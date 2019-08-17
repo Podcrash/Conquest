@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'groovy'
+}
+setLibsDirName("..\\server\\plugins")
+
+group 'raindance'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': "Champions",
+                'Implementation-Version': version,
+                'Main-Class': 'me.raindance.champions.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
