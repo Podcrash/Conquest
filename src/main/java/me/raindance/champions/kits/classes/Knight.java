@@ -13,7 +13,7 @@ public class Knight extends ChampionsPlayer {
     public Knight(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
-        setSound(new SoundWrapper("mob.blaze.hit", 0.65F, 57));
+        setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 57));
         this.armor = new Material[]{Material.IRON_BOOTS, Material.IRON_LEGGINGS, Material.IRON_CHESTPLATE, Material.IRON_HELMET};
     }
 

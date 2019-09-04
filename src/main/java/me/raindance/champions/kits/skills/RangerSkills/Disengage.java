@@ -59,7 +59,7 @@ public class Disengage extends Instant implements TimeResource {
             if (!onCooldown()) {
                 isDisengaging = true;
                 time = System.currentTimeMillis();
-                TimeHandler.repeatedTime(1, 0, this);
+                TimeHandler.repeatedTimeAsync(1, 0, this);
                 getPlayer().sendMessage(String.format("Skill> You are trying to %s", getName()));
             }
         }
@@ -87,7 +87,7 @@ public class Disengage extends Instant implements TimeResource {
     }
 
     @EventHandler(
-            priority = EventPriority.HIGHEST
+            priority = EventPriority.HIGH
     )
     public void fall(EntityDamageEvent event) {
         if (tempFallCancel && event.getCause() == EntityDamageEvent.DamageCause.FALL) {

@@ -45,7 +45,7 @@ public class PinDown extends Instant {
                 GameDamagerConverterListener.forceAddArrow(arrow, 0.375f);
                 arrow.setShooter(getPlayer());
                 ThrowableStatusApplier.applyProj(new StatusWrapper(Status.ROOTED, this.duration, 1, false), arrow);
-                ThrowableStatusApplier.applyProj(new StatusWrapper(Status.SILENCE, this.duration / 2, 1, false), arrow);
+                ThrowableStatusApplier.applyProj(new StatusWrapper(Status.SILENCE, this.duration, 1, false), arrow);
                 ThrowableStatusApplier.applyProj(new StatusWrapper(Status.SLOW, this.duration, 2, false), arrow);
                 getPlayer().sendMessage(getUsedMessage());
                 this.setLastUsed(System.currentTimeMillis());
@@ -57,6 +57,7 @@ public class PinDown extends Instant {
             priority = EventPriority.HIGHEST
     )
     public void arrowHit(DamageApplyEvent e) {
+        if(isAlly(e.getVictim())) return;
         if (e.getArrow() == arrow) {
             e.setDoKnockback(false);
             affected.add(e.getVictim().getName());

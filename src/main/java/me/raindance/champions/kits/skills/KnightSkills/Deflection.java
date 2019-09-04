@@ -47,6 +47,7 @@ public class Deflection extends Passive implements ICharge, IPassiveTimer {
             priority = EventPriority.MONITOR
     )
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if (event.getCause() != Cause.MELEE) return;
         if (event.getVictim() == getPlayer()) {
             event.setModified(true);

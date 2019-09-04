@@ -23,21 +23,10 @@ import java.util.List;
  */
 public class GameManager {
     private static int gameID = 0;
-    public static final int MAX_GAME_COUNT = 9;
-    private static final List<Game> games = new ArrayList<>();
-    private static final List<Player> queue = new ArrayList<>();
-
-    public static int getGameCount() {
-        return games.size();
-    }
-    public static boolean anyGames() {
-        return games.size() > 0;
-    }
-    public static List<Game> getGames() {
-        return games;
-    }
+    private static Game currentGame;
 
     public static Game createGame(String name, GameType type) {
+        if(currentGame != null) return currentGame;
         Game game = null;
         switch (type){
             case DOM:
@@ -49,36 +38,29 @@ public class GameManager {
                 break;
         }
         if(game == null) throw new IllegalArgumentException("only the Dom GameType works for now");
-        games.add(game);
+        currentGame = game;
         game.create();
         game.setGameWorld("GulleyRevamp");
         return game;
     }
-    public static void setGameMap(Game game, String worldName) {
-        game.setGameWorld(worldName);
+    public static void setGameMap(String worldName) {
+        currentGame.setGameWorld(worldName);
     }
 
-    public static void addSpectator(int id, Player p) {
-        Game game = getGame(id);
+    public static void addSpectator(Player p) {
+        Game game = currentGame;
         if(GameManager.hasPlayer(p)) {
-            if(game == GameManager.getGame(p)) {
-                game.removeSpectator(p);
-                p.sendMessage(String.format(
-                        "%sChampions> %sYou are no longer spectating this game!",
-                        ChatColor.BLUE,
-                        ChatColor.GRAY));
-                if(!p.getWorld().getName().equals("world")) {
-                    p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                }
-            }else {
-                p.sendMessage(String.format(
-                        "%sChampions> %sYou are already spectating in another game!",
-                        ChatColor.BLUE,
-                        ChatColor.GRAY));
+            game.removeSpectator(p);
+            p.sendMessage(String.format(
+                    "%sChampions> %sYou are no longer spectating this game!",
+                    ChatColor.BLUE,
+                    ChatColor.GRAY));
+            if(!p.getWorld().getName().equals("world")) {
+                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
             }
             return;
         }
-        if(!game.getPlayers().contains(p)) {
+        if(!game.contains(p)) {
             game.addSpectator(p);
             p.sendMessage(
                     String.format(
@@ -98,17 +80,11 @@ public class GameManager {
     }
 
     public static boolean isSpectating(Player player){
-        Game game = getGame(player);
-        if(game != null) {
-            return game.isSpectating(player);
-        } else {
-            return false;
-        }
+        return currentGame != null && currentGame.isSpectating(player);
     }
 
-    public static void addPlayer(int id, Player p) {
-
-        Game game = getGame(id);
+    public static void addPlayer(Player p) {
+        Game game = currentGame;
         if(GameManager.hasPlayer(p)) {
                 p.sendMessage(String.format(
                         "%sChampions> %sYou are already in a game!",
@@ -116,8 +92,8 @@ public class GameManager {
                         ChatColor.GRAY));
                 return;
         }
-        if(!game.getPlayers().contains(p)) {
-            game.getPlayers().add(p);
+        if(!game.contains(p)) {
+            game.add(p);
             p.sendMessage(
                     String.format(
                             "%sChampions> %sYou were added to %sGame %s%s.",
@@ -141,17 +117,19 @@ public class GameManager {
             Inventory inventory = p.getInventory();
             inventory.setItem(1, red);
             inventory.setItem(2, blue);
+
+            randomTeam(p);
         }else p.sendMessage(
                 String.format(
                         "%sChampions> %sYou are already in the game.",
                         ChatColor.BLUE,
                         ChatColor.GRAY));
         if (game.getMaxPlayers() == game.getPlayerCount()) {
-            startGame(game);
+            startGame();
         }
     }
-    public static void removePlayer(int id, Player p) {
-        Game game = getGame(id);
+    public static void removePlayer(Player p) {
+        Game game = currentGame;
         game.removePlayer(p);
 
         Inventory inventory = p.getInventory();
@@ -159,15 +137,24 @@ public class GameManager {
         inventory.setItem(2, null);
     }
     public static boolean hasPlayer(Player p) {
-        for (Game game : games) {
-            if (game.contains(p)) return true;
-        }
-        return false;
+        return currentGame != null && currentGame.contains(p);
     }
 
-    public static void joinTeam(Player player, int id, String color) {
-        Game game = getGame(id);
-        if (game.getPlayers().contains(player)) {
+    public static void randomTeam(Player player) {
+        Game game = currentGame;
+        int blue = game.blueSize();
+        int red = game.redSize();
+        if(blue > red)
+            joinTeam(player, "red");
+        else if(red > blue)
+            joinTeam(player, "blue");
+        else //they are equal, good-ol RNG!
+            joinTeam(player, new String[]{"red","blue"}[(int) (Math.random() + 0.5)]);
+
+    }
+    public static void joinTeam(Player player, String color) {
+        Game game = currentGame;
+        if (hasPlayer(player)) {
             if(game.getTeamColor(player) != null && game.getTeamColor(player).equalsIgnoreCase(color)) {
                 player.sendMessage(String.format(
                         "%sChampions> %sYou are already on this team%s!",
@@ -177,7 +164,7 @@ public class GameManager {
                 return;
             }
             if (game.getRedTeam().contains(player)) {
-                game.getRedTeam().remove(player);
+                game.removePlayerRed(player);
                 player.sendMessage(
                         String.format(
                                 "%sChampions> %sYou left the %sRed Team%s.",
@@ -186,7 +173,7 @@ public class GameManager {
                                 ChatColor.RED,
                                 ChatColor.GRAY));
             }else if (game.getBlueTeam().contains(player)) {
-                game.getBlueTeam().remove(player);
+                game.removePlayerBlue(player);
                 player.sendMessage(
                         String.format(
                                 "%sChampions> %sYou left the %sBlue Team%s.",
@@ -215,10 +202,10 @@ public class GameManager {
 
     /**
      * @see me.raindance.champions.listeners.maintainers.GameListener#onStart(GameStartEvent)
-     * @param game
      */
-    public static void startGame(Game game) {
-        if(game == null) return;
+    public static void startGame() {
+        if(currentGame == null) return;
+        Game game = currentGame;
         if(game.isOngoing()) {
             return;
         }
@@ -228,35 +215,16 @@ public class GameManager {
         Main.getInstance().getServer().getPluginManager().callEvent(gamestart);
     }
     public static void endGame(Game game) {
-        Location spawnLoc = new Location(Bukkit.getWorld("world"), 0, 100, 0);
+        Location spawnLoc = Bukkit.getWorld("world").getSpawnLocation();
         game.setOngoing(false);
         GameEndEvent gameend = new GameEndEvent(game, spawnLoc);
-        games.remove(game);
+        currentGame = null;
         Main.getInstance().getServer().getPluginManager().callEvent(gameend);
         createGame(Long.toString(System.currentTimeMillis()), game.getType());
     }
 
-    public static Game getGame(int id) {
-        for (Game game : games) {
-            if (game.getId() == id) {
-                return game;
-            }
-        }
-        return null;
-    }
-    public static Game getGame(Player p) {
-        for (Game game : games) {
-            if (game.contains(p)) return game;
-        }
-        return null;
-    }
-
-    public static Game getGame(IObjective objective) {
-        for(Game game : games) {
-            if(objective instanceof ItemObjective && game.getItemObjectives().contains(objective)) return game;
-            if(objective instanceof WinObjective && game.getWinObjectives().contains(objective)) return game;
-        }
-        return null;
+    public static Game getGame() {
+        return currentGame;
     }
     /**
      *

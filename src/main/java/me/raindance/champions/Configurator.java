@@ -55,7 +55,7 @@ public class Configurator {
         this(plugin, fileName, false);
     }
 
-    public CompletableFuture<Void>  read(String path, Consumer<Object> consumer) {
+    public CompletableFuture<Void> read(String path, Consumer<Object> consumer) {
         return CompletableFuture.supplyAsync(() -> {
             return this.config.get(path);
         }, executor).thenAcceptAsync(consumer);
@@ -97,13 +97,15 @@ public class Configurator {
         Main.getInstance().getLogger().info("Deleting " + path + "!");
     }
     public void saveConfig(){
-        synchronized (config) {
-            try {
-                config.save(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+        executor.submit(() -> {
+            synchronized (config) {
+                try {
+                    config.save(configFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+        });
     }
 
     public FileConfiguration getConfig() {

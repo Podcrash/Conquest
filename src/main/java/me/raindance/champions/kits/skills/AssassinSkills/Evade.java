@@ -67,7 +67,7 @@ public class Evade extends Instant implements TimeResource {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void hit(DamageApplyEvent event) {
-        if (event.getCause() != Cause.MELEE) return;
+        if (event.getCause() != Cause.MELEE || event.isCancelled()) return;
         LivingEntity player = event.getVictim();
         if (player == getPlayer() && isEvading) {
             LivingEntity damager = event.getAttacker();

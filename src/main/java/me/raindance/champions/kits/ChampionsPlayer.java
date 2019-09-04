@@ -2,6 +2,7 @@ package me.raindance.champions.kits;
 
 
 import com.google.gson.JsonObject;
+import me.raindance.champions.Main;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.game.Game;
@@ -15,18 +16,19 @@ import me.raindance.champions.sound.SoundWrapper;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class ChampionsPlayer implements Listener {
+public abstract class ChampionsPlayer {
     private Player player;
     private ItemStack[] defaultHotbar;
     private double fallDamage = 0;
@@ -71,10 +73,10 @@ public abstract class ChampionsPlayer implements Listener {
         return GameManager.hasPlayer(this.player);
     }
     public Game getGame() {
-        return GameManager.getGame(player);
+        return GameManager.getGame();
     }
     public String getTeam() {
-        if (isInGame()) return GameManager.getGame(this.player).getTeamColor(player);
+        if (isInGame()) return GameManager.getGame().getTeamColor(player);
         else return null;
     }
 
@@ -85,7 +87,9 @@ public abstract class ChampionsPlayer implements Listener {
      * @return true/false
      */
     public boolean isAlly(Player player) {
-        return isInGame() && getGame().getTeamColor(player).equalsIgnoreCase(getTeam());
+        String color;
+        if((color = getGame().getTeamColor(player)) == null) return true;
+        return isInGame() && color.equalsIgnoreCase(getTeam());
     }
 
     public Location getSpawnLocation() {
@@ -97,24 +101,49 @@ public abstract class ChampionsPlayer implements Listener {
 
     public void respawn(){//TODO: Respawn with the hotbar.
         player.setFallDistance(0);
+        StatusApplier.getOrNew(player).removeStatus(Status.values());
         player.teleport(this.spawnLocation);
+        getInventory().clear();
         this.restockInventory();
         this.equip();
         this.resetCooldowns();
         player.setAllowFlight(false);
         player.setFlying(false);
-        player.setFallDistance(0);
-        for(Player player : getGame().getPlayers()){
+        List<Player> players = getGame() == null ? player.getWorld().getPlayers() : getGame().getPlayers();
+        for(Player player : players){
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
-        if (this instanceof Assassin)
-            StatusApplier.getOrNew(player).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true, true);
-        else if (this instanceof Mage)
-            getEnergyBar().setEnergy(getEnergyBar().getMaxEnergy() * (3D/4D));
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
 
+    public void effects() {
+        if (this instanceof Assassin) {
+            StatusApplier.getOrNew(this.getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance,
+                    () -> StatusApplier.getOrNew(this.getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1), 4);
+        } else if (this instanceof Mage) {
+            this.setUsesEnergy(true);
+        }
+    }
 
+    public String skillsRead() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(ChatColor.YELLOW);
+        builder.append(this.getName());
+        builder.append('\n');
+        for(Skill skill : skills) {
+            builder.append(ChatColor.GREEN);
+            builder.append(skill.getInvType().getName());
+            builder.append(": ");
+            builder.append(ChatColor.WHITE);
+            builder.append(skill.getName());
+            builder.append(' ');
+            builder.append(skill.getLevel());
+            builder.append("\n");
+        }
+
+        return builder.toString();
+    }
     public void heal(double health){
         Player player = getPlayer();
         double current = player.getHealth();
@@ -189,6 +218,13 @@ public abstract class ChampionsPlayer implements Listener {
             hotbar[i] = this.getInventory().getItem(i);
         }
         return hotbar;
+    }
+    public boolean hotBarContains(Material material) {
+        for(ItemStack item : getDefaultHotbar()) {
+            if(item != null && item.getType() == material)
+                return true;
+        }
+        return false;
     }
     public void restockInventory() {
         for (int i = 0; i < getDefaultHotbar().length; i++) {

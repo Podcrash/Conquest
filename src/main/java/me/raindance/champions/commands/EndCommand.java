@@ -12,16 +12,9 @@ public class EndCommand extends CommandBase {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("Champions.host")){
             if (!(sender instanceof Player)) return false;
-            Player player = (Player) sender;
-            if (!(args.length == 1)) return false;
-            int id = Integer.parseInt(args[0]);
-            Game game = GameManager.getGame(id);
-            if(game == null) {
-                sender.sendMessage("That is not a valid game!");
-                return false;
-            }
-            GameManager.endGame(GameManager.getGame(id));
-            player.sendMessage("attempting to end game " + id);
+            Game game = GameManager.getGame();
+            GameManager.endGame(game);
+            sender.sendMessage("attempting to end game " + game.getId());
             return true;
         } else {
             sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));

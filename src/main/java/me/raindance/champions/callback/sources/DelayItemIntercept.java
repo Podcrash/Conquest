@@ -1,7 +1,9 @@
 package me.raindance.champions.callback.sources;
 
+import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.Location;
+import org.bukkit.Utility;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -19,7 +21,7 @@ public class DelayItemIntercept extends ItemIntercept {
     public boolean cancel() {
         World world = item.getWorld();
         if(!item.isValid()) return true;
-        if(!item.isOnGround()) {
+        if(!EntityUtil.onGround(item)) {
             for(LivingEntity living : world.getLivingEntities()){
                 if(living != owner){
                     Location location = living.getLocation();

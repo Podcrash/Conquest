@@ -5,6 +5,7 @@ import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
+import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
@@ -23,15 +24,12 @@ public class Longshot extends Passive {
     private List<Arrow> arrows = new ArrayList<>();
 
     public Longshot(Player player, int level) {
-        super(player, "Longshot", level,  SkillType.Ranger, InvType.PASSIVEB, 7 - level);
+        super(player, "Longshot", level,  SkillType.Ranger, InvType.PASSIVEB, 3.5F + level/2F);
         setDesc(Arrays.asList(
                 "Active by default, hold sneak to not use it. ",
                 "",
-                "Arrows fire 20% faster and ",
-                "deal an additional 1 damage ",
-                "for every %%range%% blocks they travelled.",
-                "",
-                "Maximum of 12 additional damage."
+                "The farther your victims are from where you are,",
+                "The more damage exponentially you deal."
         ));
         addDescArg("range", () ->  3);
     }
@@ -46,34 +44,27 @@ public class Longshot extends Passive {
     protected void shotArrow(EntityShootBowEvent event) {
         if (event.isCancelled()) return;
         if (!onCooldown()) {
-            if (event.getEntity() instanceof Player && event.getProjectile() instanceof Arrow) {
-                Player player = (Player) event.getEntity();
-                if (player == getPlayer() && !getPlayer().isSneaking()) {
-                    Arrow arrow = (Arrow) event.getProjectile();
-                    arrow.setVelocity(arrow.getVelocity().multiply(1.2d));
-                    arrows.add(arrow);
-                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
-                    this.getPlayer().sendMessage(getUsedMessage());
-                    this.setLastUsed(System.currentTimeMillis());
-                }
-            }
+            if(getPlayer() != event.getEntity() && !(event.getProjectile() instanceof Arrow)) return;
+            if (getPlayer().isSneaking()) return;
+            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
+            arrows.add((Arrow) event.getProjectile());
+            this.setLastUsed(System.currentTimeMillis());
         } else this.getPlayer().sendMessage(getCooldownMessage());
     }
 
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.LOW
     )
     protected void shotPlayer(DamageApplyEvent event) {
         if (event.getArrow() == null) return;
+        if(event.getCause() != Cause.PROJECTILE || event.getAttacker() != getPlayer()) return;
         Arrow arr = event.getArrow();
-        if (arrows.contains(arr) && event.getCause() == Cause.PROJECTILE && event.getAttacker() == getPlayer()) {
-            Player damager = (Player) event.getAttacker();
-            LivingEntity victim = event.getVictim();
-            Location vLocation = victim.getLocation();
-            Location dLocation = damager.getLocation();
-            double distance = vLocation.distance(dLocation);
-            event.setModified(true);
-            event.setDamage(event.getDamage() + (distance / 3));
-        }
+        event.setModified(true);
+        event.setDamage(event.getDamage() - 3);
+        if (!arrows.contains(arr)) return;
+        Location vLocation = event.getVictim().getLocation();
+        Location dLocation = getPlayer().getLocation();
+        double distance = vLocation.distance(dLocation);
+        event.setDamage(event.getDamage() + ((3 + level * 0.4) * .0009 * FastMath.pow(distance, 2)));
     }
 }

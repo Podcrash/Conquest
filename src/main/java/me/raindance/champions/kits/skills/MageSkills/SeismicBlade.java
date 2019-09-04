@@ -5,6 +5,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.Passive;
+import me.raindance.champions.util.EntityUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,8 +31,9 @@ public class SeismicBlade extends Passive implements IEnergy {
             priority = EventPriority.LOW
     )
     public void hit(DamageApplyEvent devent) {
+        if(devent.isCancelled()) return;
         if (devent.getAttacker() == getPlayer()) {
-            if (((Entity) getPlayer()).isOnGround() && hasEnergy()) {
+            if (EntityUtil.onGround(getPlayer()) && hasEnergy()) {
                 devent.setModified(true);
                 devent.setVelocityModifierX(1.5D);
                 devent.setVelocityModifierY(1.5D);

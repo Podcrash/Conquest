@@ -75,7 +75,7 @@ public class DomScoreboard extends GameScoreboard {
      * Update the dom scoreboard values.
      */
     public void update(){
-        Game game = GameManager.getGame(getGameId());
+        Game game = GameManager.getGame();
         updateBlueScore(game.getBlueScore());
         updateRedScore(game.getRedScore());
     }

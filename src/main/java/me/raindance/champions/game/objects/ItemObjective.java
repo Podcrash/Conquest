@@ -66,7 +66,7 @@ public abstract class ItemObjective implements IObjective {
 
     @Override
     public String acquiredByTeam() {
-        return GameManager.getGame(player).getTeamColor(player);
+        return GameManager.getGame().getTeamColor(player);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package me.raindance.champions.callback.sources;
 
 import me.raindance.champions.callback.CallbackAction;
+import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,7 +27,7 @@ public class ItemIntercept extends CallbackAction<ItemIntercept> {
     @Override
     public boolean cancel() {
         World world = item.getWorld();
-        if(!item.isValid() || item.isOnGround()) return true;
+        if(!item.isValid() || EntityUtil.onGround(item)) return true;
         for(LivingEntity living : world.getLivingEntities()){
             if(living.getEntityId() != owner.getEntityId()){
                 Location location = living.getLocation();

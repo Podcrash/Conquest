@@ -1,6 +1,7 @@
 package me.raindance.champions.callback.sources;
 
 import me.raindance.champions.callback.CallbackAction;
+import me.raindance.champions.util.EntityUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -12,7 +13,7 @@ public class CollideBeforeHitGround extends CallbackAction<CollideBeforeHitGroun
         this.player = player;
         this.changeEvaluation(() -> (
                 player.getNearbyEntities(1.15, 1.15, 1.15).size() > 0) ||
-                (((Entity) player).isOnGround()));
+                EntityUtil.onGround(player));
     }
     public CollideBeforeHitGround(Player player) {
         this(player, 1);

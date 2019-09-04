@@ -10,8 +10,8 @@ import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.DyeColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -53,12 +53,12 @@ public class InventoryListener extends ListenerBase {
             if(itemStack.getData() instanceof Wool) {
                 event.setCancelled(true);
                 Wool woolData = (Wool) itemStack.getData();
-                Game game = GameManager.getGame(event.getPlayer());
+                Game game = GameManager.getGame();
                 int id = game.getId();
                 if(woolData.getColor() == DyeColor.BLUE) {
-                    GameManager.joinTeam(event.getPlayer(), id, "blue");
+                    GameManager.joinTeam(event.getPlayer(), "blue");
                 }else if(woolData.getColor() == DyeColor.RED) {
-                    GameManager.joinTeam(event.getPlayer(), id, "red");
+                    GameManager.joinTeam(event.getPlayer(), "red");
                 }
             }
 
@@ -109,13 +109,8 @@ public class InventoryListener extends ListenerBase {
             String name = inventory.getName().toLowerCase();
             ChampionsPlayer newPlayer = InvFactory.inventoryToChampion((Player) e.getPlayer(), e.getInventory(), SkillType.getByName(name));
 
-            ChampionsPlayer cplayer = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) e.getPlayer());
-            Location origSpawn = cplayer.getSpawnLocation();
-            ChampionsPlayerManager.getInstance().removeChampionsPlayer(cplayer);
-
             if(newPlayer != null) {
                 ChampionsInventory.clearHotbarSelection(newPlayer.getPlayer());
-                newPlayer.setSpawnLocation(origSpawn);
                 ChampionsPlayerManager.getInstance().addChampionsPlayer(newPlayer);
                 InvFactory.editClose(newPlayer.getPlayer(), newPlayer);
                 SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
@@ -133,7 +128,7 @@ public class InventoryListener extends ListenerBase {
                 ItemStack item = event.getCurrentItem();
                 if(item.getItemMeta() == null) return;
                 String possNumber = item.getItemMeta().getDisplayName().replaceAll("[^0-9]", "");
-                Game game = GameManager.getGame(Integer.valueOf(possNumber));
+                Game game = GameManager.getGame();
                 if(game == null) {
                     event.getWhoClicked().sendMessage("Soemthing went wrong");
                     return;
@@ -145,9 +140,8 @@ public class InventoryListener extends ListenerBase {
                 packet.setSlotData(item);
                 packet.setSlot(event.getSlot());
                 packet.setWindowId(((CraftPlayer) event.getWhoClicked()).getHandle().activeContainer.windowId);
-                packet.sendPacket((Player) event.getWhoClicked());
-            }
-            if (event.getInventory().getName().toLowerCase().contains("menu")) {
+                PacketUtil.syncSend(packet, (Player) event.getWhoClicked());
+            }else if (event.getInventory().getName().toLowerCase().contains("menu")) {
                 clickHelmet((Player) event.getWhoClicked(), event.getCurrentItem());
                 event.setCancelled(true);
             } else if(event.getInventory().getName().toLowerCase().contains("build")) {
@@ -180,6 +174,7 @@ public class InventoryListener extends ListenerBase {
         BookFormatter bf = InventoryData.getSkillFormatter(book);
         if (bf == null) return false;
         ItemStack newBook = book.clone();
+
         boolean a = false;
         switch (clickType) {
             case LEFT:

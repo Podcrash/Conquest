@@ -13,7 +13,7 @@ public class IneptStatus extends CustomStatus {
     private Game game;
     public IneptStatus(Player player) {
         super(player, Status.INEPTITUDE);
-        game = GameManager.getGame(player);
+        game = GameManager.getGame();
     }
 
     @Override

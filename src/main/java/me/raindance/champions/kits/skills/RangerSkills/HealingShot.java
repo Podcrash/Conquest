@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
+import com.comphenix.packetwrapper.AbstractPacket;
 import com.comphenix.packetwrapper.WrapperPlayServerEntityStatus;
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
@@ -12,6 +13,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
 import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -62,15 +64,12 @@ public class HealingShot extends BowShotSkill {
         }else {
             StatusApplier.getOrNew(victim).applyStatus(Status.DIZZY, duration + 2, 1, true);
         }
-        WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(victim.getLocation(), EnumWrappers.Particle.HEART,
+        WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(victim.getLocation().toVector(), EnumWrappers.Particle.HEART,
                 3, rand.nextFloat(), -0.9f, rand.nextFloat());
         WrapperPlayServerEntityStatus status = new WrapperPlayServerEntityStatus();
         status.setEntityId(victim.getEntityId());
         status.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
-        for(Player player : getPlayers()) {
-            status.sendPacket(player);
-            packet.sendPacket(player);
-        }
+        PacketUtil.syncSend(new AbstractPacket[]{status, packet}, getPlayers());
         SoundPlayer.sendSound(victim.getLocation(), "random.levelup", 0.9F, 95);
         event.addSkillCause(this);
     }

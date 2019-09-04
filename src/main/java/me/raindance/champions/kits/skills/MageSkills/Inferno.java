@@ -10,6 +10,8 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.Continuous;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.EntityUtil;
+import me.raindance.champions.world.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -103,7 +105,7 @@ public class Inferno extends Continuous implements IEnergy {
                     if(entity == null) return; //null check is required because... reasons?
                     if(entity instanceof Player && !entity.equals(getPlayer())) {
                         //deals damage to enemy players and catches them on fire
-                        if(!isAlly(((Player)entity))) {
+                        if(!isAlly(((Player)entity)) && !BlockUtil.isInWater(entity)) {
                             StatusApplier.getOrNew((Player) entity).applyStatus(Status.FIRE, duration, 1);
                             DamageApplier.damage(entity, getPlayer(), damage, this, false);
                         }
@@ -128,7 +130,7 @@ public class Inferno extends Continuous implements IEnergy {
             Iterator<Item> infernoIterator = infernoItems.iterator();
             while(infernoIterator.hasNext()) {
                 Item item = infernoIterator.next();
-                if(item.isOnGround()) {
+                if(EntityUtil.onGround(item)) {
                     item.remove();
                     infernoIterator.remove();
                 }

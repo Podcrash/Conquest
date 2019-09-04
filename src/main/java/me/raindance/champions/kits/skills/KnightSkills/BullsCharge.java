@@ -84,8 +84,8 @@ public class BullsCharge extends Instant {
                     Player victim = (Player) e.getVictim();
                     StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, duration, 1);
                     StatusApplier.getOrNew(getPlayer()).removeVanilla(Status.SPEED);
-                    SoundPlayer.sendSound(getPlayer().getLocation(), "random.break", 75, 250);
-                    SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", 75, 20);
+                    SoundPlayer.sendSound(getPlayer().getLocation(), "random.break", 0.75F, 250);
+                    SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", .75F, 20);
 
                     e.setDoKnockback(false);
                     use = false;

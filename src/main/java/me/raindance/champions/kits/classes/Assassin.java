@@ -1,5 +1,7 @@
 package me.raindance.champions.kits.classes;
 
+import me.raindance.champions.effect.status.Status;
+import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
@@ -14,7 +16,7 @@ public class Assassin extends ChampionsPlayer {
         super(player);
         this.skills = skills;
         setFallDamage(1.5d);
-        setSound(new SoundWrapper("random.bow", 0.65F, 126));
+        setSound(new SoundWrapper("random.bow", 0.95F, 126));
         this.armor = new Material[]{Material.LEATHER_BOOTS, Material.LEATHER_LEGGINGS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET};
     }
 
@@ -27,5 +29,11 @@ public class Assassin extends ChampionsPlayer {
     }
     public SkillType getType() {
         return SkillType.Assassin;
+    }
+
+    @Override
+    public void respawn() {
+        super.respawn();
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true, true);
     }
 }

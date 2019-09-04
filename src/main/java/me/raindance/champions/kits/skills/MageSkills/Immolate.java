@@ -72,7 +72,7 @@ public class Immolate extends TogglePassive implements IEnergy, TimeResource {
                 "",
                 "Energy: %%energy%% per Second"
         ));
-        addDescArg("duration", () ->  0.5);
+        addDescArg("duration", () ->  0.75);
         addDescArg("energy", () -> 14);
     }
 
@@ -148,10 +148,11 @@ public class Immolate extends TogglePassive implements IEnergy, TimeResource {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void pickUp(PlayerPickupItemEvent event) {
-        if(event.getItem().getItemStack().getItemMeta().getDisplayName().contains(NAME)) {
+        if(event.getItem().getItemStack().getItemMeta() != null &&
+                event.getItem().getItemStack().getItemMeta().getDisplayName().contains(NAME)) {
             Player victim = event.getPlayer();
             if(victim == getPlayer() || isAlly(victim)) return;
-            StatusApplier.getOrNew(victim).applyStatus(Status.FIRE, 0.5F, 1);
+            StatusApplier.getOrNew(victim).applyStatus(Status.FIRE, 0.75F, 1);
             event.getItem().remove();
         }
     }

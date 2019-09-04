@@ -30,6 +30,7 @@ public class StatusApplier {
     private StatusApplier(Player p) {
         this.player = p;
     }
+
     public static StatusApplier getOrNew(Player player) {
         if (appliers.get(player.getName()) == null) {
             appliers.put(player.getName(), new StatusApplier(player));
@@ -37,8 +38,13 @@ public class StatusApplier {
         return appliers.get(player.getName());
     }
 
+    public static void remove(Player player) {
+        appliers.remove(player.getName());
+    }
+
     /**
      * Apply a status to a player.
+     *
      * @param status
      * @param duration
      * @param potency
@@ -62,15 +68,19 @@ public class StatusApplier {
             applyCustom(status, iduration, ipotency);
         }
     }
+
     public void applyStatus(Status status, float duration, int potency, boolean ambient) {
         applyStatus(status, duration, potency, ambient, false);
     }
+
     public void applyStatus(Status status, float duration, int potency) {
         applyStatus(status, duration, potency, false);
     }
+
     public void applyStatus(StatusWrapper statusWrapper) {
         applyStatus(statusWrapper.getStatus(), statusWrapper.getDuration(), statusWrapper.getPotency(), statusWrapper.isAmbience());
     }
+
     public void applyStatus(StatusWrapper... statusWrappers) {
         for (StatusWrapper statusWrapper : statusWrappers)
             applyStatus(statusWrapper.getStatus(), statusWrapper.getDuration(), statusWrapper.getPotency(), statusWrapper.isAmbience());
@@ -83,6 +93,7 @@ public class StatusApplier {
             removeCustom(status);
         }
     }
+
     public void removeStatus(Status... statuses) {
         for (Status status : statuses) {
             removeStatus(status);
@@ -142,13 +153,15 @@ public class StatusApplier {
         }, 1L);
 
     }
+
     public void removeVanilla(Status... statuses) {
         for (Status status : statuses) {
             removeVanilla(status);
         }
     }
+
     public void removeVanilla(Status status) {
-        if(player.hasPotionEffect(status.getPotionEffectType())){
+        if (player.hasPotionEffect(status.getPotionEffectType())) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -157,6 +170,7 @@ public class StatusApplier {
             }.runTaskLater(Main.instance, 1L);
         }
     }
+
     public void removeCustom(Status status) {
         switch (status) {
             case FIRE:
@@ -190,7 +204,7 @@ public class StatusApplier {
         duration = duration * 50; // duration seconds * 1000millis/1 seconds * 1/ 20 ticks
         switch (status) {
             case FIRE:
-                this.player.setFireTicks(duration/50);
+                this.player.setFireTicks(duration / 50);
                 break;
             case CLOAK:
                 applyCloak(duration);
@@ -229,37 +243,43 @@ public class StatusApplier {
         cloakMap.put(player.getName(), System.currentTimeMillis() + duration);
         TimeHandler.repeatedTime(1L, 0, new CloakStatus(player));
     }
+
     private void applyMarked(int duration, int potency) {
         removeMark();
         markedMap.put(player.getName(), System.currentTimeMillis() + duration);
         player.sendMessage(String.format("You are now marked for %d seconds!", (duration / 1000)));
         TimeHandler.repeatedTime(1, 0, new MarkedStatus(player));
     }
+
     private void applySilence(int duration) {
         removeSilence();
         silenceMap.put(player.getName(), System.currentTimeMillis() + duration);
         player.sendMessage(String.format("You are now silenced for %d seconds!", (duration / 1000)));
         TimeHandler.repeatedTime(1, 0, new SilenceStatus(player));
     }
+
     private void applyShock(int duration) {
         removeShock();
         shockMap.put(player.getName(), System.currentTimeMillis() + duration);
         player.sendMessage(String.format("You are now shocked for %d seconds!", (duration / 1000)));
         TimeHandler.repeatedTime(1, 0, new ShockStatus(player));
     }
+
     private void applyRoot(int duration) {
         if (isRooted()) removeRoot();
         rootMap.put(player.getName(), System.currentTimeMillis() + duration);
         player.sendMessage(String.format("You are now rooted for %d seconds!", (duration / 1000)));
         TimeHandler.repeatedTime(1, 1, new RootedStatus(player));
     }
+
     private void applyNoJump(int duration) {
-        if(isNoJump()) removeNoJump();
+        if (isNoJump()) removeNoJump();
         noJumpMap.put(player.getName(), System.currentTimeMillis() + duration);
         TimeHandler.repeatedTime(1, 1, new NoJumpStatus(player));
     }
-    private void applyInept(int duration){
-        if(isInept()) removeInept();
+
+    private void applyInept(int duration) {
+        if (isInept()) removeInept();
         ineptMap.put(player.getName(), System.currentTimeMillis() + duration);
         TimeHandler.repeatedTime(1, 1, new IneptStatus(player));
 
@@ -268,22 +288,28 @@ public class StatusApplier {
     public boolean isCloaked() {
         return cloakMap.containsKey(this.player.getName());
     }
+
     public boolean isMarked() {
         return markedMap.containsKey(this.player.getName());
     }
+
     public boolean isSilenced() {
         return silenceMap.containsKey(this.player.getName());
     }
+
     public boolean isShocked() {
         return shockMap.containsKey(this.player.getName());
     }
+
     public boolean isRooted() {
         return rootMap.containsKey(this.player.getName());
     }
+
     public boolean isNoJump() {
         return noJumpMap.containsKey(player.getName());
     }
-    public boolean isInept(){
+
+    public boolean isInept() {
         return ineptMap.containsKey(player.getName());
     }
 
@@ -292,7 +318,7 @@ public class StatusApplier {
             cloakMap.remove(this.player.getName());
         }
         List<Player> players = this.player.getWorld().getPlayers();
-        Bukkit.getScheduler().runTask(Main.instance, ()-> {
+        Bukkit.getScheduler().runTask(Main.instance, () -> {
             for (Player player : players) {
                 if (this.player != player) {
                     player.showPlayer(this.player);
@@ -300,36 +326,41 @@ public class StatusApplier {
             }
         });
     }
+
     public void removeMark() {
         if (isMarked()) {
             markedMap.remove(this.player.getName());
         }
     }
+
     public void removeSilence() {
         if (isSilenced()) {
             silenceMap.remove(this.player.getName());
         }
     }
+
     public void removeShock() {
         if (isShocked()) {
             shockMap.remove(this.player.getName());
         }
     }
+
     public void removeRoot() {
         if (isRooted()) {
             rootMap.remove(this.player.getName());
             this.player.setSaturation(20);
         }
     }
+
     public void removeNoJump() {
-        if(isNoJump()) noJumpMap.remove(player.getName());
+        if (isNoJump()) noJumpMap.remove(player.getName());
     }
-    public void removeInept(){
-        if(isInept()) ineptMap.remove(player.getName());
+
+    public void removeInept() {
+        if (isInept()) ineptMap.remove(player.getName());
     }
 
     /**
-     *
      * @param status the status in question
      * @return the duration of a custom effect
      */
@@ -352,13 +383,14 @@ public class StatusApplier {
                 if (isRooted()) map = rootMap;
                 break;
             case NOJUMP:
-                if(isNoJump()) map = noJumpMap;
+                if (isNoJump()) map = noJumpMap;
             case INEPTITUDE:
-                if(isInept()) map = ineptMap;
+                if (isInept()) map = ineptMap;
                 break;
         }
         return (map != null) ? map.get(player.getName()) - System.currentTimeMillis() : 0;
     }
+
     public float getRemainingDurationSeconds(Status status) {
         return getRemainingDuration(status) / 1000F;
     }
@@ -378,7 +410,10 @@ public class StatusApplier {
         if (isSilenced()) statuses.add(Status.SILENCE);
         if (isRooted()) statuses.add(Status.ROOTED);
         if (isInept()) statuses.add(Status.INEPTITUDE);
-        if(player.getFireTicks() > 0) statuses.add(Status.FIRE);
         return statuses;
+    }
+
+    public boolean has(Status status) {
+        return getEffects().contains(status);
     }
 }

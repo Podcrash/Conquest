@@ -36,13 +36,14 @@ public class SilencingArrow extends BowShotSkill {
     protected void shotArrow(Arrow arrow, float force) {
         Player player = getPlayer();
         player.sendMessage(getUsedMessage());
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(arrow.getLocation().clone(), EnumWrappers.Particle.SPELL, 1,
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(arrow.getLocation().toVector(), EnumWrappers.Particle.SPELL, 1,
                 0,0,0);
         ParticleGenerator.generateProjectile(arrow, particle);
     }
 
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+        if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BAT_HURT, 1.0f, 1.5f);
         event.addSkillCause(this);

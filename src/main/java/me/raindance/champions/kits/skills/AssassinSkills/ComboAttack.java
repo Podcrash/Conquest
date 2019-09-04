@@ -34,7 +34,7 @@ public class ComboAttack extends Passive {
         return MAX_LEVEL;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.LOW)
     public void onHit(DamageApplyEvent event) {
         if (event.isCancelled()) return;
         // cba with non players

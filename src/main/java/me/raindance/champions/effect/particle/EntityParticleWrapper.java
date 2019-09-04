@@ -3,6 +3,7 @@ package me.raindance.champions.effect.particle;
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import me.raindance.champions.sound.SoundPlayer;
 import me.raindance.champions.sound.SoundWrapper;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -43,9 +44,7 @@ public class EntityParticleWrapper {
 
     public void send() {
         packet.setLocation(entity.getLocation());
-        for(Player player : players) {
-            packet.sendPacket(player);
-        }
+        PacketUtil.syncSend(packet, players);
         if(sound != null) SoundPlayer.sendSound(entity.getLocation(), sound.getSoundName(), sound.getVolume(), sound.getPitch());
     }
 

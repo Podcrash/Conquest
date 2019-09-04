@@ -11,6 +11,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.util.TitleSender;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.ChatColor;
@@ -57,7 +58,7 @@ public class Rupture extends Instant implements TimeResource {
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if (rightClickCheck(action) && event.getPlayer() == getPlayer() && ((Entity) getPlayer()).isOnGround()) {
+        if (rightClickCheck(action) && event.getPlayer() == getPlayer() && EntityUtil.onGround(getPlayer())) {
             currentLocation = BlockUtil.getHighestUnderneath(getPlayer().getLocation());
             TimeHandler.repeatedTime(1, 5, new RuptureMaker(this));
             TimeHandler.repeatedTime(1, 0, this);
@@ -72,7 +73,7 @@ public class Rupture extends Instant implements TimeResource {
         addCharge();
         final int blockID = currentLocation.getBlock().getTypeId();
         getPlayer().sendMessage(blockID + "");
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(currentLocation, EnumWrappers.Particle.BLOCK_CRACK, new int[]{blockID}, 30, 1/8, 1, 1/8);
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(currentLocation.toVector(), EnumWrappers.Particle.BLOCK_CRACK, new int[]{blockID}, 30, 1/8, 1, 1/8);
         //Bukkit.broadcastMessage(String.format("%s: %f %f %f", getEntity().getName(), currentLocation.getX(), currentLocation.getY(), currentLocation.getZ()));
         getPlayer().getWorld().getPlayers().forEach(player -> ParticleGenerator.generate(player, particle));
         getPlayer().getWorld().playSound(currentLocation, Sound.STEP_STONE, 0.9f, 1f);

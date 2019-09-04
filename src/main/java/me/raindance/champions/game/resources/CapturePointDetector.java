@@ -9,10 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class CapturePointDetector extends GameResource {
     private final CapturePoint[] capturePoints;
@@ -28,7 +25,7 @@ public final class CapturePointDetector extends GameResource {
      * [capturePoint index][x,y,z coordinate][first or second bound]
      */
     private final double[][][] bounds;
-    private final Player[] players;
+    private final String[] players;
 
     public CapturePointDetector(int gameID) {
         super(gameID, 10, 100);
@@ -45,9 +42,9 @@ public final class CapturePointDetector extends GameResource {
                 this.bounds[i][2][b] = cbounds[b].getZ();
             }
         }
-        List<Player> players = new ArrayList<>(getGame().getRedTeam());
-        players.addAll(getGame().getBlueTeam());
-        this.players = players.toArray(new Player[players.size()]);
+        List<String> names = new ArrayList<>(getGame().getPlayerNames());
+        names.removeIf((name) -> getGame().isSpectating(name));
+        this.players = names.toArray(new String[names.size()]);
         this.scoreboard = ((DomScoreboard) getGame().getGameScoreboard());
     }
 
@@ -62,6 +59,7 @@ public final class CapturePointDetector extends GameResource {
      * @return whether the player is within the bound
      */
     private boolean isInBound(int i, Player player) {
+        if(player == null) return false;
         Location location = player.getLocation();
         double x = location.getBlockX();
         double y = location.getBlockY();
@@ -87,7 +85,7 @@ public final class CapturePointDetector extends GameResource {
      */
     private void findPlayerInCap(int i) {
         for(int p = 0; p < players.length; p++){
-            boolean a = isInBound(i, players[p]);
+            boolean a = isInBound(i, Bukkit.getPlayer(players[p]));
             if(a) {
                 String color = getGame().getTeamColor(players[p]);
                 teamToColor.put(i, teamToColor.get(i) + TeamEnum.getByColor(color).getIntData());

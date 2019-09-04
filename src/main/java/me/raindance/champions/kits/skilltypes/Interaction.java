@@ -32,7 +32,7 @@ public abstract class Interaction extends Skill {
                 SkillUseEvent useEvent = new SkillUseEvent(this);
                 Bukkit.getPluginManager().callEvent(useEvent);
                 if (useEvent.isCancelled()) return;
-                doSkill(event.getRightClicked());
+                Bukkit.getScheduler().runTask(Main.instance, () -> doSkill(event.getRightClicked()));
                 hit = true;
                 new BukkitRunnable() {
                     @Override

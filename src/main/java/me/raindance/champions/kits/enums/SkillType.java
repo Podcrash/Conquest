@@ -15,8 +15,9 @@ public enum SkillType {
     }
 
     public static SkillType getByName(String name){
+        name = name.toLowerCase();
         for(SkillType skillType : SkillType.values()) {
-            if(name.toLowerCase().contains(skillType.getName().toLowerCase())) return skillType;
+            if(name.contains(skillType.getName().toLowerCase())) return skillType;
         }
         return null;
     }

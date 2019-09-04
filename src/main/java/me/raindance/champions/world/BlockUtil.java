@@ -13,6 +13,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Gate;
 import org.bukkit.material.MaterialData;
@@ -85,6 +86,12 @@ public final class BlockUtil {
             Material.DARK_OAK_FENCE_GATE,
             Material.ACACIA_FENCE_GATE
     };
+
+
+    public static boolean isInWater(LivingEntity entity) {
+        Material m = entity.getLocation().getBlock().getType();
+        return (m.equals(Material.STATIONARY_WATER) || m.equals(Material.WATER));
+    }
 
     public static boolean isPassable(Block block) {
         if (Arrays.stream(passables).anyMatch(material -> material.equals(block.getType()))) {
@@ -284,7 +291,7 @@ public final class BlockUtil {
         return result;
     }
     public static List<Player> getPlayersInArea(Location curLoc, int radius, List<Player> players) {
-        List<Player> result = new Stack<>();
+        List<Player> result = new ArrayList<>();
         if(players == null) players = curLoc.getWorld().getPlayers();
         double radiusSquared = FastMath.pow(radius, 2D);
         //distance formula way
@@ -361,9 +368,11 @@ public final class BlockUtil {
      * @param durationInSeconds the amount of seconds after it will be restored
      */
     public static void restoreAfterBreak(Location location, Material material, byte data, int durationInSeconds) {
-        Material before = location.getBlock().getType();
+        Block originalBlock = location.getBlock();
+        Material before = originalBlock.getType();
+        byte originalData = originalBlock.getData();
         setBlock(location, material, data);
-        BlockBreakThenRestore resource = new BlockBreakThenRestore(durationInSeconds, before, location);
+        BlockBreakThenRestore resource = new BlockBreakThenRestore(durationInSeconds, before, location, originalData);
         CraftBlockUpdater.getMassBlockUpdater(location.getWorld()).addRestore(resource);
 
     }

@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.BruteSkills;
 
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import me.raindance.champions.Main;
 import me.raindance.champions.damage.DamageApplier;
 import me.raindance.champions.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.enums.InvType;
@@ -9,6 +10,8 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.PacketUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -26,13 +29,13 @@ public class WhirlwindAxe extends Instant {
     private int maxDamage;
     private float multiplier;
     private final Random random = new Random();
-    private static double[][] pleaseLoad = new double[60][2];
+    private final static double[][] pleaseLoad = new double[60][2];
     public WhirlwindAxe(Player player, int level) {
         super(player, "Whirlwind Axe", level, SkillType.Brute, ItemType.AXE, InvType.AXE, 21 - (1 + level));
         this.distance = 4 + level;
         this.distanceSquared = distance * distance;
         this.maxDamage = 3 + level;
-        this.multiplier = 1.0F + 0.1F * level;
+        this.multiplier = 1.7F + 0.2F * level;
 
         setDesc(Arrays.asList(
                 "Whirl your axe around rapidly, dealing ",
@@ -79,19 +82,19 @@ public class WhirlwindAxe extends Instant {
             }
         }.run(0,0);
 
-        for(int i = 0; i < pleaseLoad.length; i++) {
-            double x = pleaseLoad[i][0];
-            double z = pleaseLoad[i][1];
-            Vector vector = new Vector(x, 0, z);
-            playerLocation.add(vector);
-            WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(playerLocation,
-                    EnumWrappers.Particle.FIREWORKS_SPARK, 4,
-                    0.05F, 0.35F, 0.05F);
-            playerLocation.subtract(vector);
-            for (Player player : players) {
-                particle.sendPacket(player);
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            for(int i = 0; i < pleaseLoad.length; i++) {
+                double x = pleaseLoad[i][0];
+                double z = pleaseLoad[i][1];
+                Vector vector = new Vector(x, 0, z);
+                playerLocation.add(vector);
+                WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(playerLocation.toVector(),
+                        EnumWrappers.Particle.FIREWORKS_SPARK, 4,
+                        0.05F, 0.35F, 0.05F);
+                playerLocation.subtract(vector);
+                PacketUtil.syncSend(particle, getPlayers());
             }
-        }
+        });
 
     }
 
@@ -115,7 +118,7 @@ public class WhirlwindAxe extends Instant {
                     Vector toCenter = center.subtract(player.getLocation()).toVector().normalize().add(new Vector(0F, 0.1F, 0F));
                     double percentage = diff / distanceSquared;
                     toCenter.multiply(multiplier)
-                            .multiply(percentage + 0.5);
+                            .multiply(percentage);
                     player.setVelocity(toCenter);
                     DamageApplier.damage(player, getPlayer(), (double) maxDamage * (1D - percentage), this, false);
                 }

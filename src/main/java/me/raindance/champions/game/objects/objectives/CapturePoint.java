@@ -6,6 +6,8 @@ import me.raindance.champions.game.Game;
 import me.raindance.champions.game.GameManager;
 import me.raindance.champions.game.TeamEnum;
 import me.raindance.champions.game.objects.WinObjective;
+import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -61,12 +63,12 @@ public final class CapturePoint extends WinObjective {
         this.captureStyle[24][0] = 2;
         this.captureStyle[24][1] = 2;
 
-        this.game = GameManager.getGame(this);
+        this.game = GameManager.getGame();
     }
 
     @Override
     public void spawnFirework() {
-        this.fireworkEffect = FireworkEffect.builder().withColor(TeamEnum.getByColor(color).getColor()).with(FireworkEffect.Type.BURST).build();
+        this.fireworkEffect = FireworkEffect.builder().withColor(TeamEnum.getByColor(color).getColor()).with(FireworkEffect.Type.BALL_LARGE).build();
         super.spawnFirework();
     }
 
@@ -222,6 +224,8 @@ public final class CapturePoint extends WinObjective {
         if(current == colorByte && progress != 25) return capture(color);
         else {
             isFull = false;
+            if(!isCaptured())
+                SoundPlayer.sendSound(getLocation(), "dig.stone", 1, 90);
             progress++;
             int deltaX = row - this.blocks.length/2;
             int deltaZ = col - this.blocks[0].length/2;
@@ -293,10 +297,7 @@ public final class CapturePoint extends WinObjective {
             effect.setEffectId(2001);
             effect.setData(team.getProtocolData());
             effect.setLocation(new BlockPosition(woolLocation.toVector()));
-            for(Player player : players) {
-                effect.sendPacket(player);
-                //sound.sendPacket(player);
-            }
+            PacketUtil.asyncSend(effect, players);
         }
     }
 

@@ -1,5 +1,6 @@
 package me.raindance.champions.kits;
 
+import com.comphenix.protocol.PacketType;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.game.Game;
@@ -11,8 +12,10 @@ import me.raindance.champions.kits.iskilltypes.ISkill;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
@@ -39,7 +42,7 @@ public abstract class Skill implements ISkill {
     public Skill(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, float cooldown) {
         this.player = player;
         this.boosted = false;
-        this.level = boost(level);
+        this.level = level;
         this.name = name;
         this.cooldown = cooldown;
         this.type = type;
@@ -56,6 +59,9 @@ public abstract class Skill implements ISkill {
         addDescArg("weight", this::getSkillTokenWeight);
     }
 
+    public int getID() {
+        return Objects.hash(name);
+    }
     public abstract int getMaxLevel();
 
     public boolean isInGame() {
@@ -74,8 +80,10 @@ public abstract class Skill implements ISkill {
      * @param player
      * @return
      */
-    public boolean isAlly(Player player) {
-        return !isInGame() || getChampionsPlayer().isAlly(player);
+    public boolean isAlly(LivingEntity player) {
+        if(player instanceof Player) {
+            return !isInGame() || getChampionsPlayer().isAlly((Player) player);
+        }else return false;
     }
 
     /**
@@ -202,8 +210,8 @@ public abstract class Skill implements ISkill {
     public boolean onCooldown() {
         return (float) (System.currentTimeMillis() - lastUsed) < cooldown * 1000F;
     }
-    public float cooldown() {
-        return cooldown - ((float) (System.currentTimeMillis() - lastUsed)) / 1000F;
+    public double cooldown() {
+        return cooldown - ((double)(System.currentTimeMillis() - lastUsed)) / 1000D;
     }
 
     public boolean hasEnergy(double energy) {

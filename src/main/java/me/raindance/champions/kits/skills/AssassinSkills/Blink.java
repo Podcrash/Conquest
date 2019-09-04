@@ -71,7 +71,7 @@ public class Blink extends Instant {
                 break;
             }
             else {
-                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(location.clone().add(0, 1, 0), EnumWrappers.Particle.SMOKE_LARGE, 5, 0,0,0);
+                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(location.clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.SMOKE_LARGE, 5, 0,0,0);
                 getPlayer().getWorld().getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
                 location.add(increment);
             }
@@ -97,7 +97,7 @@ public class Blink extends Instant {
 
             for(int i = 0; i < finalDistance; i++) {
 
-                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(start.clone().add(0, 1, 0), EnumWrappers.Particle.SMOKE_LARGE, 5, 0,0,0);
+                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(start.clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.SMOKE_LARGE, 5, 0,0,0);
                 getPlayer().getWorld().getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
                 start.add(increment);
 

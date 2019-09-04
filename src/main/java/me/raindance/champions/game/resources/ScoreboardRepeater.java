@@ -12,7 +12,7 @@ public class ScoreboardRepeater extends GameResource {
     public ScoreboardRepeater(int gameID) {
         //every 10 ticks, I'm not sure if a scoreboard render is going to lag the client but it doesn't
         //need to be refreshed every 1/20th of a second
-        this(gameID, 10, 0);
+        this(gameID, 5, 0);
         this.scoreboard = getGame().getGameScoreboard();
     }
 
@@ -20,10 +20,9 @@ public class ScoreboardRepeater extends GameResource {
      * Remake the scoreboard and show it to the players
      */
     private void update() {
-        GameScoreboard  gameScoreboard =  getGame().getGameScoreboard();
-        gameScoreboard.convertScoreboard(null);
+        scoreboard.convertScoreboard(null);
         for (Player player : getGame().getPlayers()){
-            player.setScoreboard(getGame().getGameScoreboard().getBoard());
+            player.setScoreboard(scoreboard.getBoard());
         }
     }
 

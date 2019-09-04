@@ -9,6 +9,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import java.util.Arrays;
 
@@ -32,8 +33,9 @@ public class Cleave extends Passive {
         return 3;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void damage(DamageApplyEvent e){
+        if(e.isCancelled()) return;
         if(e.getAttacker() != getPlayer() || e.getCause() != Cause.MELEE) return;
         Location victLoc = e.getVictim().getLocation();
         for(Player player : getPlayers()){

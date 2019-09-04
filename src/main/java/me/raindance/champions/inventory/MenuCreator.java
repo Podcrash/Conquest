@@ -50,9 +50,7 @@ public class MenuCreator {
         @Override
         public void update() {
             getInventory().clear();
-            for(Game game : GameManager.getGames()) {
-                getInventory().addItem(game.getItemInfo());
-            }
+            getInventory().addItem(GameManager.getGame().getItemInfo());
         }
     };
 

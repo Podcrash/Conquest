@@ -30,6 +30,7 @@ public class NullBlade extends Passive {
 
     @EventHandler
     public void hit(DamageApplyEvent event){
+        if(event.isCancelled()) return;
         if (event.getAttacker() == getPlayer()) {
             EnergyBar ebar = getChampionsPlayer().getEnergyBar();
             boolean willOverfill = ebar.getEnergy() + energyGain > ebar.getMaxEnergy();

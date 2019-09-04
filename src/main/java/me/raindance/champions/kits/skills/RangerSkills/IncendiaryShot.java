@@ -44,6 +44,7 @@ public class IncendiaryShot extends BowShotSkill {
 
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+        if(isAlly(victim)) return;
         victim.setFireTicks(0);
         float duration = level/2F + (float) victim.getLocation().distance(shooter.getLocation())/scaling;
         event.addSkillCause(this);

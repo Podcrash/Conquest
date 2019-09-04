@@ -35,9 +35,7 @@ public class ShockingStrikes extends Passive {
             priority = EventPriority.MONITOR
     )
     public void onHit(DamageApplyEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
+        if(event.isCancelled()) return;
         //cba with non players
         if (event.getAttacker() == getPlayer() && event.getCause() == Cause.MELEE && event.getVictim() instanceof Player) {
             Player damager = (Player) event.getAttacker();

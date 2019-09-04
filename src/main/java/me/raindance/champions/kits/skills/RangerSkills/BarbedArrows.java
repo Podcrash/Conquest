@@ -10,6 +10,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import java.util.Arrays;
 
@@ -31,7 +32,7 @@ public class BarbedArrows extends Passive {
             priority = EventPriority.LOW
     )
     public void shoot(DamageApplyEvent e) {
-        if (e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
+        if (!isAlly(e.getVictim()) && e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
             e.addSkillCause(this);
@@ -40,6 +41,13 @@ public class BarbedArrows extends Passive {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void sprint(PlayerToggleSprintEvent event) {
+        if(event.isSprinting()) {
+            event.setCancelled(true);
+
+        }
+    }
     @Override
     public int getMaxLevel() {
         return 3;

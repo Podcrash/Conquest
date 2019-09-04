@@ -45,7 +45,7 @@ public class InventoryData {
 
 
     public static void addAssassin() {
-        System.out.println("Trying to add assassin");
+        Main.getInstance().getLogger().info("Trying to add assassin");
         addSkill(new Illusion(null, 0));
         addSkill(new Evade(null, 0));
         addSkill(new Flash(null, 0));
@@ -62,6 +62,7 @@ public class InventoryData {
         addSkill(new Backstab(null, 0));
     }
     public static void addRanger() {
+        Main.getInstance().getLogger().info("Trying to add ranger");
         addSkill(new WolfsPounce(null, 0));
         addSkill(new Disengage(null, 0));
         addSkill(new Agility(null, 0));
@@ -78,10 +79,12 @@ public class InventoryData {
         addSkill(new HealingShot(null,  0));
         addSkill(new ExplosiveArrow(null, 0));
         addSkill(new IncendiaryShot(null, 0));
-        addSkill(new LongshotRework(null, 0 ));
+        addSkill(new HeartsEye(null, 0 ));
         addSkill(new Barrage(null, 0));
     }
     public static void addMage() {
+
+        Main.getInstance().getLogger().info("Trying to add mage");
         addSkill(new Rupture(null, 0));
         addSkill(new Inferno(null, 0));
         addSkill(new StaticLaser(null, 0));
@@ -100,6 +103,7 @@ public class InventoryData {
         addSkill(new ManaPool(null, 0));
     }
     public static void addKnight() {
+        Main.getInstance().getLogger().info("Trying to add knight");
         addSkill(new DefensiveStance(null, 0));
         addSkill(new BullsCharge(null, 0));
         addSkill(new HiltSmash(null, 0));
@@ -115,6 +119,7 @@ public class InventoryData {
         addSkill(new RopedAxeThrow(null, 0));
     }
     public static void addBrute() {
+        Main.getInstance().getLogger().info("Trying to add brute");
         addSkill(new Colossus(null, 0));
         addSkill(new Overwhelm(null, 0));
         addSkill(new CripplingBlow(null, 0));
@@ -128,6 +133,7 @@ public class InventoryData {
         addSkill(new WhirlwindAxe(null, 0));
     }
     public static void addGlobal() {
+        Main.getInstance().getLogger().info("Trying to add global");
         addSkill(new Swim(null, 0));
         addSkill(new Resistance(null, 0));
         addSkill(new BreakFall(null, 0));

@@ -9,11 +9,8 @@ public class SpecCommand extends CommandBase{
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player && args.length == 1) {
-            int id = Integer.parseInt(args[0]);
-            if(GameManager.getGame(id) != null) {
-                GameManager.addSpectator(id, (Player) sender);
-            }else sender.sendMessage("Game with ID " + id + " does not exist!");
+        if(sender instanceof Player) {
+            GameManager.addSpectator((Player) sender);
             return true;
         }
         return false;

@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
@@ -35,14 +36,18 @@ public class ShieldSmash extends Instant {
         }
         Location eyeLoc = getPlayer().getEyeLocation();
         Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(0.5d));
-        AbstractPacket packet = ParticleGenerator.createParticle(center, EnumWrappers.Particle.EXPLOSION_LARGE, 1, 0, 0 , 0);
+        AbstractPacket packet = ParticleGenerator.createParticle(center.toVector(), EnumWrappers.Particle.EXPLOSION_LARGE,
+                1, 0, 0 , 0);
         for(Player p : getPlayers()) {
 
             ParticleGenerator.generate(p, packet);
-            if(p != getPlayer() && p.getLocation().distanceSquared(center) <= 4D){
-                p.setVelocity(eyeLoc.getDirection().normalize().multiply(velocity));
-                SoundPlayer.sendSound(p, "mob.zombie.metal", 0.8F, 57);
+
+            Vector vector = eyeLoc.getDirection().normalize().multiply(velocity);
+            if(vector.getY() > 0.75) vector.setY(0.75);
+            if(p != getPlayer() && p.getLocation().distanceSquared(center) <= 10D){
+                p.setVelocity(vector);
             }
+            SoundPlayer.sendSound(p, "mob.zombie.metal", 0.8F, 57);
         }
         this.setLastUsed(System.currentTimeMillis());
     }

@@ -1,5 +1,8 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
+import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import me.raindance.champions.effect.particle.ParticleGenerator;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.events.skill.SkillUseEvent;
@@ -83,11 +86,12 @@ public class Recall extends Passive implements IDropPassive, IContinuousPassive,
             if (useEvent.isCancelled()) return;
             boolean sneaking = getPlayer().isSneaking();
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_UNFECT, 2.0F, 2.0F);
-            if (sneaking) {
-                shiftRecall();
-            } else {
-                recall();
-            }
+            Location start = getPlayer().getLocation();
+            if (sneaking) shiftRecall();
+            else recall();
+            Location end = getPlayer().getLocation();
+            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.SPELL_WITCH, 3);
+            ParticleGenerator.generateLocAs(packet, start, end);
             setCooldown(sneaking);
             this.setLastUsed(System.currentTimeMillis());
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_UNFECT, 2.0F, 2.0F);

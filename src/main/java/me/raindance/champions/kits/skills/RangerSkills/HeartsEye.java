@@ -18,28 +18,34 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.util.Vector;
 
 import java.util.*;
 
-public class LongshotRework extends Passive implements TimeResource {
+public class HeartsEye extends Passive implements TimeResource {
     private List<Arrow> arrows = new ArrayList<>();
     private HashMap<String, LongshotDebuff> affected = new HashMap<>();
-    private float damageMultiplier;
+    private double damageMultiplier;
     private float distanceMultiplier;
-    public LongshotRework(Player player, int level) {
-        super(player, "Longshot Rework", level, SkillType.Ranger, InvType.PASSIVEB);
-        this.damageMultiplier = 1 + 0.05F * level;
+    public HeartsEye(Player player, int level) {
+        super(player, "Heart's Eye", level, SkillType.Ranger, InvType.PASSIVEB);
+        this.damageMultiplier = 1 - 0.05 + 0.1D * level;
         this.distanceMultiplier = 5.5F - 0.5F * level;
         if(player != null) this.run(1, 0);
         setDesc(Arrays.asList(
-                "You are a skilled tracker: ",
-                "hitting an enemy with an arrow from ",
-                "at least %%distance%% blocks away will ",
-                "reveal important information about them. "
+                "For 1 second per %%distance%% blocks travelled,",
+                "Your arrows will reveal the",
+                "vulnerabilities of their victims.",
+                "",
+                "Marked enemies will show their",
+                "current health and skill. They will",
+                "also take %%damage%%% more damage",
+                "from any source."
         ));
-        addDescArg("distance", () ->  distanceMultiplier * 3);
+        addDescArg("distance", () ->  distanceMultiplier);
+        addDescArg("damage", () -> MathUtil.round((damageMultiplier - 1D) * 100D, 2));
     }
 
     @Override
@@ -51,20 +57,27 @@ public class LongshotRework extends Passive implements TimeResource {
             priority = EventPriority.LOW
     )
     protected void shotArrow(EntityShootBowEvent event) {
-        if (event.isCancelled()) return;
         if (event.getEntity() == getPlayer() && event.getProjectile() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getProjectile();
             arrows.add(arrow);
         }
     }
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
-    protected void shotPlayer(DamageApplyEvent event) {
-        if(!(event.getVictim() instanceof Player)) return;
-        if(affected.containsKey(event.getVictim().getName())){
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    protected void damage(EntityDamageEvent event) {
+        if(event.isCancelled() || event.getCause() == null) return;
+        if(affected.getOrDefault(event.getEntity().getName(), null) != null)
             event.setDamage(event.getDamage() * damageMultiplier);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    protected void shotPlayer(DamageApplyEvent event) {
+        if(!(event.getVictim() instanceof Player) || event.isCancelled() || isAlly(event.getVictim())) return;
+        if(affected.containsKey(event.getVictim().getName())){
+            //self reduce to avoid bow spamming abuse
+            double multiplier = event.getAttacker() == getPlayer() ? 1D + (damageMultiplier - 1D)/2D : damageMultiplier;
+            event.setDamage(event.getDamage() * multiplier);
 
 
             event.setModified(true);
@@ -93,7 +106,6 @@ public class LongshotRework extends Passive implements TimeResource {
             }
         }
     }
-
 
     private class LongshotDebuff {
         private final Vector up = new Vector(0, 3, 0);

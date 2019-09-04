@@ -48,7 +48,7 @@ public class Barrage extends BowChargeUp {
             Vector vector1 = new Vector(x, z, y);
             Arrow arrow1 = world.spawnArrow(location, vector.clone().add(vector1).normalize(), speed, 0);
             arrow1.setShooter(getPlayer());
-            GameDamagerConverterListener.forceAddArrow(arrow1, 0.95F);
+            GameDamagerConverterListener.forceAddArrow(arrow1, 0.9F);
             SoundPlayer.sendSound(getPlayer().getLocation(), "random.bow", 0.12F, 70);
 
         }

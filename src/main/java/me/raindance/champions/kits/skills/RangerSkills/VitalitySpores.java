@@ -50,7 +50,7 @@ public class VitalitySpores extends Passive {
                     active = false;
                 }
             }); //this makes soups work if you are hit
-            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(getPlayer().getLocation(), EnumWrappers.Particle.HEART,
+            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(), EnumWrappers.Particle.HEART,
                     3, rand.nextFloat(), 0.9f, rand.nextFloat());
             getPlayer().getWorld().getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
         });
@@ -70,6 +70,7 @@ public class VitalitySpores extends Passive {
             priority = EventPriority.MONITOR
     )
     protected void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if (event.getVictim() == getPlayer()) {
             add();
         }
@@ -79,6 +80,7 @@ public class VitalitySpores extends Passive {
             priority = EventPriority.MONITOR
     )
     protected void hit(EntityDamageEvent event) {
+        if(event.isCancelled()) return;
         if (event.getEntity() == getPlayer() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
             add();
         }

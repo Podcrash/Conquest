@@ -2,6 +2,7 @@ package me.raindance.champions.hologram;
 
 import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
 import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
+import me.raindance.champions.util.PacketUtil;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.Location;
@@ -79,7 +80,7 @@ public class Hologram {
         WrapperPlayServerSpawnEntityLiving living = spawnPacket(line, loc);
         for(Player player : loc.getWorld().getPlayers()) {
             if(distCheck && player.getLocation().distanceSquared(loc) <= 8D) continue;
-            living.sendPacket(player);
+            PacketUtil.syncSend(living, location.getWorld().getPlayers());
         }
         return living.getEntityID();
     }
@@ -131,15 +132,13 @@ public class Hologram {
         show = false;
         WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
         destroy.setEntityIds(entityIDs.stream().mapToInt(i -> i).toArray());
-        for(Player player : location.getWorld().getPlayers()) {
-            destroy.sendPacket(player);
-        }
+        location.getWorld().getPlayers().forEach(destroy::sendPacket);
         this.entityIDs.clear();
     }
 
     /**
      * Combine the create and destroy methods to seamlessly update values.
-     * {@link me.raindance.champions.kits.skills.RangerSkills.LongshotRework}
+     * {@link me.raindance.champions.kits.skills.RangerSkills.HeartsEye}
      */
     public void update() {
         destroy();

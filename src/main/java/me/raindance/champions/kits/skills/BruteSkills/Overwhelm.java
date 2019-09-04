@@ -1,11 +1,10 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
+import me.raindance.champions.damage.Cause;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-
-import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +45,8 @@ public class Overwhelm extends Passive {
             priority = EventPriority.NORMAL
     )
     public void hit(DamageApplyEvent e) {
-        if (e.getAttacker() == getPlayer()) {
+        if(e.isCancelled()) return;
+        if (e.getAttacker() == getPlayer() && e.getCause() == Cause.MELEE) {
             Player damager = (Player) e.getAttacker();
             LivingEntity victim = e.getVictim();
             double diff = (damager.getHealth() - victim.getHealth());

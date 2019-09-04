@@ -42,8 +42,10 @@ public class LevelField extends Passive implements TimeResource, IPassiveTimer {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         //calculate(); if you wanted to make it on demand instead of calculating it every few ticks
         if (event.getAttacker() == getPlayer()) {
+            if(bonus == 0) return;
             event.addSkillCause(this);
             event.setDamage(event.getDamage() + bonus);
         }

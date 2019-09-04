@@ -13,8 +13,14 @@ public class Mage extends ChampionsPlayer {
     public Mage(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
-        setSound(new SoundWrapper("random.break", 0.65F, 126));
+        setSound(new SoundWrapper("random.break", 0.95F, 126));
         this.armor = new Material[]{Material.GOLD_BOOTS, Material.GOLD_LEGGINGS, Material.GOLD_CHESTPLATE, Material.GOLD_HELMET};
+    }
+
+    @Override
+    public void respawn() {
+        super.respawn();
+        getEnergyBar().setEnergy(getEnergyBar().getMaxEnergy() * 0.75D);
     }
 
     public String getName() {

@@ -17,7 +17,7 @@ public class Soup implements IItem {
 
     @Override
     public boolean useItem(Player player, Action action) {
-        StatusApplier.getOrNew(player).applyStatus(Status.REGENERATION, 4, 1);
+        StatusApplier.getOrNew(player).applyStatus(Status.REGENERATION, 4, 1, true, true);
         Location location = player.getEyeLocation();
         SoundPlayer.sendSound(location, "random.eat", 0.85F, 63, null);
         WrapperPlayServerWorldEvent red = ParticleGenerator.createBlockEffect(location, Material.RED_MUSHROOM.getId());

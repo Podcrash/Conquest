@@ -49,7 +49,7 @@ public class Sharpshooter extends Passive implements ICharge {
     }
 
     private boolean checkIfValidShooter(DamageApplyEvent e){
-        return e.getVictim() != getPlayer() && e.getAttacker() == getPlayer()
+        return !e.isCancelled() && e.getVictim() != getPlayer() && e.getAttacker() == getPlayer()
                 && e.getArrow() != null && e.getCause() == Cause.PROJECTILE;
     }
 

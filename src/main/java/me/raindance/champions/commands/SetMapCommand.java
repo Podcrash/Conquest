@@ -21,21 +21,11 @@ public class SetMapCommand extends CommandBase {
                 sender.sendMessage("List of the available maps: " + Main.getInstance().getMapConfiguration().getKeys(false).toString());
             } else if(args.length == 1){
                 if (GameManager.hasPlayer(player) && isValidMap(args[0])) {
-                    Game game = GameManager.getGame(player);
-                    GameManager.setGameMap(game, args[0]);
+                    GameManager.setGameMap(args[0]);
                     player.sendMessage("You selected " + args[0]);
                 } else if(!isValidMap(args[0])) {
                     player.sendMessage("That is not a valid map: available maps are " + Main.getInstance().getMapConfiguration().getKeys(false).toString());
                 }else player.sendMessage("You are currently not in a game");
-            } else if(args.length == 2) {
-                Game game = GameManager.getGame(Integer.parseInt(args[1]));
-                if(isValidMap(args[0])) {
-                    GameManager.setGameMap(game, args[0]);
-                    player.sendMessage("You selected " + args[0] + " for game #" + game.getId());
-                } else {
-                    player.sendMessage("That is not a valid map: available maps are " + Main.getInstance().getMapConfiguration().getKeys(false).toString());
-                }
-
             }
         } else {
             sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));

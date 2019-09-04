@@ -66,7 +66,7 @@ public class LightningOrb extends Instant implements IEnergy {
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if(!rightClickCheck(action) || hasCooldown()) return;
+        if(!rightClickCheck(action) || onCooldown()) return;
         if(isInWater()) getPlayer().sendMessage(getNoEnergyMessage());
         else {
             this.setLastUsed(System.currentTimeMillis());
@@ -77,7 +77,7 @@ public class LightningOrb extends Instant implements IEnergy {
             Item item = ItemManipulationManager.interceptWithCooldown(getPlayer(), Material.DIAMOND_BLOCK, location, vector, 2.5F, ((item1, entity) -> {
                 Location location1 = item1.getLocation();
                 for(Player player : getPlayers()) {
-                    if(player != getPlayer() && isAlly(player)) continue;
+                    if(player == getPlayer() && isAlly(player)) continue;
                     Location playerLocation = player.getLocation();
                     if(location1.distanceSquared(playerLocation) <= distance) {
                         playerLocation.getWorld().strikeLightningEffect(playerLocation);

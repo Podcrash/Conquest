@@ -80,6 +80,7 @@ public class WolfsFury extends Instant implements TimeResource {
             priority = EventPriority.HIGHEST
     )
     public void hit(DamageApplyEvent e) {
+        if(e.isCancelled()) return;
         if (_active && getPlayer() == e.getAttacker()) {
             e.setModified(true);
             e.addSkillCause(this);
@@ -96,7 +97,7 @@ public class WolfsFury extends Instant implements TimeResource {
     @Override
     public void task() {
         if (System.currentTimeMillis() - getLastUsed() >= selfEffect1000) _active = false;
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().add(0, 0, 0),
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
                 EnumWrappers.Particle.REDSTONE, new int[]{255, 255, 255, 0}, 9,
                 rand.nextFloat() / 2f, 0.25f + (rand.nextFloat() - 0.15f), rand.nextFloat() / 2f);
         getPlayer().getWorld().getPlayers().forEach(player -> ParticleGenerator.generate(player, particle));

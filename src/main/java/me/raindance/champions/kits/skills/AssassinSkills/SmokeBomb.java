@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.AssassinSkills;
 
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import me.raindance.champions.damage.Cause;
 import me.raindance.champions.effect.particle.ParticleGenerator;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
@@ -14,6 +15,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.SimpleTimeResource;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -87,7 +89,8 @@ public class SmokeBomb extends Passive implements IDropPassive {
                     Location loc2 = player.getLocation();
                     double distanceS = loc2.distanceSquared(loc);
                     if (distanceS < distanceSquared) {
-                        StatusApplier.getOrNew(player).applyStatus(Status.BLIND, blindDuration, 1);
+                        float duration = (isAlly(player)) ? blindDuration/2 : blindDuration;
+                        StatusApplier.getOrNew(player).applyStatus(Status.BLIND, duration, 1);
                     }
 
                 }
@@ -116,8 +119,9 @@ public class SmokeBomb extends Passive implements IDropPassive {
             priority = EventPriority.HIGHEST
     )
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
-        if (isInvis && applier.isCloaked()) {
+        if (isInvis && applier.isCloaked() && event.getCause() != Cause.MELEE) {
             LivingEntity victim = event.getVictim();
             LivingEntity damager = event.getAttacker();
             if (victim == getPlayer() || damager == getPlayer()) {
@@ -132,7 +136,7 @@ public class SmokeBomb extends Passive implements IDropPassive {
         @Override
         public void task() {
             smokeTrail.setLocation(getPlayer().getLocation());
-            for(Player player : getPlayers()) smokeTrail.sendPacket(player);
+            PacketUtil.syncSend(smokeTrail, getPlayers());
         }
 
         @Override

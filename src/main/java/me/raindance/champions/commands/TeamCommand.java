@@ -15,10 +15,9 @@ public class TeamCommand extends CommandBase {
             if (args.length == 1 && !GameManager.isSpectating(player)) {
                 if (args[0].equalsIgnoreCase("red") || args[0].equalsIgnoreCase("blue")) {
                     String team = args[0].toLowerCase();
-                    if (GameManager.hasPlayer(player) && !GameManager.getGame(player).isOngoing()) {
-                        Game game = GameManager.getGame(player);
-                        GameManager.joinTeam(player, game.getId(), team);
-                    } else if(GameManager.getGame(player).isOngoing()) {
+                    if (GameManager.hasPlayer(player) && !GameManager.getGame().isOngoing()) {
+                        GameManager.joinTeam(player, team);
+                    } else if(GameManager.getGame().isOngoing()) {
                         player.sendMessage(
                                 String.format(
                                         "%sChampions> %sYou may not switch teams mid-game!",

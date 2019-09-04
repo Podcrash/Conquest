@@ -14,7 +14,7 @@ public class Brute extends ChampionsPlayer {
     public Brute(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
-        setSound(new SoundWrapper("mob.blaze.hit", 0.65F, 57));
+        setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 57));
         this.armor = new Material[]{Material.DIAMOND_BOOTS, Material.DIAMOND_LEGGINGS, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_HELMET};
     }
 

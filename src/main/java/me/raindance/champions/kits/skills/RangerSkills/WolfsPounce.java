@@ -5,11 +5,11 @@ import me.raindance.champions.damage.DamageApplier;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
-import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
+import me.raindance.champions.util.EntityUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -73,6 +73,7 @@ public class WolfsPounce extends ChargeUp {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void damage(DamageApplyEvent e) {
+        if(e.isCancelled()) return;
         if (e.getVictim() == this.getPlayer() && isUsing) {
             resetWhenDamaged();
         }
@@ -80,6 +81,7 @@ public class WolfsPounce extends ChargeUp {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void damage(EntityDamageEvent e) {
+        if(e.isCancelled()) return;
         if (e.getEntity() == this.getPlayer() && isUsing) {
             resetWhenDamaged();
         }
@@ -100,21 +102,21 @@ public class WolfsPounce extends ChargeUp {
         vector.setY(vector.getY() + 0.2);
         double yMax = 0.5d + 0.82d * getCharge();
         if (vector.getY() > yMax) vector.setY(yMax);
-        if (((Entity) getPlayer()).isOnGround()) vector.setY(vector.getY() + 0.2);
+        if (EntityUtil.onGround(getPlayer())) vector.setY(vector.getY() + 0.2);
         getPlayer().setVelocity(vector);
         this.hitGround.run();
     }
 
     @Override
     public void task() {
-        if (((Entity) getPlayer()).isOnGround()) {
+        if (EntityUtil.onGround(getPlayer())) {
             super.task();
         }
     }
 
     @Override
     public void charge() {
-        if (((Entity) getPlayer()).isOnGround()) {
+        if (EntityUtil.onGround(getPlayer())) {
             super.charge();
         }
     }

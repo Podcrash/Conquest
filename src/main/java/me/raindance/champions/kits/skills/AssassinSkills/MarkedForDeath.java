@@ -49,13 +49,14 @@ public class MarkedForDeath extends BowShotSkill {
     protected void shotArrow(Arrow arrow, float force) {
         Player player = getPlayer();
         player.sendMessage(getUsedMessage());
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(arrow.getLocation().clone(), EnumWrappers.Particle.SPELL_MOB, 1,
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(arrow.getLocation().toVector(), EnumWrappers.Particle.SPELL_MOB, 1,
                 0,0,0);
         ParticleGenerator.generateProjectile(arrow, particle);
     }
 
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+        if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, duration, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BLAZE_BREATH, 1.0f, 1.5f);
         event.addSkillCause(this);
@@ -70,6 +71,7 @@ public class MarkedForDeath extends BowShotSkill {
 
     @EventHandler
     public void damage(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         LivingEntity entity = event.getVictim();
         if(victims.containsKey(entity.getName()) && System.currentTimeMillis() <= victims.get(entity.getName())) {
             event.addSkillCause(this);

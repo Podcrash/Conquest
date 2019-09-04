@@ -11,6 +11,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Continuous;
 import me.raindance.champions.mob.CustomSkeleton;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.EntityEquipment;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Illusion extends Continuous {
     private final int MAX_LEVEL = 4;
@@ -105,13 +107,14 @@ public class Illusion extends Continuous {
         Location location = skeleton.getLocation().clone();
         despawn(skeleton);
 
-        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location, EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
-        for(Player player : getPlayers()) {
+        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location.toVector(), EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
+        List<Player> players = getPlayers();
+        for(Player player : players) {
             if(player != getPlayer() && player.getLocation().distanceSquared(location) <= 9) {
                 StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 1);
             }
-            particles.sendPacket(player);
         }
+        PacketUtil.syncSend(particles, players);
         for (int i=0 ; i<2 ; i++) location.getWorld().playSound(location, Sound.FIZZ, 2f, 0.4f);
         this.setLastUsed(System.currentTimeMillis());
         a = true;

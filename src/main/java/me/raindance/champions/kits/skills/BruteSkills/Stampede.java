@@ -38,7 +38,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
         this.toggle = false;
         this.timing = 6 - level;
         double bonus = (0.25 + level * 0.25);
-        resource = player != null ? new StampedeParticleResource(getPlayer(), ParticleGenerator.createParticle(null, EnumWrappers.Particle.CRIT, 2, 0,0,0), null) : null;
+        resource = player != null ? new StampedeParticleResource(getPlayer(), ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2), null) : null;
         setDesc(Arrays.asList(
                 "You slowly build up speed as you ",
                 "sprint. You gain a level of Speed ",
@@ -142,9 +142,10 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     }
 
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.NORMAL
     )
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if (event.getAttacker() == getPlayer()) {
             if (event.getCause() != Cause.MELEE) return;
             if(charges == 0) return;

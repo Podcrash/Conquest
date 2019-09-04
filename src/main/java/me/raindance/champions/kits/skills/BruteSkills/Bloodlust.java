@@ -50,7 +50,7 @@ public class Bloodlust extends Passive {
 
     private class BloodlustParticleResource extends EntityParticleResource {
         public BloodlustParticleResource() {
-            super(instance.getPlayer(), ParticleGenerator.createParticle(null, EnumWrappers.Particle.REDSTONE, 2,0,0,0), null);
+            super(instance.getPlayer(), ParticleGenerator.createParticle(EnumWrappers.Particle.REDSTONE, 2), null);
         }
 
         @Override
@@ -94,12 +94,13 @@ public class Bloodlust extends Passive {
             }, 1L);
             SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombiepig.zpigangry", 1f, 110);
             this.setLastUsed(System.currentTimeMillis());
-            resource.run(1,1);
+            resource.runAsync(1,1);
         }
     }
 
     @EventHandler
     public void damage(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if(event.getAttacker() == getPlayer() && (event.getCause() == Cause.MELEE || event.getCause() == Cause.MELEESKILL)) {
             if(System.currentTimeMillis() - current <= duration * 1000L) event.addSkillCause(this);
         }

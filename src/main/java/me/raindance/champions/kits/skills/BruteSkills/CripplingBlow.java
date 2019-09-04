@@ -8,7 +8,6 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,7 +38,7 @@ public class CripplingBlow extends Passive { // Crippling Blow is a Passive skil
     } // It has a maximum level so you can't paralyse people for life with Crippling Blow 12
 
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.LOW
     ) // The priority is monitor because, the Brute wants to watch you suffer rather than end your pain immediately
 
     public void onHit(DamageApplyEvent event) { // When you smack someone it does stuff

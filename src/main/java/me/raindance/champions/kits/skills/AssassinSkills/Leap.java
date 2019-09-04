@@ -4,10 +4,11 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
+import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.EntityUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -44,24 +45,24 @@ public class Leap extends Instant {
         if (!loc.getBlock().getType().equals(Material.AIR)) {
             player.sendMessage(String.format("%sSkill> %sYou used %sWall Kick%s.",
                     ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY));
-            player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 1f, 1f);
+            SoundPlayer.sendSound(player.getLocation(), "mob.bat.takeoff", 1, 90);
             Vector v = getPlayer().getLocation().getDirection().multiply(1.2);
             v.setY(0);
             v.multiply(0.7);
             v.setY(v.getY() + 0.7);
             if(v.getY() > 2) v.setY(2);
-            if(((Entity) getPlayer()).isOnGround()) v.setY(v.getY() + 0.2);
+            if(EntityUtil.onGround(player)) v.setY(v.getY() + 0.2);
             player.setVelocity(v);
             player.setFallDistance(-3);
         }else {
             if(!onCooldown()) {
                 player.sendMessage(getUsedMessage());
-                player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 1f, 1f);
+                SoundPlayer.sendSound(player.getLocation(), "mob.bat.takeoff", 1, 70);
                 Vector v = getPlayer().getLocation().getDirection().multiply(1.2);
                 v.setY(v.getY() + 0.2);
                 if(v.getY() > 1) v.setY(1);
                 else if (v.getY() < 0) v.setY(0);
-                if(((Entity) getPlayer()).isOnGround()) v.setY(v.getY() + 0.2);
+                if(EntityUtil.onGround(getPlayer())) v.setY(v.getY() + 0.2);
                 player.setVelocity(v);
                 player.setFallDistance(-3);
                 this.setLastUsed(System.currentTimeMillis());

@@ -63,8 +63,8 @@ public final class TitleSender {
         String bar = generateBars();
         int size = bar.length() - 1;
         float temp = skill.getCooldown();
-        float cooldown = skill.cooldown();
-        float product = 1F - cooldown/temp;
+        double cooldown = skill.cooldown();
+        double product = 1F - cooldown/temp;
         int currentProgress = (int) (size * product);
         currentProgress = (currentProgress > size) ? size : currentProgress;
         String sprogress = bar.substring(0, currentProgress) + ChatColor.RED + bar.substring(currentProgress, size);
@@ -80,8 +80,8 @@ public final class TitleSender {
         String bar = generateBars();
         int size = bar.length() - 1;
         float temp = skill.getCooldown();
-        float cooldown = skill.cooldown();
-        float product = 1F - cooldown/temp;
+        double cooldown = skill.cooldown();
+        double product = 1F - cooldown/temp;
         int currentProgress = (int) (size * product);
         currentProgress = (currentProgress > size) ? size : currentProgress;
         String sprogress = bar.substring(0, currentProgress) + ChatColor.RED + bar.substring(currentProgress, size);

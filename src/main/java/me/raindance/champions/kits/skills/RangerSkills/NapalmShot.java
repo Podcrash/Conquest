@@ -10,6 +10,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.EntityUtil;
 import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -133,7 +134,7 @@ public class NapalmShot extends BowShotSkill {
     public void pickUp(PlayerPickupItemEvent event){
         if(!items.contains(event.getItem())) return;
         Item item = event.getItem();
-        if(item.isOnGround()){
+        if(EntityUtil.onGround(item, 0.025)){
             item.remove();
             if(event.getPlayer().getLocation().getBlock().getType().equals(Material.WATER)) return;
             StatusApplier.getOrNew(event.getPlayer()).applyStatus(Status.FIRE, duration, 1);

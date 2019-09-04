@@ -10,8 +10,8 @@ public class ViewCommand extends CommandBase{
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(args.length == 1) {
             int id = Integer.parseInt(args[0]);
-            if(GameManager.getGame(id) != null) {
-                sender.sendMessage(GameManager.getGame(id).toString());
+            if(GameManager.getGame() != null) {
+                sender.sendMessage(GameManager.getGame().toString());
             }else sender.sendMessage("Game with ID " + id + " does not exist!");
             return true;
         }

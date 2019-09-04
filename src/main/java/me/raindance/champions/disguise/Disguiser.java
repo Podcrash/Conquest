@@ -14,6 +14,7 @@ import com.mojang.authlib.GameProfile;
 import me.raindance.champions.Main;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.util.PlayerCache;
 import me.raindance.champions.util.Utility;
 import net.minecraft.server.v1_8_R3.*;
@@ -105,9 +106,7 @@ public final class Disguiser {
                 if(destroyIDs.size() > 0) {
                     WrapperPlayServerEntityDestroy entityDestroy = destroyPacket(destroyIDs.stream().mapToInt(i -> i).toArray());
                     //this nullpointer error won't actually be called ever.
-                    for (Player player : disguise.getEntity().getWorld().getPlayers()) {
-                        entityDestroy.sendPacket(player);
-                    }
+                    PacketUtil.asyncSend(entityDestroy, disguise.getEntity().getWorld().getPlayers());
                 }
             }
 
@@ -155,12 +154,13 @@ public final class Disguiser {
         disguises.put(entity.getEntityId(), disguise);
         seenDisguises.put(entityPlayer.getId(), disguise);
 
-        for (Player player : players) {
-            destroy.sendPacket(player);
-            info.sendPacket(player);
-            spawn.sendPacket(player);
-            if(armorPackets != null)
-                for(AbstractPacket armorPacket : armorPackets) armorPacket.sendPacket(player);
+        List<AbstractPacket> allPackets = new ArrayList<>(Arrays.asList(destroy, info, spawn));
+        if(armorPackets != null)
+            allPackets.addAll(armorPackets);
+        for(Player player : players) {
+            for(AbstractPacket packet : allPackets) {
+                packet.sendPacket(player);
+            }
         }
     }
     public static void disguise(Entity entity, EntityType entityType){
@@ -180,8 +180,8 @@ public final class Disguiser {
 
         AbstractPacket[] packets = new AbstractPacket[] {entityDestroy, spawnEntity};
         List<Player> players = world.getPlayers();
-        for(AbstractPacket packet : packets) {
-            for (Player player : players) {
+        for(Player player : players) {
+            for(AbstractPacket packet : packets) {
                 packet.sendPacket(player);
             }
         }

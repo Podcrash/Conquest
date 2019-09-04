@@ -63,6 +63,7 @@ public class Riposte extends Instant implements TimeResource {
             priority = EventPriority.MONITOR
     )
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         LivingEntity player = event.getVictim();
         if (player == getPlayer() && isRiposting) {
             isRiposting = false;
@@ -80,7 +81,7 @@ public class Riposte extends Instant implements TimeResource {
                 event.setDamage(event.getDamage() + bonus);
                 event.addSkillCause(this);
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1f, 1.6f);
-                getPlayer().sendMessage("Skill> You riposted " + event.getAttacker().getName());
+                getPlayer().sendMessage("Skill> You riposted " + event.getVictim().getName());
                 event.setModified(true);
             } else getPlayer().sendMessage("Skill> You failed to Riposte");
             ripoSuccess = false;

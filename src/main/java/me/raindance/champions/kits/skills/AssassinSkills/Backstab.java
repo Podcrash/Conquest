@@ -37,7 +37,7 @@ public class Backstab extends Passive {
     )
     public void onHit(DamageApplyEvent event) {
         //cba with non players
-        if (event.isCancelled() && event.getCause() == Cause.MELEE) return;
+        if (event.isCancelled() || event.getCause() != Cause.MELEE) return;
         if (event.getAttacker() != getPlayer()) return;
         Player damager = (Player) event.getAttacker();
         LivingEntity victim = event.getVictim();

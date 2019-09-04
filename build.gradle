@@ -1,7 +1,14 @@
 plugins {
     id 'java'
+    id 'idea'
+    id 'eclipse'
     id 'groovy'
 }
+
+repositories {
+    mavenCentral()
+}
+
 setLibsDirName("..\\server\\plugins")
 
 group 'raindance'
@@ -9,22 +16,16 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
+    implementation fileTree('libs')
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': "Champions",
-                'Implementation-Version': version,
-                'Main-Class': 'me.raindance.champions.Main'
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    test.useJUnitPlatform()
+
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.5.1"
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.5.1')
+
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.1"
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.5.1')
 }

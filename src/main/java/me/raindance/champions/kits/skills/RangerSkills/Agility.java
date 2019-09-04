@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Agility extends Instant implements TimeResource {
@@ -62,7 +63,7 @@ public class Agility extends Instant implements TimeResource {
     protected void doSkill(PlayerInteractEvent event, Action action) {
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             if (_active) _active = false;
-        } else if (!onCooldown()) {
+        } else if (!onCooldown() && action != Action.PHYSICAL) {
             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, selfEffect, 1, false);
             _active = true;
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.NOTE_PLING, 0.5f, 0.5f);
@@ -79,17 +80,19 @@ public class Agility extends Instant implements TimeResource {
         if (_active && getPlayer() == e.getVictim() && getPlayer().isSprinting()) {
             e.setModified(true);
             e.setDoKnockback(false);
-            e.setDamage(e.getDamage() * selfReduction);
+            e.setDamage(e.getDamage() * (1D - selfReduction));
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.BLAZE_BREATH, 0.5f, 2);
         }
     }
 
     @EventHandler(
-            priority = EventPriority.HIGHEST
+            priority = EventPriority.HIGH
     )
     public void hit(EntityDamageEvent event) {
-        if (_active && event.getEntity() == getPlayer() && getPlayer().isSprinting() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            event.setDamage(event.getDamage() * selfReduction);
+        List<EntityDamageEvent.DamageCause>  causes = Arrays.asList(
+                EntityDamageEvent.DamageCause.FALL, EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK);
+        if (_active && event.getEntity() == getPlayer() && getPlayer().isSprinting() && causes.contains(event.getCause())) {
+            event.setDamage(event.getDamage() * (1D - selfReduction));
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.BLAZE_BREATH, 0.5f, 2);
         }
     }
@@ -103,7 +106,7 @@ public class Agility extends Instant implements TimeResource {
     public void task() {
         if (System.currentTimeMillis() - getLastUsed() >= selfEffect1000) _active = false;
         if (!getPlayer().isSprinting()) return;
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().add(0, 0, 0),
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
                 EnumWrappers.Particle.SPELL, new int[]{255, 255, 255, 0}, 9,
                 rand.nextFloat() / 2f, 0.25f + (rand.nextFloat() - 0.15f), rand.nextFloat() / 2f);
         getPlayer().getWorld().getPlayers().forEach(player -> ParticleGenerator.generate(player, particle));

@@ -7,11 +7,15 @@ import me.raindance.champions.damage.DamageApplier;
 import me.raindance.champions.effect.particle.ParticleGenerator;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
+import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
+import me.raindance.champions.util.EntityUtil;
+import me.raindance.champions.util.PacketUtil;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -37,8 +41,11 @@ public class Takedown extends Instant {
         this.effect = 2 + level;
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2);
         this.hitGround = new CollideBeforeHitGround(player)
-                .changeEvaluation(() -> (player.getNearbyEntities(hitbox, hitbox, hitbox).size() > 0) || (((Entity) player).isOnGround()))
+                .changeEvaluation(() -> (player.getNearbyEntities(hitbox, hitbox, hitbox).size() > 0) || EntityUtil.onGround(player))
                 .then(() -> {
+                    SkillUseEvent event = new SkillUseEvent(this);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if(event.isCancelled()) return;
                     List<Entity> entities = getPlayer().getNearbyEntities(hitbox, hitbox, hitbox);
                     if (entities.size() == 0) return;
                     getPlayer().setVelocity(new Vector(0, 0, 0));
@@ -60,7 +67,7 @@ public class Takedown extends Instant {
                     }
                 }).doWhile(() -> {
                     packet.setLocation(player.getLocation());
-                    for(Player p : getPlayers()) packet.sendPacket(p);
+                    PacketUtil.syncSend(packet, getPlayers());
                 });
 
         setDesc(Arrays.asList(
@@ -76,7 +83,7 @@ public class Takedown extends Instant {
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if (!rightClickCheck(action) || ((Entity) getPlayer()).isOnGround()) {
+        if (!rightClickCheck(action) || EntityUtil.onGround(getPlayer())) {
             if(!onCooldown()) {
                 getPlayer().sendMessage(String.format("%s%s> %sYou cannot use %sTakedown%s while grounded.",
                         ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY));

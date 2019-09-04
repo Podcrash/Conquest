@@ -10,6 +10,8 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
 import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.EntityUtil;
+import me.raindance.champions.util.PacketUtil;
 import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -68,20 +70,20 @@ public class ExplosiveArrow extends BowShotSkill {
     }
     private void explode(Arrow arrow, Location location) {
         explosion.setLocation(location);
-        for(final Player player : location.getWorld().getPlayers()) {
+        PacketUtil.syncSend(explosion, getPlayers());
+        for(final Player player : getPlayers()) {
             double deltaDistance = this.range - location.distanceSquared(player.getLocation());
             if(deltaDistance > 0) {
                 double divide = deltaDistance/range;
                 Vector vector = player.getLocation().add(0, 1, 0).subtract(location).toVector().normalize().multiply(0.45D + 0.6D * divide);
                 vector.setY(vector.getY() + 0.3D + 0.3D * divide);
                 if(vector.getY() > 0.8D) vector.setY(0.8D);
-                if(((Entity) player).isOnGround()) {
+                if(EntityUtil.onGround(player)) {
                     vector.setY(vector.getY() + 0.1);
                 }
                 player.setVelocity(vector);
             }
             SoundPlayer.sendSound(location, "random.explode", 0.9F, 70);
-            explosion.sendPacket(player);
         }
     }
 

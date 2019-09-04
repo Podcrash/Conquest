@@ -1,6 +1,5 @@
 package me.raindance.champions.listeners;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityStatus;
 import me.raindance.champions.damage.DamageApplier;
 import me.raindance.champions.disguise.Disguise;
 import me.raindance.champions.disguise.Disguiser;
@@ -8,22 +7,23 @@ import me.raindance.champions.effect.status.ThrowableStatusApplier;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.classes.Assassin;
+import me.raindance.champions.util.PacketUtil;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameDamagerConverterListener extends ListenerBase {
-    private static HashMap<Arrow, Float> arrowDamageMap = new HashMap<>();
+    private static Map<Arrow, Float> arrowDamageMap = new HashMap<>();
+    private Map<String, Long> delay = new HashMap<>();
 
     public GameDamagerConverterListener(JavaPlugin plugin) {
         super(plugin);
@@ -45,11 +45,14 @@ public class GameDamagerConverterListener extends ListenerBase {
                 ChampionsPlayer cVictim = b(event.getEntity());
                 ChampionsPlayer cDamager = b((Entity) ((Projectile) event.getDamager()).getShooter());
                 if(!(event.getDamager() instanceof Arrow)) return;
+                if(System.currentTimeMillis() < delay.getOrDefault(event.getEntity().getName(), 0L))
+                    return;
                 Arrow arrow = (Arrow) event.getDamager();
                 if (cVictim != null && cDamager != null && arrow != null && arrowDamageMap.containsKey(arrow)) {
                     event.setCancelled(true);
                     double damage = (cDamager instanceof Assassin) ? 5 * arrowDamageMap.get(arrow) : 8 * arrowDamageMap.get(arrow);
                     DamageApplier.damage((LivingEntity) event.getEntity(), (Player) ((Projectile) event.getDamager()).getShooter(), damage, arrow, true);
+                    delay.put(event.getEntity().getName(), System.currentTimeMillis() + 100);
                     arrow.remove();
                 }
                 ThrowableStatusApplier.apply(arrow, event.getEntity());
@@ -80,30 +83,6 @@ public class GameDamagerConverterListener extends ListenerBase {
             }else ((LivingEntity) possDisguise.getEntity()).damage(event.getDamage(), event.getDamager());
         }
         return false;
-    }
-
-    /**
-     * Remove the default damage tick which makes alters your velocity
-     * @param e
-     */
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
-    public void statusDamage(EntityDamageEvent e) {
-        if (e.isCancelled()) return;
-        if (e.getEntity() instanceof Player) {
-            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
-                Player p = (Player) e.getEntity();
-                EntityPlayer epvictim = ((CraftPlayer) p).getHandle();
-                e.setCancelled(true);
-                double health = p.getHealth() - e.getDamage();
-                p.setHealth((health < 0) ? 0 : health);
-                WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus();
-                packet.setEntityId(epvictim.getId());
-                packet.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
-                p.getWorld().getPlayers().forEach(packet::sendPacket);
-            }
-        }
     }
 
     /**

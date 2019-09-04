@@ -35,7 +35,6 @@ public abstract class TogglePassive extends Passive {
         }
         event.setCancelled(true);
         Bukkit.getPluginManager().callEvent(new SkillUseEvent(this));
-        forceToggle();
         toggle();
     }
 
@@ -44,7 +43,7 @@ public abstract class TogglePassive extends Passive {
         getPlayer().sendMessage(getToggleMessage());
     }
 
-    protected boolean isToggled() {
+    public boolean isToggled() {
         return toggled;
     }
 

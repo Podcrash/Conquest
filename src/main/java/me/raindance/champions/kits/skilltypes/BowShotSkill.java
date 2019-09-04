@@ -52,7 +52,7 @@ public abstract class BowShotSkill extends Instant {
     Shooting the arrow
      */
     @EventHandler(
-            priority = EventPriority.HIGH
+            priority = EventPriority.MONITOR
     )
     public void shootBow(EntityShootBowEvent event){
         if(event.isCancelled() || !isPrepared) return;
@@ -90,19 +90,18 @@ public abstract class BowShotSkill extends Instant {
                 Shooting a player
              */
     @EventHandler(
-            priority = EventPriority.HIGHEST
+            priority = EventPriority.MONITOR
     )
     public void arrowShotPlayer(DamageApplyEvent event){
-        if(event.getCause() == Cause.PROJECTILE){
-            LivingEntity livingEntity = event.getAttacker();
-            Arrow proj = event.getArrow();
-            if(livingEntity == getPlayer() && proj.getShooter() instanceof Player){
-                if(arrowForceMap.containsKey(proj)){
-                    if(event.getVictim() instanceof Player) {
-                        shotPlayer(event, (Player) proj.getShooter(), (Player) event.getVictim(), proj, arrowForceMap.get(proj));
-                    }
-                    //proj.remove();
+        if(event.isCancelled() || event.getCause() != Cause.PROJECTILE) return;
+        LivingEntity livingEntity = event.getAttacker();
+        Arrow proj = event.getArrow();
+        if(livingEntity == getPlayer() && proj.getShooter() instanceof Player){
+            if(arrowForceMap.containsKey(proj)){
+                if(event.getVictim() instanceof Player) {
+                    shotPlayer(event, (Player) proj.getShooter(), (Player) event.getVictim(), proj, arrowForceMap.get(proj));
                 }
+                //proj.remove();
             }
         }
     }
@@ -112,7 +111,7 @@ public abstract class BowShotSkill extends Instant {
     Shooting the ground
      */
     @EventHandler(
-            priority = EventPriority.HIGH
+            priority = EventPriority.MONITOR
     )
     public void arrowShotGround(ProjectileHitEvent event){
         if(event.getEntity() instanceof Arrow ){

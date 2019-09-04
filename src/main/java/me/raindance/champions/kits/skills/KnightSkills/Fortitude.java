@@ -62,6 +62,7 @@ public class Fortitude extends Passive implements TimeResource {
             priority = EventPriority.MONITOR
     )
     protected void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if (event.getVictim() == getPlayer() && event.getCause() == Cause.MELEE) {
             add(event.getDamage());
         }
@@ -71,6 +72,7 @@ public class Fortitude extends Passive implements TimeResource {
             priority = EventPriority.MONITOR
     )
     protected void hit(EntityDamageEvent event) {
+        if(event.isCancelled()) return;
         if (event.getEntity() == getPlayer() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
             add(event.getDamage());
         }
@@ -96,7 +98,7 @@ public class Fortitude extends Passive implements TimeResource {
 
     @Override
     public void cleanup() {
-        WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(getPlayer().getLocation(), EnumWrappers.Particle.HEART,
+        WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(), EnumWrappers.Particle.HEART,
                 3, rand.nextFloat(), 0.9f, rand.nextFloat());
         getPlayers().forEach(player -> ParticleGenerator.generate(player, packet));
         currentlyRunning = true;

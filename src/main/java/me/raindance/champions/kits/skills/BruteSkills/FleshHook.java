@@ -12,6 +12,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
 import me.raindance.champions.sound.SoundPlayer;
 import me.raindance.champions.sound.SoundWrapper;
+import me.raindance.champions.util.VectorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,7 +35,7 @@ public class FleshHook extends ChargeUp {
         int realRate = (int) (this.rate * 2000);
         this.damage = 5 + level;
         this.vect = 1.1F + 0.3F * level;
-        packet = getPlayer() == null ? null : ParticleGenerator.createParticle(null, EnumWrappers.Particle.CRIT, 2, 0, 0,0 );
+        packet = getPlayer() == null ? null : ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2);
         sound = new SoundWrapper("fire.ignite", 0.8F, 70);
         setDesc(Arrays.asList(
                 "Hold block to charge Flesh Hook. ",
@@ -63,10 +64,10 @@ public class FleshHook extends ChargeUp {
                     if(entity == null) return;
                     double amnt = 0.20F + 0.8F * charge;
                     Location away = entity.getLocation();
-                    Vector newVect = oldLocation.subtract(away).getDirection();
-                    newVect.normalize().multiply(vector).multiply(amnt);
+                    Vector newVect = VectorUtil.fromAtoB(away, oldLocation);
+                    newVect.normalize().multiply(this.vect).multiply(amnt);
                     double addY = newVect.getY() + 0.4F  + 0.4F * amnt;
-                    if(addY > 1.5F) addY = 1.5F;
+                    if(addY > 1.35F) addY = 1.35F;
                     entity.setVelocity(newVect.setY(addY));
                     SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.75F, 50);
                     if(entity instanceof Player) DamageApplier.damage(entity, getPlayer(), charge * damage, this, false);

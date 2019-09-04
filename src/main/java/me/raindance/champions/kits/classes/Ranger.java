@@ -14,7 +14,7 @@ public class Ranger extends ChampionsPlayer {
     public Ranger(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
-        setSound(new SoundWrapper("random.break", 0.65F, 115));
+        setSound(new SoundWrapper("random.break", 0.95F, 115));
         this.armor = new Material[]{Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_HELMET};
     }
 

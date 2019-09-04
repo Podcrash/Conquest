@@ -11,9 +11,9 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.classes.Assassin;
 import me.raindance.champions.kits.classes.Brute;
 import me.raindance.champions.sound.SoundPlayer;
+import me.raindance.champions.util.PacketUtil;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,11 +23,15 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class DamageQueue implements Runnable {
     public static boolean active = false;
     private static final Deque<Damage> damages = new ArrayDeque<>();
+    private static final Deque<String> deadPlayers = new ArrayDeque<>();
     //String = victim, stack damage - past damage instances -> used to find last damage cause for death events
     private static final Map<String, ArrayDeque<Damage>> damageHistory = new HashMap<>();
     /**
@@ -37,6 +41,22 @@ public final class DamageQueue implements Runnable {
     @Override
     public void run() {
         while (damages.peek() != null) processDamage(damages.poll());
+    }
+
+
+    /**Through testing the below does absolutely nothing LOOOL
+     *
+     * The below methods are exactly what they sound like.
+     * @param player
+     */
+    private void addDeath(Player player) {
+        deadPlayers.add(player.getName());
+    }
+    private void removeDeath(Player player) {
+        deadPlayers.remove(player.getName());
+    }
+    private static boolean hasDeath(Player player) {
+        return deadPlayers.contains(player.getName());
     }
 
     /**
@@ -110,8 +130,10 @@ public final class DamageQueue implements Runnable {
      * This method also handles the damaging part synchronously, which is required.
      * @param entity the entity that will be damaged
      * @param damage the amount of damage
+     *
+     * @returns if the entity will die
      */
-    private void damageEntity(LivingEntity entity, double damage) {
+    private boolean damageEntity(LivingEntity entity, double damage) {
         final double future;
         boolean a = false;
         if(entity instanceof Player) {
@@ -133,12 +155,14 @@ public final class DamageQueue implements Runnable {
                     PlayerInventory inventory = ((Player) entity).getInventory();
                     inventory.clear();
                     inventory.setArmorContents(new ItemStack[]{null, null, null, null});
-
                 }
-                entity.setHealth(future);
-                if(entity.isDead() || entity.getHealth() <= 0) die(entity);
+                if(future <= 0) {
+                    die(entity);
+                }else entity.setHealth(future);
             } else entity.damage(future);
         }, 0L);
+
+        return b;
     }
 
     /**
@@ -174,17 +198,27 @@ public final class DamageQueue implements Runnable {
      * @param entity the victim
      * @param damage the unfiltered damage
      * @param armorValue armor value of the victim, see {@link DamageQueue#armorValue(LivingEntity)}
+     * @param damageEvent the event
      */
-    private void damage(LivingEntity entity, double damage, int armorValue) {
+    private void damage(LivingEntity entity, double damage, int armorValue, DamageApplyEvent damageEvent) {
+        double orig = damage;
         if(entity instanceof Player) {
             ChampionsPlayer victim = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) entity);
-            if(victim instanceof Brute) {
+            if(victim instanceof Brute && damage >= 3.5) {
                 damage += 8D;
             }
         }
         double damageFormula = damage * (1D - 0.04D * armorValue);
         //Bukkit.broadcastMessage("AV: " + armorValue  + " " + damage + " --> " + damageFormula);
-        damageEntity(entity, damageFormula);
+        if(damageEntity(entity, damageFormula)) return;
+        if(damageEvent.isDoKnockback()) {
+            Cause cause = damageEvent.getCause();
+            LivingEntity victim = damageEvent.getVictim();
+            LivingEntity attacker = damageEvent.getAttacker();
+            if (attacker instanceof Player && (ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) attacker) instanceof Assassin && cause == Cause.MELEE))
+                return;
+            applyKnockback(victim, attacker, findVectorModifiers(damageEvent.getVelocityModifiers(), cause, orig, attacker));
+        }
     }
 
     /**
@@ -193,12 +227,16 @@ public final class DamageQueue implements Runnable {
      * @param victim
      */
     private void die(LivingEntity victim) {
+        if(!(victim instanceof Player)) return;
         String name = getNameFor(victim);
         ArrayDeque<Damage> history = damageHistory.get(name);
         if(history.size() == 0) return;
+        addDeath((Player) victim);
         Damage damage = history.removeLast();
-        Bukkit.getPluginManager().callEvent(new DeathApplyEvent(damage));
+
+        Bukkit.getPluginManager().callEvent(new DeathApplyEvent(damage, history));
         clearHistory(name);
+        removeDeath((Player) victim);
     }
 
     /**
@@ -209,7 +247,6 @@ public final class DamageQueue implements Runnable {
      * @param cause
      */
     private void playSound(LivingEntity victim, LivingEntity attacker, Cause cause) {
-        final World world = victim.getWorld();
         if(victim instanceof Player) {
             ChampionsPlayer championVictim = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) victim);
             if(championVictim != null)
@@ -218,6 +255,23 @@ public final class DamageQueue implements Runnable {
         if(attacker instanceof Player && cause == Cause.PROJECTILE) {
             SoundPlayer.sendSound((Player) attacker, "random.successful_hit", 0.8F, 20);
         }
+    }
+
+    private double[] findVectorModifiers(double[] velocity, Cause cause, double damage, LivingEntity attacker) {
+        if (cause == Cause.PROJECTILE) {
+            if (damage < 1) damage = 1;
+            double multiplier = (Math.log(damage) / 3d);
+            if (multiplier < 0) multiplier = 1; //uhs
+            velocity[0] *= multiplier;
+            velocity[2] *= multiplier;
+        }
+        if ((cause == Cause.MELEE || cause == Cause.MELEESKILL) && attacker instanceof Player) {
+            double multiplier = .05 * damage + 0.65;
+            velocity[0] *= multiplier;
+            velocity[1] *= multiplier;
+            velocity[2] *= multiplier;
+        }
+        return velocity;
     }
 
     /**
@@ -238,9 +292,8 @@ public final class DamageQueue implements Runnable {
         WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus();
         packet.setEntityId(victim.getEntityId());
         packet.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
-        for(Player player : victim.getWorld().getPlayers()) packet.sendPacket(player);
+        PacketUtil.syncSend(packet, victim.getWorld().getPlayers());
     }
-
     /**
      * The main method of this runnable. It does all of the above.
      * @param damageWrapper
@@ -250,12 +303,13 @@ public final class DamageQueue implements Runnable {
         LivingEntity attacker = damageWrapper.getAttacker();
         Cause cause = damageWrapper.getCause();
 
-        if(victim instanceof Player && cause == Cause.MELEE && StatusApplier.getOrNew((Player) victim).isCloaked()) return;
         DamageApplyEvent damageEvent = new DamageApplyEvent(victim, attacker, damageWrapper.getDamage(), cause,
                 damageWrapper.getArrow(), damageWrapper.getSkills(), damageWrapper.isApplyKnockback());
         double damage = damageEvent.getDamage();
         Bukkit.getPluginManager().callEvent(damageEvent);
 
+        if(hasDeath((Player) attacker) || hasDeath((Player) victim)) return; //if the attacker is currently dead, don't process the damage at all
+        if(victim instanceof Player && cause == Cause.MELEE && StatusApplier.getOrNew((Player) victim).isCloaked()) return;
         if(damageEvent.isCancelled() || damageEvent.getAttacker() == damageEvent.getVictim()) return;
         if(damageEvent.isModified()) damage = damageEvent.getDamage();
         if((cause == Cause.MELEE || cause == Cause.MELEESKILL) && damageWrapper.getArrow() == null)
@@ -266,27 +320,7 @@ public final class DamageQueue implements Runnable {
         playSound(victim, attacker, cause);
         if(attacker instanceof Player) ((Player) attacker).setLevel((int) damage);
         sendUsePacket(victim);
-        damage(victim, damage, armorValue);
-        if(!damageEvent.isDoKnockback()) return;
-        double[] velocity = damageEvent.getVelocityModifiers();
-        if(cause == Cause.PROJECTILE && damageWrapper.getArrow() != null) {
-            if(damage < 1) damage = 1;
-            double multiplier = (Math.log(damage) / 3d);
-            if(multiplier < 0) multiplier = 1; //uhs
-            velocity[0] *= multiplier;
-            velocity[2] *= multiplier;
-        }
-        if((cause == Cause.MELEE || cause == Cause.MELEESKILL) && attacker instanceof Player) {
-            if(ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) attacker) instanceof Assassin)
-                return;
-            if(velocity[0] != 1 && velocity[1] != 1 && velocity[2] != 1) {
-                double multiplier = .05 * damage + 0.65;
-                velocity[0] *= multiplier;
-                velocity[1] *= multiplier;
-                velocity[2] *= multiplier;
-            }
-        }
-        applyKnockback(victim, attacker, velocity);
+        damage(victim, damage, armorValue, damageEvent);
     }
 
     /**
@@ -294,23 +328,23 @@ public final class DamageQueue implements Runnable {
      * @param player - the player you want to do it for
      */
     public static void artificialDie(Player player) {
-        if(player.isDead()) return;
+        if(hasDeath(player)) return;
         ArrayDeque<Damage> damages = damageHistory.get(player.getName());
         player.getInventory().clear();
         Damage damage;
-        final Damage nullDamage = new Damage(player, player, -99, Cause.NULL, null, (Skill) null, false);
+        final Damage nullDamage = new Damage(player, player, -99, null, Cause.NULL, null, (Skill) null, false);
+        boolean a = false;
         if(damages == null) damage = nullDamage;
         else {
             if(damages.size() != 0) {
-
                 damage = damages.removeLast();
-                damages.clear();
+                a = true;
             }else {
                 damage = nullDamage;
             }//ie this dude hasn't done anything
         }
-        Bukkit.getPluginManager().callEvent(new DeathApplyEvent(damage));
-
+        Bukkit.getPluginManager().callEvent(new DeathApplyEvent(damage, damages));
+        if(a) damages.clear();
     }
 
     public static Deque<Damage> getDamages() {

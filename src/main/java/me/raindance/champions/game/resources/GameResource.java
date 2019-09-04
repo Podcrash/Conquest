@@ -22,7 +22,7 @@ public abstract class GameResource implements TimeResource {
 
     public GameResource(int gameID, int ticks, int delayTicks){
         this.gameID = gameID;
-        this.game = GameManager.getGame(this.gameID);
+        this.game = GameManager.getGame();
         this.ticks = ticks;
         this.delayTicks = delayTicks;
     }

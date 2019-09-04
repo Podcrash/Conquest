@@ -137,4 +137,13 @@ public class BookFormatter {
     public Constructor getConstructor() {
         return constructor;
     }
+
+    public Skill newInstance(Player player, int level) {
+        try {
+            return (Skill) constructor.newInstance(player, level);
+        }catch (IllegalAccessException|InstantiationException|InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("the object returned must not be null");
+    }
 }

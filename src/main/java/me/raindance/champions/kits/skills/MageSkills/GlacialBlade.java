@@ -32,7 +32,7 @@ public class GlacialBlade extends Instant implements IEnergy {
         super(player, "Glacial Blade", level, SkillType.Mage, ItemType.SWORD, InvType.PASSIVEB, 1F - 0.1F * level);
         this.level = level;
         this.energyUsage = 11 - (2 * level);
-        this.particles = (player == null) ? null : ParticleGenerator.createParticle(null, EnumWrappers.Particle.SNOW_SHOVEL, 1, 0,0,0);
+        this.particles = (player == null) ? null : ParticleGenerator.createParticle(EnumWrappers.Particle.SNOW_SHOVEL, 1);
         this.NAME = (player == null) ? null : getName() + player.getName();
         setCanUseMessage(null);
 
@@ -51,9 +51,9 @@ public class GlacialBlade extends Instant implements IEnergy {
     public boolean playersAreDistant() {
         List<Player> peopleInRange = getPlayersInArea(getPlayer().getLocation(), 4, getPlayers());
         for(Player p: peopleInRange) {
-            if(p == getPlayer() || isAlly(p)) return false;
+            if(p != getPlayer() && !isAlly(p)) return true;
         }
-        return true;
+        return false;
     }
 
     @Override

@@ -2,6 +2,7 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import me.lordraindance2.sweetdreams.LunarDance;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.damage.DamageQueue;
 import me.raindance.champions.damage.HitDetectionInjector;
@@ -11,16 +12,11 @@ import me.raindance.champions.events.TickEvent;
 import me.raindance.champions.game.Game;
 import me.raindance.champions.game.GameManager;
 import me.raindance.champions.game.GameType;
+import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.InventoryData;
 import me.raindance.champions.inventory.update.InventoryUpdater;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.items.ItemHelper;
-import me.raindance.champions.kits.skills.BruteSkills.WhirlwindAxe;
-import me.raindance.champions.kits.skills.MageSkills.ArticArmor;
-import me.raindance.champions.kits.skills.RangerSkills.Sharpshooter;
-import me.raindance.champions.kits.skills.RangerSkills.WolfsPounce;
 import me.raindance.champions.listeners.*;
 import me.raindance.champions.listeners.maintainers.GameListener;
 import me.raindance.champions.listeners.maintainers.MapMaintainListener;
@@ -43,6 +39,8 @@ import org.spigotmc.SpigotConfig;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -51,8 +49,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
-
     public static volatile Main instance;
+    public static final String CHANNEL_NAME = "Champions";
     private ProtocolManager protocolManager;
     private BukkitTask tickTask;
     public static BlankEnchantment customEnchantment = new BlankEnchantment();
@@ -65,7 +63,12 @@ public class Main extends JavaPlugin {
     //configurators
     private Map<String, Configurator> configurators = new HashMap<>();
     private ExecutorService executor = Executors.newFixedThreadPool(8);
+    private LunarDance antiCheat;
 
+    private void registerMessengers() {
+        getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL_NAME);
+        getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_NAME, new MessageListener(CHANNEL_NAME));
+    }
     private Callable<Void> registerListeners() {
         return () -> {
             new GameDamagerConverterListener(this);
@@ -151,6 +154,11 @@ public class Main extends JavaPlugin {
         saveConfig();
         */
         instance = this;
+        registerMessengers();
+
+        antiCheat = new LunarDance();
+        antiCheat.setup(this);
+
         protocolManager = ProtocolLibrary.getProtocolManager();
         mapConfig = new File(getDataFolder(), "maps.yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
@@ -180,29 +188,22 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
         log.info("[GameManager] Making a lot of games");
-        for(int i = 0; i < 9; i++) {
-            Game game = GameManager.createGame(Long.toString(System.currentTimeMillis()), GameType.DOM);
-            log.info("Created game " + game.getName());
-        }
+        Game game = GameManager.createGame(Long.toString(System.currentTimeMillis()), GameType.DOM);
+        log.info("Created game " + game.getName());
+
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
         DamageQueue.active = true;
         Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new DamageQueue(), 0L, 1L);
         Bukkit.getScheduler().runTaskTimer(Main.instance, new InventoryUpdater(), 0L, 1L);
 
+        //This part is really only used for reloading
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-        Main.getInstance().getLogger().info(players.toString());
         if(players.size() > 0) {
             for(Player p : players) {
-                new HitDetectionInjector(p).injectHitDetection();
-                WolfsPounce evade = new WolfsPounce(p, 5);
-                ArticArmor articArmor = new ArticArmor(p, 3);
-                Sharpshooter backstab = new Sharpshooter(p, 3);
-                WhirlwindAxe axe = new WhirlwindAxe(p, 5);
-                axe.setBoosted(true);
-
-                List<Skill> rangerKit = Arrays.asList(backstab, articArmor, axe, evade);
-                ChampionsPlayerManager.getInstance().addChampionsPlayer(new Mage(p, rangerKit));
+                HitDetectionInjector detection = new HitDetectionInjector(p);
+                detection.injectHitDetection();
+                InvFactory.applyLastBuild(p);
             }
         }
         executor.shutdown();
@@ -222,6 +223,8 @@ public class Main extends JavaPlugin {
         tickTask.cancel();
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();
+        ChampionsPlayerManager.getInstance().clear();
+        antiCheat.disable();
         //CustomEntityType.unregisterEntities();
 
     }
@@ -271,7 +274,6 @@ public class Main extends JavaPlugin {
 
     private Callable<Void> registerCommands() {
         return () -> {
-            getCommand("join").setExecutor(new JoinCommand());
             getCommand("leave").setExecutor(new LeaveCommand());
             getCommand("team").setExecutor(new TeamCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
@@ -292,8 +294,9 @@ public class Main extends JavaPlugin {
             getCommand("view").setExecutor(new ViewCommand());
             getCommand("skill").setExecutor(new SkillCommand());
             getCommand("setrole").setExecutor(new SetRoleCommand());
-            getCommand("newgame").setExecutor(new NewGameCommand());
             getCommand("kb").setExecutor(new KnockbackCommand());
+            getCommand("hitreg").setExecutor(new HitRegCommand());
+            getCommand("kill").setExecutor(new KillCommand());
 
             return null;
         };
@@ -307,9 +310,10 @@ public class Main extends JavaPlugin {
         PermissionAttachment attachment = this.playerPermissions.get(uuid);
         Player player = Bukkit.getPlayer(uuid);
         for(String roles : this.getConfig().getConfigurationSection("roles").getKeys(false)) {
-            if(getConfig().getStringList("roles." + roles + ".players").contains(player.getName())) {
+            if(getConfig().getStringList("roles." + roles + ".players").contains(player.getUniqueId().toString())) {
                 player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, roles));
                 for(String permissions : this.getConfig().getStringList("roles." + roles + ".permissions")) {
+                    player.sendMessage(permissions);
                     attachment.setPermission(permissions, true);
                 }
             }

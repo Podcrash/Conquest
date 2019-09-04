@@ -3,7 +3,9 @@ package me.raindance.champions.time.resources;
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import me.raindance.champions.sound.SoundPlayer;
 import me.raindance.champions.sound.SoundWrapper;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 /**
  * Give players particles as used in {@link WrapperPlayServerWorldParticles}
@@ -23,7 +25,12 @@ public class EntityParticleResource implements TimeResource {
     @Override
     public void task() {
         packet.setLocation(entity.getLocation());
-        entity.getWorld().getPlayers().forEach(player -> packet.sendPacket(player));
+        for(Player player : entity.getWorld().getPlayers()) {
+            if(this.entity instanceof Player) {
+                if(!player.canSee((Player) this.entity)) continue;
+            }
+            packet.sendPacket(player);
+        }
         if(sound != null) SoundPlayer.sendSound(entity.getLocation(), sound.getSoundName(), sound.getVolume(), sound.getPitch());
     }
 

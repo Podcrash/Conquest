@@ -63,23 +63,19 @@ public class DomGame extends Game {
             log(String.format("%s: map is not dominate map", toString()));
             return;
         }
-        final String name = this.gameWorld.getName();
-        World copy = WorldManager.getInstance().copyWorld(name);
-        DominateMap domMap = new DominateMap(copy, name);
+        DominateMap domMap = new DominateMap(gameWorld, gameWorld.getName());
         this.capturePoints = domMap.getCapturePoints();
         this.emeralds = domMap.getEmeralds();
         this.restocks = domMap.getRestocks();
         this.redSpawn = domMap.getRedSpawn();
         this.blueSpawn = domMap.getBlueSpawn();
-        this.actualWorld = copy.getName();
+        this.actualWorld = gameWorld.getName();
         for(CapturePoint capturePoint : capturePoints) {
             capturePoint.getLocation().getWorld().loadChunk(capturePoint.getLocation().getChunk());
         }
         GameScoreboard gameScoreboard;
         if((gameScoreboard = getGameScoreboard()) instanceof DomScoreboard) ((DomScoreboard) gameScoreboard).setup(this.capturePoints);
         setLoadedMap(true);
-        this.gameWorld = copy;
-        log("Loaded world " + name);
     }
     public void unloadWorld(){
         WorldManager.getInstance().deleteWorld(Bukkit.getWorld(actualWorld), true);

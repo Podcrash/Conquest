@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -23,13 +24,15 @@ public class DeathApplyEvent extends Event implements Cancellable {
     private Player player;
     private LivingEntity attacker;
     private Damage damage;
+    private Deque<Damage> history;
     private boolean cancel;
 
 
-    public DeathApplyEvent(Damage lastDamage) {
+    public DeathApplyEvent(Damage lastDamage, Deque<Damage> damages) {
         this.player = (Player) lastDamage.getVictim();
         this.attacker = lastDamage.getAttacker();
         this.damage = lastDamage;
+        this.history = damages;
     }
 
     public Player getPlayer() {
@@ -57,7 +60,7 @@ public class DeathApplyEvent extends Event implements Cancellable {
     }
 
     public ItemStack getItemInHand() {
-        return attacker.getEquipment().getItemInHand();
+        return damage.getItem();
     }
     public boolean isApplyKnockback() {
         return damage.isApplyKnockback();
@@ -71,11 +74,9 @@ public class DeathApplyEvent extends Event implements Cancellable {
                 break;
             case SKILL:
                 withMsg = ChatColor.DARK_AQUA + getSkills().get(0).getName();
-                getSkills().remove(0);
                 break;
             case MELEESKILL:
                 withMsg = ChatColor.AQUA + getSkills().get(0).getName();
-                getSkills().remove(0);
                 break;
             case MELEE:
                 if (getItemInHand() == null || getItemInHand().getItemMeta() == null) withMsg = "Fists";
@@ -107,6 +108,18 @@ public class DeathApplyEvent extends Event implements Cancellable {
         builder.append(" was killed by ");
         builder.append(ChatColor.RESET);
         builder.append((attacker instanceof Player) ? ((Player) attacker).getDisplayName() : attacker.getName());
+
+        int i = 0;
+        if(history != null) {
+            for (Damage last : history) {
+                if (System.currentTimeMillis() - last.getTime() >= 8000L) break;
+                if (last.getAttacker() == null ||
+                        last.getAttacker().getName().equalsIgnoreCase(damage.getAttacker().getName())) continue;
+                i++;
+            }
+        }
+
+        if(i != 0) builder.append(" + " + i);
         builder.append(ChatColor.GRAY);
         builder.append(" using ");
         builder.append(ChatColor.RESET);
@@ -114,6 +127,15 @@ public class DeathApplyEvent extends Event implements Cancellable {
         builder.append(ChatColor.GRAY);
         builder.append(".");
         return builder.toString();
+    }
+
+    public boolean wasUnsafe() {
+        //Gradually add other stuff, maybe if  was stuck in a block?
+        return player.getLocation().getY() <= 0;
+    }
+
+    public Deque<Damage> getHistory() {
+        return history;
     }
 
     @Override

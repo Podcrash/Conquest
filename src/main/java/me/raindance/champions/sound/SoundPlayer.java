@@ -1,6 +1,7 @@
 package me.raindance.champions.sound;
 
 import com.comphenix.packetwrapper.WrapperPlayServerNamedSoundEffect;
+import me.raindance.champions.util.PacketUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -38,9 +39,7 @@ public class SoundPlayer {
         WrapperPlayServerNamedSoundEffect soundPacket = createSound(loc, sound, volume, pitch);
 
         if(players == null) players = loc.getWorld().getPlayers();
-        for(Player player : players){
-            soundPacket.sendPacket(player);
-        }
+        players.forEach(soundPacket::sendPacket);
     }
 
     public static void sendSound(Location loc, String sound, float volume, int pitch) {

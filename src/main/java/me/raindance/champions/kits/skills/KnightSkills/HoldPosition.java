@@ -70,7 +70,7 @@ public class HoldPosition extends Instant implements TimeResource {
 
     @Override
     public void task() {
-        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().add(0, 0, 0),
+        WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
                 EnumWrappers.Particle.SPELL_MOB, new int[]{1, 1, 1, 0}, 5,
                 rand.nextFloat() / 2f, 0.25f + (rand.nextFloat() - 0.15f), rand.nextFloat() / 2f);
         getPlayer().getWorld().getPlayers().forEach(player -> ParticleGenerator.generate(player, particle));
@@ -88,6 +88,7 @@ public class HoldPosition extends Instant implements TimeResource {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void damage(DamageApplyEvent e){
+        if(e.isCancelled()) return;
         if(active && e.getVictim() == getPlayer()) {
             e.setModified(true);
             e.setDoKnockback(false);

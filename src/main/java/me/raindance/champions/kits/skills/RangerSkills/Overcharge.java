@@ -32,7 +32,7 @@ public class Overcharge extends BowChargeUp {
 
     @Override
     public void doShoot(Arrow arrow, float charge) {
-        ParticleGenerator.generateProjectile(arrow, ParticleGenerator.createParticle(arrow.getLocation(), EnumWrappers.Particle.REDSTONE, 10, 0, 0, 0));
+        ParticleGenerator.generateProjectile(arrow, ParticleGenerator.createParticle(arrow.getLocation().toVector(), EnumWrappers.Particle.REDSTONE, 10, 0, 0, 0));
     }
 
     @Override

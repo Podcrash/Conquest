@@ -5,13 +5,18 @@ import com.comphenix.packetwrapper.WrapperPlayServerWorldEvent;
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import me.raindance.champions.Main;
 import me.raindance.champions.sound.SoundWrapper;
+import me.raindance.champions.util.PacketUtil;
+import me.raindance.champions.util.VectorUtil;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.util.Vector;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,21 +27,27 @@ public final class ParticleGenerator {
     }
 
     public static void generate(Player p, AbstractPacket... packets) {
-        for (AbstractPacket packet : packets) {
-            packet.sendPacket(p);
-        }
+        PacketUtil.syncSend(packets, p);
     }
     public static void generate(Player p, List<AbstractPacket> packets) {
-        for (int i = 0; i < packets.size(); i++) {
-            packets.get(i).sendPacket(p);
-        }
+        PacketUtil.syncSend(packets, p);
     }
 
     public static void sendToAll(Player player, AbstractPacket packet){
-        for(Player p : player.getWorld().getPlayers()){
-            packet.sendPacket(p);
-        }
+        PacketUtil.syncSend(packet, player);
+    }
 
+    public static void generateLocAs(final WrapperPlayServerWorldParticles packet, Location a, Location b) {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.instance, () -> {
+            Vector vector = VectorUtil.fromAtoB(a, b).normalize();
+            Location start = a.clone();
+            List<Player> players = a.getWorld().getPlayers();
+            while(BlockUtil.get2dDistanceSquared(start.toVector(), b.toVector()) > 1) {
+                packet.setLocation(start);
+                players.forEach(packet::sendPacket);
+                start.add(vector);
+            }
+        });
     }
 
     public static WrapperPlayServerWorldEvent createPotionParticle(Location loc, int potionEffectId){
@@ -49,8 +60,11 @@ public final class ParticleGenerator {
     }
 
     public static WrapperPlayServerWorldEvent createBlockEffect(Location location, int blockID) {
+        return createBlockEffect(location.toVector(), blockID);
+    }
+    public static WrapperPlayServerWorldEvent createBlockEffect(Vector vector, int blockID) {
         WrapperPlayServerWorldEvent event = new WrapperPlayServerWorldEvent();
-        event.setLocation(new BlockPosition(location.toVector()));
+        event.setLocation(new BlockPosition(vector));
         event.setEffectId(2001);
         event.setData(blockID);
         return event;
@@ -59,13 +73,14 @@ public final class ParticleGenerator {
     public static WrapperPlayServerWorldParticles createParticle(EnumWrappers.Particle particle, int count) {
        return createParticle(null, particle, count, 0,0,0);
     }
-    public static WrapperPlayServerWorldParticles createParticle(Location loc, EnumWrappers.Particle particle, int[] data, int particleCount, float offsetX, float offsetY, float offsetZ) {
+
+    public static WrapperPlayServerWorldParticles createParticle(Vector vector, EnumWrappers.Particle particle, int[] data, int particleCount, float offsetX, float offsetY, float offsetZ) {
+        if(vector == null) vector = new Vector(0, 0,0);
         WrapperPlayServerWorldParticles packet = new WrapperPlayServerWorldParticles();
         packet.setParticleType(particle);
-        if (loc == null) loc = new Location(Bukkit.getWorlds().get(0), 1, 1, 1);
-        packet.setX((float) loc.getX());
-        packet.setY((float) loc.getY());
-        packet.setZ((float) loc.getZ());
+        packet.setX((float) vector.getX());
+        packet.setY((float) vector.getY());
+        packet.setZ((float) vector.getZ());
         packet.setNumberOfParticles(particleCount);
         packet.setOffsetX(offsetX);
         packet.setOffsetY(offsetY);
@@ -73,8 +88,8 @@ public final class ParticleGenerator {
         packet.setData(data);
         return packet;
     }
-    public static WrapperPlayServerWorldParticles createParticle(Location loc, EnumWrappers.Particle particle, int particleCount, float offsetX, float offsetY, float offsetZ) {
-        return createParticle(loc, particle, new int[]{1}, particleCount, offsetX, offsetY, offsetZ);
+    public static WrapperPlayServerWorldParticles createParticle(Vector vector, EnumWrappers.Particle particle, int particleCount, float offsetX, float offsetY, float offsetZ) {
+        return createParticle(vector, particle, new int[]{1}, particleCount, offsetX, offsetY, offsetZ);
     }
 
     public static void generateProjectile(Projectile proj, WrapperPlayServerWorldParticles packet) {
@@ -91,17 +106,15 @@ public final class ParticleGenerator {
         double startZ = center.getZ() - radius2;
         double endX = center.getX() + radius2;
         double endZ = center.getZ() + radius2;
-        LinkedList<AbstractPacket> particles = new LinkedList<>();
+        List<Player> players = center.getWorld().getPlayers();
         for (double x = startX; x <= endX; x += 1D) {
             for (double z = startZ; z <= endZ; z += 1D) {
                 Location test = BlockUtil.getHighestUnderneath(new Location(center.getWorld(), x, center.getY(), z));
-                WrapperPlayServerWorldParticles particle = createParticle(test, EnumWrappers.Particle.BLOCK_CRACK, new int[]{test.getBlock().getTypeId(), 0}, 15, 0.1F, 0.1F, 0.1F);
-                particles.add(particle);
+                if(test.getBlock().getType() == Material.AIR) continue;
+                AbstractPacket particle = createBlockEffect(test.toVector(), test.getBlock().getTypeId());
+                PacketUtil.asyncSend(particle, players);
 
             }
-        }
-        for (Player p : center.getWorld().getPlayers()) {
-            generate(p, particles);
         }
     }
 }

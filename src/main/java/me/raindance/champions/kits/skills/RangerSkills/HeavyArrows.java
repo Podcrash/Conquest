@@ -5,6 +5,7 @@ import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
+import me.raindance.champions.util.EntityUtil;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class HeavyArrows extends Passive {
     }
 
     @EventHandler(
-            priority = EventPriority.LOW
+            priority = EventPriority.MONITOR
     )
     protected void shotArrow(EntityShootBowEvent event) {
         if (event.isCancelled()) return;
@@ -54,8 +55,8 @@ public class HeavyArrows extends Passive {
                 Vector newVector = arrow.getVelocity().multiply(0.8d);
                 arrow.setVelocity(newVector);
                 if (!getPlayer().isSneaking()) {
-                    Vector fly = newVector.multiply(-0.4d).setY(newVector.getY() + 0.1d);
-                    if (((Entity) player).isOnGround()) fly.setY(fly.getY() + 0.3d);
+                    Vector fly = newVector.multiply(-0.35d).setY(newVector.getY() + 0.1d);
+                    if (EntityUtil.onGround(getPlayer())) fly.setY(fly.getY() + 0.2d);
                     player.setVelocity(fly);
                     player.setFallDistance(0);
                 }

@@ -28,10 +28,11 @@ public abstract class Game {
     private List<GameResource> gameResources = new ArrayList<>();
     private String name;
 
-    private List<Player> players;
-    private List<Player> spectators;
-    private List<Player> blueTeam;
-    private List<Player> redTeam;
+    private List<String> players;
+    private List<String> spectators;
+    private List<String> blueTeam;
+    private List<String> redTeam;
+    private List<Player> respawning;
 
     protected List<Location> redSpawn;
     protected List<Location> blueSpawn;
@@ -53,6 +54,7 @@ public abstract class Game {
         this.name = name;
         this.players = new ArrayList<>();
         this.spectators = new ArrayList<>();
+        this.respawning = new ArrayList<>();
         this.blueTeam = new ArrayList<>();
         this.redTeam = new ArrayList<>();
         this.redSpawn = new ArrayList<>();
@@ -94,7 +96,32 @@ public abstract class Game {
     public int getPlayerCount() {
         return this.blueTeam.size() + this.redTeam.size();
     }
+    public int size() {
+        int i = players.size();
+        for(String specName : spectators) {
+            if(players.contains(specName)) i--;
+        }
+        return i;
+    }
+    public int redSize() {
+        return this.redTeam.size();
+    }
+    public int blueSize() {
+        return this.blueTeam.size();
+    }
+    public boolean isFull() {
+        return getPlayerCount() >= getMaxPlayers();
+    }
+
     public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        for(String name : this.players) {
+            Player p;
+            if ((p = Bukkit.getPlayer(name)) != null) players.add(p);
+        }
+        return players;
+    }
+    public List<String> getPlayerNames() {
         return players;
     }
 
@@ -109,6 +136,14 @@ public abstract class Game {
         } else if (color.equalsIgnoreCase("blue")) {
             addPlayerToBlue(player);
         } else throw new IllegalArgumentException(String.format("%s must be either red or blue!", color));
+    }
+
+    public boolean isRespawning(Player player) {
+        return respawning.contains(player);
+    }
+
+    public List<Player> getRespawning(){
+        return respawning;
     }
 
     /**
@@ -134,7 +169,7 @@ public abstract class Game {
     }
 
     private void addPlayerToRed(Player player) {
-        this.redTeam.add(player);
+        this.redTeam.add(player.getName());
         Scoreboard colorBoard = getGameScoreboard().getBoard();
         Team red = colorBoard.getTeam(id + "redTeam");
         player.setScoreboard(colorBoard);
@@ -142,21 +177,27 @@ public abstract class Game {
 
     }
     private void addPlayerToBlue(Player player) {
-        this.blueTeam.add(player);
+        this.blueTeam.add(player.getName());
         Scoreboard colorBoard = getGameScoreboard().getBoard();
         Team blue = colorBoard.getTeam(id + "blueTeam");
         player.setScoreboard(colorBoard);
         blue.addEntry(player.getName());
     }
 
+    public void removePlayerRed(Player player) {
+        redTeam.remove(player.getName());
+    }
+    public void removePlayerBlue(Player player) {
+        blueTeam.remove(player.getName());
+    }
     /**
      * If the player wants sto spectate, add them to the list.
      * If the game is ongoing, teleport them to the game
      * @param player
      */
     public void addSpectator(Player player) {
-        this.spectators.add(player);
-        this.players.add(player);
+        this.spectators.add(player.getName());
+        this.players.add(player.getName());
         player.setScoreboard(getGameScoreboard().getBoard());
         if(isOngoing()) {
             Location spawn = getRedSpawn().get(1);
@@ -165,23 +206,19 @@ public abstract class Game {
         }
     }
     public void removeSpectator(Player player) {
-        this.spectators.remove(player);
+        this.spectators.remove(player.getName());
         player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-        this.players.remove(player);
+        this.players.remove(player.getName());
     }
 
-    public Set<Player> getAllPlayers(){
-        HashSet<Player> players = new HashSet<>();
-        players.addAll(redTeam);
-        players.addAll(blueTeam);
-        players.addAll(this.players);
-        return players;
+    public void add(Player player) {
+        this.players.add(player.getName());
     }
     public boolean contains(Player player) {
-        return isRed(player) || isBlue(player) || isSpectating(player) || players.contains(player);
+        return isRed(player) || isBlue(player) || isSpectating(player) || players.contains(player.getName());
     }
 
-    public List<Player> getTeamStr(String color) {
+    public List<String> getTeamStr(String color) {
         if (color.equalsIgnoreCase("red")) {
             return redTeam;
         } else if (color.equalsIgnoreCase("blue")) {
@@ -189,32 +226,55 @@ public abstract class Game {
         } else throw new IllegalArgumentException(String.format("%s must be either red or blue!", color));
     }
     public List<Player> getBlueTeam() {
-        return blueTeam;
+        List<Player> players = new ArrayList<>();
+        for(String name : this.blueTeam) {
+            Player p;
+            if ((p = Bukkit.getPlayer(name)) != null) players.add(p);
+        }
+        return players;
     }
     public List<Player> getRedTeam() {
-        return redTeam;
+        List<Player> players = new ArrayList<>();
+        for(String name : this.redTeam) {
+            Player p;
+            if ((p = Bukkit.getPlayer(name)) != null) players.add(p);
+        }
+        return players;
     }
-    public List<Player> getSpectators() {return spectators; }
+    public List<Player> getSpectators() {
+        List<Player> players = new ArrayList<>();
+        for(String name : this.spectators) {
+            Player p;
+            if ((p = Bukkit.getPlayer(name)) != null) players.add(p);
+        }
+        return players;
+    }
 
-    public List<Player> getTeam(Player player) {
-        if (redTeam.contains(player)) return redTeam;
-        else if (blueTeam.contains(player)) return blueTeam;
+    public List<String> getTeam(Player player) {
+        if (redTeam.contains(player.getName())) return redTeam;
+        else if (blueTeam.contains(player.getName())) return blueTeam;
         else return null;
     }
     public String getTeamColor(Player player) {
-        if (redTeam.contains(player)) return "red";
-        else if (blueTeam.contains(player)) return "blue";
+        return getTeamColor(player.getName());
+    }
+    public String getTeamColor(String name) {
+        if (redTeam.contains(name)) return "red";
+        else if (blueTeam.contains(name)) return "blue";
         else return null;
     }
 
     public boolean isRed(Player player) {
-        return redTeam.contains(player);
+        return redTeam.contains(player.getName());
     }
     public boolean isBlue(Player player) {
-        return blueTeam.contains(player);
+        return blueTeam.contains(player.getName());
     }
     public boolean isSpectating(Player player) {
-        return spectators.contains(player);
+        return isSpectating(player.getName());
+    }
+    public boolean isSpectating(String name) {
+        return spectators.contains(name);
     }
 
     public void registerResource(GameResource resource){
@@ -254,16 +314,6 @@ public abstract class Game {
     }
     public List<Location> getBlueSpawn() {
         return blueSpawn;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-    public void setBlueTeam(List<Player> blueTeam) {
-        this.blueTeam = blueTeam == null ? new ArrayList<>() : blueTeam;
-    }
-    public void setRedTeam(List<Player> redTeam) {
-        this.redTeam = redTeam == null ? new ArrayList<>() : redTeam;
     }
 
     public int getRedScore() {
@@ -311,20 +361,21 @@ public abstract class Game {
     }
 
     public void removePlayer(Player player) {
-        if (players.contains(player)) {
-            players.remove(player);
+        String name = player.getName();
+        if (players.contains(name)) {
+            players.remove(name);
             Team team = null;
             if (isRed(player)) {
-                redTeam.remove(player);
+                redTeam.remove(name);
                 team = getGameScoreboard().getBoard().getTeam(id + "redTeam");
             } else if (isBlue(player)) {
                 team = getGameScoreboard().getBoard().getTeam(id + "blueTeam");
-                blueTeam.remove(player);
+                blueTeam.remove(name);
             } else if (isSpectating(player)) {
-                spectators.remove(player);
+                spectators.remove(name);
             }
             if (team != null) {
-                team.removeEntry(player.getName());
+                team.removeEntry(name);
             }
             player.sendMessage(
                     String.format(
@@ -335,6 +386,24 @@ public abstract class Game {
         }
     }
 
+    public void backToSpawn(Player player) {
+        String color = getTeamColor(player.getName());
+        if(color == null) {
+            player.teleport(gameWorld.getSpawnLocation());
+            return;
+        }
+        switch (color) {
+            case "red":
+                player.teleport(redSpawn.get(0));
+                break;
+            case "blue":
+                player.teleport(blueSpawn.get(0));
+                break;
+            default:
+                player.teleport(gameWorld.getSpawnLocation());
+                break;
+        }
+    }
     @Override
     public String toString() {
         return String.format("%s{Game %d}%s[%d/%d]%s:\n %s\n %s\n %s",ChatColor.GREEN, id, ChatColor.WHITE, getPlayerCount(), getMaxPlayers(), ChatColor.GRAY, niceLookingRed(), niceLookingBlue(), niceLookingSpec());
@@ -343,27 +412,28 @@ public abstract class Game {
     private String niceLookingRed() {
         StringBuilder result = new StringBuilder(ChatColor.RED + "" + ChatColor.BOLD + "Red Team: ");
         result.append(ChatColor.RESET);
-        for(Player p : redTeam) {
+        for(String name : redTeam) {
+            Player p = Bukkit.getPlayer(name);
             result.append(p.getName());
             result.append(' ');
         }
         return result.toString();
     }
-
     private String niceLookingBlue() {
         StringBuilder result = new StringBuilder(ChatColor.BLUE + "" + ChatColor.BOLD + "Blue Team: ");
         result.append(ChatColor.RESET);
-        for(Player p : blueTeam) {
+        for(String name : blueTeam) {
+            Player p = Bukkit.getPlayer(name);
             result.append(p.getName());
             result.append(' ');
         }
         return result.toString();
     }
-
     private String niceLookingSpec() {
         StringBuilder result = new StringBuilder(ChatColor.YELLOW + "" + ChatColor.BOLD + "Spectators: ");
         result.append(ChatColor.RESET);
-        for(Player p : spectators) {
+        for(String name : spectators) {
+            Player p = Bukkit.getPlayer(name);
             result.append(p.getName());
             result.append(' ');
         }
@@ -371,7 +441,7 @@ public abstract class Game {
     }
 
     public void broadcast(String msg) {
-        for(Player player : getAllPlayers()){
+        for(Player player : getPlayers()){
             player.sendMessage(msg);
         }
     }
@@ -406,16 +476,16 @@ public abstract class Game {
 
         desc.add("");
         desc.add(ChatColor.YELLOW + "Players:");
-        for(Player player : players) {
-            if(spectators.contains(player)) continue;
-            TeamEnum team = TeamEnum.getByColor(getTeamColor(player));
-            desc.add(team.getChatColor() + player.getName());
+        for(String name : players) {
+            if(spectators.contains(name)) continue;
+            TeamEnum team = TeamEnum.getByColor(getTeamColor(name));
+            desc.add(team.getChatColor() + name);
         }
 
         desc.add(" ");
         desc.add(ChatColor.WHITE + "Spectators: ");
-        for(Player player : spectators) {
-            desc.add(ChatColor.YELLOW + player.getName());
+        for(String name : spectators) {
+            desc.add(ChatColor.YELLOW + name);
         }
 
         if(players.size() > 0) {
@@ -435,16 +505,14 @@ public abstract class Game {
      */
     public void leftClickAction(Player player) {
         if(isOngoing())
-            GameManager.addSpectator(id, player);
-        else
-            if(players.contains(player))
-                GameManager.removePlayer(id, player);
+            GameManager.addSpectator(player);
+        else if(players.contains(player.getName()))
+                GameManager.removePlayer(player);
             else
-                GameManager.addPlayer(id, player);
+                GameManager.addPlayer(player);
     }
-
     public void rightClickAction(Player player) {
-        GameManager.addSpectator(id, player);
+        GameManager.addSpectator(player);
     }
 
     @Override
@@ -455,7 +523,6 @@ public abstract class Game {
         return id == game.id &&
                 Objects.equals(name, game.name);
     }
-
     @Override
     public int hashCode() {
 

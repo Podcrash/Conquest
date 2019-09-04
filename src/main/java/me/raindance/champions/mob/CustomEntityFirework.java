@@ -11,6 +11,8 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import java.util.List;
+
 /**
  * Make a firework that instantly explodes, this could be  better though
  */
@@ -61,6 +63,9 @@ public class CustomEntityFirework extends EntityFireworks {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static void spawn(Location location, FireworkEffect effect, List<Player> players) {
+        spawn(location, effect, players.toArray(new Player[players.size()]));
     }
 }
 

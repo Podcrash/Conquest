@@ -11,6 +11,7 @@ import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import me.raindance.champions.time.resources.BlockBreakThenRestore;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.world.BlockUtil;
 import me.raindance.champions.world.CraftBlockUpdater;
 import net.jafama.FastMath;
@@ -65,6 +66,7 @@ public class ArticArmor extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public void toggle() {
+        forceToggle();
         if(isToggled()) {
             if(hasEnergy(energeUsage)) {
                 useEnergy(energeUsage);
@@ -103,9 +105,9 @@ public class ArticArmor extends TogglePassive implements IEnergy, TimeResource {
             Block current = up.getBlock();
             if(current.getRelative(BlockFace.UP).getType() == Material.AIR && current.getRelative(BlockFace.DOWN).getType() != Material.AIR) {
                 if(minus < current.getY() && current.getY() <= currentY){
-                    WrapperPlayServerWorldParticles snow = ParticleGenerator.createParticle(up, EnumWrappers.Particle.SNOW_SHOVEL, 1,
+                    WrapperPlayServerWorldParticles snow = ParticleGenerator.createParticle(up.toVector(), EnumWrappers.Particle.SNOW_SHOVEL, 1,
                             random.nextFloat() * 0.5F, 0.3F, random.nextFloat() * 0.5F);
-                    for (Player player : getPlayers()) snow.sendPacket(player);
+                    PacketUtil.syncSend(snow, getPlayers());
                 }
             }
         }

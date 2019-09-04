@@ -2,6 +2,7 @@ package me.raindance.champions.damage;
 
 import com.comphenix.packetwrapper.WrapperPlayServerEntityVelocity;
 import me.raindance.champions.kits.Skill;
+import me.raindance.champions.util.PacketUtil;
 import net.jafama.FastMath;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityLiving;
@@ -33,11 +34,11 @@ public final class DamageApplier {
         double d2 = livingVictim.motZ;
         a(livingVictim, livingDamager);
 
-        double inRadian = 3.1415927F / 180.0F;
+        double inRadian = Math.PI / 180.0D;
         double angle = livingDamager.yaw * inRadian;
-        livingVictim.g((-FastMath.sin(angle) * (float) 0.33),
-                0.05,
-                (FastMath.cos(angle) * (float) 0.33));
+        livingVictim.g((-FastMath.sin(angle) * SpigotConfig.knockbackExtraHorizontal),
+                SpigotConfig.knockbackExtraVertical,
+                (FastMath.cos(angle) * SpigotConfig.knockbackExtraHorizontal));
 
         livingVictim.motX *= velocityModifiers[0];
         livingVictim.motY *= velocityModifiers[1];
@@ -68,7 +69,7 @@ public final class DamageApplier {
             Bukkit.getServer().getPluginManager().callEvent(event);
 
             if (!velocity.equals(event.getVelocity())) {
-                player.setVelocity(velocity);
+                event.setVelocity(velocity);
             }
             if (!event.isCancelled()) {
                 WrapperPlayServerEntityVelocity entityVelocity = new WrapperPlayServerEntityVelocity();
@@ -76,7 +77,7 @@ public final class DamageApplier {
                 entityVelocity.setVelocityX(livingVictim.motX);
                 entityVelocity.setVelocityY(livingVictim.motY);
                 entityVelocity.setVelocityZ(livingVictim.motZ);
-                for(Player player1 : player.getWorld().getPlayers()) entityVelocity.sendPacket(player1);
+                PacketUtil.syncSend(entityVelocity, player.getWorld().getPlayers());
                 livingVictim.velocityChanged = false;
                 livingVictim.motX = d0;
                 livingVictim.motY = d1;
@@ -89,7 +90,8 @@ public final class DamageApplier {
     public static void damage(LivingEntity victim, LivingEntity attacker, double damage, Arrow arrow, Skill skill, boolean applyKb, Cause cause) {
         if(victim.isDead() || attacker.isDead()) return; //prevent bs hits from dying
         //TODO: change to our own death system (ex: spectators)
-        DamageQueue.getDamages().push(new Damage(victim, attacker, damage, cause, arrow, skill, applyKb));
+        DamageQueue.getDamages().push(new Damage(victim, attacker, damage,
+                attacker.getEquipment().getItemInHand(), cause, arrow, skill, applyKb));
     }
     //For good-ol melee
     public static void damage(LivingEntity victim, LivingEntity attacker, double damage, boolean applyKb) {

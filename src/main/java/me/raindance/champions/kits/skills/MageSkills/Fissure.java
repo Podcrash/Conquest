@@ -12,6 +12,8 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.EntityUtil;
+import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.world.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,11 +62,6 @@ public class Fissure extends Instant implements IEnergy, TimeResource {
     }
 
     @Override
-    public boolean isAlly(Player player) {
-        return false;
-    }
-
-    @Override
     public int getMaxLevel() {
         return 5;
     }
@@ -82,33 +79,33 @@ public class Fissure extends Instant implements IEnergy, TimeResource {
         }else if(!hasEnergy()) {
             getPlayer().sendMessage(getNoEnergyMessage());
         }else {
-            if(!((Entity) getPlayer()).isOnGround()) {
+            if(!(EntityUtil.onGround(getPlayer()))) {
                 getPlayer().sendMessage("Skill> You must be grounded to use Fissure!");
                 return;
             }
-            useEnergy(energy);
-            setLastUsed(System.currentTimeMillis());
-            Location playerLocation = getPlayer().getLocation();
-            dir = playerLocation.getDirection().setY(0).normalize();
-            start = playerLocation.subtract(new Vector(0, 0.4, 0));
-            current = start.clone();
-            run(3, 0);
-            Location sstart = start.clone();
-            end = sstart.clone().add(dir.clone().multiply(14));
-            Vector startVector = start.toVector();
-            while(BlockUtil.get2dDistanceSquared(startVector, sstart.add(dir).toVector()) <= 196) {
-                if(BlockUtil.isPassable(sstart.getBlock())) {
-                    sstart.subtract(up);
-                    if(BlockUtil.isPassable(sstart.getBlock())) break;
-                }
-                WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(sstart, sstart.getBlock().getType().getId());
-                for(Player player : getPlayers()) {
-                    packet.sendPacket(player);
-                    if(player != getPlayer() && !isAlly(player) && player.getLocation().distanceSquared(sstart) <= 1.3225D) {
-                        StatusApplier.getOrNew(player).applyStatus(Status.SLOW,  duration, 0);
-                    }
+        useEnergy(energy);
+        setLastUsed(System.currentTimeMillis());
+        Location playerLocation = getPlayer().getLocation();
+        dir = playerLocation.getDirection().setY(0).normalize();
+        start = playerLocation.subtract(new Vector(0, 0.4, 0));
+        current = start.clone();
+        run(3, 0);
+        Location sstart = start.clone();
+        end = sstart.clone().add(dir.clone().multiply(14));
+        Vector startVector = start.toVector();
+        while(BlockUtil.get2dDistanceSquared(startVector, sstart.add(dir).toVector()) <= 196) {
+            if(BlockUtil.isPassable(sstart.getBlock())) {
+                sstart.subtract(up);
+                if(BlockUtil.isPassable(sstart.getBlock())) break;
+            }
+            WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(sstart, sstart.getBlock().getType().getId());
+            PacketUtil.syncSend(packet, getPlayers());
+            for(Player player : getPlayers()) {
+                if(player != getPlayer() && !isAlly(player) && player.getLocation().distanceSquared(sstart) <= 1.3225D) {
+                    StatusApplier.getOrNew(player).applyStatus(Status.SLOW,  duration, 0);
                 }
             }
+        }
         }
     }
 
@@ -175,7 +172,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource {
         final Material material = location.getBlock().getType();
         final MaterialData data = location.getBlock().getState().getData();
         AbstractPacket packet = ParticleGenerator.createBlockEffect(location, material.getId());
-        for(Player player : getPlayers()) packet.sendPacket(player);
+        PacketUtil.syncSend(packet, getPlayers());
         final Location toMake = location.add(up);
         if(!BlockUtil.isPassable(toMake.getBlock())) return;
         BlockUtil.restoreAfterBreak(toMake.clone(), material, data.getData(), 14 - level);

@@ -93,6 +93,7 @@ public class Void extends TogglePassive implements TimeResource, IEnergy {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void hit(DamageApplyEvent event) {
+        if(event.isCancelled()) return;
         if(isToggled() && event.getVictim() == getPlayer()) {
             event.setModified(true);
             int reduction = damage;

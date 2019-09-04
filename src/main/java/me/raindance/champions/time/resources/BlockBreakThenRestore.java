@@ -7,12 +7,18 @@ import org.bukkit.Material;
 public final class BlockBreakThenRestore {
     private long duration;
     private final Material material1;
+    private final byte data;
     private final Location location;
 
-    public BlockBreakThenRestore(int duration, Material material1, Location location) {
+    public BlockBreakThenRestore(int duration, Material material1, Location location, byte data) {
         this.duration = System.currentTimeMillis() + duration * 1000L;
         this.material1 = material1;
         this.location = location;
+        this.data = data;
+    }
+
+    public BlockBreakThenRestore(int duration, Material material1, Location location) {
+        this(duration, material1, location, (byte) 0);
     }
 
     public boolean check() {
@@ -20,7 +26,7 @@ public final class BlockBreakThenRestore {
     }
 
     public void remove() {
-        BlockUtil.setBlock(location, material1, (byte) 0);
+        BlockUtil.setBlock(location, material1, data);
     }
 
     public long getDuration() {

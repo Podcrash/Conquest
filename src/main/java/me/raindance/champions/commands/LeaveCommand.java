@@ -13,7 +13,7 @@ public class LeaveCommand extends CommandBase {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (GameManager.hasPlayer(player)) {
-                Game game = GameManager.getGame(player);
+                Game game = GameManager.getGame();
                 if(game == null) return false; //this should never happen, but whatever
                 if(game.isOngoing()) {
                     player.sendMessage(
@@ -22,7 +22,7 @@ public class LeaveCommand extends CommandBase {
                                     ChatColor.BLUE,
                                     ChatColor.GRAY));
                 }else {
-                    GameManager.removePlayer(game.getId(), player);
+                    GameManager.removePlayer(player);
                     player.sendMessage(
                             String.format(
                                     "%sChampions> %sYou have left %sGame %s%s.",
