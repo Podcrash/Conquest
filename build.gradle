@@ -9,8 +9,6 @@ repositories {
     mavenCentral()
 }
 
-setLibsDirName("..\\server\\plugins")
-
 group 'raindance'
 version '1.0-SNAPSHOT'
 
