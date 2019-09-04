@@ -13,6 +13,7 @@ import me.raindance.champions.game.scoreboard.GameScoreboard;
 import me.raindance.champions.util.PlayerCache;
 import me.raindance.champions.util.Utility;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -489,7 +490,7 @@ public abstract class Game {
         }
 
         if(players.size() > 0) {
-            info.addEnchantment(Main.customEnchantment, 1);
+            info.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
         }
         meta.setLore(desc);
         info.setItemMeta(meta);

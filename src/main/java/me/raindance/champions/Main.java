@@ -22,7 +22,6 @@ import me.raindance.champions.listeners.maintainers.GameListener;
 import me.raindance.champions.listeners.maintainers.MapMaintainListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
 import me.raindance.champions.mob.CustomEntityType;
-import me.raindance.champions.util.BlankEnchantment;
 import me.raindance.champions.util.PlayerCache;
 import me.raindance.champions.world.WorldManager;
 import org.bukkit.Bukkit;
@@ -39,8 +38,6 @@ import org.spigotmc.SpigotConfig;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -53,7 +50,6 @@ public class Main extends JavaPlugin {
     public static final String CHANNEL_NAME = "Champions";
     private ProtocolManager protocolManager;
     private BukkitTask tickTask;
-    public static BlankEnchantment customEnchantment = new BlankEnchantment();
     public Logger log = this.getLogger();
     //Mapping configuration files
     private File mapConfig;
@@ -112,37 +108,7 @@ public class Main extends JavaPlugin {
     }
     private Callable<Void> registerCustomEnchant(){
         return  () -> {
-            //from https://bukkit.org/threads/custom-enchantments-you-say-what.160684/
-            try {
-                Field byIdField = Enchantment.class.getDeclaredField("byId");
-                Field byNameField = Enchantment.class.getDeclaredField("byName");
-
-                byIdField.setAccessible(true);
-                byNameField.setAccessible(true);
-
-                @SuppressWarnings("unchecked")
-                HashMap<Integer, Enchantment> byId = (HashMap<Integer, Enchantment>) byIdField.get(null);
-                @SuppressWarnings("unchecked")
-                HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) byNameField.get(null);
-
-                if (byId.containsKey(customEnchantment.getId()))
-                    byId.remove(customEnchantment.getId());
-
-                if (byName.containsKey(customEnchantment.getName()))
-                    byName.remove(customEnchantment.getName());
-
-                Field f = Enchantment.class.getDeclaredField("acceptingNew");
-                f.setAccessible(true);
-                f.set(null, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Enchantment.registerEnchantment(customEnchantment);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                //if this is thrown it means the id is already taken.
-            }
+            // lol
             return null;
         };
     }

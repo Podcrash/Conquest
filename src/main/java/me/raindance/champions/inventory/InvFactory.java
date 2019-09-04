@@ -13,8 +13,10 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.sound.SoundPlayer;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
@@ -46,7 +48,7 @@ public final class InvFactory {
         List<Skill> skills = new ArrayList<>();
         for (ItemStack book : menu.getContents()) {
             //only pass if it has the enchantent
-            if(book == null || !book.containsEnchantment(Main.customEnchantment)) continue;
+            if(book == null || !book.containsEnchantment(Enchantment.DAMAGE_ALL)) continue;
             Skill skill = InventoryData.getSkill(book);
             if(skill == null) continue;
             BookFormatter formatter = InventoryData.getSkillFormatter(skill);
@@ -223,10 +225,11 @@ public final class InvFactory {
                 int level = nameToLevel.getOrDefault(bookFormatter.getName(), -1);
                 if (level == -1) continue;
                 book.setAmount(level);
-                book.addEnchantment(Main.customEnchantment, 1);
+                book.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
                 ItemMeta meta = book.getItemMeta();
                 meta.setDisplayName(bookFormatter.getHeader(level));
                 meta.setLore(bookFormatter.getDescription(level - 1));
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 book.setItemMeta(meta);
                 goldTokens -= level * bookFormatter.getSkillTokenWeight();
             }

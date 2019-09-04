@@ -14,6 +14,7 @@ import me.raindance.champions.util.PacketUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,6 +22,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
@@ -181,15 +183,15 @@ public class InventoryListener extends ListenerBase {
                 Skill skill = bf.getSkill();
                 if (skill != null && tokenCountMap.get(player.getName()) > 0) {
                     boolean b = false;
-                    if (newBook.containsEnchantment(Main.customEnchantment)) {
+                    if (newBook.containsEnchantment(Enchantment.DAMAGE_ALL)) {
                         if(newBook.getAmount() >= skill.getMaxLevel())
                             SoundPlayer.sendSound(player, "note.bass", 0.6F, 63);
                         else {
                             newBook.setAmount(newBook.getAmount() + 1);
                             b = true;
                         }
-                    } else if (!(newBook.containsEnchantment(Main.customEnchantment))) {
-                        newBook.addUnsafeEnchantment(Main.customEnchantment, 1);
+                    } else if (!(newBook.containsEnchantment(Enchantment.DAMAGE_ALL))) {
+                        newBook.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
                         b = true;
                     }
                     if (b) {
@@ -201,13 +203,13 @@ public class InventoryListener extends ListenerBase {
                 }
                 break;
             case RIGHT:
-                if (!newBook.containsEnchantment(Main.customEnchantment)) break;
-                else if (newBook.containsEnchantment(Main.customEnchantment)) {
+                if (!newBook.containsEnchantment(Enchantment.DAMAGE_ALL)) break;
+                else if (newBook.containsEnchantment(Enchantment.DAMAGE_ALL)) {
                     if (newBook.getAmount() > 1) {
                         newBook.setAmount(newBook.getAmount() - 1);
                     } else {
                         newBook.setAmount(1);
-                        newBook.removeEnchantment(Main.customEnchantment);
+                        newBook.removeEnchantment(Enchantment.DAMAGE_ALL);
                     }
                     a = true;
                     tokenCountMap.put(player.getName(), tokenCountMap.get(player.getName()) + bf.getSkillTokenWeight());
@@ -216,10 +218,11 @@ public class InventoryListener extends ListenerBase {
                 break;
         }
         if(a) {
-            int display = (!newBook.containsEnchantment(Main.customEnchantment)) ? newBook.getAmount() - 1 : newBook.getAmount();
+            int display = (!newBook.containsEnchantment(Enchantment.DAMAGE_ALL)) ? newBook.getAmount() - 1 : newBook.getAmount();
             ItemMeta meta = newBook.getItemMeta();
             meta.setDisplayName(bf.getHeader(display));
             meta.setLore(bf.getDescription(newBook.getAmount() - 1));
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             newBook.setItemMeta(meta);
             inventory.setItem(slot, newBook);
             ItemStack[] contents = inventory.getContents();
