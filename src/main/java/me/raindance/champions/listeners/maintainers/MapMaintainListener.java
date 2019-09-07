@@ -10,6 +10,7 @@ import me.raindance.champions.listeners.PlayerJoinEventTest;
 import me.raindance.champions.sound.SoundPlayer;
 import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.world.WorldManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -92,11 +93,9 @@ public class MapMaintainListener extends ListenerBase {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onFood(FoodLevelChangeEvent e) {
-        if (plugin.getConfig().getList("worlds").contains(e.getEntity().getWorld().getName()) || evaluate(e.getEntity().getWorld())) {
-            e.setCancelled(true);
-        }else if(e.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
+        if(e.getEntity().getWorld().getName().equalsIgnoreCase("world")) {
             e.setFoodLevel(20);
-        }
+        }else e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -131,7 +130,7 @@ public class MapMaintainListener extends ListenerBase {
             event.setCancelled(true);
             return;
         }
-
+        Bukkit.broadcastMessage("test2");
         LivingEntity p = (LivingEntity) event.getEntity();
         double damage = event.getDamage();
         //if the damage is 0, don't go through with the event
@@ -183,7 +182,7 @@ public class MapMaintainListener extends ListenerBase {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void die(PlayerDeathEvent event) {
         event.setDeathMessage(null);
         Main.getInstance().getLogger().info("from MapMaintainListener#92: If you ever see this message, it's a bug");

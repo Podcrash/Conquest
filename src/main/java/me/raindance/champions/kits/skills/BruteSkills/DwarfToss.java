@@ -82,13 +82,15 @@ public class DwarfToss extends Interaction implements TimeResource, IInjector {
                 victim.teleport(getPlayer().getLocation());
             victim.playEffect(EntityEffect.HURT);
             delays.put(victim.getName(), System.currentTimeMillis());
+
             Vector vector = getPlayer().getLocation().getDirection();
             vector.normalize().multiply(multiplier);
             victim.setVelocity(vector);
-            victim = null;
-            use = false;
-            setLastUsed(System.currentTimeMillis());
         }
+
+        victim = null;
+        use = false;
+        setLastUsed(System.currentTimeMillis());
 
     }
 

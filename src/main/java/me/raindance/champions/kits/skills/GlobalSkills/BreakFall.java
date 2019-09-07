@@ -25,8 +25,9 @@ public class BreakFall extends Passive {
         return MAX_LEVEL;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void fall(EntityDamageEvent event) {
+        Bukkit.broadcastMessage("test1");
         if (event.getEntity() != getPlayer() || event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
         Player player = (Player) event.getEntity();

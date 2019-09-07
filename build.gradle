@@ -27,3 +27,8 @@ dependencies {
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.1"
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.5.1')
 }
+
+task copyjar(type: Exec) {
+    workingDir '.'
+    commandLine 'sh', 'copy.sh'
+}
