@@ -204,7 +204,7 @@ public final class InvFactory {
      * @param path
      */
     private static CompletableFuture giveProperSkillLevels(final Inventory inventory, String path) {
-        if(!kitConfigurator.hasPath(path)) return null;
+        if(!kitConfigurator.hasPath(path)) return CompletableFuture.completedFuture(null);
         return kitConfigurator.readString(path, (deserial) -> {
             //vvvThis should be one function
             JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
@@ -250,7 +250,7 @@ public final class InvFactory {
      * @return
      */
     private static CompletableFuture giveProperItemLevels(final Inventory inventory, SkillType skillType, String path) {
-        if(!kitConfigurator.hasPath(path)) return null;
+        if(!kitConfigurator.hasPath(path)) return CompletableFuture.completedFuture(null);
         return kitConfigurator.readString(path, (deserial) -> {
             JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
             JsonObject skillObject = object.getAsJsonObject("items");
