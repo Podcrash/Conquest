@@ -130,7 +130,6 @@ public class MapMaintainListener extends ListenerBase {
             event.setCancelled(true);
             return;
         }
-        Bukkit.broadcastMessage("test2");
         LivingEntity p = (LivingEntity) event.getEntity();
         double damage = event.getDamage();
         //if the damage is 0, don't go through with the event
@@ -185,6 +184,7 @@ public class MapMaintainListener extends ListenerBase {
     @EventHandler(priority = EventPriority.HIGH)
     public void die(PlayerDeathEvent event) {
         event.setDeathMessage(null);
+        event.getDrops().clear();
         Main.getInstance().getLogger().info("from MapMaintainListener#92: If you ever see this message, it's a bug");
     }
 

@@ -263,6 +263,7 @@ public class Main extends JavaPlugin {
             getCommand("kb").setExecutor(new KnockbackCommand());
             getCommand("hitreg").setExecutor(new HitRegCommand());
             getCommand("kill").setExecutor(new KillCommand());
+            getCommand("tell").setExecutor(new TellCommand());
 
             return null;
         };

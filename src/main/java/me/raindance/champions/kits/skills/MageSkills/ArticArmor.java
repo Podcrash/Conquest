@@ -66,7 +66,6 @@ public class ArticArmor extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public void toggle() {
-        forceToggle();
         if(isToggled()) {
             if(hasEnergy(energeUsage)) {
                 useEnergy(energeUsage);

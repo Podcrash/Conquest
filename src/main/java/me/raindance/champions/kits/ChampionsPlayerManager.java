@@ -97,6 +97,7 @@ public class ChampionsPlayerManager {
             if (skill instanceof TimeResource) TimeHandler.unregister((TimeResource) skill);
         }
         clearPacketListeners(cplayer);
+        cplayer.setUsesEnergy(false);
         championsPlayers.remove(cplayer.getPlayer().getName());
     }
     public void removeChampionsPlayer(Player player) {

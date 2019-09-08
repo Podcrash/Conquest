@@ -76,8 +76,10 @@ public class StaticLaser extends ChargeUp implements IEnergy{
     @EventHandler(priority = EventPriority.MONITOR)
     public void damage(DamageApplyEvent damage) {
         if(damage.isCancelled()) return;
-        resetCharge();
-        SoundPlayer.sendSound(getPlayer(), "mob.zombie.remedy", 0.9F, 126);
+        if(damage.getVictim() == player && player.isBlocking()) {
+            resetCharge();
+            SoundPlayer.sendSound(getPlayer(), "mob.zombie.remedy", 0.9F, 126);
+        }
     }
     @Override
     public void charge() {
