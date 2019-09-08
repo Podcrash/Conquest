@@ -88,7 +88,7 @@ public class Bloodlust extends Passive {
                 boolean b = getPlayer().addPotionEffect(speed, true);
                 boolean c = getPlayer().addPotionEffect(regen, true);
                 if(a && b && c) {
-                    getPlayer().sendMessage("You gained Bloodlust");
+                    getPlayer().sendMessage(String.format("%sBrute> %sYou gained Bloodlust.", ChatColor.BLUE, ChatColor.GRAY));
                     current = System.currentTimeMillis();
                 }
             }, 1L);

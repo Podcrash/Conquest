@@ -95,7 +95,15 @@ public class HeartsEye extends Passive implements TimeResource {
                 double distance = vLocation.distance(dLocation);
                 int time = (int) ((distance/distanceMultiplier) + 0.5);
                 if(time < 3) return;
-                getPlayer().sendMessage("Longshot> You tracked " + victim.getName() + " for " + time + " seconds.");
+                getPlayer().sendMessage(String.format("%sRanger> %sYou tracked %s%s%s for %s%d%s seconds.",
+                        ChatColor.BLUE,
+                        ChatColor.GRAY,
+                        ChatColor.YELLOW,
+                        victim.getName(),
+                        ChatColor.GRAY,
+                        ChatColor.GREEN,
+                        time,
+                        ChatColor.GRAY));
                 event.addSkillCause(this);
                 long nextTime = System.currentTimeMillis() + (time * 1000L);
                 LongshotDebuff debuff = affected.get(victim.getName());
