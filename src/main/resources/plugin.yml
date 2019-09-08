@@ -81,6 +81,8 @@ commands:
   kill:
     description: Kills your player if you are currently in a game.
     usage: /kill
+  tell:
+    description: Currently unused messaging system.
 permissions:
     Champions.*:
       description: Permission to use all Champions commands.

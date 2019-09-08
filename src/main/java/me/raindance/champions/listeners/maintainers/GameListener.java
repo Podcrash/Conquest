@@ -408,6 +408,11 @@ public class GameListener extends ListenerBase {
     @EventHandler
     public void chat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
+        if(player.hasPermission("Champions.mute")){
+            event.setCancelled(true);
+            player.sendMessage(String.format("%sChampions> %sYou are muted.", ChatColor.BLUE, ChatColor.GRAY));
+            return;
+        }
         if(GameManager.hasPlayer(player)) {
             event.setCancelled(true);
             Game game = GameManager.getGame();
