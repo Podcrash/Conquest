@@ -60,10 +60,10 @@ public class BookFormatter {
     }
 
     private void setDescs() throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(maxLevel);
+        ExecutorService executor = Executors.newFixedThreadPool(skill.getFlatBoostedMaxLevel());
         Main.getInstance().log.info("Loading descriptions for " + skill.getName());
         List<Callable<List<String>>> callables = new ArrayList<>();
-        for (int i = 1; i <= maxLevel; i++) {
+        for (int i = 1; i <= skill.getFlatBoostedMaxLevel(); i++) {
             //what we are going to do is set up multiple skill constructors and extract the descriptions from them.
             //Fastest way to do it is async!
             final int currentLevel = i;
@@ -80,15 +80,13 @@ public class BookFormatter {
                 throw new NullPointerException("from bookformatter:76");
             });
         }
-        for (Future<List<String>> desc : executor.invokeAll(callables)) {
+        for (Future<List<String>> desc : executor.invokeAll(callables))
             descriptions.add(desc.get());
-        }
-
         executor.shutdown();
     }
 
     private void setDescsSync() {
-        for (int i = 0; i <= maxLevel; i++) {
+        for (int i = 0; i <= skill.getFlatBoostedMaxLevel(); i++) {
             //what we are going to do is set up multiple skill constructors and extract the descriptions from them.
             //Fastest way to do it is async!
             final int currentLevel = i;
