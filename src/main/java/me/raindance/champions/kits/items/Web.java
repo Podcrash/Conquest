@@ -28,7 +28,8 @@ public class Web implements IItem {
             if(entity != null) {
                 SoundPlayer.sendSound(player, "random.successful_hit", 0.75F, 126);
             }
-            BlockUtil.restoreAfterBreak(itemm.getLocation(), Material.WEB, (byte) 0, 9);
+            if(itemm.getLocation().getBlock().getType() != Material.WEB)
+                BlockUtil.restoreAfterBreak(itemm.getLocation(), Material.WEB, (byte) 0, 9);
             itemm.remove();
         });
         ItemStack itemStack = item.getItemStack();
