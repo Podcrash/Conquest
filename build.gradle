@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url "http://repo.dmulloy2.net/nexus/repository/public/" }
 }
 
 group 'raindance'
@@ -16,10 +17,13 @@ sourceCompatibility = 1.8
 
 dependencies {
     implementation fileTree('libs')
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation('com.comphenix.protocol:ProtocolLib:4.4.0')
 
-    test.useJUnitPlatform()
+    implementation('org.mongodb:mongodb-driver-core:3.11.0')
+    implementation('org.mongodb:mongodb-driver:3.11.0')
+    implementation('de.caluga:morphium:4.0.7.1')
 
+    testImplementation('org.slf4j:slf4j-simple:1.7.21')
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.5.1"
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.5.1')
@@ -31,4 +35,9 @@ dependencies {
 task copyjar(type: Exec) {
     workingDir '.'
     commandLine 'sh', 'copy.sh'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging.showStandardStreams true
 }
