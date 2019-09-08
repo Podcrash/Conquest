@@ -130,7 +130,6 @@ public class MapMaintainListener extends ListenerBase {
             event.setCancelled(true);
             return;
         }
-        Bukkit.broadcastMessage("test2");
         LivingEntity p = (LivingEntity) event.getEntity();
         double damage = event.getDamage();
         //if the damage is 0, don't go through with the event
