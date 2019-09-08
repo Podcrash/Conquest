@@ -248,6 +248,7 @@ public abstract class ChampionsPlayer {
         if(usesEnergy){
             ebar = new EnergyBar(player, maxEnergy);
         } else {
+            if(ebar == null) return;
             ebar.stop();
             ebar = null;
         }
