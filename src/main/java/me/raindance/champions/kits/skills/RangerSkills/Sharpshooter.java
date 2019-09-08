@@ -10,6 +10,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import me.raindance.champions.sound.SoundPlayer;
 import me.raindance.champions.time.TimeHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -141,7 +142,7 @@ public class Sharpshooter extends Passive implements ICharge {
     @Override
     public void cleanup() {
         resetCharge();
-        getPlayer().sendMessage(String.format("%s bonus: %d", getName(), getCurrentCharges()));
+        getPlayer().sendMessage(String.format("%s%s bonus: %s%d", ChatColor.GRAY, getName(), ChatColor.GREEN, getCurrentCharges()));
         playSound();
     }
 

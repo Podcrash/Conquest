@@ -9,6 +9,7 @@ import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.CooldownResource;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,8 +39,12 @@ public class SkillMaintainListener extends ListenerBase {
         ChampionsPlayer championsPlayer = e.getSkill().getChampionsPlayer();
         if(championsPlayer.isSilenced()){
             e.setCancelled(true);
-            e.getPlayer().sendMessage(String.format("Skill> You are silenced for %.2f seconds",
-                    StatusApplier.getOrNew(e.getPlayer()).getRemainingDuration(Status.SILENCE) / 1000L));
+            e.getPlayer().sendMessage(String.format("%sCondition> %sYou are silenced for %s%.2f %sseconds",
+                    ChatColor.BLUE,
+                    ChatColor.GRAY,
+                    ChatColor.GREEN,
+                    StatusApplier.getOrNew(e.getPlayer()).getRemainingDuration(Status.SILENCE) / 1000L,
+                    ChatColor.GRAY));
         }
     }
 }

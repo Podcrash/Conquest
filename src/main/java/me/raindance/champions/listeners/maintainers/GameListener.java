@@ -411,7 +411,7 @@ public class GameListener extends ListenerBase {
         if(GameManager.hasPlayer(player)) {
             event.setCancelled(true);
             Game game = GameManager.getGame();
-            game.broadcast(String.format("%s%s%s:" + ChatColor.RESET + " %s",
+            game.broadcast(String.format("%s%s%s" + ChatColor.RESET + " %s",
                     PrefixUtil.getPrefix(PrefixUtil.getPlayerRole(player)),
                     TeamEnum.getByColor(game.getTeamColor(player)).getChatColor(),
                     player.getName(),
@@ -419,7 +419,7 @@ public class GameListener extends ListenerBase {
             );
         }else {
             event.getRecipients().removeIf(GameManager::hasPlayer);
-            event.setFormat(PrefixUtil.getPrefix(PrefixUtil.getPlayerRole(player)) + ChatColor.RESET + "%s: " + ChatColor.GRAY + "%s");
+            event.setFormat(PrefixUtil.getPrefix(PrefixUtil.getPlayerRole(player)) + ChatColor.RESET + "%s " + ChatColor.GRAY + "%s");
 
         }
     }

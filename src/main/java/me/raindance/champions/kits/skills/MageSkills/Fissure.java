@@ -15,6 +15,7 @@ import me.raindance.champions.time.resources.TimeResource;
 import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.util.PacketUtil;
 import me.raindance.champions.world.BlockUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -80,7 +81,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource {
             getPlayer().sendMessage(getNoEnergyMessage());
         }else {
             if(!(EntityUtil.onGround(getPlayer()))) {
-                getPlayer().sendMessage("Skill> You must be grounded to use Fissure!");
+                getPlayer().sendMessage(String.format("%sSkill> %sYou must be grounded to use Fissure.", ChatColor.BLUE, ChatColor.GRAY));
                 return;
             }
         useEnergy(energy);

@@ -247,28 +247,28 @@ public class StatusApplier {
     private void applyMarked(int duration, int potency) {
         removeMark();
         markedMap.put(player.getName(), System.currentTimeMillis() + duration);
-        player.sendMessage(String.format("You are now marked for %d seconds!", (duration / 1000)));
+        player.sendMessage(String.format("%sCondition> %sYou are now marked for %s%d %sseconds!",ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, (duration / 1000), ChatColor.GRAY));
         TimeHandler.repeatedTime(1, 0, new MarkedStatus(player));
     }
 
     private void applySilence(int duration) {
         removeSilence();
         silenceMap.put(player.getName(), System.currentTimeMillis() + duration);
-        player.sendMessage(String.format("You are now silenced for %d seconds!", (duration / 1000)));
+        player.sendMessage(String.format("%sCondition> %sYou are now silenced for %s%d %sseconds!",ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, (duration / 1000), ChatColor.GRAY));
         TimeHandler.repeatedTime(1, 0, new SilenceStatus(player));
     }
 
     private void applyShock(int duration) {
         removeShock();
         shockMap.put(player.getName(), System.currentTimeMillis() + duration);
-        player.sendMessage(String.format("You are now shocked for %d seconds!", (duration / 1000)));
+        //player.sendMessage(String.format("%sCondition> %sYou are now shocked for %s%d %sseconds!",ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, (duration / 1000), ChatColor.GRAY));
         TimeHandler.repeatedTime(1, 0, new ShockStatus(player));
     }
 
     private void applyRoot(int duration) {
         if (isRooted()) removeRoot();
         rootMap.put(player.getName(), System.currentTimeMillis() + duration);
-        player.sendMessage(String.format("You are now rooted for %d seconds!", (duration / 1000)));
+        player.sendMessage(String.format("%sCondition> %sYou are now rooted for %s%d %sseconds!", ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, (duration / 1000), ChatColor.GRAY));
         TimeHandler.repeatedTime(1, 1, new RootedStatus(player));
     }
 

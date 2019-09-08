@@ -3,6 +3,7 @@ package me.raindance.champions.effect.status.custom;
 import me.raindance.champions.effect.status.Status;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.time.resources.TimeResource;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /*
@@ -57,7 +58,7 @@ public abstract class CustomStatus implements TimeResource {
     @Override
     public void cleanup() {
         removeEffect();
-        if(status != Status.INEPTITUDE) player.sendMessage(String.format("You have been cleared of %s", status.getName()));
+        if(status != Status.INEPTITUDE && status != Status.SHOCK) player.sendMessage(String.format("%sCondition> %sYou have been cleared of %s.", ChatColor.BLUE, ChatColor.GRAY, status.getName()));
     }
 
     @Override
