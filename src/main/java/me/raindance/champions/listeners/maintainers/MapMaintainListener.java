@@ -185,6 +185,7 @@ public class MapMaintainListener extends ListenerBase {
     @EventHandler(priority = EventPriority.HIGH)
     public void die(PlayerDeathEvent event) {
         event.setDeathMessage(null);
+        event.getDrops().clear();
         Main.getInstance().getLogger().info("from MapMaintainListener#92: If you ever see this message, it's a bug");
     }
 

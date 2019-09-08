@@ -2,6 +2,7 @@ package me.raindance.champions.callback.sources;
 
 import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.world.BlockUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Utility;
 import org.bukkit.World;
@@ -41,5 +42,11 @@ public class DelayItemIntercept extends ItemIntercept {
             }
         }
         return System.currentTimeMillis() > this.duration;
+    }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        item.remove();
     }
 }

@@ -161,11 +161,13 @@ public class StatusApplier {
     }
 
     public void removeVanilla(Status status) {
+        if(status == null) return;
         if (player.hasPotionEffect(status.getPotionEffectType())) {
+            PotionEffect effect = status.getPotionEffectType().createEffect(0, 0);
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.removePotionEffect(status.getPotionEffectType());
+                    player.addPotionEffect(effect, true);
                 }
             }.runTaskLater(Main.instance, 1L);
         }

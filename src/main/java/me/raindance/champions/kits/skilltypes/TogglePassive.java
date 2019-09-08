@@ -30,11 +30,19 @@ public abstract class TogglePassive extends Passive {
         if(event.getPlayer() != getPlayer()) return;
         String itemName = event.getItemDrop().getItemStack().getType().name();
 
+        Bukkit.broadcastMessage("test1");
         for(ItemType type : ItemType.values()) {
             if(itemName.toUpperCase().contains(type.getName())) break;
         }
         event.setCancelled(true);
-        Bukkit.getPluginManager().callEvent(new SkillUseEvent(this));
+
+        Bukkit.broadcastMessage("test2");
+        SkillUseEvent skillUse = new SkillUseEvent(this);
+        Bukkit.getPluginManager().callEvent(skillUse);
+        if(skillUse.isCancelled()) return;
+
+        Bukkit.broadcastMessage("test3");
+        forceToggle(); //is this right?
         toggle();
     }
 
