@@ -6,6 +6,9 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.game.GameJoinEvent;
+import me.raindance.champions.events.game.GameLeaveEvent;
+import me.raindance.champions.events.game.GameMapChangeEvent;
 import me.raindance.champions.game.objects.ItemObjective;
 import me.raindance.champions.game.objects.WinObjective;
 import me.raindance.champions.game.resources.GameResource;
@@ -74,6 +77,7 @@ public abstract class Game {
     }
     public void setGameWorld(String string){
         this.gameWorld = Bukkit.getWorld(string);
+        Bukkit.getPluginManager().callEvent(new GameMapChangeEvent(this, string));
     }
 
     public abstract void loadMap();
@@ -198,7 +202,7 @@ public abstract class Game {
      */
     public void addSpectator(Player player) {
         this.spectators.add(player.getName());
-        this.players.add(player.getName());
+        add(player);
         player.setScoreboard(getGameScoreboard().getBoard());
         if(isOngoing()) {
             Location spawn = getRedSpawn().get(1);
@@ -207,13 +211,18 @@ public abstract class Game {
         }
     }
     public void removeSpectator(Player player) {
+        remove(player);
         this.spectators.remove(player.getName());
         player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-        this.players.remove(player.getName());
     }
 
     public void add(Player player) {
         this.players.add(player.getName());
+        Bukkit.getServer().getPluginManager().callEvent(new GameJoinEvent(this, player));
+    }
+    public void remove(Player player) {
+        this.players.remove(player.getName());
+        Bukkit.getServer().getPluginManager().callEvent(new GameLeaveEvent(this, player));
     }
     public boolean contains(Player player) {
         return isRed(player) || isBlue(player) || isSpectating(player) || players.contains(player.getName());
@@ -364,7 +373,7 @@ public abstract class Game {
     public void removePlayer(Player player) {
         String name = player.getName();
         if (players.contains(name)) {
-            players.remove(name);
+            remove(player);
             Team team = null;
             if (isRed(player)) {
                 redTeam.remove(name);
@@ -458,7 +467,7 @@ public abstract class Game {
      * - The current scores
      * - The players and spectators
      * Its status of ongoing or not will show in the form of its itemtype (redstone = ongoing, emerald = hasn't started)
-     * {@link me.raindance.champions.inventory.MenuCreator#gamesMenu}
+     * {@link me.raindance.champions.inventory.MenuCreator#}
      * @return the item that will represent the game
      */
     public ItemStack getItemInfo() {

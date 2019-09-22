@@ -31,3 +31,21 @@ gradlew test --tests <testname here>
 ```
 
 See https://docs.gradle.org/current/userguide/command_line_interface.html for more reading.
+
+
+# Redis
+
+1. Install redis (windows: https://github.com/microsoftarchive/redis/releases)
+2. Set your environment variables.
+    ```bash
+    setx REDIS_HOST redis://127.0.0.1:6379
+    setx REDIS_PASS foobared
+    ``` 
+3. Go to the directory where you installed it, and go to the config. Delete the '#' next to "requirepass".
+4. Run the redis server, using (windows: command prompt) 
+    ```bash
+    redis-server ./redis.conf
+    
+    redis-cli - for commandline  
+    ```
+    https://redis.io/topics/rediscli

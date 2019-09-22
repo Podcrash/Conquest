@@ -2,6 +2,7 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import io.netty.util.NetUtil;
 import me.lordraindance2.sweetdreams.LunarDance;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.damage.DamageQueue;
@@ -22,6 +23,7 @@ import me.raindance.champions.listeners.maintainers.GameListener;
 import me.raindance.champions.listeners.maintainers.MapMaintainListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
 import me.raindance.champions.mob.CustomEntityType;
+import me.raindance.champions.redis.Communicator;
 import me.raindance.champions.util.PlayerCache;
 import me.raindance.champions.world.WorldManager;
 import org.bukkit.Bukkit;
@@ -39,10 +41,7 @@ import org.spigotmc.SpigotConfig;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -61,12 +60,14 @@ public class Main extends JavaPlugin {
     private ExecutorService executor = Executors.newFixedThreadPool(8);
     private LunarDance antiCheat;
 
-    private void registerMessengers() {
-        getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL_NAME);
-        getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_NAME, new MessageListener(CHANNEL_NAME));
+    private CompletableFuture<Void> registerMessengers() {
+        return CompletableFuture.runAsync(() -> {
+            getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL_NAME);
+            getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_NAME, new MessageListener(CHANNEL_NAME));
+        }, executor);
     }
-    private Callable<Void> registerListeners() {
-        return () -> {
+    private CompletableFuture<Void> registerListeners() {
+        return CompletableFuture.runAsync(() -> {
             new GameDamagerConverterListener(this);
             new GameListener(this);
             new InventoryListener(this);
@@ -78,39 +79,34 @@ public class Main extends JavaPlugin {
             new ItemHelper(this);
             new TickEventListener(this);
             new Disguiser().disguiserIntercepter();
-            return null;
-        };
+        }, executor);
     }
-    private Callable<Void> setUpClasses() {
-        return () -> {
+    private CompletableFuture<Void> setUpClasses() {
+        return CompletableFuture.runAsync(() -> {
             InventoryData.addAssassin();
             InventoryData.addRanger();
             InventoryData.addMage();
             InventoryData.addKnight();
             InventoryData.addBrute();
             InventoryData.addGlobal();
-            return null;
-        };
+        }, executor);
     }
-    private Callable<Void> registerInjectors() {
-        return () -> {
+    private CompletableFuture<Void> registerInjectors() {
+        return CompletableFuture.runAsync(() -> {
             //new SoundInjector();
-            return null;
-        };
+        }, executor);
     }
-    private Callable<Void> setUp() {
-        return  () -> {
+    private CompletableFuture<Void> setUp() {
+        return CompletableFuture.runAsync(() -> {
             final PluginManager pman = Bukkit.getPluginManager();
             tickTask = Bukkit.getScheduler().runTaskTimer(instance, () -> pman.callEvent(new TickEvent()), 1L, 1L);
 
-            return null;
-        };
+        }, executor);
     }
-    private Callable<Void> registerCustomEnchant(){
-        return  () -> {
+    private CompletableFuture<Void> registerCustomEnchant(){
+        return CompletableFuture.runAsync(() -> {
             // lol
-            return null;
-        };
+        }, executor);
     }
 
     @Override
@@ -120,7 +116,20 @@ public class Main extends JavaPlugin {
         saveConfig();
         */
         instance = this;
-        registerMessengers();
+
+        log.info("[GameManager] Making a lot of games");
+        Game game = GameManager.createGame(Long.toString(System.currentTimeMillis()), GameType.DOM);
+        log.info("Created game " + game.getName());
+
+        CompletableFuture communications = Communicator.setup(executor);
+        CompletableFuture kb = setKnockback();
+        CompletableFuture customEnchantment = registerCustomEnchant();
+        CompletableFuture listeners = registerListeners();
+        CompletableFuture commands = registerCommands();
+        CompletableFuture injectors = registerInjectors();
+        CompletableFuture setups = setUp();
+        CompletableFuture setupClasses = setUpClasses();
+        CompletableFuture msgs = registerMessengers();
 
         antiCheat = new LunarDance();
         antiCheat.setup(this);
@@ -140,22 +149,18 @@ public class Main extends JavaPlugin {
 
         WorldManager.getInstance().loadWorlds();
         this.log.info(Bukkit.getWorlds().toString());
-        CustomEntityType.registerEntities();
-        try {
-            executor.invokeAll(Arrays.asList(
-                    setKnockback(),
-                    registerCustomEnchant(),
-                    registerListeners(),
-                    registerCommands(),
-                    registerInjectors(),
-                    setUp(),
-                    setUpClasses()));
-        }catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("[GameManager] Making a lot of games");
-        Game game = GameManager.createGame(Long.toString(System.currentTimeMillis()), GameType.DOM);
-        log.info("Created game " + game.getName());
+
+        CompletableFuture.allOf(
+            communications,
+            kb,
+            customEnchantment,
+            listeners,
+            commands,
+            injectors,
+            setups,
+            setupClasses,
+            msgs
+        );
 
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
@@ -195,8 +200,8 @@ public class Main extends JavaPlugin {
 
     }
 
-    private Callable<Void> setKnockback() {
-        return () -> {
+    private CompletableFuture<Void> setKnockback() {
+        return CompletableFuture.runAsync(() -> {
             log.info("Kb Numbers: ");
         /*
 
@@ -223,8 +228,7 @@ public class Main extends JavaPlugin {
             log.info("Extra Horizontal: " + SpigotConfig.knockbackExtraHorizontal);
             log.info("Extra Vertical: " + SpigotConfig.knockbackExtraVertical);
 
-            return null;
-        };
+        }, executor);
     }
 
     public FileConfiguration getMapConfiguration() {
@@ -238,8 +242,8 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private Callable<Void> registerCommands() {
-        return () -> {
+    private CompletableFuture<Void> registerCommands() {
+        return CompletableFuture.runAsync(() -> {
             getCommand("leave").setExecutor(new LeaveCommand());
             getCommand("team").setExecutor(new TeamCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
@@ -265,8 +269,7 @@ public class Main extends JavaPlugin {
             getCommand("kill").setExecutor(new KillCommand());
             getCommand("tell").setExecutor(new TellCommand());
 
-            return null;
-        };
+        }, executor);
     }
     public void setupPermissions(Player player) {
         PermissionAttachment attachment = player.addAttachment(this);

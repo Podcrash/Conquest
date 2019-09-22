@@ -93,7 +93,6 @@ public class GameManager {
                 return;
         }
         if(!game.contains(p)) {
-            game.add(p);
             p.sendMessage(
                     String.format(
                             "%sChampions> %sYou were added to %sGame %s%s.",
@@ -119,6 +118,7 @@ public class GameManager {
             inventory.setItem(2, blue);
 
             randomTeam(p);
+            game.add(p);
         }else p.sendMessage(
                 String.format(
                         "%sChampions> %sYou are already in the game.",

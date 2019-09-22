@@ -30,6 +30,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import me.raindance.champions.listeners.ListenerBase;
+import me.raindance.champions.redis.Communicator;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.SimpleTimeResource;
 import me.raindance.champions.util.EntityUtil;
@@ -64,6 +65,22 @@ public class GameListener extends ListenerBase {
 
     public GameListener(JavaPlugin plugin) {
         super(plugin);
+    }
+
+    @EventHandler
+    public void mapChange(GameMapChangeEvent e) {
+        Communicator.getMap().put("map", e.getMap());
+    }
+    @EventHandler
+    public void onJoin(GameJoinEvent e) {
+        Communicator.getMap().put("size", Integer.toString(e.getGame().size()));
+        //Communicator.publish(e.getGame().getGameCount());
+    }
+
+    @EventHandler
+    public void onLeave(GameLeaveEvent e) {
+        Communicator.getMap().put("size", Integer.toString(e.getGame().size()));
+        //Communicator.publish(e.getGame().getGameCount());
     }
 
     //--------------------------------------
@@ -146,6 +163,8 @@ public class GameListener extends ListenerBase {
             }
             deadPeople.remove(player);
         }
+
+        Communicator.publish(Communicator.getCode() + " close");
         //WorldManager.getInstance().deleteWorld(e.getGame().getGameWorld(), true);
 
     }

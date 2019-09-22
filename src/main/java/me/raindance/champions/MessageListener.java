@@ -10,6 +10,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.io.*;
 
+/**
+ * this class will be currently unused
+ */
 public class MessageListener implements PluginMessageListener {
     private final String CHANNEL_NAME;
 
@@ -32,6 +35,7 @@ public class MessageListener implements PluginMessageListener {
             gameQuery(player, input);
     }
     private void gameQuery(Player player, ByteArrayDataInput input) {
+        /*
         String query = input.readUTF();
         Game game = GameManager.getGame();
 
@@ -42,6 +46,8 @@ public class MessageListener implements PluginMessageListener {
         else if(query.equalsIgnoreCase("gamestate"))
             output.writeUTF(game.isOngoing() ? "INGAME" : "POLLING");
 
-        player.sendPluginMessage(Main.instance, CHANNEL_NAME, output.toByteArray());
+        player.sendPluginMessage(Main.instance, CHANNEL_NAME, output.toByteArray());\
+
+         */
     }
 }
