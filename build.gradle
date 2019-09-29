@@ -1,14 +1,17 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'idea'
     id 'eclipse'
     id 'groovy'
+    id 'nu.studer.jooq' version '3.0.3'
     id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
 repositories {
     mavenCentral()
     maven { url "http://repo.dmulloy2.net/nexus/repository/public/" }
+    maven { url 'https://plugins.gradle.org/m2/' }
 }
 
 group 'raindance'
@@ -17,7 +20,15 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 dependencies {
-    implementation('com.comphenix.protocol:ProtocolLib:4.4.0')
+    compileOnly fileTree('libs')
+    implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
+
+    implementation('com.zaxxer:HikariCP:3.3.1')
+    implementation('org.jooq:jooq:3.12.1')
+
+    implementation('postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted')
+
+    jooqRuntime('postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted')
 
     implementation('org.redisson:redisson:3.11.3')
 
@@ -26,12 +37,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.5.1"
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.5.1')
 
-
-    testRuntimeOnly('io.netty:netty-bom:4.1.38.Final')
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.1"
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.5.1')
-
-    implementation fileTree('libs')
 }
 
 task copyjar(type: Exec) {
@@ -39,7 +46,76 @@ task copyjar(type: Exec) {
     commandLine 'sh', 'copy.sh'
 }
 
+jooq {
+    version = '3.11.11'
+    edition = 'OSS'
+
+    ext.getUrl = {databaseName ->
+        final String HOST = System.getenv("PSQL_HOST")
+        final int PORT = 5432
+        return String.format("jdbc:postgresql://%s:%d/%s",
+                HOST, PORT, databaseName)
+    }
+
+    String[] dbs = "champions".split(" ");
+    for(String db : dbs) {
+        println "Loading for " + db + " databases!"
+        String funcName = db + "database"
+        String _url = getUrl(db)
+        "${funcName}"(sourceSets.main) {
+            final String USER = System.getenv("PSQL_USER")
+            final String PASSWORD = System.getenv("PSQL_PASS")
+
+            jdbc {
+                driver = 'org.postgresql.Driver'
+                url = _url
+                user = USER
+                password = PASSWORD
+                println "Attempting to find the mappings for " + _url
+            }
+            generator {
+                name = 'org.jooq.codegen.DefaultGenerator'
+                strategy {
+                    name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                    // ...
+                }
+                database {
+                    name = 'org.jooq.meta.postgres.PostgresDatabase'
+                    inputSchema = 'public'
+                    forcedTypes {
+                        forcedType {
+                            name = 'varchar'
+                            expression = '.*'
+                            types = 'JSONB?'
+                        }
+                        forcedType {
+                            name = 'varchar'
+                            expression = '.*'
+                            types = 'INET'
+                        }
+                    }
+                    // ...
+                }
+                generate {
+                    relations = true
+                    deprecated = false
+                    records = true
+                    immutablePojos = true
+                    fluentSetters = true
+                    // ...
+                }
+                target {
+                    packageName = 'nu.studer.sample'
+                    // directory = ...
+                }
+            }
+        }
+    }
+
+}
+
 test {
+    test.dependsOn(shadowJar)
     useJUnitPlatform()
     systemProperty "lobby.code", "dom1234132"
 
@@ -48,11 +124,26 @@ test {
 
 shadowJar {
     mergeServiceFiles()
-    exclude "spigot.jar"
-    exclude "com.comphenix.protocol:ProtocolLib:4.4.0"
+
+    dependencies {
+
+        /*
+        include (dependency("org.jooq:jooq:3.12.1"))
+        include (dependency("com.zaxxer:HikariCP:3.3.1"))
+        include (dependency("postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted"))
+
+        include (dependency("org.redisson:redisson:3.11.3"))
+        include (dependency("io.netty:+:+"))
+        include (dependency("javax.cache:cache-api:1.0.0"))
+        */
+        exclude "spigot.jar"
+        exclude(dependency("com.comphenix.protocol:ProtocolLib:4.4.0"))
+    }
 
     relocate("io.netty", "org.redisson.netty")
+    //minimize()
 }
+
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Champions',
@@ -63,3 +154,6 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+
+jar.enabled = false
+assemble.dependsOn(shadowJar)

@@ -4,6 +4,9 @@ package me.raindance.champions.inventory;
 import com.google.gson.JsonObject;
 import me.raindance.champions.Configurator;
 import me.raindance.champions.Main;
+import me.raindance.champions.db.ChampionsKitTable;
+import me.raindance.champions.db.DataTableType;
+import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -11,6 +14,7 @@ import me.raindance.champions.kits.classes.*;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.sound.SoundPlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,21 +25,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class InvFactory {
-    private static final ExecutorService executor = Executors.newFixedThreadPool(4);
+    private static ChampionsKitTable table;
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
     private static Map<String, Integer> buildMap = new HashMap<>();
     private static final Configurator kitConfigurator = Main.getConfigurator("kits");
     private InvFactory() {
 
     }
 
+    private static ChampionsKitTable getKitTable() {
+        if(table == null) table = TableOrganizer.getTable(DataTableType.KITS);
+        return table;
+    }
     /**
      * Take a inventory menu and turn it into a list of skills.
      * It will iterate through the inventory looking for enchanted books.
@@ -184,28 +191,31 @@ public final class InvFactory {
      * @param buildID
      */
     private static void apply(Player player, SkillType skillType, int buildID) {
-        String path = player.getUniqueId() + "." + skillType.getName().toLowerCase() + "." + buildID;
-        if(!kitConfigurator.hasPath(path)) {
-            player.sendMessage("There is no build loaded here! Click the anvil to make a kit!");
+        String deserializedPlayer = getKitTable().getJSONData(player.getUniqueId(), skillType.getName(), buildID);
+        if(deserializedPlayer == null) {
+            player.sendMessage(ChatColor.BLUE + "Champions>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
             return;
         }
-        kitConfigurator.readString(path, deserializedPlayer -> {
-            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
-            SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
-            setCurrent(player, skillType, buildID);
-        });
+
+        ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
+        ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
+        SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
+        setCurrent(player, skillType, buildID);
     }
 
     /**
      * Helper method to give a book the proper level of the inventory
      * As well as the description and tokens.
      * @param inventory
-     * @param path
+     * @param uuid
+     * @param clasz
+     * @param buildID
+     * @return
      */
-    private static CompletableFuture giveProperSkillLevels(final Inventory inventory, String path) {
-        if(!kitConfigurator.hasPath(path)) return CompletableFuture.completedFuture(null);
-        return kitConfigurator.readString(path, (deserial) -> {
+    private static CompletableFuture giveProperSkillLevels(final Inventory inventory, UUID uuid, String clasz, int buildID) {
+        String deserial = getKitTable().getJSONData(uuid, clasz, buildID);
+        if(deserial == null) return CompletableFuture.completedFuture(null);
+        return CompletableFuture.runAsync(() -> {
             //vvvThis should be one function
             JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
             JsonObject skillObject = object.getAsJsonObject("skills");
@@ -237,7 +247,7 @@ public final class InvFactory {
                 gold.setType(Material.REDSTONE);
             gold.setAmount(goldTokens);
 
-        });
+        }, executor);
     }
 
     /**
@@ -246,12 +256,14 @@ public final class InvFactory {
      * based on the value of each item.
      * @param inventory
      * @param skillType
-     * @param path
+     * @param uuid
+     * @param buildID
      * @return
      */
-    private static CompletableFuture giveProperItemLevels(final Inventory inventory, SkillType skillType, String path) {
-        if(!kitConfigurator.hasPath(path)) return CompletableFuture.completedFuture(null);
-        return kitConfigurator.readString(path, (deserial) -> {
+    private static CompletableFuture giveProperItemLevels(final Inventory inventory, SkillType skillType, UUID uuid, int buildID) {
+        String deserial = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
+        if(deserial == null) return CompletableFuture.completedFuture(null);
+        return CompletableFuture.runAsync(() -> {
             JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
             JsonObject skillObject = object.getAsJsonObject("items");
             ItemStack iron = inventory.getItem(17);
@@ -266,7 +278,7 @@ public final class InvFactory {
             if(ironTokens == 0)
                 iron.setType(Material.REDSTONE);
             iron.setAmount(ironTokens);
-        });
+        }, executor);
     }
 
     /**
@@ -281,10 +293,13 @@ public final class InvFactory {
         buildMap.put(player.getName(), buildID);
         Inventory inventory = MenuCreator.getInv(skillType);
         ChampionsInventory.getHotbarSelection(player, skillType);
-        String path = player.getUniqueId() + "." + skillType.getName().toLowerCase() + "." + buildID;
+
+        UUID uuid = player.getUniqueId();
+        String clasz = skillType.getName();
+
         CompletableFuture.allOf(
-            giveProperSkillLevels(inventory, path),
-            giveProperItemLevels(player.getInventory(), skillType, path)
+            giveProperSkillLevels(inventory, uuid, clasz, buildID),
+            giveProperItemLevels(player.getInventory(), skillType, uuid, buildID)
         ).join();
 
         player.openInventory(inventory);
@@ -297,9 +312,12 @@ public final class InvFactory {
      * @param championsPlayer
      */
     public static void editClose(Player player, ChampionsPlayer championsPlayer) {
-        kitConfigurator.getConfig().set(player.getUniqueId() + "." +
-                        championsPlayer.getType().getName().toLowerCase() + "." +
-                        buildMap.get(player.getName()), championsPlayer.serialize().toString());
+        UUID uuid = player.getUniqueId();
+        String clasz = championsPlayer.getType().getName();
+        int id = buildMap.get(player.getName());
+        String data = championsPlayer.serialize().toString();
+        getKitTable().set(uuid, clasz, id, data);
+
         setCurrent(player, championsPlayer.getType(), buildMap.get(player.getName()));
         buildMap.remove(player.getName());
     }
@@ -312,8 +330,8 @@ public final class InvFactory {
      * @return
      */
     private static boolean delete(Player player, SkillType skillType, int buildID) {
-        kitConfigurator.deletePath(player.getUniqueId() + "." + skillType.getName().toLowerCase() + "." + Integer.toString(buildID));
-        kitConfigurator.saveConfig();
+        getKitTable().delete(player.getUniqueId(), skillType.getName(), buildID);
+
         return true;
     }
 

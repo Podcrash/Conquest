@@ -3,6 +3,9 @@ package me.raindance.champions.inventory;
 import com.google.common.collect.BiMap;
 import me.raindance.champions.Configurator;
 import me.raindance.champions.Main;
+import me.raindance.champions.db.ChampionsKitTable;
+import me.raindance.champions.db.DataTableType;
+import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.game.Game;
 import me.raindance.champions.game.GameManager;
 import me.raindance.champions.inventory.update.IUpdateInv;
@@ -23,6 +26,7 @@ import org.bukkit.material.Dye;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -82,12 +86,10 @@ public class MenuCreator {
         return inventory;
     }
     public static Inventory createMenu(BiMap<Integer, Skill> idSkillMap, Set<Integer> classSet, SkillType stype) {
-        Logger log = Main.getInstance().getLogger();
         Inventory decider = basicSetter(Bukkit.createInventory(null, 54, String.format("%s%s", ChatColor.GREEN, stype.toString())));
         idSkillMap.forEach((key, skill) -> {
             if (classSet.contains(key)) {
                 BookFormatter book = InventoryData.getSkillFormatter(skill);
-                Main.getInstance().getLogger().info(book.toString());
                 ItemStack itemBook = new ItemStack(Material.BOOK);
                 ItemMeta meta = itemBook.getItemMeta();
                 meta.setDisplayName(book.getHeader(0));
@@ -230,7 +232,7 @@ public class MenuCreator {
     }
 
     public static Inventory createKitTemplate(Player player, SkillType skillType) {
-        final Configurator configurator = Main.getConfigurator("kits");
+        ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
         Inventory inventory = createCopyMenu(ChatColor.BLACK.toString(), skillType.getName() + " Build");
         DyeColor[] colors = new DyeColor[]{DyeColor.RED, DyeColor.BLUE, DyeColor.YELLOW, DyeColor.GREEN};
         int[] rowStarts = new int[] {20, 22, 24, 26};
@@ -239,6 +241,8 @@ public class MenuCreator {
         String[] names = new String[] {"Apply Build ", "Edit Build ", "Delete Build "};
         int[] slots = new int[] {0, 9, 27};
 
+        UUID uuid = player.getUniqueId();
+        String clasz = skillType.getName();
         for(int i = 1; i < 5; i++) {
             final int index = i - 1;
             DyeColor color = colors[index];
@@ -252,18 +256,12 @@ public class MenuCreator {
                 final ItemMeta meta = item.getItemMeta();
 
                 meta.setDisplayName(name);
-                String lookup;
-                if(name.contains("Apply Build") && configurator.hasPath(lookup = player.getUniqueId() + "." + skillType.getName().toLowerCase() + "." + i)) {
+                String dataJSON = table.getJSONData(uuid, clasz, i);
+                if(name.contains("Apply Build") && dataJSON != null) {
                     Dye data = ((Dye) item.getData());
                     data.setColor(color);
                     item = new ItemStack(Material.INK_SACK, 1, data.getData());
-                    try {
-                        configurator.readString(lookup, (deserialized) ->
-                            meta.setLore(ChampionsPlayerManager.getInstance().readSkills(deserialized))
-                        ).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    meta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
                 }
                 item.setItemMeta(meta);
                 inventory.setItem(slot, item);

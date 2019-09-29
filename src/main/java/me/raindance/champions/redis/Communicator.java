@@ -16,7 +16,12 @@ public class Communicator {
     private static RedissonClient client;
     private static String code;
     private static RTopic controllerMessages;
+
+    private static boolean bukkitFound;
+
     public static CompletableFuture<Void> setup(Executor executor) {
+        bukkitFound = findBukkit();
+
         System.out.println("[Redis] Starting!");
         Config config = new Config();
         String[] creds = getCredentials();
@@ -45,6 +50,8 @@ public class Communicator {
 
     private static void ready() {
         controllerMessages.publish(code + " READY");
+        if(!bukkitFound) return;
+
         getMap().put("maxsize", Integer.toString(GameManager.getGame().getMaxPlayers()));
 
         System.out.println("[Redis] Ready! test: " + getMap().get("maxsize"));
@@ -76,8 +83,18 @@ public class Communicator {
                     "Failed to detect redis host and pass, stopping!\n" +
                     "Host: " + HOST + '\n' +
                     "Password: " + PASS);
-            Bukkit.shutdown();
+            if(bukkitFound)
+                Bukkit.shutdown();
         }
         return new String[]{HOST, PASS};
+    }
+
+    private static boolean findBukkit() {
+        try {
+            Class.forName("org.bukkit.Bukkit");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }

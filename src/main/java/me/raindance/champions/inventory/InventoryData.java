@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class InventoryData {
-    private static int i = 0;
 
     private static BiMap<Integer, Skill> idSkillMap = HashBiMap.create();
     private static HashMap<Integer, BookFormatter> idUserReadMap = new HashMap<>();
@@ -148,13 +147,13 @@ public class InventoryData {
             throw new RuntimeException(String.format("%s must have an empty player", skill.getName()));
         }
         Main.getInstance().getLogger().info(String.format("[SKILL] Loading %s: %s.", skill.getType(), skill.getName()));
-        idSkillMap.put(i, skill);
-        idUserReadMap.put(i, new BookFormatter(skill));
-        putClassSet(skill.getType());
-        putItemSet(skill.getInvType());
-        i++;
+        int id = skill.getID();
+        idSkillMap.put(skill.getID(), skill);
+        idUserReadMap.put(skill.getID(), new BookFormatter(skill));
+        putClassSet(id, skill.getType());
+        putItemSet(id, skill.getInvType());
     }
-    private static void putClassSet(SkillType stype) {
+    private static void putClassSet(int id, SkillType stype) {
         Set<Integer> addSet = null;
         switch (stype) {
             case Knight:
@@ -176,9 +175,9 @@ public class InventoryData {
                 addSet = bruteSet;
                 break;
         }
-        if (addSet != null) addSet.add(i);
+        if (addSet != null) addSet.add(id);
     }
-    private static void putItemSet(InvType invType) {
+    private static void putItemSet(int id, InvType invType) {
         Set<Integer> addSet = null;
         switch (invType) {
             case SWORD:
@@ -200,7 +199,7 @@ public class InventoryData {
                 addSet = passiveCSet;
                 break;
         }
-        if (addSet != null) addSet.add(i);
+        if (addSet != null) addSet.add(id);
     }
 
     public static BiMap<Integer, Skill> getIdSkillMap() {
@@ -274,7 +273,7 @@ public class InventoryData {
     }
 
     public static BookFormatter getSkillFormatter(Skill skill) {
-        for(int i = 0; i < idSkillMap.size(); i++) {
+        for(int i : idSkillMap.keySet()) {
             Skill skillz = idSkillMap.get(i);
             if(skillz.getName().equalsIgnoreCase(skill.getName())) {
                 return idUserReadMap.get(i);

@@ -2,6 +2,9 @@ package me.raindance.champions.listeners;
 
 import me.raindance.champions.Main;
 import me.raindance.champions.damage.HitDetectionInjector;
+import me.raindance.champions.db.DataTableType;
+import me.raindance.champions.db.PlayerTable;
+import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.events.DeathApplyEvent;
 import me.raindance.champions.game.GameManager;
@@ -20,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.Random;
+import java.util.UUID;
 
 public class PlayerJoinEventTest extends ListenerBase {
     public PlayerJoinEventTest(JavaPlugin plugin) {
@@ -34,10 +38,15 @@ public class PlayerJoinEventTest extends ListenerBase {
         beacon.setItemMeta(meta1);
     }
 
+    private void putPlayerDB(UUID uuid) {
+        PlayerTable players = TableOrganizer.getTable(DataTableType.PLAYERS);
+        players.insert(uuid);
+    }
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
+        putPlayerDB(p.getUniqueId());
         InvFactory.applyLastBuild(p);
         if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
@@ -49,10 +58,10 @@ public class PlayerJoinEventTest extends ListenerBase {
             }else GameManager.addPlayer(e.getPlayer());
         }
         new HitDetectionInjector(p).injectHitDetection();
+        Main.getInstance().setupPermissions(p);
         if (p.getWorld().getName().equals("world")) {
             p.getInventory().setItem(35, beacon);
             //adds the PermissionAttachment so permissions work on the players
-            Main.getInstance().setupPermissions(p);
 
             //Spawn the Firework, get the FireworkMeta.
 

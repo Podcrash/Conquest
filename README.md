@@ -1,8 +1,10 @@
-# test
+# Champions!
 
 :^)
 
-# How to setup
+# USE `./gradlew shadowjar` INSTEAD of `./gradlew jar`
+
+# How to setup ( don't read this)
 
 1. Make a new folder called 'server'
 2. Make another folder in it called 'plugins'
@@ -32,6 +34,23 @@ gradlew test --tests <testname here>
 
 See https://docs.gradle.org/current/userguide/command_line_interface.html for more reading.
 
+# Postgres
+1. Install postgres + pgadmin4.
+2. Set your environment variables:
+    ```bash
+    setx PSQL_HOST localhost
+    setx PSQL_PASS <pass>
+    setx PSQL_PORT 5432
+    setx PSQL_USER postgres
+    setx PSQL_DBNAME champions
+    ```
+    Make sure to restart your terminal.
+3. Open pgadmin, log in and create a new database named "champions".
+4. Run the test using `./gradlew clean test` to create the new dbs (See: DatabaseLoginTest)
+5. Run `./gradlew clean generateChampionsdatabaseJooqSchemaSource`
+6. You should get new files on the directory build/generated-src/jooq
+7. Now you can reference said files! See the ChampionsKitTable class for examples!
+8. Learn PSQL
 
 # Redis
 

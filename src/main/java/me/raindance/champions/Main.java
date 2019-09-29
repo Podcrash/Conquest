@@ -7,6 +7,9 @@ import me.lordraindance2.sweetdreams.LunarDance;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.damage.DamageQueue;
 import me.raindance.champions.damage.HitDetectionInjector;
+import me.raindance.champions.db.DataTableType;
+import me.raindance.champions.db.PlayerPermissionsTable;
+import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.disguise.Disguiser;
 import me.raindance.champions.effect.particle.ParticleRunnable;
 import me.raindance.champions.events.TickEvent;
@@ -32,6 +35,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -79,6 +85,14 @@ public class Main extends JavaPlugin {
             new ItemHelper(this);
             new TickEventListener(this);
             new Disguiser().disguiserIntercepter();
+
+            Bukkit.getPluginManager().registerEvents(new Listener() {
+                @EventHandler
+                public void overrideStop(PlayerCommandPreprocessEvent event) {
+                    if(event.getMessage().split(" ")[0].equalsIgnoreCase("/stop"))
+                        event.setCancelled(true);
+                }
+            }, this);
         }, executor);
     }
     private CompletableFuture<Void> setUpClasses() {
@@ -108,6 +122,10 @@ public class Main extends JavaPlugin {
             // lol
         }, executor);
     }
+    private CompletableFuture<Void> startSQLBases() {
+        TableOrganizer.createTables(false);
+        return CompletableFuture.runAsync(() -> {});
+    }
 
     @Override
     public void onEnable() {
@@ -122,6 +140,7 @@ public class Main extends JavaPlugin {
         log.info("Created game " + game.getName());
 
         CompletableFuture communications = Communicator.setup(executor);
+        CompletableFuture sql = startSQLBases();
         CompletableFuture kb = setKnockback();
         CompletableFuture customEnchantment = registerCustomEnchant();
         CompletableFuture listeners = registerListeners();
@@ -151,6 +170,7 @@ public class Main extends JavaPlugin {
         this.log.info(Bukkit.getWorlds().toString());
 
         CompletableFuture.allOf(
+            sql,
             communications,
             kb,
             customEnchantment,
@@ -178,11 +198,6 @@ public class Main extends JavaPlugin {
             }
         }
         executor.shutdown();
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        }catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
     @Override
     public void onLoad() {
@@ -274,20 +289,36 @@ public class Main extends JavaPlugin {
     public void setupPermissions(Player player) {
         PermissionAttachment attachment = player.addAttachment(this);
         this.playerPermissions.put(player.getUniqueId(), attachment);
-        permissionsSetter(player.getUniqueId());
+        permissionsSetter(player);
     }
-    private void permissionsSetter(UUID uuid) {
-        PermissionAttachment attachment = this.playerPermissions.get(uuid);
-        Player player = Bukkit.getPlayer(uuid);
-        for(String roles : this.getConfig().getConfigurationSection("roles").getKeys(false)) {
-            if(getConfig().getStringList("roles." + roles + ".players").contains(player.getUniqueId().toString())) {
-                player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, roles));
-                for(String permissions : this.getConfig().getStringList("roles." + roles + ".permissions")) {
-                    player.sendMessage(permissions);
-                    attachment.setPermission(permissions, true);
+    private void permissionsSetter(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+
+            PermissionAttachment attachment = this.playerPermissions.get(player.getUniqueId());
+            PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
+            List<Perm> perms = table.getRoles(player.getUniqueId());
+            for(Perm perm : Perm.values()) {
+                boolean a = false;
+                if(perms.contains(perm)) {
+                    player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, perm.name()));
+                    a = true;
+                }
+                for(String permission : perm.getPermissions()) {
+                    attachment.setPermission(permission, a);
                 }
             }
-        }
+            String[] disallowedPerms = new String[] {
+                    "bukkit.command.reload",
+                    "bukkit.command.timings",
+                    "bukkit.command.plugins",
+                    "bukkit.command.help",
+                    "bukkit.command.ban-ip",
+                    "bukkit.command.stop",
+            };
+            Main.getInstance().getLogger().info("Disabling bad permissions");
+            for(String disallowed : disallowedPerms)
+                attachment.setPermission(disallowed, false);
+        });
     }
 
     public static Main getInstance() {

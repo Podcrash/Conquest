@@ -13,7 +13,7 @@ public class KnockbackCommand extends CommandBase {
         if(sender instanceof Player && sender.hasPermission("Champions.developer")) {
             if(args.length == 0) {
                 sender.sendMessage(getValues());
-                ((Player) sender).sendMessage(ChatColor.BLUE + "[Knockback] To change KB values: /kb kbfriction kbhorizontal kbextrahorizontal kbvertical kbverticallimit kbextravertical");
+                sender.sendMessage(ChatColor.BLUE + "[Knockback] To change KB values: /kb kbfriction kbhorizontal kbextrahorizontal kbvertical kbverticallimit kbextravertical");
             }else if(args.length < 6) {
                 if(args.length == 1 && args[0].equalsIgnoreCase("reset")) {
                     SpigotConfig.knockbackFriction = SpigotConfig.config.getDouble("settings.knockback.friction");
@@ -22,9 +22,9 @@ public class KnockbackCommand extends CommandBase {
                     SpigotConfig.knockbackVertical = SpigotConfig.config.getDouble("settings.knockback.vertical");
                     SpigotConfig.knockbackVerticalLimit = SpigotConfig.config.getDouble("settings.knockback.verticallimit");
                     SpigotConfig.knockbackExtraVertical = SpigotConfig.config.getDouble("settings.knockback.extravertical");
-                    ((Player) sender).sendMessage(ChatColor.LIGHT_PURPLE + "Knockback reset to default values!");
-                    ((Player) sender).sendMessage(getValues());
-                }else ((Player) sender).sendMessage(ChatColor.BLUE + "[Knockback] Too little arguments!");
+                    sender.sendMessage(ChatColor.LIGHT_PURPLE + "Knockback reset to default values!");
+                    sender.sendMessage(getValues());
+                }else sender.sendMessage(ChatColor.BLUE + "[Knockback] Too little arguments!");
             }else if(args.length == 6) {
                 try {
                     SpigotConfig.knockbackFriction = Double.parseDouble(args[0]);
@@ -33,13 +33,13 @@ public class KnockbackCommand extends CommandBase {
                     SpigotConfig.knockbackVertical = Double.parseDouble(args[3]);
                     SpigotConfig.knockbackVerticalLimit = Double.parseDouble(args[4]);
                     SpigotConfig.knockbackExtraVertical = Double.parseDouble(args[5]);
-                    ((Player) sender).sendMessage(ChatColor.LIGHT_PURPLE + "Knockback Changed!");
-                    ((Player) sender).sendMessage(getValues());
+                    sender.sendMessage(ChatColor.LIGHT_PURPLE + "Knockback Changed!");
+                    sender.sendMessage(getValues());
                 }catch (NumberFormatException e) {
-                   ((Player) sender).sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "[Knockback] one of the arguments is not a decimal!");
+                   sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "[Knockback] one of the arguments is not a decimal!");
                 }
             }else {
-                ((Player) sender).sendMessage(ChatColor.BLUE + "[Knockback] Too many arguments!");
+                sender.sendMessage(ChatColor.BLUE + "[Knockback] Too many arguments!");
             }
         }
         return true;

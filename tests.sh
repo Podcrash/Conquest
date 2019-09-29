@@ -1,0 +1,2 @@
+./jooqobjects.sh
+./gradlew test
