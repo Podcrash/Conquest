@@ -4,7 +4,6 @@ import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.*;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.lordraindance2.sweetdreams.checks.Reach;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
