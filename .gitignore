@@ -19,3 +19,4 @@ gradle-app.setting
 
 server/*
 /out/
+/src/main/java/me/lordraindance2/sweetdreams/*

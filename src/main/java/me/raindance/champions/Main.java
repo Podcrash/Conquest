@@ -3,7 +3,6 @@ package me.raindance.champions;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import io.netty.util.NetUtil;
-import me.lordraindance2.sweetdreams.LunarDance;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.damage.DamageQueue;
 import me.raindance.champions.damage.HitDetectionInjector;
@@ -64,7 +63,6 @@ public class Main extends JavaPlugin {
     //configurators
     private Map<String, Configurator> configurators = new HashMap<>();
     private ExecutorService executor = Executors.newFixedThreadPool(8);
-    private LunarDance antiCheat;
 
     private CompletableFuture<Void> registerMessengers() {
         return CompletableFuture.runAsync(() -> {
@@ -150,9 +148,6 @@ public class Main extends JavaPlugin {
         CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
 
-        antiCheat = new LunarDance();
-        antiCheat.setup(this);
-
         protocolManager = ProtocolLibrary.getProtocolManager();
         mapConfig = new File(getDataFolder(), "maps.yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
@@ -210,7 +205,6 @@ public class Main extends JavaPlugin {
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();
         ChampionsPlayerManager.getInstance().clear();
-        antiCheat.disable();
         //CustomEntityType.unregisterEntities();
 
     }
