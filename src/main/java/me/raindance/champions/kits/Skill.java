@@ -211,7 +211,7 @@ public abstract class Skill implements ISkill {
         return (float) (System.currentTimeMillis() - lastUsed) < cooldown * 1000F;
     }
     public double cooldown() {
-        return cooldown - ((double)(System.currentTimeMillis() - lastUsed)) / 1000D;
+        return (double) cooldown - ((double)(System.currentTimeMillis() - lastUsed)) / 1000D;
     }
 
     public boolean hasEnergy(double energy) {

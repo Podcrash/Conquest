@@ -18,13 +18,8 @@ public final class TimeHandler {
     }
 
     public static void repeatedTime(long ticks, long delayTicks, TimeResource resource) {
-        Runnable runnable = () -> {
-            if (resource.cancel()) {
-                resource.cleanup();
-                unregister(resource);
-            } else resource.task();
+        Runnable runnable = makeRunnable(resource);
 
-        };
         //Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable).getTaskId();
         int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, runnable, delayTicks, ticks);
         //runnable.runTaskTimer(plugin, delaySeconds * 20, seconds * 20);
@@ -32,29 +27,27 @@ public final class TimeHandler {
     }
 
     public static void repeatedTimeAsync(long ticks, long delayTicks, TimeResource resource) {
-        Runnable runnable = () -> {
-            if (resource.cancel()) {
-                resource.cleanup();
-                unregister(resource);
-            } else resource.task();
+        Runnable runnable = makeRunnable(resource);
 
-        };
         int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delayTicks, ticks).getTaskId();
         //runnable.runTaskTimer(plugin, delaySeconds * 20, seconds * 20);
         register(resource, taskID);
     }
 
     public static void repeatedTimeSeconds(long seconds, long delaySeconds, TimeResource resource) {
-        Runnable runnable = () -> {
-            resource.task();
-            if (resource.cancel()) {
-                unregister(resource);
-                resource.cleanup();
-            }
-        };
+        Runnable runnable = makeRunnable(resource);
+
         int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, runnable, delaySeconds * 20, seconds * 20);
         //runnable.runTaskTimer(plugin, delaySeconds * 20, seconds * 20);
         register(resource, taskID);
+    }
+
+    public static void repeatedTimeSecondsAsync(long seconds, long delaySeconds, TimeResource resource) {
+        Runnable runnable = makeRunnable(resource);
+
+        int taskID = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delaySeconds * 20, seconds * 20).getTaskId();
+        register(resource, taskID);
+        //runnable.runTaskTimer(plugin, delaySeconds * 20, seconds * 20);
     }
 
     public static void delayTime(long delay, TimeResource resource) {
@@ -68,6 +61,16 @@ public final class TimeHandler {
         int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, delay);
         register(resource, taskID);
         //runnable.scheduleSync(plugin, delay * 20);
+    }
+
+    private static Runnable makeRunnable(TimeResource resource) {
+        return () -> {
+            resource.task();
+            if (resource.cancel()) {
+                unregister(resource);
+                resource.cleanup();
+            }
+        };
     }
 
     private static void register(TimeResource resource, int taskID) {

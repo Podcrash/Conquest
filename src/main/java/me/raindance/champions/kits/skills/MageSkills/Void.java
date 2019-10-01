@@ -58,6 +58,7 @@ public class Void extends TogglePassive implements TimeResource, IEnergy {
         }else {
             getChampionsPlayer().getEnergyBar().toggleRegen(true);
             unregister();
+            statusApplier.removeStatus(Status.SLOW, Status.INVISIBILITY);
         }
     }
 

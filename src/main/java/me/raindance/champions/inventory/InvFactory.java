@@ -316,7 +316,9 @@ public final class InvFactory {
         String clasz = championsPlayer.getType().getName();
         int id = buildMap.get(player.getName());
         String data = championsPlayer.serialize().toString();
-        getKitTable().set(uuid, clasz, id, data);
+        String current = getKitTable().getJSONData(uuid, clasz, id);
+        if(current == null) getKitTable().set(uuid, clasz, id, data);
+        else getKitTable().alter(uuid, clasz, id, data);
 
         setCurrent(player, championsPlayer.getType(), buildMap.get(player.getName()));
         buildMap.remove(player.getName());

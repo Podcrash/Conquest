@@ -116,9 +116,8 @@ public class GameManager {
             Inventory inventory = p.getInventory();
             inventory.setItem(1, red);
             inventory.setItem(2, blue);
-
-            randomTeam(p);
             game.add(p);
+            randomTeam(p);
         }else p.sendMessage(
                 String.format(
                         "%sChampions> %sYou are already in the game.",

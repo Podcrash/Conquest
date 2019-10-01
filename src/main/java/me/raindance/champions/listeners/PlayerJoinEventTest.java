@@ -45,7 +45,6 @@ public class PlayerJoinEventTest extends ListenerBase {
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-
         putPlayerDB(p.getUniqueId());
         InvFactory.applyLastBuild(p);
         if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
@@ -55,7 +54,10 @@ public class PlayerJoinEventTest extends ListenerBase {
         }else {
             if(GameManager.getGame().isOngoing() || GameManager.getGame().isFull()) {
                 GameManager.addSpectator(e.getPlayer());
-            }else GameManager.addPlayer(e.getPlayer());
+            }else {
+                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                GameManager.addPlayer(e.getPlayer());
+            }
         }
         new HitDetectionInjector(p).injectHitDetection();
         Main.getInstance().setupPermissions(p);

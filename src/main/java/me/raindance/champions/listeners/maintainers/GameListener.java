@@ -324,7 +324,8 @@ public class GameListener extends ListenerBase {
     public void gameDamage(GameDamageEvent event) {
         Game game = event.getGame();
         if(!game.isOngoing()) return;
-        if(game.getTeamColor(event.getWho()).equalsIgnoreCase(game.getTeamColor(event.getVictim()))) {
+        String color = game.getTeamColor(event.getWho());
+        if("spec".equalsIgnoreCase(color) || color.equalsIgnoreCase(game.getTeamColor(event.getVictim()))) {
             event.setCancelled(true);
         }
     }

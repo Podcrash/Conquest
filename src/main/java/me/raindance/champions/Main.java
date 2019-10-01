@@ -291,8 +291,8 @@ public class Main extends JavaPlugin {
             PermissionAttachment attachment = this.playerPermissions.get(player.getUniqueId());
             PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
             List<Perm> perms = table.getRoles(player.getUniqueId());
+            boolean a = false;
             for(Perm perm : Perm.values()) {
-                boolean a = false;
                 if(perms.contains(perm)) {
                     player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, perm.name()));
                     a = true;
@@ -300,6 +300,7 @@ public class Main extends JavaPlugin {
                 for(String permission : perm.getPermissions()) {
                     attachment.setPermission(permission, a);
                 }
+                a = false;
             }
             String[] disallowedPerms = new String[] {
                     "bukkit.command.reload",

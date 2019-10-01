@@ -39,14 +39,18 @@ public class ChampionsKitTable extends BaseTable implements IPlayerDB {
                  */
                 .column("class", SQLDataType.VARCHAR(16))
                 .column("build_id", SQLDataType.INTEGER)
-                .column("build_info", SQLDataType.VARCHAR(128));
+                .column("build_info", SQLDataType.VARCHAR(256));
 
-        step.constraint(DSL.constraint(getConstraintPrefix() + "foreign_player_id")
-            .foreignKey("player_id")
-            .references(players.getName(), "_id"));
-        step.constraint(DSL.constraint(getConstraintPrefix() + "primary_player_id").primaryKey("player_id"));
-        step.constraint(DSL.constraint(getConstraintPrefix() + "player_unique").unique("player_id", "class", "build_id"));
+        step.constraints(
+            DSL.constraint(getConstraintPrefix() + "foreign_player_id")
+                .foreignKey("player_id")
+                .references(players.getName(), "_id"),
+            DSL.constraint(getConstraintPrefix() + "player_primary").primaryKey("player_id", "class", "build_id"),
+            DSL.constraint(getConstraintPrefix() + "limit_build_id").check(KITS.BUILD_ID.lt(5)));
         step.execute();
+
+        getContext().createIndexIfNotExists(getConstraintPrefix() + "player_id_index").on(getName(), "player_id")
+            .execute();
     }
 
 
@@ -76,6 +80,25 @@ public class ChampionsKitTable extends BaseTable implements IPlayerDB {
         // build_id domain size must be equal to 5
         // it should only be between 0-5 or 1-5
     }
+
+    public void alter(UUID uuid, String clasz, int build_id, String data) {
+        // Find from (spotify recommended is fire Aujourd’hui à 21:45: inventory/InvFactory (look around for editClose))
+        // int build_id = ?;
+
+        DSLContext alter = getContext();
+
+        alter.update(KITS)
+            .set(KITS.BUILD_INFO, data)
+            .where(
+                    KITS.PLAYER_ID.eq(getID(uuid)),
+                    KITS.BUILD_ID.eq(build_id),
+                    KITS.CLASS.eq(clasz))
+            .execute();
+
+        // build_id domain size must be equal to 5
+        // it should only be between 0-5 or 1-5
+    }
+
     public void delete(UUID uuid, String clasz, int build_id) {
         DSLContext delete = getContext();
         delete.delete(KITS)
@@ -88,5 +111,11 @@ public class ChampionsKitTable extends BaseTable implements IPlayerDB {
 
     public int size() {
         return getContext().fetchCount(KITS);
+    }
+
+    @Override
+    public void dropTable() {
+        super.dropTable();
+        getContext().dropIndexIfExists(getConstraintPrefix() + "player_id_index").execute();
     }
 }

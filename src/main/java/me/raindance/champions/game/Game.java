@@ -32,11 +32,11 @@ public abstract class Game {
     private List<GameResource> gameResources = new ArrayList<>();
     private String name;
 
-    private List<String> players;
-    private List<String> spectators;
-    private List<String> blueTeam;
-    private List<String> redTeam;
-    private List<Player> respawning;
+    private Set<String> players;
+    private Set<String> spectators;
+    private Set<String> blueTeam;
+    private Set<String> redTeam;
+    private Set<Player> respawning;
 
     protected List<Location> redSpawn;
     protected List<Location> blueSpawn;
@@ -56,11 +56,11 @@ public abstract class Game {
     public Game(int id, GameType type, String name) {
         this.id = id;
         this.name = name;
-        this.players = new ArrayList<>();
-        this.spectators = new ArrayList<>();
-        this.respawning = new ArrayList<>();
-        this.blueTeam = new ArrayList<>();
-        this.redTeam = new ArrayList<>();
+        this.players = new HashSet<>();
+        this.spectators = new HashSet<>();
+        this.respawning = new HashSet<>();
+        this.blueTeam = new HashSet<>();
+        this.redTeam = new HashSet<>();
         this.redSpawn = new ArrayList<>();
         this.blueSpawn = new ArrayList<>();
         this.redScore = new AtomicInteger(0);
@@ -126,7 +126,7 @@ public abstract class Game {
         }
         return players;
     }
-    public List<String> getPlayerNames() {
+    public Set<String> getPlayerNames() {
         return players;
     }
 
@@ -147,7 +147,7 @@ public abstract class Game {
         return respawning.contains(player);
     }
 
-    public List<Player> getRespawning(){
+    public Set<Player> getRespawning(){
         return respawning;
     }
 
@@ -179,6 +179,7 @@ public abstract class Game {
         Team red = colorBoard.getTeam(id + "redTeam");
         player.setScoreboard(colorBoard);
         red.addEntry(player.getName());
+        add(player);
 
     }
     private void addPlayerToBlue(Player player) {
@@ -187,13 +188,16 @@ public abstract class Game {
         Team blue = colorBoard.getTeam(id + "blueTeam");
         player.setScoreboard(colorBoard);
         blue.addEntry(player.getName());
+        add(player);
     }
 
     public void removePlayerRed(Player player) {
         redTeam.remove(player.getName());
+        remove(player);
     }
     public void removePlayerBlue(Player player) {
         blueTeam.remove(player.getName());
+        remove(player);
     }
     /**
      * If the player wants sto spectate, add them to the list.
@@ -228,7 +232,7 @@ public abstract class Game {
         return isRed(player) || isBlue(player) || isSpectating(player) || players.contains(player.getName());
     }
 
-    public List<String> getTeamStr(String color) {
+    public Set<String> getTeamStr(String color) {
         if (color.equalsIgnoreCase("red")) {
             return redTeam;
         } else if (color.equalsIgnoreCase("blue")) {
@@ -260,7 +264,7 @@ public abstract class Game {
         return players;
     }
 
-    public List<String> getTeam(Player player) {
+    public Set<String> getTeam(Player player) {
         if (redTeam.contains(player.getName())) return redTeam;
         else if (blueTeam.contains(player.getName())) return blueTeam;
         else return null;
@@ -271,7 +275,7 @@ public abstract class Game {
     public String getTeamColor(String name) {
         if (redTeam.contains(name)) return "red";
         else if (blueTeam.contains(name)) return "blue";
-        else return null;
+        else return "spec";
     }
 
     public boolean isRed(Player player) {

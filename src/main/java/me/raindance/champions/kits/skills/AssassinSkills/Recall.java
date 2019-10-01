@@ -101,22 +101,32 @@ public class Recall extends Passive implements IDropPassive, IContinuousPassive,
 
 
     private void shiftRecall() {
+        Location current = getPlayer().getLocation();
+        Location newLoc;
         try {
-            getPlayer().teleport(locations.get(shiftTime));
+            newLoc =  locations.get(shiftTime);
         } catch (IndexOutOfBoundsException e) {
-            getPlayer().teleport(locations.get(locations.size() - 1));
+            newLoc =  locations.get(locations.size() - 1);
         }
+        newLoc.setPitch(current.getPitch());
+        newLoc.setYaw(current.getYaw());
+        getPlayer().teleport(newLoc);
         double heal = (getPlayer().getHealth() + health > 20) ? 20 : (getPlayer().getHealth() + health);
         getPlayer().setHealth(heal);
 
     }
 
     private void recall() {
+        Location current = getPlayer().getLocation();
+        Location newLoc;
         try {
-            getPlayer().teleport(locations.get(time));
+            newLoc = locations.get(time);
         } catch (IndexOutOfBoundsException e) {
-            getPlayer().teleport(locations.get(locations.size() - 1));
+            newLoc = locations.get(locations.size() - 1);
         }
+        newLoc.setPitch(current.getPitch());
+        newLoc.setYaw(current.getYaw());
+        getPlayer().teleport(newLoc);
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, duration, 2);
     }
 
