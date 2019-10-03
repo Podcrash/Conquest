@@ -140,6 +140,15 @@ public class ChampionsPlayerManager {
         JsonObject json = new JsonParser().parse(jsonStr).getAsJsonObject();
         SkillType skillType = SkillType.getByName(json.get("skilltype").getAsString());
 
+        JsonObject itemsJson = json.getAsJsonObject("items");
+        ItemStack[] items = new ItemStack[9];
+        for(String slotKey : itemsJson.keySet()) {
+            int itemID = itemsJson.get(slotKey).getAsInt();
+            if(itemID == -1) continue;
+            ChampionsItem championsItem = ChampionsItem.getBy(itemID, skillType);
+            items[Integer.parseInt(slotKey)] = championsItem.toItemStack();
+        }
+
         JsonObject skillsJson = json.getAsJsonObject("skills");
         List<Skill> skills = new ArrayList<>();
 
@@ -150,14 +159,7 @@ public class ChampionsPlayerManager {
             skills.add(newSkill);
         }
 
-        JsonObject itemsJson = json.getAsJsonObject("items");
-        ItemStack[] items = new ItemStack[9];
-        for(String slotKey : itemsJson.keySet()) {
-            int itemID = itemsJson.get(slotKey).getAsInt();
-            if(itemID == -1) continue;
-            ChampionsItem championsItem = ChampionsItem.getBy(itemID, skillType);
-            items[Integer.parseInt(slotKey)] = championsItem.toItemStack();
-        }
+
 
         ChampionsPlayer championsPlayer = newObj(owner, skills, skillType);
         championsPlayer.setDefaultHotbar(items);

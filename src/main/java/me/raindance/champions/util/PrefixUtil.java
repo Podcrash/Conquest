@@ -1,17 +1,13 @@
 package me.raindance.champions.util;
 
-import me.raindance.champions.Main;
-import me.raindance.champions.Perm;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.PlayerPermissionsTable;
-import me.raindance.champions.db.TableOrganizer;
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.permissions.Perm;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.nio.file.attribute.GroupPrincipal;
 import java.util.List;
-import java.util.Set;
 
 public class PrefixUtil {
     public static String getPrefix(Perm role){

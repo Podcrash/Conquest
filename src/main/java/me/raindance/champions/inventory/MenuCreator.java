@@ -1,12 +1,9 @@
 package me.raindance.champions.inventory;
 
 import com.google.common.collect.BiMap;
-import me.raindance.champions.Configurator;
-import me.raindance.champions.Main;
-import me.raindance.champions.db.ChampionsKitTable;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.TableOrganizer;
-import me.raindance.champions.game.Game;
+import com.podcrash.api.db.ChampionsKitTable;
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.TableOrganizer;
 import me.raindance.champions.game.GameManager;
 import me.raindance.champions.inventory.update.IUpdateInv;
 import me.raindance.champions.inventory.update.InventoryUpdater;

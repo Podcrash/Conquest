@@ -30,13 +30,12 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import me.raindance.champions.listeners.ListenerBase;
-import me.raindance.champions.redis.Communicator;
+import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.time.TimeHandler;
 import me.raindance.champions.time.resources.SimpleTimeResource;
 import me.raindance.champions.util.EntityUtil;
 import me.raindance.champions.util.PrefixUtil;
 import me.raindance.champions.util.VectorUtil;
-import me.raindance.champions.world.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -69,17 +68,17 @@ public class GameListener extends ListenerBase {
 
     @EventHandler
     public void mapChange(GameMapChangeEvent e) {
-        Communicator.getMap().put("map", e.getMap());
+        Communicator.put("map", e.getMap());
     }
     @EventHandler
     public void onJoin(GameJoinEvent e) {
-        Communicator.getMap().put("size", Integer.toString(e.getGame().size()));
+        Communicator.put("size", e.getGame().size());
         //Communicator.publish(e.getGame().getGameCount());
     }
 
     @EventHandler
     public void onLeave(GameLeaveEvent e) {
-        Communicator.getMap().put("size", Integer.toString(e.getGame().size()));
+        Communicator.put("size", e.getGame().size());
         //Communicator.publish(e.getGame().getGameCount());
     }
 

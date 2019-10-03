@@ -2,13 +2,13 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import io.netty.util.NetUtil;
+import com.podcrash.api.permissions.Perm;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.damage.DamageQueue;
 import me.raindance.champions.damage.HitDetectionInjector;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.PlayerPermissionsTable;
-import me.raindance.champions.db.TableOrganizer;
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.TableOrganizer;
 import me.raindance.champions.disguise.Disguiser;
 import me.raindance.champions.effect.particle.ParticleRunnable;
 import me.raindance.champions.events.TickEvent;
@@ -24,15 +24,13 @@ import me.raindance.champions.listeners.*;
 import me.raindance.champions.listeners.maintainers.GameListener;
 import me.raindance.champions.listeners.maintainers.MapMaintainListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
-import me.raindance.champions.mob.CustomEntityType;
-import me.raindance.champions.redis.Communicator;
+import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.util.PlayerCache;
 import me.raindance.champions.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,7 +42,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.SpigotConfig;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
@@ -193,6 +190,8 @@ public class Main extends JavaPlugin {
             }
         }
         executor.shutdown();
+        Communicator.put("maxsize", GameManager.getGame().getMaxPlayers());
+
     }
     @Override
     public void onLoad() {

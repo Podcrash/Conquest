@@ -1,10 +1,10 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.permissions.Perm;
 import me.raindance.champions.Main;
-import me.raindance.champions.Perm;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.PlayerPermissionsTable;
-import me.raindance.champions.db.TableOrganizer;
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.TableOrganizer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;

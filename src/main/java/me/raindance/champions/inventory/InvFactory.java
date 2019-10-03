@@ -2,11 +2,11 @@ package me.raindance.champions.inventory;
 
 
 import com.google.gson.JsonObject;
+import com.podcrash.api.db.ChampionsKitTable;
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.TableOrganizer;
 import me.raindance.champions.Configurator;
 import me.raindance.champions.Main;
-import me.raindance.champions.db.ChampionsKitTable;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;

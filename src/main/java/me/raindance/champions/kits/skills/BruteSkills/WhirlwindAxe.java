@@ -60,7 +60,6 @@ public class WhirlwindAxe extends Instant {
     }
 
     private void spiral(Location playerLocation) {
-        final List<Player> players = getPlayers();
         new TimeResource() {
             private int a = 0;
             @Override

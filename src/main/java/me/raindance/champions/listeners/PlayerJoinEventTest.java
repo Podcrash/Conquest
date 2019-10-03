@@ -1,10 +1,10 @@
 package me.raindance.champions.listeners;
 
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.PlayerTable;
+import com.podcrash.api.db.TableOrganizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.damage.HitDetectionInjector;
-import me.raindance.champions.db.DataTableType;
-import me.raindance.champions.db.PlayerTable;
-import me.raindance.champions.db.TableOrganizer;
 import me.raindance.champions.effect.status.StatusApplier;
 import me.raindance.champions.events.DeathApplyEvent;
 import me.raindance.champions.game.GameManager;

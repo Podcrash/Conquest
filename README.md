@@ -46,7 +46,7 @@ See https://docs.gradle.org/current/userguide/command_line_interface.html for mo
     ```
     Make sure to restart your terminal.
 3. Open pgadmin, log in and create a new database named "champions".
-4. Run the test using `./gradlew clean test` to create the new dbs (See: DatabaseLoginTest)
+4. Run the test using `./gradlew clean test` to create the new dbs (See: com.podcrash.test.DatabaseLoginTest)
 5. Run `./gradlew clean generateChampionsdatabaseJooqSchemaSource`
 6. You should get new files on the directory build/generated-src/jooq
 7. Now you can reference said files! See the ChampionsKitTable class for examples!
