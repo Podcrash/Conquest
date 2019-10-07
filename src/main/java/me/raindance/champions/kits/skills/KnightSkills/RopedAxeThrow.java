@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;

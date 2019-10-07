@@ -5,7 +5,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IConstruct;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.util.MathUtil;
+import com.podcrash.api.mc.util.MathUtil;
 import org.bukkit.entity.Player;
 
 public class ManaPool extends Passive implements IConstruct {

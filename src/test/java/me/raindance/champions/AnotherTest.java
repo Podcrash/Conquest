@@ -1,6 +1,6 @@
 package me.raindance.champions;
 
-import me.raindance.champions.util.MathUtil;
+import com.podcrash.api.mc.util.MathUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

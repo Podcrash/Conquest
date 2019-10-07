@@ -5,7 +5,7 @@ import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

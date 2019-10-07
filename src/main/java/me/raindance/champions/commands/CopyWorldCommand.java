@@ -1,6 +1,6 @@
 package me.raindance.champions.commands;
 
-import me.raindance.champions.world.WorldManager;
+import com.podcrash.api.mc.world.WorldManager;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;

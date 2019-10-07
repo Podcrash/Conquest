@@ -1,18 +1,18 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import me.raindance.champions.Main;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.sound.SoundWrapper;
-import me.raindance.champions.util.VectorUtil;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundWrapper;
+import com.podcrash.api.mc.util.VectorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

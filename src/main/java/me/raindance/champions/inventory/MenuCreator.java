@@ -4,7 +4,7 @@ import com.google.common.collect.BiMap;
 import com.podcrash.api.db.ChampionsKitTable;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import me.raindance.champions.game.GameManager;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.inventory.update.IUpdateInv;
 import me.raindance.champions.inventory.update.InventoryUpdater;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -24,10 +24,8 @@ import org.bukkit.material.Dye;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 public class MenuCreator {
     private static final ExecutorService executor = Executors.newFixedThreadPool(3);

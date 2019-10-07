@@ -1,19 +1,19 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
-import me.raindance.champions.mob.CustomEntityFirework;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.util.ColorMaker;
-import me.raindance.champions.world.BlockUtil;
+import com.podcrash.api.mc.mob.CustomEntityFirework;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.ColorMaker;
+import com.podcrash.api.mc.world.BlockUtil;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -24,8 +24,8 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-import static me.raindance.champions.world.BlockUtil.isPassable;
-import static me.raindance.champions.world.BlockUtil.playerIsHere;
+import static com.podcrash.api.mc.world.BlockUtil.isPassable;
+import static com.podcrash.api.mc.world.BlockUtil.playerIsHere;
 
 public class StaticLaser extends ChargeUp implements IEnergy{
     private final int MAX_LEVEL = 5;

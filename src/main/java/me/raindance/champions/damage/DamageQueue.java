@@ -1,8 +1,8 @@
 package me.raindance.champions.damage;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityStatus;
+import com.abstractpackets.packetwrapper.WrapperPlayServerEntityStatus;
 import me.raindance.champions.Main;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.events.DeathApplyEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
@@ -10,8 +10,8 @@ import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.classes.Assassin;
 import me.raindance.champions.kits.classes.Brute;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.util.PacketUtil;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.PacketUtil;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;

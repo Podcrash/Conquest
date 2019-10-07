@@ -5,7 +5,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowChargeUp;
 import me.raindance.champions.listeners.GameDamagerConverterListener;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;

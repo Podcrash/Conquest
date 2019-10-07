@@ -5,7 +5,7 @@ import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;

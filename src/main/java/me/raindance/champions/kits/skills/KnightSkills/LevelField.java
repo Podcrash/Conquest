@@ -6,7 +6,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.time.resources.TimeResource;
+import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

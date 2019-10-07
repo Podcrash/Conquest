@@ -1,13 +1,13 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
 import me.raindance.champions.damage.Cause;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.time.resources.TimeResource;
+import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

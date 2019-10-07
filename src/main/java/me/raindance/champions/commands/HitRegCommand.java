@@ -1,5 +1,6 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.permissions.Perm;
 import me.raindance.champions.damage.HitDetectionInjector;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -7,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class HitRegCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(!sender.isOp()) {
+        if(!Perm.DEVELOPER.has(sender)) {
             sender.sendMessage("You do not have permissions!");
             return false;
         }

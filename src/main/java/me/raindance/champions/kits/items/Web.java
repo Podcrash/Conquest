@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.items;
 
-import me.raindance.champions.item.ItemManipulationManager;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.world.BlockUtil;
+import com.podcrash.api.mc.item.ItemManipulationManager;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.world.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;

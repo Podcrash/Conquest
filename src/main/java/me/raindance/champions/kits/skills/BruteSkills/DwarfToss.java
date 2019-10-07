@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayClientSteerVehicle;
+import com.abstractpackets.packetwrapper.WrapperPlayClientSteerVehicle;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketEvent;
 import me.raindance.champions.events.DamageApplyEvent;
@@ -9,8 +9,8 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IInjector;
 import me.raindance.champions.kits.skilltypes.Interaction;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.world.BlockUtil;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.world.BlockUtil;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.EntityEffect;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

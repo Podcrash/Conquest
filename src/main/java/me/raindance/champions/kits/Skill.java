@@ -1,9 +1,8 @@
 package me.raindance.champions.kits;
 
-import com.comphenix.protocol.PacketType;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
-import me.raindance.champions.game.Game;
+import com.podcrash.api.mc.game.Game;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -15,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.*;

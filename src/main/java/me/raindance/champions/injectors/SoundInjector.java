@@ -1,13 +1,13 @@
 package me.raindance.champions.injectors;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityStatus;
+import com.abstractpackets.packetwrapper.WrapperPlayServerEntityStatus;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketEvent;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.entity.Player;
 
 public class SoundInjector extends InjectorBase {

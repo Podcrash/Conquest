@@ -1,10 +1,10 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.events.DeathApplyEvent;
 import me.raindance.champions.kits.enums.InvType;

@@ -1,12 +1,12 @@
 package me.raindance.champions.game.map.types;
 
 import me.raindance.champions.game.map.MapManager;
-import me.raindance.champions.game.objects.IObjective;
-import me.raindance.champions.game.objects.ItemObjective;
-import me.raindance.champions.game.objects.WinObjective;
-import me.raindance.champions.game.objects.objectives.CapturePoint;
-import me.raindance.champions.game.objects.objectives.Emerald;
-import me.raindance.champions.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.objects.IObjective;
+import com.podcrash.api.mc.game.objects.ItemObjective;
+import com.podcrash.api.mc.game.objects.WinObjective;
+import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
+import com.podcrash.api.mc.game.objects.objectives.Emerald;
+import com.podcrash.api.mc.game.objects.objectives.Restock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

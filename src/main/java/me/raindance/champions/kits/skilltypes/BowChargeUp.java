@@ -1,6 +1,10 @@
 package me.raindance.champions.kits.skilltypes;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.TitleSender;
 import me.raindance.champions.damage.Cause;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
@@ -8,10 +12,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.time.TimeHandler;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.util.TitleSender;
+import me.raindance.champions.util.SkillTitleSender;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumAnimation;
 import net.minecraft.server.v1_8_R3.ItemStack;
@@ -109,7 +110,7 @@ public abstract class BowChargeUp extends Skill implements TimeResource {
         if(System.currentTimeMillis() - times.get(getPlayer().getName()) >= 1500L) {
             charge();
             isUsing = true;
-            WrappedChatComponent progress = TitleSender.chargeUpProgressBar(instance, getCharge());
+            WrappedChatComponent progress = SkillTitleSender.chargeUpProgressBar(instance, getCharge());
             if (getCharge() < 1f)
                 SoundPlayer.sendSound(getPlayer(), "note.harp", 0.75f, (int) (130 * getCharge()));
             TitleSender.sendTitle(getPlayer(), progress);

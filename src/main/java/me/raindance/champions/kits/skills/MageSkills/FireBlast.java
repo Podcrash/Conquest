@@ -1,15 +1,15 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.util.VectorUtil;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.VectorUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -22,8 +22,8 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 
-import static me.raindance.champions.world.BlockUtil.getAllPlayersHere;
-import static me.raindance.champions.world.BlockUtil.getPlayersInArea;
+import static com.podcrash.api.mc.world.BlockUtil.getAllPlayersHere;
+import static com.podcrash.api.mc.world.BlockUtil.getPlayersInArea;
 
 public class FireBlast extends Instant implements IEnergy {
     private int energyUsage;

@@ -1,15 +1,15 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
-import me.raindance.champions.callback.sources.CollideBeforeHitGround;
+import com.podcrash.api.mc.callback.sources.CollideBeforeHitGround;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
-import me.raindance.champions.util.EntityUtil;
+import com.podcrash.api.mc.util.EntityUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

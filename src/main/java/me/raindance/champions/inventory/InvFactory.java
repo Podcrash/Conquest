@@ -13,7 +13,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.classes.*;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;

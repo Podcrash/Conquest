@@ -1,17 +1,17 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
+import com.podcrash.api.mc.hologram.Hologram;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.damage.Cause;
 import me.raindance.champions.events.DamageApplyEvent;
-import me.raindance.champions.hologram.Hologram;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.util.MathUtil;
-import me.raindance.champions.util.TitleSender;
+import me.raindance.champions.util.SkillTitleSender;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
@@ -127,7 +127,7 @@ public class HeartsEye extends Passive implements TimeResource {
             this.nextTime = nextTime;
             this.cplayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
             Skill current = cplayer.getCurrentSkillInHand();
-            String cooldownBar = (current == null) ? "" : TitleSender.coolDownString(current);
+            String cooldownBar = (current == null) ? "" : SkillTitleSender.coolDownString(current);
             this.hologram = new Hologram(player.getLocation().add(up), true, String.valueOf(player.getHealth()), cooldownBar);
             render();
         }
@@ -147,7 +147,7 @@ public class HeartsEye extends Passive implements TimeResource {
                 secondLine = " ";
             }else {
                 if(!current.onCooldown()) secondLine = ChatColor.GREEN + current.getName();
-                else secondLine = TitleSender.coolDownString(current);
+                else secondLine = SkillTitleSender.coolDownString(current);
             }
             this.hologram.editLine(1, secondLine);
             this.hologram.update();

@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;

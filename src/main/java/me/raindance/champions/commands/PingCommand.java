@@ -1,6 +1,6 @@
 package me.raindance.champions.commands;
 
-import me.raindance.champions.util.Utility;
+import com.podcrash.api.mc.util.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

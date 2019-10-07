@@ -1,11 +1,11 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import me.raindance.champions.Main;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -21,7 +21,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 
-import static me.raindance.champions.world.BlockUtil.getPlayersInArea;
+import static com.podcrash.api.mc.world.BlockUtil.getPlayersInArea;
 
 public class GlacialBlade extends Instant implements IEnergy {
     private final WrapperPlayServerWorldParticles particles;

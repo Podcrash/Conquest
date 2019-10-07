@@ -1,13 +1,13 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
-import com.comphenix.packetwrapper.AbstractPacket;
+import com.abstractpackets.packetwrapper.AbstractPacket;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.sound.SoundPlayer;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;

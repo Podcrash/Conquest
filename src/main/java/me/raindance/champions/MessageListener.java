@@ -1,14 +1,9 @@
 package me.raindance.champions;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import me.raindance.champions.game.Game;
-import me.raindance.champions.game.GameManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-
-import java.io.*;
 
 /**
  * this class will be currently unused

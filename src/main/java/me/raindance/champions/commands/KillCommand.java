@@ -1,12 +1,8 @@
 package me.raindance.champions.commands;
 
-import me.raindance.champions.damage.DamageApplier;
 import me.raindance.champions.damage.DamageQueue;
-import me.raindance.champions.events.game.GameDeathEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.listeners.maintainers.GameListener;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

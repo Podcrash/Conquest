@@ -1,29 +1,30 @@
 package me.raindance.champions.listeners.maintainers;
 
 import me.raindance.champions.Main;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
-import me.raindance.champions.effect.status.StatusWrapper;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.StatusWrapper;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.events.DeathApplyEvent;
-import me.raindance.champions.events.StatusApplyEvent;
-import me.raindance.champions.events.game.*;
+import com.podcrash.api.mc.events.StatusApplyEvent;
+import com.podcrash.api.mc.events.game.*;
 import me.raindance.champions.events.skill.SkillUseEvent;
-import me.raindance.champions.game.Game;
-import me.raindance.champions.game.GameManager;
-import me.raindance.champions.game.TeamEnum;
-import me.raindance.champions.game.objects.IObjective;
-import me.raindance.champions.game.objects.ItemObjective;
-import me.raindance.champions.game.objects.objectives.CapturePoint;
-import me.raindance.champions.game.objects.objectives.Emerald;
-import me.raindance.champions.game.objects.objectives.Restock;
-import me.raindance.champions.game.resources.CapturePointDetector;
-import me.raindance.champions.game.resources.CapturePointScorer;
-import me.raindance.champions.game.resources.ItemObjectiveSpawner;
-import me.raindance.champions.game.resources.ScoreboardRepeater;
-import me.raindance.champions.game.scoreboard.DomScoreboard;
-import me.raindance.champions.game.scoreboard.GameScoreboard;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.game.Game;
+import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.mc.game.objects.IObjective;
+import com.podcrash.api.mc.game.objects.ItemObjective;
+import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
+import com.podcrash.api.mc.game.objects.objectives.Emerald;
+import com.podcrash.api.mc.game.objects.objectives.Restock;
+import me.raindance.champions.game.resource.CapturePointDetector;
+import me.raindance.champions.game.resource.CapturePointScorer;
+import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
+import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
+import com.podcrash.api.mc.game.scoreboard.DomScoreboard;
+import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.mc.item.ItemManipulationManager;
+import me.raindance.champions.game.DomGame;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -31,11 +32,11 @@ import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import me.raindance.champions.listeners.ListenerBase;
 import com.podcrash.api.redis.Communicator;
-import me.raindance.champions.time.TimeHandler;
-import me.raindance.champions.time.resources.SimpleTimeResource;
-import me.raindance.champions.util.EntityUtil;
-import me.raindance.champions.util.PrefixUtil;
-import me.raindance.champions.util.VectorUtil;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.SimpleTimeResource;
+import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.mc.util.PrefixUtil;
+import com.podcrash.api.mc.util.VectorUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -68,17 +69,17 @@ public class GameListener extends ListenerBase {
 
     @EventHandler
     public void mapChange(GameMapChangeEvent e) {
-        Communicator.put("map", e.getMap());
+        Communicator.putLobbyMap("map", e.getMap());
     }
     @EventHandler
     public void onJoin(GameJoinEvent e) {
-        Communicator.put("size", e.getGame().size());
+        Communicator.putLobbyMap("size", e.getGame().size());
         //Communicator.publish(e.getGame().getGameCount());
     }
 
     @EventHandler
     public void onLeave(GameLeaveEvent e) {
-        Communicator.put("size", e.getGame().size());
+        Communicator.putLobbyMap("size", e.getGame().size());
         //Communicator.publish(e.getGame().getGameCount());
     }
 
@@ -86,7 +87,7 @@ public class GameListener extends ListenerBase {
     //GameEvents
     //--------------------------------------
     /**
-     * @see me.raindance.champions.game.GameManager#startGame
+     * @see com.podcrash.api.mc.game.GameManager#startGame
      * @param e event callback
      */
     @EventHandler
@@ -163,7 +164,9 @@ public class GameListener extends ListenerBase {
             deadPeople.remove(player);
         }
 
-        Communicator.publish(Communicator.getCode() + " close");
+        Communicator.publishLobby(Communicator.getCode() + " close");
+        DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        GameManager.createGame(game1);
         //WorldManager.getInstance().deleteWorld(e.getGame().getGameWorld(), true);
 
     }

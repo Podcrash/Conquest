@@ -5,8 +5,8 @@ import com.comphenix.protocol.events.PacketListener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.raindance.champions.Main;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.ApplyKitEvent;
 import me.raindance.champions.inventory.BookFormatter;
 import me.raindance.champions.inventory.ChampionsItem;
@@ -17,8 +17,8 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IConstruct;
 import me.raindance.champions.kits.iskilltypes.IInjector;
 import me.raindance.champions.kits.iskilltypes.IPassiveTimer;
-import me.raindance.champions.time.TimeHandler;
-import me.raindance.champions.time.resources.TimeResource;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -171,7 +171,7 @@ public class ChampionsPlayerManager {
         if(skillType == SkillType.Global) throw new IllegalArgumentException("Global is not allowed");
         if(!constructors.containsKey(skillType)) {
             try {
-                Class<ChampionsPlayer> clazz = (Class<ChampionsPlayer>) Class.forName("me.raindance.champions.kits.classes." + skillType.getName());
+                Class<? extends ChampionsPlayer> clazz = (Class<? extends ChampionsPlayer>) Class.forName("me.raindance.champions.kits.classes." + skillType.getName());
                 Constructor cons = clazz.getDeclaredConstructor(Player.class, List.class);
                 constructors.put(skillType, cons);
             }catch (ClassNotFoundException|NoSuchMethodException e) {

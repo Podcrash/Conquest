@@ -1,8 +1,8 @@
 package me.raindance.champions.damage;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityVelocity;
+import com.abstractpackets.packetwrapper.WrapperPlayServerEntityVelocity;
 import me.raindance.champions.kits.Skill;
-import me.raindance.champions.util.PacketUtil;
+import com.podcrash.api.mc.util.PacketUtil;
 import net.jafama.FastMath;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityLiving;

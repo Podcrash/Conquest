@@ -13,7 +13,7 @@ import org.bukkit.event.EventPriority;
 import java.util.Arrays;
 
 //How to make a class from scratch
-public class Vengeance extends Passive {//it is a passive because the other skilltypes do not match what I am trying to do: control damage me.raindance.champions.events.
+public class Vengeance extends Passive {//it is a passive because the other skilltypes do not match what I am trying to do: control damage com.podcrash.api.mc.events.
     //It's going to implement charges, since it has the ability to stack (at least twice). Nevermind, it is only going to implement the part where
     //it will gain charges, the other stuff has stuff to do with time.
     private final int MAX_LEVEL = 3;
@@ -45,7 +45,7 @@ public class Vengeance extends Passive {//it is a passive because the other skil
     @EventHandler(
             priority = EventPriority.NORMAL
     )
-    protected void hit(DamageApplyEvent e) {// looking into the hit me.raindance.champions.events
+    protected void hit(DamageApplyEvent e) {// looking into the hit com.podcrash.api.mc.events
         if (e.isCancelled()) return; //if the event is already cancelled, ie riposte, then don't do anything.
         /*
            There are two situations: one in which you are the victim and one in which you are the damager

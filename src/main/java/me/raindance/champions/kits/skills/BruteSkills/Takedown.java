@@ -1,19 +1,19 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.callback.sources.CollideBeforeHitGround;
+import com.podcrash.api.mc.callback.sources.CollideBeforeHitGround;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.util.EntityUtil;
-import me.raindance.champions.util.PacketUtil;
+import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.mc.util.PacketUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

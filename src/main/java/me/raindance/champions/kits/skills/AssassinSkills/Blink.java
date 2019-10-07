@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -15,8 +15,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import static me.raindance.champions.world.BlockUtil.isSafe;
-import static me.raindance.champions.world.BlockUtil.playerIsHere;
+import static com.podcrash.api.mc.world.BlockUtil.isSafe;
+import static com.podcrash.api.mc.world.BlockUtil.playerIsHere;
 
 public class Blink extends Instant {
     private final int MAX_LEVEL = 4;

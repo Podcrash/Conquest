@@ -3,7 +3,7 @@ main: me.raindance.champions.Main
 version: 0.1
 author: RainDanceMC
 
-softdepend: [ProtocolLib]
+softdepend: [ProtocolLib, PodcrashAPI]
 commands:
   ping:
     description: Tells you your ping

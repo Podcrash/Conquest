@@ -1,16 +1,16 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.util.EntityUtil;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.EntityUtil;
 import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;

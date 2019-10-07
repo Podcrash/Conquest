@@ -1,6 +1,6 @@
 package me.raindance.champions.damage;
 
-import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
+import com.abstractpackets.packetwrapper.WrapperPlayClientUseEntity;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.*;
 import com.comphenix.protocol.wrappers.EnumWrappers;

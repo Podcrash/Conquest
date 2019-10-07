@@ -1,16 +1,17 @@
 package me.raindance.champions.game;
 
+import com.podcrash.api.mc.game.Game;
+import com.podcrash.api.mc.game.GameType;
 import me.raindance.champions.game.map.types.DominateMap;
-import me.raindance.champions.game.objects.ItemObjective;
-import me.raindance.champions.game.objects.WinObjective;
-import me.raindance.champions.game.objects.objectives.CapturePoint;
-import me.raindance.champions.game.objects.objectives.Emerald;
-import me.raindance.champions.game.objects.objectives.Restock;
-import me.raindance.champions.game.scoreboard.DomScoreboard;
-import me.raindance.champions.game.scoreboard.GameScoreboard;
-import me.raindance.champions.world.WorldManager;
+import com.podcrash.api.mc.game.objects.ItemObjective;
+import com.podcrash.api.mc.game.objects.WinObjective;
+import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
+import com.podcrash.api.mc.game.objects.objectives.Emerald;
+import com.podcrash.api.mc.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.scoreboard.DomScoreboard;
+import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.mc.world.WorldManager;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;

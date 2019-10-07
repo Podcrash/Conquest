@@ -1,14 +1,14 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.util.MathUtil;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.MathUtil;
 import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

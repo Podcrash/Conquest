@@ -1,17 +1,17 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.disguise.Disguiser;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.disguise.Disguiser;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Continuous;
-import me.raindance.champions.mob.CustomSkeleton;
-import me.raindance.champions.util.PacketUtil;
+import com.podcrash.api.mc.mob.CustomSkeleton;
+import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;

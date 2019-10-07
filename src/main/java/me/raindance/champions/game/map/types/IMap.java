@@ -1,8 +1,8 @@
 package me.raindance.champions.game.map.types;
 
-import me.raindance.champions.game.objects.IObjective;
-import me.raindance.champions.game.objects.ItemObjective;
-import me.raindance.champions.game.objects.WinObjective;
+import com.podcrash.api.mc.game.objects.IObjective;
+import com.podcrash.api.mc.game.objects.ItemObjective;
+import com.podcrash.api.mc.game.objects.WinObjective;
 import org.bukkit.Location;
 
 import java.util.List;

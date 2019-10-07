@@ -1,16 +1,16 @@
 package me.raindance.champions.listeners;
 
-import com.comphenix.packetwrapper.WrapperPlayServerSetSlot;
+import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
 import me.raindance.champions.Main;
-import me.raindance.champions.game.Game;
-import me.raindance.champions.game.GameManager;
+import com.podcrash.api.mc.game.Game;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.inventory.*;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.util.PacketUtil;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

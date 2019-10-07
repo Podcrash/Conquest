@@ -1,14 +1,12 @@
 package me.raindance.champions.commands;
 
 import me.raindance.champions.Main;
-import me.raindance.champions.game.Game;
-import me.raindance.champions.game.GameManager;
+import com.podcrash.api.mc.game.GameManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.Set;
 
 public class SetMapCommand extends CommandBase {

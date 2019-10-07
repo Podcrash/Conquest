@@ -1,16 +1,16 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.time.resources.EntityParticleResource;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.time.resources.EntityParticleResource;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

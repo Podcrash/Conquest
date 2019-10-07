@@ -1,11 +1,11 @@
 package me.raindance.champions.kits.classes;
 
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundWrapper;
+import com.podcrash.api.mc.sound.SoundWrapper;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

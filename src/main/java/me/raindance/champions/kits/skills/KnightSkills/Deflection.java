@@ -7,7 +7,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.ICharge;
 import me.raindance.champions.kits.iskilltypes.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.time.TimeHandler;
+import com.podcrash.api.mc.time.TimeHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

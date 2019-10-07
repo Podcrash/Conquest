@@ -2,19 +2,21 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.permissions.Perm;
-import me.raindance.champions.commands.*;
-import me.raindance.champions.damage.DamageQueue;
-import me.raindance.champions.damage.HitDetectionInjector;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.PlayerPermissionsTable;
 import com.podcrash.api.db.TableOrganizer;
-import me.raindance.champions.disguise.Disguiser;
-import me.raindance.champions.effect.particle.ParticleRunnable;
-import me.raindance.champions.events.TickEvent;
-import me.raindance.champions.game.Game;
-import me.raindance.champions.game.GameManager;
-import me.raindance.champions.game.GameType;
+import com.podcrash.api.mc.disguise.Disguiser;
+import com.podcrash.api.mc.effect.particle.ParticleRunnable;
+import com.podcrash.api.mc.events.TickEvent;
+import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.util.PlayerCache;
+import com.podcrash.api.mc.world.WorldManager;
+import com.podcrash.api.permissions.Perm;
+import com.podcrash.api.redis.Communicator;
+import me.raindance.champions.commands.*;
+import me.raindance.champions.damage.DamageQueue;
+import me.raindance.champions.damage.HitDetectionInjector;
+import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.InventoryData;
 import me.raindance.champions.inventory.update.InventoryUpdater;
@@ -24,9 +26,6 @@ import me.raindance.champions.listeners.*;
 import me.raindance.champions.listeners.maintainers.GameListener;
 import me.raindance.champions.listeners.maintainers.MapMaintainListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
-import com.podcrash.api.redis.Communicator;
-import me.raindance.champions.util.PlayerCache;
-import me.raindance.champions.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,7 +42,10 @@ import org.spigotmc.SpigotConfig;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -117,10 +119,6 @@ public class Main extends JavaPlugin {
             // lol
         }, executor);
     }
-    private CompletableFuture<Void> startSQLBases() {
-        TableOrganizer.createTables(false);
-        return CompletableFuture.runAsync(() -> {});
-    }
 
     @Override
     public void onEnable() {
@@ -131,11 +129,10 @@ public class Main extends JavaPlugin {
         instance = this;
 
         log.info("[GameManager] Making a lot of games");
-        Game game = GameManager.createGame(Long.toString(System.currentTimeMillis()), GameType.DOM);
+        DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        GameManager.createGame(game);
         log.info("Created game " + game.getName());
 
-        CompletableFuture communications = Communicator.setup(executor);
-        CompletableFuture sql = startSQLBases();
         CompletableFuture kb = setKnockback();
         CompletableFuture customEnchantment = registerCustomEnchant();
         CompletableFuture listeners = registerListeners();
@@ -162,8 +159,6 @@ public class Main extends JavaPlugin {
         this.log.info(Bukkit.getWorlds().toString());
 
         CompletableFuture.allOf(
-            sql,
-            communications,
             kb,
             customEnchantment,
             listeners,
@@ -177,7 +172,7 @@ public class Main extends JavaPlugin {
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
         DamageQueue.active = true;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Main.instance, new DamageQueue(), 0L, 1L);
+        Executors.newSingleThreadScheduledExecutor().schedule(new DamageQueue(), 25, TimeUnit.MILLISECONDS);
         Bukkit.getScheduler().runTaskTimer(Main.instance, new InventoryUpdater(), 0L, 1L);
 
         //This part is really only used for reloading
@@ -189,8 +184,9 @@ public class Main extends JavaPlugin {
                 InvFactory.applyLastBuild(p);
             }
         }
+        Communicator.readyGameLobby();
+        Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
-        Communicator.put("maxsize", GameManager.getGame().getMaxPlayers());
 
     }
     @Override

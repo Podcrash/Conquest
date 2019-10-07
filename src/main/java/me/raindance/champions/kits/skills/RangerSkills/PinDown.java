@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
-import me.raindance.champions.effect.status.StatusWrapper;
-import me.raindance.champions.effect.status.ThrowableStatusApplier;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.effect.status.StatusWrapper;
+import com.podcrash.api.mc.effect.status.ThrowableStatusApplier;
 import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;

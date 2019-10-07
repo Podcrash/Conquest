@@ -1,14 +1,12 @@
 package me.raindance.champions.listeners;
 
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.disguise.Disguise;
-import me.raindance.champions.disguise.Disguiser;
-import me.raindance.champions.effect.status.ThrowableStatusApplier;
+import com.podcrash.api.mc.disguise.Disguise;
+import com.podcrash.api.mc.disguise.Disguiser;
+import com.podcrash.api.mc.effect.status.ThrowableStatusApplier;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.classes.Assassin;
-import me.raindance.champions.util.PacketUtil;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

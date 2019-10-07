@@ -1,20 +1,17 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import me.raindance.champions.callback.sources.CollideBeforeHitGround;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.time.resources.TimeResource;
-import me.raindance.champions.util.EntityUtil;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.EntityUtil;
 import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;

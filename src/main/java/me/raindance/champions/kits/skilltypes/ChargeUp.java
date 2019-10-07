@@ -1,16 +1,17 @@
 package me.raindance.champions.kits.skilltypes;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.TitleSender;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.sound.SoundPlayer;
-import me.raindance.champions.util.TitleSender;
-import me.raindance.champions.time.TimeHandler;
-import me.raindance.champions.time.resources.TimeResource;
+import me.raindance.champions.util.SkillTitleSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +51,7 @@ public abstract class ChargeUp extends Skill implements TimeResource {
     public void task() {
         charge();
         isUsing = true;
-        WrappedChatComponent progress = TitleSender.chargeUpProgressBar(this, this.getCharge());
+        WrappedChatComponent progress = SkillTitleSender.chargeUpProgressBar(this, this.getCharge());
         if(getCharge() < 1f) SoundPlayer.sendSound(this.getPlayer(), "note.harp", 0.75f, (int)(130 * getCharge()) );
         TitleSender.sendTitle(this.getPlayer(), progress);
     }

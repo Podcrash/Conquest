@@ -1,18 +1,18 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import me.raindance.champions.damage.DamageApplier;
-import me.raindance.champions.effect.particle.ParticleGenerator;
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.effect.status.StatusApplier;
-import me.raindance.champions.item.ItemManipulationManager;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.sound.SoundWrapper;
+import com.podcrash.api.mc.sound.SoundWrapper;
 import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;

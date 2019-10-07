@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.GlobalSkills;
 
-import me.raindance.champions.effect.status.Status;
-import me.raindance.champions.events.StatusApplyEvent;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.events.StatusApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;

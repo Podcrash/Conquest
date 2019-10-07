@@ -1,9 +1,9 @@
 package me.raindance.champions.game.map;
 
 import me.raindance.champions.Main;
-import me.raindance.champions.game.objects.objectives.CapturePoint;
-import me.raindance.champions.game.objects.objectives.Emerald;
-import me.raindance.champions.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
+import com.podcrash.api.mc.game.objects.objectives.Emerald;
+import com.podcrash.api.mc.game.objects.objectives.Restock;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -15,15 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapManager {
+    private Main mstance;
     //TODO: Refactor using the new configurator
     private static volatile MapManager mapManager;
-    private Main mstance = Main.getInstance();
     private static final String[] xyzs = new String[]{".x", ".y", ".z"};
 
     private MapManager() {
         if (mapManager != null) {
             throw new RuntimeException("Please use getInstance() method");
         }
+        mstance = Main.getInstance();
     }
 
     public static MapManager getInstance() {

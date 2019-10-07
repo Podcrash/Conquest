@@ -3,7 +3,6 @@ plugins {
     id 'java-library'
     id 'idea'
     id 'eclipse'
-    id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
 group 'raindance'
@@ -14,7 +13,7 @@ sourceCompatibility = 1.8
 dependencies {
     compileOnly fileTree('../libs')
 
-    implementation project(path: ":PodcrashAPI", configuration: "shadow")
+    implementation project(path: ":PodcrashAPI")
 
     implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
 
@@ -33,47 +32,12 @@ task copyjar(type: Exec) {
 }
 
 test {
-    test.dependsOn(shadowJar)
     useJUnitPlatform()
     systemProperty "lobby.code", "dom1234132"
 
     testLogging.showStandardStreams true
 }
 
-shadowJar {
-    mergeServiceFiles()
+task spigot(dependsOn: jar) {
 
-    dependencies {
-
-        /*
-        include (dependency("org.jooq:jooq:3.12.1"))
-        include (dependency("com.zaxxer:HikariCP:3.3.1"))
-        include (dependency("postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted"))
-
-        include (dependency("org.redisson:redisson:3.11.3"))
-        include (dependency("io.netty:+:+"))
-        include (dependency("javax.cache:cache-api:1.0.0"))
-        */
-        //exclude(dependency(":PodcrashAPI"))
-        exclude "spigot.jar"
-        exclude(dependency("com.comphenix.protocol:ProtocolLib:4.4.0"))
-
-        relocate("io.netty", "org.redisson.netty")
-    }
-
-    //minimize()
 }
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Champions',
-                'Implementation-Version': 1.0,
-                'Main-Class': 'me.raindance.champions.Main'
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-jar.enabled = false
-assemble.dependsOn(shadowJar)
