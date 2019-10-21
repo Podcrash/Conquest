@@ -15,7 +15,7 @@ dependencies {
 
     implementation project(path: ":game-api")
 
-    implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
+    //implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
 
     testImplementation('org.slf4j:slf4j-simple:1.7.21')
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
@@ -32,8 +32,8 @@ task copyjar(type: Exec) {
 }
 
 test {
-    useJUnitPlatform()
     systemProperty "lobby.code", "dom1234132"
+    useJUnitPlatform()
 
     testLogging.showStandardStreams true
 }

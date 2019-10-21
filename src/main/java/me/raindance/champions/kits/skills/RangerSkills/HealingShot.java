@@ -7,7 +7,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -71,7 +71,7 @@ public class HealingShot extends BowShotSkill {
         status.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
         PacketUtil.syncSend(new AbstractPacket[]{status, packet}, getPlayers());
         SoundPlayer.sendSound(victim.getLocation(), "random.levelup", 0.9F, 95);
-        event.addSkillCause(this);
+        event.addSource(this);
     }
 
     @Override

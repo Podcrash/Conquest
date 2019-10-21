@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
 
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -56,7 +56,7 @@ public class Vengeance extends Passive {//it is a passive because the other skil
         if (e.getCause() == Cause.MELEE) {
             if (e.getAttacker() == getPlayer()) {
                 e.setModified(true); //Modify the damage
-                e.addSkillCause(this);
+                e.addSource(this);
                 e.setDamage(e.getDamage() + getCurrentCharges() * damageScale); //set it
                 resetCharges(); //reset the charges so that it's not infinite
             } else if (e.getVictim() == getPlayer()) {

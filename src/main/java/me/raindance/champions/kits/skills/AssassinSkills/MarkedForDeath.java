@@ -5,8 +5,8 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
-import me.raindance.champions.events.DeathApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -59,7 +59,7 @@ public class MarkedForDeath extends BowShotSkill {
         if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, duration, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BLAZE_BREATH, 1.0f, 1.5f);
-        event.addSkillCause(this);
+        event.addSource(this);
         victims.put(victim.getName(), System.currentTimeMillis() + 1000L * (long) duration);
         //shooter.sendMessage("You marked " + victim.getName() + " for " + duration + " seconds.");
     }
@@ -74,7 +74,7 @@ public class MarkedForDeath extends BowShotSkill {
         if(event.isCancelled()) return;
         LivingEntity entity = event.getVictim();
         if(victims.containsKey(entity.getName()) && System.currentTimeMillis() <= victims.get(entity.getName())) {
-            event.addSkillCause(this);
+            event.addSource(this);
             event.setModified(true);
             event.setDamage(event.getDamage() * 1.1D);
         }

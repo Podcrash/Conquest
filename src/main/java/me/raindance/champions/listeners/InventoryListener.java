@@ -1,6 +1,7 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;

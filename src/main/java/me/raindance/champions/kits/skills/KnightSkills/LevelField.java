@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -46,7 +46,7 @@ public class LevelField extends Passive implements TimeResource, IPassiveTimer {
         //calculate(); if you wanted to make it on demand instead of calculating it every few ticks
         if (event.getAttacker() == getPlayer()) {
             if(bonus == 0) return;
-            event.addSkillCause(this);
+            event.addSource(this);
             event.setDamage(event.getDamage() + bonus);
         }
         else if (event.getVictim() == getPlayer()){

@@ -1,12 +1,12 @@
 package me.raindance.champions.kits.skilltypes;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.TitleSender;
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;

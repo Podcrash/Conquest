@@ -3,7 +3,7 @@ package me.raindance.champions.kits.skills.BruteSkills;
 import com.abstractpackets.packetwrapper.WrapperPlayClientSteerVehicle;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketEvent;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;

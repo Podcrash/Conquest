@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -39,7 +39,7 @@ public class ViperStrikes extends Passive {
             StatusApplier.getOrNew(victim).applyStatus(Status.POISON, duration, 0, false, true);
             StatusApplier.getOrNew(victim).applyStatus(Status.WITHER, duration, 0, false, true);
             SoundPlayer.sendSound(victim.getLocation(), "mob.spider.say", 0.75F, 140, getPlayers());
-            event.addSkillCause(this);
+            event.addSource(this);
         }
     }
 }

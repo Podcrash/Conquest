@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.Main;
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.ICharge;
@@ -67,7 +67,7 @@ public class Sharpshooter extends Passive implements ICharge {
             if(forceMap.get(id) >= 0.9F) addCharge();
             forceMap.remove(id);
             getPlayer().sendMessage(String.format("%s bonus: %d", getName(), getCurrentCharges()));
-            e.addSkillCause(this);
+            e.addSource(this);
             playSound();
             miss = 0;
             start();

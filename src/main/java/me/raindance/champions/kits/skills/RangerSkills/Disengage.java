@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -38,7 +38,7 @@ public class Disengage extends Instant implements TimeResource {
                 "and your attacker receives Slow 4 ",
                 "for %%duration%% seconds."
         ));
-        addDescArg("duration", () ->  effectTime);
+        addDescArg("duration", () -> effectTime);
     }
 
     /*
@@ -70,7 +70,7 @@ public class Disengage extends Instant implements TimeResource {
     )
     public void hit(DamageApplyEvent event) {
         if (isDisengaging && event.getVictim() == getPlayer() && event.getCause() == Cause.MELEE) {
-            if(!(event.getAttacker() instanceof Player)) return;
+            if (!(event.getAttacker() instanceof Player)) return;
             Player victim = (Player) event.getAttacker();
             event.setCancelled(true);
             isDisengaging = false;

@@ -1,10 +1,10 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.hologram.Hologram;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.MathUtil;
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -81,7 +81,7 @@ public class HeartsEye extends Passive implements TimeResource {
 
 
             event.setModified(true);
-            event.addSkillCause(this);
+            event.addSource(this);
         }
         if(event.getArrow() != null) {
             Arrow arr = event.getArrow();
@@ -104,7 +104,7 @@ public class HeartsEye extends Passive implements TimeResource {
                         ChatColor.GREEN,
                         time,
                         ChatColor.GRAY));
-                event.addSkillCause(this);
+                event.addSource(this);
                 long nextTime = System.currentTimeMillis() + (time * 1000L);
                 LongshotDebuff debuff = affected.get(victim.getName());
                 if(debuff != null) {

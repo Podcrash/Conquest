@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.IEnergy;
@@ -38,7 +38,7 @@ public class SeismicBlade extends Passive implements IEnergy {
                 devent.setVelocityModifierY(1.5D);
                 devent.setVelocityModifierZ(1.5D);
                 useEnergy(getEnergyUsage());
-                devent.addSkillCause(this);
+                devent.addSource(this);
             } else {
                 devent.setDoKnockback(false);
                 devent.setCancelled(true);

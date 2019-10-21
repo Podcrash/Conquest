@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -43,7 +43,7 @@ public class Backstab extends Passive {
         LivingEntity victim = event.getVictim();
         if (VectorUtil.angleIsAround(damager.getLocation().getDirection(), victim.getLocation().getDirection(), 60)) {
             event.setModified(true);
-            event.addSkillCause(this);
+            event.addSource(this);
             event.setDamage(event.getDamage() + bonus);
             SoundPlayer.sendSound(victim.getLocation(), "game.neutral.hurt", 0.5F, 126);
             victim.getWorld().playEffect(event.getVictim().getLocation(), Effect.STEP_SOUND, 55);

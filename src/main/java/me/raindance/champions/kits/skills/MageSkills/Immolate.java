@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -143,7 +143,7 @@ public class Immolate extends TogglePassive implements IEnergy, TimeResource {
     @EventHandler(priority =  EventPriority.HIGH)
     public void damage(DamageApplyEvent event) {
         if(isToggled() && event.getAttacker() == getPlayer()) {
-            event.addSkillCause(this);
+            event.addSource(this);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)

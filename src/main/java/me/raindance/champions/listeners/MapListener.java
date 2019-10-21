@@ -1,5 +1,6 @@
 package me.raindance.champions.listeners;
 
+import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.game.map.MapManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

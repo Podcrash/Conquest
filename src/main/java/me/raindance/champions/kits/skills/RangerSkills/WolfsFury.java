@@ -5,7 +5,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -83,7 +83,7 @@ public class WolfsFury extends Instant implements TimeResource {
         if(e.isCancelled()) return;
         if (_active && getPlayer() == e.getAttacker()) {
             e.setModified(true);
-            e.addSkillCause(this);
+            e.addSource(this);
             e.setDoKnockback(false);
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 1f, 1);
         }

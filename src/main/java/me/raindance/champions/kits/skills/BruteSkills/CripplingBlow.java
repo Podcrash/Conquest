@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -49,7 +49,7 @@ public class CripplingBlow extends Passive { // Crippling Blow is a Passive skil
                 event.setVelocityModifierX(0.75); // They take 0.75 of the knockback in the X direction
                 event.setVelocityModifierZ(0.75); // They take 0.75 of the knockback in the Z direction
                 StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 2, 1); // The victim gets crippled
-                event.addSkillCause(this);
+                event.addSource(this);
             }
         }
     }

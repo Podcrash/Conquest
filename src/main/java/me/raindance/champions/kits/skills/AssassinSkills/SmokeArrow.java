@@ -5,7 +5,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -49,7 +49,7 @@ public class SmokeArrow extends BowShotSkill {
         StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, duration, 1);
         SoundPlayer.sendSound(victim.getLocation(), "mob.blaze.breathe", 1, 100);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(victim.getLocation().toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, 1, 0, 0, 0);
-        event.addSkillCause(this);
+        event.addSource(this);
         PacketUtil.syncSend(packet, getPlayers());
         shooter.sendMessage(String.format("You smoked %s for %d seconds.", victim.getName(), duration));
     }

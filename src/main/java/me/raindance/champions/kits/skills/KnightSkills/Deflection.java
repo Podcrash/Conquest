@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.ICharge;

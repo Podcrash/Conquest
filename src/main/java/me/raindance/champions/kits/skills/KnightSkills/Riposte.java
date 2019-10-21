@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -79,7 +79,7 @@ public class Riposte extends Instant implements TimeResource {
         if (event.getAttacker() == getPlayer() && ripoSuccess) {
             if (System.currentTimeMillis() - ripoSuccessTime < 1200L) {
                 event.setDamage(event.getDamage() + bonus);
-                event.addSkillCause(this);
+                event.addSource(this);
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1f, 1.6f);
                 getPlayer().sendMessage("Skill> You riposted " + event.getVictim().getName());
                 event.setModified(true);

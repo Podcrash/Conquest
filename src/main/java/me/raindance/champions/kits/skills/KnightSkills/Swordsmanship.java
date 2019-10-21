@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.KnightSkills;
 
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -55,7 +55,7 @@ public class Swordsmanship extends Passive implements ICharge, IPassiveTimer {
         if (event.getCause() != Cause.MELEE) return;
         if (event.getAttacker() == getPlayer() && getItemType(getPlayer().getItemInHand()) == ItemType.SWORD) {
             event.setModified(true);
-            event.addSkillCause(this);
+            event.addSource(this);
             event.setDamage(event.getDamage() + charges);
             charges = 0;
         }

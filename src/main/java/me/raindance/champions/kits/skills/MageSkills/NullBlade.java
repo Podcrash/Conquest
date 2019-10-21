@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.EnergyBar;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -34,7 +34,7 @@ public class NullBlade extends Passive {
         if (event.getAttacker() == getPlayer()) {
             EnergyBar ebar = getChampionsPlayer().getEnergyBar();
             boolean willOverfill = ebar.getEnergy() + energyGain > ebar.getMaxEnergy();
-            event.addSkillCause(this);
+            event.addSource(this);
             if(willOverfill) {
                 ebar.setEnergy(ebar.getMaxEnergy());
             } else {

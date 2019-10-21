@@ -1,11 +1,11 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import me.raindance.champions.Main;
-import me.raindance.champions.damage.Cause;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import me.raindance.champions.events.DamageApplyEvent;
-import me.raindance.champions.events.DeathApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -102,7 +102,7 @@ public class Bloodlust extends Passive {
     public void damage(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         if(event.getAttacker() == getPlayer() && (event.getCause() == Cause.MELEE || event.getCause() == Cause.MELEESKILL)) {
-            if(System.currentTimeMillis() - current <= duration * 1000L) event.addSkillCause(this);
+            if(System.currentTimeMillis() - current <= duration * 1000L) event.addSource(this);
         }
     }
 }

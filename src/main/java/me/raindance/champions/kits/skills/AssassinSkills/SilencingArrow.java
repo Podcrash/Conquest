@@ -5,7 +5,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -46,7 +46,7 @@ public class SilencingArrow extends BowShotSkill {
         if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BAT_HURT, 1.0f, 1.5f);
-        event.addSkillCause(this);
+        event.addSource(this);
         //shooter.sendMessage(String.format("Skill> You silenced %s for %d seconds.", victim.getName(), duration));
     }
 

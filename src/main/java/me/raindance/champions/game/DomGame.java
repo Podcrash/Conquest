@@ -8,7 +8,7 @@ import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.objects.objectives.Emerald;
 import com.podcrash.api.mc.game.objects.objectives.Restock;
-import com.podcrash.api.mc.game.scoreboard.DomScoreboard;
+import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.world.WorldManager;
 import org.bukkit.Bukkit;

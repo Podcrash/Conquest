@@ -1,5 +1,6 @@
 package me.raindance.champions.kits;
 
+import com.podcrash.api.mc.damage.DamageSource;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import com.podcrash.api.mc.game.Game;
@@ -18,7 +19,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
 
-public abstract class Skill implements ISkill {
+public abstract class Skill implements ISkill, DamageSource {
     protected final Skill instance = this;
     private final PluginManager pluginManager = Bukkit.getPluginManager();
 

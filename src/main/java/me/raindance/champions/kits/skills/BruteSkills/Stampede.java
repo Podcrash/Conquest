@@ -2,11 +2,11 @@ package me.raindance.champions.kits.skills.BruteSkills;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.ICharge;
@@ -150,7 +150,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
             if (event.getCause() != Cause.MELEE) return;
             if(charges == 0) return;
             event.setModified(true);
-            event.addSkillCause(this);
+            event.addSource(this);
             double bonus = event.getDamage() + ((0.25 + level * 0.25) * charges);
             event.setVelocityModifierX(1 + charges * 0.5);
             event.setVelocityModifierZ(1 + charges * 0.5);

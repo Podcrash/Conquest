@@ -2,7 +2,7 @@ package me.raindance.champions.kits.skills.MageSkills;
 
 import com.abstractpackets.packetwrapper.AbstractPacket;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
-import me.raindance.champions.damage.DamageApplier;
+import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;

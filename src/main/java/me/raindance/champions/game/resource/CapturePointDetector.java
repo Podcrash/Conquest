@@ -4,7 +4,7 @@ import com.podcrash.api.mc.events.game.GameCaptureEvent;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.resources.GameResource;
-import com.podcrash.api.mc.game.scoreboard.DomScoreboard;
+import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.game.DomGame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

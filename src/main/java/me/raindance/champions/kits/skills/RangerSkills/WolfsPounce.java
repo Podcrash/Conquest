@@ -1,10 +1,10 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
 import com.podcrash.api.mc.callback.sources.CollideBeforeHitGround;
-import me.raindance.champions.damage.DamageApplier;
+import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;

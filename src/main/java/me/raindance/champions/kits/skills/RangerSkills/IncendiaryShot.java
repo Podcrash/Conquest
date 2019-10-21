@@ -5,7 +5,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -47,7 +47,7 @@ public class IncendiaryShot extends BowShotSkill {
         if(isAlly(victim)) return;
         victim.setFireTicks(0);
         float duration = level/2F + (float) victim.getLocation().distance(shooter.getLocation())/scaling;
-        event.addSkillCause(this);
+        event.addSource(this);
         getPlayer().sendMessage("IncendiaryShot> You burned " + victim.getName() + " for " + duration + " seconds.");
         StatusApplier.getOrNew(victim).applyStatus(Status.FIRE, duration, 1, false);
     }

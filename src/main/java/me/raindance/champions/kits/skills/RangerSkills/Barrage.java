@@ -1,10 +1,10 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowChargeUp;
-import me.raindance.champions.listeners.GameDamagerConverterListener;
+import com.podcrash.api.mc.listeners.GameDamagerConverterListener;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.World;

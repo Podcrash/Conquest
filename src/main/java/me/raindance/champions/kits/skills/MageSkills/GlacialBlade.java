@@ -2,8 +2,8 @@ package me.raindance.champions.kits.skills.MageSkills;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.mc.damage.DamageApplier;
 import me.raindance.champions.Main;
-import me.raindance.champions.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.enums.InvType;

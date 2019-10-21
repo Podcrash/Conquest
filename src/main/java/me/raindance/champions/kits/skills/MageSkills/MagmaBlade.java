@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.MageSkills;
 
-import me.raindance.champions.damage.Cause;
-import me.raindance.champions.events.DamageApplyEvent;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -38,7 +38,7 @@ public class MagmaBlade extends Passive {
         if (event.getAttacker() == getPlayer() && event.getVictim().getFireTicks() > 0 && getItemType(getPlayer().getItemInHand()) == ItemType.SWORD) {
             event.setDamage(event.getDamage() + extraDamage);
             event.setModified(true);
-            event.addSkillCause(this);
+            event.addSource(this);
             event.getVictim().setFireTicks(0);
         } else {
             System.out.println(event.getVictim().getFireTicks());

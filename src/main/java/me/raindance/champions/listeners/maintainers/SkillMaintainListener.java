@@ -4,7 +4,7 @@ import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.listeners.ListenerBase;
+import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.time.TimeHandler;

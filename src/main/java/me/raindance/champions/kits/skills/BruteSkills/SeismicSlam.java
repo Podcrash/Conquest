@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skills.BruteSkills;
 
-import me.raindance.champions.damage.DamageApplier;
+import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.enums.InvType;

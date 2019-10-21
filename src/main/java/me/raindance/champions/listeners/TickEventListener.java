@@ -1,6 +1,7 @@
 package me.raindance.champions.listeners;
 
 import com.podcrash.api.mc.events.TickEvent;
+import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.ongoing.TickHelper;
 import me.raindance.champions.ongoing.TickManager;
 import org.bukkit.event.EventHandler;

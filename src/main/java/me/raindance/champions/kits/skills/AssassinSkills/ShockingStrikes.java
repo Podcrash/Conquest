@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.AssassinSkills;
 
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -42,7 +42,7 @@ public class ShockingStrikes extends Passive {
             Player victim = (Player) event.getVictim();
             StatusApplier.getOrNew(victim).applyStatus(Status.SHOCK, duration, 1);
             StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, duration, 0);
-            event.addSkillCause(this);
+            event.addSource(this);
             if (!onCooldown()) {
                 StatusApplier.getOrNew(victim).applyStatus(Status.BLIND, duration, 1);
                 this.setLastUsed(System.currentTimeMillis());

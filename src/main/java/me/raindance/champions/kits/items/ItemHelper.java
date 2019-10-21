@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.items;
 
 import me.raindance.champions.Main;
-import me.raindance.champions.listeners.ListenerBase;
+import com.podcrash.api.mc.listeners.ListenerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.RangerSkills;
 
-import me.raindance.champions.damage.Cause;
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import me.raindance.champions.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
@@ -39,7 +39,7 @@ public class BarbedArrows extends Passive implements TimeResource {
         if (!isAlly(e.getVictim()) && e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
-            e.addSkillCause(this);
+            e.addSource(this);
             StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 1);
             player.setSprinting(false);
             affected.put(player.getName(), System.currentTimeMillis());
