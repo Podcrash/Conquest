@@ -1,6 +1,6 @@
 package me.raindance.champions.commands;
 
-import me.raindance.champions.damage.DamageQueue;
+import com.podcrash.api.mc.damage.DamageQueue;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import org.bukkit.ChatColor;

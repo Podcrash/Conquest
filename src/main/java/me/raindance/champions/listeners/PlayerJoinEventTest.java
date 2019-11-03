@@ -3,9 +3,10 @@ package me.raindance.champions.listeners;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.damage.HitDetectionInjector;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.Main;
-import me.raindance.champions.damage.HitDetectionInjector;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.inventory.InvFactory;
@@ -49,17 +50,18 @@ public class PlayerJoinEventTest extends ListenerBase {
         InvFactory.applyLastBuild(p);
         if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
-        if(GameManager.hasPlayer(e.getPlayer())) {
-            GameManager.getGame().backToSpawn(e.getPlayer());
-        }else {
-            if(GameManager.getGame().isOngoing() || GameManager.getGame().isFull()) {
-                GameManager.addSpectator(e.getPlayer());
-            }else {
-                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                GameManager.addPlayer(e.getPlayer());
+        if(GameManager.getGame() != null) {
+            if (GameManager.hasPlayer(e.getPlayer()))
+                GameManager.getGame().backToSpawn(e.getPlayer());
+            else {
+                if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
+                    GameManager.addSpectator(e.getPlayer());
+                else {
+                    p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                    GameManager.addPlayer(e.getPlayer());
+                }
             }
         }
-        new HitDetectionInjector(p).injectHitDetection();
         Main.getInstance().setupPermissions(p);
         if (p.getWorld().getName().equals("world")) {
             p.getInventory().setItem(35, beacon);

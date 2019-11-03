@@ -1,6 +1,6 @@
 package me.raindance.champions.commands;
 
-import me.raindance.champions.damage.DamageApplier;
+import com.podcrash.api.mc.damage.DamageApplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

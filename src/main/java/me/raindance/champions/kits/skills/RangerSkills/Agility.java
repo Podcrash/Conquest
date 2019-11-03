@@ -89,7 +89,7 @@ public class Agility extends Instant implements TimeResource {
             priority = EventPriority.HIGH
     )
     public void hit(EntityDamageEvent event) {
-        List<EntityDamageEvent.DamageCause>  causes = Arrays.asList(
+        final List<EntityDamageEvent.DamageCause> causes = Arrays.asList(
                 EntityDamageEvent.DamageCause.FALL, EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK);
         if (_active && event.getEntity() == getPlayer() && getPlayer().isSprinting() && causes.contains(event.getCause())) {
             event.setDamage(event.getDamage() * (1D - selfReduction));

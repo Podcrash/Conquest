@@ -1,5 +1,7 @@
 package me.raindance.champions.listeners.maintainers;
 
+import com.podcrash.api.mc.damage.Cause;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
@@ -23,6 +25,8 @@ import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
+import me.raindance.champions.kits.classes.Assassin;
+import me.raindance.champions.kits.classes.Brute;
 import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.Bukkit;
@@ -31,6 +35,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -41,13 +46,37 @@ public class DomGameListener extends ListenerBase {
         super(plugin);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void regDamage(DamageApplyEvent event) {
+        if(!(event.getAttacker() instanceof Player) && !(event.getVictim() instanceof Player)) return;
+        ChampionsPlayer championsVictim = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
+        ChampionsPlayer championsAttacker = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
+
+        double curr = event.getDamage();
+
+        if(championsAttacker instanceof Assassin) {
+            if(event.getCause() == Cause.PROJECTILE) {
+                event.setModified(true);
+                event.setDamage(.625D * curr);
+            }else if(event.getCause() == Cause.MELEE || event.getCause() == Cause.MELEESKILL)
+                event.setDoKnockback(false);
+        }
+
+        if(championsVictim instanceof Brute) {
+            if (curr <= 3.5D) return;
+            event.setDamage(curr + 8D);
+            event.setModified(true);
+            event.setChangeXP(curr);
+        }
+    }
+
     @EventHandler
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
         game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
-            this.plugin.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
+            Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getPlayers()) p.sendMessage(startingMsg);
@@ -55,8 +84,8 @@ public class DomGameListener extends ListenerBase {
         game.loadMap();
 
         GameScoreboard gamescoreboard = game.getGameScoreboard();
-        gamescoreboard.makeObjective();
-        gamescoreboard.setupScoreboard();
+        //gamescoreboard.makeObjective();
+        //gamescoreboard.setupScoreboard();
 
         Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
             Location red = game.getRedSpawn().get(0);

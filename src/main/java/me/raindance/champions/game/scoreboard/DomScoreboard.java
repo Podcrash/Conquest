@@ -6,9 +6,13 @@ import com.podcrash.api.mc.game.GameType;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import me.raindance.champions.game.DomGame;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +21,7 @@ import java.util.List;
  */
 public class DomScoreboard extends GameScoreboard {
     private List<CapturePoint> capturePoints;
-    private static HashMap<Integer, Object> scoreHash = new HashMap<>();
+    private static HashMap<String, Integer> scoreHash = new HashMap<>();
     //this is the scoreboard that we are going to be using.
     private String[] scores;
 
@@ -38,6 +42,8 @@ public class DomScoreboard extends GameScoreboard {
                 "cp5" //0
         };
 
+
+
     }
 
     /**
@@ -46,30 +52,15 @@ public class DomScoreboard extends GameScoreboard {
      * @param capturePoints the list of capturepoints
      */
     public void setup(List<CapturePoint> capturePoints) {
-        this.capturePoints = capturePoints;
-        if(this.capturePoints != null && capturePoints.size() > 0){
-            int a = scores.length - 5;
-            for(int i = a; i < scores.length; i++){
-                this.scores[i] = capturePoints.get((i - a)).getName();
-            }
-        }else throw new IllegalArgumentException("Capture points length must be more than 0!");
-    }
-
-    @Override
-    public void convertScoreboard(String[] strings){
-        if(strings == null) {
-            convertScoreboard(this.scores);
+        List<String> points = new ArrayList<>();
+        points.add("");
+        points.add(ChatColor.RED + "Red");
+        points.add("");
+        points.add(ChatColor.BLUE + "Blue");
+        for(CapturePoint point : capturePoints) {
+            points.add(point.getName());
         }
-        makeObjective();
-        for (int i = 0; i < this.scores.length; i++) {
-            Score score = this.getObjective().getScore(this.scores[i]);
-            score.setScore(this.scores.length - 1 - i);
-        }
-    }
-
-    @Override
-    public void setupScoreboard() {
-        convertScoreboard(null);
+        //convertScoreboard(points);
     }
 
     /**

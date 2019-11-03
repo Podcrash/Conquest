@@ -33,7 +33,7 @@ public class Backstab extends Passive {
     }
 
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.HIGHEST
     )
     public void onHit(DamageApplyEvent event) {
         //cba with non players

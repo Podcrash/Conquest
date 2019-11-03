@@ -5,6 +5,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.PlayerPermissionsTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.damage.DamageQueue;
+import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleRunnable;
 import com.podcrash.api.mc.events.TickEvent;
@@ -15,8 +17,6 @@ import com.podcrash.api.mc.world.WorldManager;
 import com.podcrash.api.permissions.Perm;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.commands.*;
-import me.raindance.champions.damage.DamageQueue;
-import me.raindance.champions.damage.HitDetectionInjector;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.InventoryData;
@@ -26,7 +26,10 @@ import me.raindance.champions.kits.items.ItemHelper;
 import me.raindance.champions.listeners.*;
 import com.podcrash.api.mc.listeners.GameListener;
 import com.podcrash.api.mc.listeners.MapMaintainListener;
+import me.raindance.champions.listeners.maintainers.ApplyKitListener;
+import me.raindance.champions.listeners.maintainers.DomGameListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
+import me.raindance.champions.listeners.maintainers.SoundDamage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -72,17 +75,17 @@ public class Main extends JavaPlugin {
     }
     private CompletableFuture<Void> registerListeners() {
         return CompletableFuture.runAsync(() -> {
-            new GameDamagerConverterListener(this);
-            new GameListener(this);
+            new DomGameListener(this);
+            new SoundDamage(this);
             new InventoryListener(this);
             new MapListener(this);
             new ObjectiveListener(this);
-            new MapMaintainListener(this);
             new PlayerJoinEventTest(this);
             new SkillMaintainListener(this);
             new ItemHelper(this);
             new TickEventListener(this);
             new Disguiser().disguiserIntercepter();
+            new ApplyKitListener(this);
 
             Bukkit.getPluginManager().registerEvents(new Listener() {
                 @EventHandler
@@ -156,7 +159,6 @@ public class Main extends JavaPlugin {
         getConfig().set("worlds", domMaps);
         saveConfig();
 
-        WorldManager.getInstance().loadWorlds();
         this.log.info(Bukkit.getWorlds().toString());
 
         CompletableFuture.allOf(
@@ -172,8 +174,6 @@ public class Main extends JavaPlugin {
 
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
-        DamageQueue.active = true;
-        Executors.newSingleThreadScheduledExecutor().schedule(new DamageQueue(), 25, TimeUnit.MILLISECONDS);
         Bukkit.getScheduler().runTaskTimer(Main.instance, new InventoryUpdater(), 0L, 1L);
 
         //This part is really only used for reloading
@@ -196,7 +196,6 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         DamageQueue.active = false;
-        WorldManager.getInstance().unloadWorlds();
         tickTask.cancel();
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();

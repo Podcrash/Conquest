@@ -32,7 +32,7 @@ public class BreakFall extends Passive {
         Player player = (Player) event.getEntity();
         if (player != getPlayer()) return;
         double totalDamage = event.getDamage() -
-                (reduction + getChampionsPlayer().getFallDamage());
+                reduction;
         if (totalDamage < 0) event.setCancelled(true);
         else event.setDamage(totalDamage);
     }

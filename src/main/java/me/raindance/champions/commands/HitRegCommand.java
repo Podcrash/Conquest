@@ -1,7 +1,7 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.permissions.Perm;
-import me.raindance.champions.damage.HitDetectionInjector;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

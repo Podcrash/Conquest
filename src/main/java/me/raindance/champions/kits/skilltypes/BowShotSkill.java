@@ -90,7 +90,7 @@ public abstract class BowShotSkill extends Instant {
                 Shooting a player
              */
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.LOW
     )
     public void arrowShotPlayer(DamageApplyEvent event){
         if(event.isCancelled() || event.getCause() != Cause.PROJECTILE) return;

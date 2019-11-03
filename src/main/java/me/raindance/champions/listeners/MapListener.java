@@ -1,6 +1,10 @@
 package me.raindance.champions.listeners;
 
+import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.permissions.Perm;
 import me.raindance.champions.game.map.MapManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,8 +27,8 @@ public class MapListener extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onTouch(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        UUID uuid = e.getPlayer().getUniqueId();
-        if (uuid.equals(UUID.fromString("58581cbc-cde7-40e7-985e-c530f2705cba")) || uuid.equals(UUID.fromString("fd4b3460-00e3-4dcb-8997-efe20c3bbc89"))) { //Switch out for permissions
+        PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
+        if (table.hasRole(e.getPlayer().getUniqueId(), Perm.BUILD)) { //Switch out for permissions
             Player p = e.getPlayer();
             MapManager mapper = MapManager.getInstance();
             Block block = e.getClickedBlock();

@@ -45,15 +45,15 @@ public class Blink extends Instant {
         if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
         Player player = getPlayer();
         if (!this.onCooldown()) {
-            blink();
             player.setFallDistance(0);
+            blink();
             player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 0.4f, 1.2f);
             this.setLastUsed(System.currentTimeMillis());
         } else if (onCooldown()
                 && this.cooldown - cooldown() < deblinkThreshold
                 && prevLocation != null) {
-            deBlink();
             player.setFallDistance(0);
+            deBlink();
             player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 0.4f, 1.2f);
         } else {
             //this.getEntity().sendMessage(getCooldownMessage());
