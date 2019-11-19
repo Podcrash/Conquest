@@ -15,7 +15,7 @@ public abstract class Passive extends Skill {
         this(player, name, level, type, invType, -1);
     }
     /*
-    Returns true if drops sword, bow, or axe
+    Returns true if drops sword, bow, shovel, or axe
      */
     protected final boolean checkItem(ItemStack itemStack){
         for(ItemType itemtype : ItemType.values()){

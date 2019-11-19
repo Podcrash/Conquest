@@ -3,6 +3,7 @@ package me.raindance.champions.kits.enums;
 public enum InvType {
     SWORD("Sword"),
     AXE("Axe"),
+    SHOVEL("Shovel"),
     BOW("Bow"),
     PASSIVEA("Passive A"),
     PASSIVEB("Passive B"),

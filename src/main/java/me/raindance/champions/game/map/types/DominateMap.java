@@ -25,6 +25,7 @@ public class DominateMap implements IMap {
     private List<Restock> restocks;
 
     public DominateMap(World world, String worldName) {
+        
         this.worldName = worldName;
         this.redSpawn = MapManager.getInstance().loadRedSpawns(world, worldName);
         this.blueSpawn = MapManager.getInstance().loadBlueSpawns(world, worldName);

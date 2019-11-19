@@ -32,6 +32,7 @@ public class Blink extends Instant {
                 "Right click to instantly teleport forwards %%distance%% blocks.",
                 "Right clicking again within %%deblinkThreshold%% seconds",
                 "teleports you to your original location.");
+
         addDescArg("distance", () -> distance);
         addDescArg("deblinkThreshold", () -> deblinkThreshold);
     }

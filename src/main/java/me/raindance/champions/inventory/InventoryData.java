@@ -130,6 +130,7 @@ public class InventoryData {
         addSkill(new Intimidation(null, 0));
         addSkill(new DwarfToss(null, 0));
         addSkill(new WhirlwindAxe(null, 0));
+        addSkill(new Rally(null, 123123));
     }
     public static void addGlobal() {
         Main.getInstance().getLogger().info("Trying to add global");

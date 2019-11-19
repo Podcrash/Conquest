@@ -207,7 +207,7 @@ public abstract class Skill implements ISkill, DamageSource {
         return cooldown != -1;
     }
     public boolean onCooldown() {
-        return (float) (System.currentTimeMillis() - lastUsed) < cooldown * 1000F;
+        return (System.currentTimeMillis() - lastUsed) < cooldown * 1000L;
     }
     public double cooldown() {
         return (double) cooldown - ((double)(System.currentTimeMillis() - lastUsed)) / 1000D;
