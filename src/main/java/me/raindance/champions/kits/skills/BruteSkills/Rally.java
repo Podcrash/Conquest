@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class Rally extends Passive implements IDropPassive {
-    public Rally(Player player, int leve) {
+    public Rally(Player player, int level) {
         super(player, "Rally", 1, SkillType.Brute, InvType.AXE, 12);
 
         setDesc("Drop shovel/axe to activate. For 3 seconds, you and your",

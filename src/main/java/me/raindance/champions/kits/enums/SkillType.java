@@ -1,7 +1,12 @@
 package me.raindance.champions.kits.enums;
 
 public enum SkillType {
-    Brute("Brute"), Knight("Knight"), Ranger("Ranger"), Mage("Mage"), Assassin("Assassin"), Global("All");
+    Brute("Brute"),
+    Knight("Knight"),
+    Ranger("Ranger"),
+    Mage("Mage"),
+    Assassin("Assassin"),
+    Global("All");
 
 
     private String name;

@@ -57,8 +57,8 @@ public class Takedown extends Instant {
                             StatusApplier.getOrNew((Player) entity).applyStatus(Status.SLOW, effect, 3);
                             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SLOW, effect, 3);
 
-                            StatusApplier.getOrNew((Player) entity).applyStatus(Status.NOJUMP, effect, 3);
-                            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.NOJUMP, effect, 3);
+                            StatusApplier.getOrNew((Player) entity).applyStatus(Status.GROUND, effect, 3);
+                            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.GROUND, effect, 3);
 
                             getPlayer().sendMessage(String.format("%s%s> You used %sTakedown%s on %s", ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GREEN, ChatColor.GRAY, entity.getName()));
 
