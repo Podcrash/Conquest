@@ -52,22 +52,7 @@ public class DomGameListener extends ListenerBase {
         ChampionsPlayer championsVictim = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
         ChampionsPlayer championsAttacker = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
 
-        double curr = event.getDamage();
-
-        if(championsAttacker instanceof Assassin) {
-            if(event.getCause() == Cause.PROJECTILE) {
-                event.setModified(true);
-                event.setDamage(.625D * curr);
-            }else if(event.getCause() == Cause.MELEE || event.getCause() == Cause.MELEESKILL)
-                event.setDoKnockback(false);
-        }
-
-        if(championsVictim instanceof Brute) {
-            if (curr <= 3.5D) return;
-            event.setDamage(curr + 8D);
-            event.setModified(true);
-            event.setChangeXP(curr);
-        }
+        event.setArmorValue(championsVictim.getArmorValue());
     }
 
     @EventHandler

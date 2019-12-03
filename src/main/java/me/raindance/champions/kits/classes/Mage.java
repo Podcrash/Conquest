@@ -29,4 +29,10 @@ public class Mage extends ChampionsPlayer {
     public SkillType getType() {
         return SkillType.Mage;
     }
+
+
+    @Override
+    public int getHP() {
+        return 0;
+    }
 }

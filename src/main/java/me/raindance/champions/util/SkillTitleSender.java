@@ -3,6 +3,8 @@ package me.raindance.champions.util;
 import com.podcrash.api.mc.util.TitleSender;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.raindance.champions.kits.Skill;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
+import net.jafama.FastMath;
 import org.bukkit.ChatColor;
 
 public final class SkillTitleSender {
@@ -37,24 +39,24 @@ public final class SkillTitleSender {
     }
 
 
-    public static WrappedChatComponent coolDownBar(Skill skill) {
+    public static WrappedChatComponent coolDownBar(ICooldown skill) {
         String bar = TitleSender.generateBars();
         int size = bar.length() - 1;
         float temp = skill.getCooldown();
         double cooldown = skill.cooldown();
         double product = 1F - cooldown/temp;
         int currentProgress = (int) (size * product);
-        currentProgress = (currentProgress > size) ? size : currentProgress;
+        currentProgress = FastMath.min(currentProgress, size);
         String sprogress = bar.substring(0, currentProgress) + ChatColor.RED + bar.substring(currentProgress, size);
         String builder = (!skill.onCooldown()) ? String.format("%s%s%s fully recharged!", ChatColor.GREEN, ChatColor.BOLD, skill.getName())
-                : String.format("%s %d:%s%s %s%s%s %.2f s",
-                skill.getName(), skill.getLevel(), ChatColor.BOLD, ChatColor.GREEN, sprogress, ChatColor.RESET, ChatColor.BOLD, cooldown);
+                : String.format("%s:%s%s %s%s%s %.2f s",
+                skill.getName(), ChatColor.BOLD, ChatColor.GREEN, sprogress, ChatColor.RESET, ChatColor.BOLD, cooldown);
         //String variant = skill.getName() + " " + skill.getLevel() + ChatColor.BOLD + ChatColor.GREEN + " " + sprogress + ChatColor.RESET + ChatColor.BOLD + cooldown
 
         return TitleSender.writeTitle(builder);
     }
 
-    public static String coolDownString(Skill skill) {
+    public static String coolDownString(ICooldown skill) {
         String bar = TitleSender.generateBars();
         int size = bar.length() - 1;
         float temp = skill.getCooldown();
@@ -64,7 +66,7 @@ public final class SkillTitleSender {
         currentProgress = (currentProgress > size) ? size : currentProgress;
         String sprogress = bar.substring(0, currentProgress) + ChatColor.RED + bar.substring(currentProgress, size);
         return (!skill.onCooldown()) ? String.format("%s%s%s fully recharged!", ChatColor.GREEN, ChatColor.BOLD, skill.getName())
-                : String.format("%s %d:%s%s %s%s%s %.2f s",
-                skill.getName(), skill.getLevel(), ChatColor.BOLD, ChatColor.GREEN, sprogress, ChatColor.RESET, ChatColor.BOLD, cooldown);
+                : String.format("%s:%s%s %s%s%s %.2f s",
+                skill.getName(), ChatColor.BOLD, ChatColor.GREEN, sprogress, ChatColor.RESET, ChatColor.BOLD, cooldown);
     }
 }

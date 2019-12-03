@@ -17,4 +17,10 @@ public enum InvType {
     public String getName() {
         return name;
     }
+
+
+    private final static InvType[] details = InvType.values();
+    public static InvType[] details() {
+        return details;
+    }
 }

@@ -2,21 +2,23 @@ package me.raindance.champions.kits;
 
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.ApplyKitEvent;
-import me.raindance.champions.inventory.BookFormatter;
 import me.raindance.champions.inventory.ChampionsItem;
 import me.raindance.champions.inventory.InventoryData;
+import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.classes.Knight;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.iskilltypes.IConstruct;
-import me.raindance.champions.kits.iskilltypes.IInjector;
-import me.raindance.champions.kits.iskilltypes.IPassiveTimer;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
+import me.raindance.champions.kits.iskilltypes.action.IInjector;
+import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
@@ -37,22 +39,12 @@ public class ChampionsPlayerManager {
     private Map<ChampionsPlayer, List<PacketListener>> injectors = new HashMap<>();
     private Set<Integer> assassins = new HashSet<>();
 
-    private void boost(Skill skill, ChampionsPlayer championsPlayer) {
-        boolean boosted = false;
-        if(skill.getInvType().equals(InvType.SWORD)) {
-            if(championsPlayer.hotBarContains(Material.GOLD_SWORD)) boosted = true;
-        }else if(skill.getInvType().equals(InvType.AXE)) {
-            if(championsPlayer.hotBarContains(Material.GOLD_AXE)) boosted = true;
-        }
-        skill.setBoosted(boosted);
-    }
     private void register(Skill skill) {
-        if(skill.isValid()) {
-            plugin.getServer().getPluginManager().registerEvents(skill, plugin);
-            if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).start();
-            if (skill instanceof IConstruct) ((IConstruct) skill).doConstruct();
-            if (skill instanceof IInjector) addPacketListener(getChampionsPlayer(skill.getPlayer()), ((IInjector) skill).inject());
-        }
+        plugin.getServer().getPluginManager().registerEvents(skill, plugin);
+        skill.init();
+        if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).start();
+        if (skill instanceof IConstruct) ((IConstruct) skill).doConstruct();
+        if (skill instanceof IInjector) addPacketListener(getChampionsPlayer(skill.getPlayer()), ((IInjector) skill).inject());
     }
 
     public void addChampionsPlayer(ChampionsPlayer cplayer) {
@@ -74,7 +66,7 @@ public class ChampionsPlayerManager {
         cp.getPlayer().setFoodLevel(20);
         cp.effects();
         for(Skill skill : cp.getSkills()) {
-            boost(skill, cp);
+            skill.setPlayer(cplayer.getPlayer());
             register(skill);
         }
 
@@ -93,7 +85,6 @@ public class ChampionsPlayerManager {
             final Skill skill = skillIterator.next();
             HandlerList.unregisterAll(skill);
             Main.getInstance().getLogger().info(String.format("%s unregistered from %s", skill.getName(), skill.getPlayer()));
-            skill.setValid(false);
             if (skill instanceof TimeResource) TimeHandler.unregister((TimeResource) skill);
         }
         clearPacketListeners(cplayer);
@@ -126,10 +117,11 @@ public class ChampionsPlayerManager {
         List<String> skillWord = new ArrayList<>();
         JsonObject json = new JsonParser().parse(jsonStr).getAsJsonObject();
 
-        JsonObject skillsJson = json.getAsJsonObject("skills");
-        for (String idKey : skillsJson.keySet()) {
-            Skill skill = InventoryData.getSkillById(Integer.parseInt(idKey));
-            skillWord.add(skill.getName() + ": " + skillsJson.get(idKey).getAsInt());
+        JsonArray skillsJson = json.getAsJsonArray("skills");
+        for (int i = 0, size = skillsJson.size(); i < size; i++) {
+            int id = skillsJson.get(i).getAsInt();
+            SkillData data = SkillInfo.getSkill(id);
+            skillWord.add(data.getName());
         }
         return skillWord;
     }
@@ -142,21 +134,24 @@ public class ChampionsPlayerManager {
 
         JsonObject itemsJson = json.getAsJsonObject("items");
         ItemStack[] items = new ItemStack[9];
-        for(String slotKey : itemsJson.keySet()) {
-            int itemID = itemsJson.get(slotKey).getAsInt();
+        for(Map.Entry<String, JsonElement> entry : itemsJson.entrySet()) {
+            String slotKey = entry.getKey();
+            int itemID = entry.getValue().getAsInt();
             if(itemID == -1) continue;
-            ChampionsItem championsItem = ChampionsItem.getBy(itemID, skillType);
+            ChampionsItem championsItem = ChampionsItem.getBySlotID(itemID);
             items[Integer.parseInt(slotKey)] = championsItem.toItemStack();
         }
 
-        JsonObject skillsJson = json.getAsJsonObject("skills");
+        JsonArray skillsJson = json.getAsJsonArray("skills");
         List<Skill> skills = new ArrayList<>();
 
-        for (String idKey : skillsJson.keySet()) {
-            Skill skill = InventoryData.getSkillById(Integer.parseInt(idKey));
-            BookFormatter book = InventoryData.getSkillFormatter(skill);
-            Skill newSkill = book.newInstance(owner, skillsJson.get(idKey).getAsInt());
-            skills.add(newSkill);
+        for (int i = 0, size = skillsJson.size(); i < size; i++) {
+            int id = skillsJson.get(i).getAsInt();
+            SkillData data = SkillInfo.getSkill(id);
+
+            Skill skill = data.newInstance();
+            skill.setPlayer(owner);
+            skills.add(skill);
         }
 
 
@@ -166,8 +161,8 @@ public class ChampionsPlayerManager {
         return championsPlayer; //oh god
     }
 
-    private static final Map<SkillType, Constructor> constructors = new HashMap<>(); //reflection is expensive
-    private Constructor getConstructor(SkillType skillType) {
+    private static final Map<SkillType, Constructor<? extends ChampionsPlayer>> constructors = new HashMap<>(); //reflection is expensive
+    private Constructor<? extends ChampionsPlayer> getConstructor(SkillType skillType) {
         if(skillType == SkillType.Global) throw new IllegalArgumentException("Global is not allowed");
         if(!constructors.containsKey(skillType)) {
             try {
@@ -181,21 +176,21 @@ public class ChampionsPlayerManager {
         return constructors.get(skillType);
     }
 
-    private ChampionsPlayer newObj(Player owner, List<Skill> skills, SkillType skillType) {
-        try {
-            return (ChampionsPlayer) getConstructor(skillType).newInstance(owner, skills);
-        }catch (InstantiationException|IllegalAccessException|InvocationTargetException e){
-            e.printStackTrace();
-        }
-        throw new IllegalArgumentException("something went wrong ya");
-    }
-
     public void clear(){
         Iterator iterator = championsPlayers.keySet().iterator();
         while (iterator.hasNext()) {
             iterator.next();
             iterator.remove();
         }
+    }
+
+    public  <T extends ChampionsPlayer> T newObj(Player owner, List<Skill> skills, SkillType skillType) {
+        try {
+            return (T) getConstructor(skillType).newInstance(owner, skills);
+        }catch (InstantiationException|IllegalAccessException|InvocationTargetException e){
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("something went wrong ya");
     }
 
     public ChampionsPlayer defaultBuild(Player player) {

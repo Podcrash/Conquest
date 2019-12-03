@@ -16,13 +16,9 @@ import org.bukkit.event.player.PlayerDropItemEvent;
  */
 public abstract class TogglePassive extends Passive {
     private boolean toggled;
-    public TogglePassive(Player player, String name, int level, SkillType type, InvType invType, int cooldown) {
-        super(player, name, level, type, invType, cooldown);
+    public TogglePassive() {
+        super();
         this.toggled = false;
-    }
-
-    public TogglePassive(Player player, String name, int level, String description, SkillType type, InvType invType) {
-        this(player, name, level, type, invType, -1);
     }
 
     @EventHandler(priority = EventPriority.LOW)

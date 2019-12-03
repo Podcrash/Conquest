@@ -1,6 +1,7 @@
 package me.raindance.champions.kits;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
@@ -30,13 +31,14 @@ import java.util.List;
 
 public abstract class ChampionsPlayer {
     private Player player;
-    private ItemStack[] defaultHotbar;
     private double fallDamage = 0;
     private SoundWrapper sound; // sound when hit
     private EnergyBar ebar = null;
     private Location spawnLocation = null;
     private JsonObject jsonObject;
+
     protected List<Skill> skills = null;
+    private ItemStack[] defaultHotbar;
     protected Material[] armor;
 
     public ChampionsPlayer(Player player) {
@@ -44,6 +46,9 @@ public abstract class ChampionsPlayer {
         this.spawnLocation = player.getWorld().getSpawnLocation(); // so that stuff doesn't crash
         getDefaultHotbar();
     }
+
+    public abstract SkillType getType();
+    public abstract int getHP();
 
     public boolean equip(){
         if(armor[0] == null) return false;
@@ -66,8 +71,9 @@ public abstract class ChampionsPlayer {
 
     }
 
-    public abstract String getName();
-    public abstract SkillType getType();
+    public String getName() {
+        return getType().getName();
+    }
 
     public boolean isInGame() {
         return GameManager.hasPlayer(this.player);
@@ -133,12 +139,12 @@ public abstract class ChampionsPlayer {
         builder.append('\n');
         for(Skill skill : skills) {
             builder.append(ChatColor.GREEN);
-            builder.append(skill.getInvType().getName());
+            //TODO: fix this
+            builder.append(SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName());
             builder.append(": ");
             builder.append(ChatColor.WHITE);
             builder.append(skill.getName());
             builder.append(' ');
-            builder.append(skill.getLevel());
             builder.append("\n");
         }
 
@@ -166,19 +172,11 @@ public abstract class ChampionsPlayer {
     public ItemStack[] getArmor() {
         return this.player.getEquipment().getArmorContents();
     }
-    public int getArmorValue() {
-        //Check getEntityCraftPlayer().bq(); might be the exact same
-        net.minecraft.server.v1_8_R3.ItemStack[] itemStack = getEntityCraftPlayer().inventory.armor;
-        int i = 0;
-        for (net.minecraft.server.v1_8_R3.ItemStack item : itemStack) {
-            if (item != null) {
-                if (item.getItem() instanceof ItemArmor) {
-                    ItemArmor itemArmor = (ItemArmor) item.getItem();
-                    i += itemArmor.c;
-                }
-            }
-        }
-        return i;
+    public double getArmorValue(double halfHearts) {
+        return (halfHearts - getHP())/(-0.04*getHP());
+    }
+    public double getArmorValue() {
+        return getArmorValue(20);
     }
     public Inventory getInventory() {
         return this.player.getInventory();
@@ -193,9 +191,6 @@ public abstract class ChampionsPlayer {
                     new ItemStack(Material.MUSHROOM_SOUP),
                     new ItemStack(Material.MUSHROOM_SOUP),
                     new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP)
             };
         }
         return this.defaultHotbar;
@@ -283,8 +278,9 @@ public abstract class ChampionsPlayer {
     public Skill getCurrentSkillInHand() {
         final Material material = player.getItemInHand().getType();
         for(Skill skill : skills) {
-            if(skill.getItype() == null) continue;
-            if(material.name().contains(skill.getItype().getName())) return skill;
+            if(skill.getItemType() == null) continue;
+            String name = skill.getItemType().getName();
+            if(name != null && material.name().contains(name)) return skill;
         }
         return null;
     }
@@ -295,12 +291,10 @@ public abstract class ChampionsPlayer {
 
         championsObject.addProperty("skilltype", this.getType().getName().toLowerCase());
 
-        JsonObject skillsSerial = new JsonObject();
+        JsonArray skillArray = new JsonArray();
 
-        for(Skill skill : skills) {
-            int id = InventoryData.getSkillId(skill.getName());
-            skillsSerial.addProperty(Integer.toString(id), skill.getLevel());
-        }
+        for(Skill skill : skills)
+            skillArray.add(SkillInfo.getSkillID(skill));
 
         JsonObject itemsSerial = new JsonObject();
         for(int i = 0; i < defaultHotbar.length; i++) {
@@ -311,7 +305,7 @@ public abstract class ChampionsPlayer {
             itemsSerial.addProperty(Integer.toString(i), slotID);
         }
 
-        championsObject.add("skills", skillsSerial);
+        championsObject.add("skills", skillArray);
         championsObject.add("items", itemsSerial);
         this.jsonObject = championsObject;
         return championsObject;

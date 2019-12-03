@@ -7,12 +7,10 @@ import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+//TODO: Make ActiveSkill (DropQ)
 public abstract class Passive extends Skill {
-    public Passive(Player player, String name, int level, SkillType type, InvType invType, float cooldown) {
-        super(player, name, level, type, null, invType, cooldown);
-    }
-    public Passive(Player player, String name, int level, SkillType type, InvType invType) {
-        this(player, name, level, type, invType, -1);
+    public Passive() {
+        super();
     }
     /*
     Returns true if drops sword, bow, shovel, or axe

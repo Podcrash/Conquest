@@ -1,218 +1,105 @@
 package me.raindance.champions.inventory;
 
-import com.google.common.collect.BiMap;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.podcrash.api.db.ChampionsKitTable;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.game.GameManager;
-import me.raindance.champions.inventory.update.IUpdateInv;
-import me.raindance.champions.inventory.update.InventoryUpdater;
+import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
+import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
-import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MenuCreator {
-    private static final ExecutorService executor = Executors.newFixedThreadPool(3);
-    private static Inventory generalMenu;
-    private static Inventory bruteInv;
-    private static Inventory knightInv;
-    private static Inventory rangerInv;
-    private static Inventory assassinInv;
-    private static Inventory mageInv;
-
-    /**
-     * Responsible for creating a game menu that constantly updates (kinda)
-     */
-    private static IUpdateInv gamesMenu = new IUpdateInv() {
-        Inventory gameMenu = createCopyMenu(ChatColor.BOLD.toString() + ChatColor.DARK_AQUA, "Current Champions Games");
-        @Override
-        public Inventory getInventory() {
-            return gameMenu;
-        }
-
-        @Override
-        public void update() {
-            getInventory().clear();
-            getInventory().addItem(GameManager.getGame().getItemInfo());
-        }
-    };
-
-    static {
-        InventoryUpdater.add(gamesMenu);
-    }
-    private final static HashMap<InvType, Integer> invIntMap = new HashMap<>();
-
-    static {
-        final int sword = 0;
-        final int axe = sword + 9;
-        final int bow = axe + 9;
-        final int passA = bow + 9;
-        final int passB = passA + 9;
-        final int passC = passB + 9;
-        invIntMap.put(InvType.SWORD, sword);
-        invIntMap.put(InvType.AXE, axe);
-        invIntMap.put(InvType.BOW, bow);
-        invIntMap.put(InvType.PASSIVEA, passA);
-        invIntMap.put(InvType.PASSIVEB, passB);
-        invIntMap.put(InvType.PASSIVEC, passC);
-    }
 
     public static Inventory createGeneralMenu() {
-        if (generalMenu != null) return generalMenu;
-        Inventory inventory = Bukkit.createInventory(null, 9, "Class Menu");
-        inventory.addItem(ChampionsInventory.getClassItemList());
-        generalMenu = inventory;
+        ItemStack[] items = ChampionsInventory.getClassItemList();
+        Inventory inventory = Bukkit.createInventory(null, MathUtil.floor(9, items.length), "Class Menu");
+        //this is safer, just in case items have some null elements
+        for(ItemStack item : items)
+            if(item != null) inventory.addItem(item);
         return inventory;
     }
-    public static Inventory createMenu(BiMap<Integer, Skill> idSkillMap, Set<Integer> classSet, SkillType stype) {
-        Inventory decider = basicSetter(Bukkit.createInventory(null, 54, String.format("%s%s", ChatColor.GREEN, stype.toString())));
-        idSkillMap.forEach((key, skill) -> {
-            if (classSet.contains(key)) {
-                BookFormatter book = InventoryData.getSkillFormatter(skill);
-                ItemStack itemBook = new ItemStack(Material.BOOK);
-                ItemMeta meta = itemBook.getItemMeta();
-                meta.setDisplayName(book.getHeader(0));
-                meta.setLore(book.getDescription(0));
-                itemBook.setItemMeta(meta);
-                for (int b = 0; b <= 8; b++) {
-                    int a = invIntMap.get(skill.getInvType()) + b;
-                    if (decider.getItem(a) == null) {
-                        decider.setItem(a, itemBook);
-                        break;
-                    }
-                }
 
+    private static int calculateRows(SkillType skillType) {
+        Set<InvType> invTypes = new HashSet<>();
+        SkillInfo.skillsConsumer(skillType, skill -> invTypes.add(skill.getInvType()));
+        return invTypes.size();
+    }
+
+    public static Inventory createKitMenu(SkillType skillType) {
+        return createKitMenu(skillType, new Integer[0]);
+    }
+    /**
+     * Create the kit menu
+     * @param skillType
+     * @param skillIDs
+     * @return
+     */
+    public static Inventory createKitMenu(SkillType skillType, Integer[] skillIDs) {
+        Set<Integer> skillSet = new HashSet<>(Arrays.asList(skillIDs));
+        final int rows = calculateRows(skillType);
+        System.out.println("Creating inventory with " + rows + " rows!");
+        String title = ChatColor.GREEN + skillType.getName();
+        Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
+        int i = 0;
+        //get all the invtypes
+        for(InvType invType : InvType.details()) {
+            //get all the skills related to the invtype
+            List<SkillData> dataList = SkillInfo.getSkills(invType);
+            //make a cursor for the inventory
+            int entry = i + 1;
+            for(SkillData data : dataList) {
+                //if the skilltype doesn't correspond, skip
+                if(data.getSkillType() != skillType) continue;
+                ItemStack item = InventoryData.skillToItemStack(data);
+                if(skillSet.contains(data.getId()))
+                    item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                inventory.setItem(entry, item);
+                entry++;
+                //set the item and move the cursor
             }
-        });
-        switch (stype) {
-            case Brute:
-                bruteInv = decider;
-                break;
-            case Mage:
-                mageInv = decider;
-                break;
-            case Ranger:
-                rangerInv = decider;
-                break;
-            case Assassin:
-                assassinInv = decider;
-                break;
-            case Knight:
-                knightInv = decider;
-                break;
+            if(dataList.size() > 0) {
+                //if the yielded list has skills for it, then set the item tag and move the primary
+                //cursor over 1 row
+                inventory.setItem(i, InventoryData.getInvItem(invType));
+                i += 9;
+            }
         }
-        ItemStack goldTokens = new ItemStack(Material.GOLD_INGOT);
-        goldTokens.setAmount(12);
-        decider.setItem(8, goldTokens);
-        return decider;
-    }
-    private static Inventory basicSetter(Inventory inventory) {
-        Dye red = new Dye();
-        red.setColor(DyeColor.RED);
-        Dye blue = new Dye();
-        blue.setColor(DyeColor.BLUE);
-        Dye green = new Dye();
-        green.setColor(DyeColor.GREEN);
-
-        ItemStack sword = new ItemStack(Material.IRON_SWORD);
-        setItemName(sword, "Sword Skills");
-        ItemStack axe = new ItemStack(Material.IRON_AXE);
-        setItemName(axe, "Axe Skills");
-        ItemStack bow = new ItemStack(Material.BOW);
-        setItemName(bow, "Bow Skills");
-
-        ItemStack redi = new ItemStack(red.toItemStack(1));
-        setItemName(redi, "Passive A");
-        ItemStack bluei = new ItemStack(blue.toItemStack(1));
-        setItemName(bluei, "Passive B");
-        ItemStack greeni = new ItemStack(green.toItemStack(1));
-        setItemName(greeni, "Passive C");
-
-        inventory.setItem(invIntMap.get(InvType.SWORD), sword);
-        inventory.setItem(invIntMap.get(InvType.AXE), axe);
-        inventory.setItem(invIntMap.get(InvType.BOW), bow);
-        inventory.setItem(invIntMap.get(InvType.PASSIVEA), redi);
-        inventory.setItem(invIntMap.get(InvType.PASSIVEB), bluei);
-        inventory.setItem(invIntMap.get(InvType.PASSIVEC), greeni);
         return inventory;
     }
+    public static void giveHotbarInventory(Player player, SkillType skillType) {
+        Inventory inventory = player.getInventory();
+        ChampionsInventory.setHotBar(inventory, skillType);
+        player.updateInventory();
+    }
+    public static void giveHotBarInventory(Player player, JsonObject itemsJson) {
+        Inventory inventory = player.getInventory();
+        for(Map.Entry<String, JsonElement> entry : itemsJson.entrySet()) {
+            String slotKey = entry.getKey();
+            int itemID = entry.getValue().getAsInt();
+            if(itemID == -1) continue;
+            ChampionsItem championsItem = ChampionsItem.getBySlotID(itemID);
+            inventory.setItem(Integer.parseInt(slotKey), championsItem.toItemStack());
+        }
 
-    public static Inventory getBruteInv() {
-        if (bruteInv == null) {
-            bruteInv = MenuCreator.createMenu(InventoryData.getIdSkillMap(), InventoryData.getBruteSet(), SkillType.Brute);
-        }
-        Inventory inv = createCopyMenu("Brute");
-        inv.setContents(bruteInv.getContents());
-        return inv;
-    }
-    public static Inventory getKnightInv() {
-        if (knightInv == null) {
-            knightInv = MenuCreator.createMenu(InventoryData.getIdSkillMap(), InventoryData.getKnightSet(), SkillType.Knight);
-        }
-        Inventory inv = createCopyMenu("Knight");
-        inv.setContents(knightInv.getContents());
-        return inv;
-    }
-    public static Inventory getRangerInv() {
-        if (rangerInv == null) {
-            rangerInv = MenuCreator.createMenu(InventoryData.getIdSkillMap(), InventoryData.getRangerSet(), SkillType.Ranger);
-        }
-        Inventory inv = createCopyMenu("Ranger");
-        inv.setContents(rangerInv.getContents());
-        return inv;
-    }
-    public static Inventory getAssassinInv() {
-        if (assassinInv == null) {
-            assassinInv = MenuCreator.createMenu(InventoryData.getIdSkillMap(), InventoryData.getAssassinSet(), SkillType.Assassin);
-        }
-        Inventory inv = createCopyMenu("Assassin");
-        inv.setContents(assassinInv.getContents());
-        return inv;
-    }
-    public static Inventory getMageInv() {
-        if (mageInv == null) {
-            mageInv = MenuCreator.createMenu(InventoryData.getIdSkillMap(), InventoryData.getMageSet(), SkillType.Mage);
-        }
-        Inventory inv = createCopyMenu("Mage");
-        inv.setContents(mageInv.getContents());
-        return inv; //test
-    }
-
-    public static Inventory getInv(SkillType skillType) {
-        switch (skillType) {
-            case Knight:
-                return getKnightInv();
-            case Assassin:
-                return getAssassinInv();
-            case Ranger:
-                return getRangerInv();
-            case Mage:
-                return getMageInv();
-            case Brute:
-                return getBruteInv();
-        }
-        return createCopyMenu("something went wrong? report to raindanxe MC");
-    }
-    private static void setItemName(ItemStack item, String name) {
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        item.setItemMeta(meta);
+        player.updateInventory();
     }
 
     private static Inventory createCopyMenu(String color, String stype) {
@@ -222,10 +109,6 @@ public class MenuCreator {
         return createCopyMenu(ChatColor.GREEN.toString(), stype);
     }
 
-    public static Inventory createGameMenu() {
-        return gamesMenu.getInventory();
-    }
-
     public static Inventory createKitTemplate(Player player, SkillType skillType) {
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
         Inventory inventory = createCopyMenu(ChatColor.BLACK.toString(), skillType.getName() + " Build");
@@ -233,7 +116,7 @@ public class MenuCreator {
         int[] rowStarts = new int[] {20, 22, 24, 26};
 
         Material[] materials = new Material[] {Material.INK_SACK, Material.ANVIL, Material.FIREBALL};
-        String[] names = new String[] {"Apply Build ", "Edit Build ", "Delete Build "};
+        String[] names = new String[] {"Apply Build ", "Edit Build ", "Delete Build"};
         int[] slots = new int[] {0, 9, 27};
 
         UUID uuid = player.getUniqueId();

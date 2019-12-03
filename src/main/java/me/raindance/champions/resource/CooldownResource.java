@@ -3,9 +3,12 @@ package me.raindance.champions.resource;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
+import me.raindance.champions.kits.ChampionsPlayer;
+import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.TitleSender;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.util.SkillTitleSender;
 import org.bukkit.entity.Player;
 
@@ -14,28 +17,27 @@ import org.bukkit.entity.Player;
  * {@link me.raindance.champions.listeners.maintainers.SkillMaintainListener#toCooldown(SkillCooldownEvent)}
  */
 public class CooldownResource implements TimeResource {
-    private Skill skill;
+    private ICooldown skill;
     private Player player;
     private boolean switcher;
-    private final String lowerName;
-    public CooldownResource(Skill skill) {
+    public CooldownResource(ICooldown skill) {
         this.skill = skill;
-        this.lowerName = skill.getItype().getName().toLowerCase();
         this.player = skill.getPlayer();
     }
 
     public CooldownResource(SkillCooldownEvent event) {
-        this(event.getSkill());
+        this((ICooldown) event.getSkill());
     }
 
-    public Skill getSkill() {
+    public ICooldown getSkill() {
         return skill;
     }
 
     @Override
     public void task() {
-        if (player.getItemInHand().getType().name().toLowerCase().contains(lowerName)) {
-            WrappedChatComponent component = SkillTitleSender.coolDownBar(skill);
+        Skill skill = ChampionsPlayerManager.getInstance().getChampionsPlayer(player).getCurrentSkillInHand();
+        if(skill != null && skill == this.skill) {
+            WrappedChatComponent component = SkillTitleSender.coolDownBar(this.skill);
             TitleSender.sendTitle(player, component);
             if(!switcher) switcher = true;
         } else if (switcher) {
@@ -46,16 +48,15 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public boolean cancel() {
-        return !skill.isValid() || !skill.onCooldown();
+        return !skill.onCooldown();
     }
 
     @Override
     public void cleanup() {
-        if(skill.isValid() && skill.getCanUseMessage() != null) {
-            player.sendMessage(skill.getCanUseMessage());
-            TitleSender.sendTitle(player, TitleSender.emptyTitle());
-            SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
-        }
+        player.sendMessage(skill.getCanUseMessage());
+        TitleSender.sendTitle(player, TitleSender.emptyTitle());
+        SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
+
     }
 
     @Override

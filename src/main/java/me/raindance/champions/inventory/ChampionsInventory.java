@@ -1,5 +1,7 @@
 package me.raindance.champions.inventory;
 
+import com.podcrash.api.mc.util.ItemStackUtil;
+import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Bukkit;
@@ -10,52 +12,89 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ChampionsInventory {
     private static final ItemStack[] classItemList;
-
+    private static int cursor = 0;
     static {
-        ItemStack assassin = createItem(Material.LEATHER_HELMET, "Assassin", Arrays.asList("Use stealth hacks", "and insane mobility to kill every1"));
-        ItemStack brute = createItem(Material.DIAMOND_HELMET, "Brute", Arrays.asList("Use crowd control", "and filth to kill every1"));
-        ItemStack mage = createItem(Material.GOLD_HELMET, "Mage", Arrays.asList("Use insane IQ", "and insane skills to kill every1"));
-        ItemStack knight = createItem(Material.IRON_HELMET, "Knight", Arrays.asList("Use defense", "and brain to kill every1"));
-        ItemStack ranger = createItem(Material.CHAINMAIL_HELMET, "Ranger", Arrays.asList("Use mobility", "and range to kill every1"));
-        classItemList = new ItemStack[]{assassin, brute, mage, knight, ranger};
+        classItemList = new ItemStack[SkillType.details().length];
+
+        addClass(SkillType.Warden, Material.IRON_HELMET,
+                "Wardens function as off-tanks, boasting",
+                "damage-soaking capabilities and crowd control.",
+                "While they lack mobility, they make up for it with",
+                "their considerable skrimishing ability.");
+
+        addClass(SkillType.Duelist, Material.DIAMOND_SWORD,
+                "Duelists excel in fighting enemies one by one",
+                "and dealing consistent single-target damage.",
+                "They primarily rely on their melee attacks",
+                "to cut their opponents down.");
+
+        addClass(SkillType.Vanguard, Material.DIAMOND_CHESTPLATE,
+                "Vanguards are resilient and powerful teamfighters.",
+                        "They sacrifice damage in exchange for strong crowd ",
+                        "control abilities and high durability.");
+        
+        addClass(SkillType.Berserker, Material.DIAMOND_AXE, 
+                "Berserkers are mobile, close-range fighters capable",
+                        "of dealing with multiple enemies. Though somewhat",
+                        "fraile, they can become a huge threat in teamfights",
+                        "if left unchecked. ");
+
+        addClass(SkillType.Marksman, Material.BOW, 
+                "Marksmen rely on their precise, long-ranged attacks",
+                        "to support their team. They exclusively use their bow",
+                        "to deal heavy damage and cripple their targets.");
+
+        addClass(SkillType.Hunter, Material.BONE,
+                "Hunters are nimble archers that shine in both",
+                        "short-range and mid-range engagements. They are able",
+                        "to use their bow to keep strong enemies at a distance",
+                        "and to secure kills on the weak.\n");
+
+        addClass(SkillType.Sorcerer, Material.BLAZE_ROD,
+                "Hunters are nimble archers that shine in both",
+                        "short-range and mid-range engagements. They are able",
+                        "to use their bow to keep strong enemies at a distance",
+                        "and to secure kills on the weak.");
+
+        addClass(SkillType.Druid, Material.SAPLING,
+                "Druids act as supports for their team, empowering their",
+                        "allies with enchantments and protecting them with healing magic. ",
+                        "In addition, they offer a substantial amount of utility in ",
+                        "teamfights with their crowd control.");
+
+        addClass(SkillType.Rogue, Material.LEATHER_BOOTS,
+                "Rogues are agile assassins who specialize in taking down",
+                        "fragile priority targets. They depend on their mobility to",
+                        "close the gap between their enemies and their high burst ",
+                        "damage to dispatch of them quickly.");
+
+        addClass(SkillType.Thief, Material.COAL, 
+                "Thieves are cunning and elusive, adept at disorienting",
+                        "their adversaries with a plethora of tools and abilities.",
+                        "Rather than eliminating the opposition themselves, they",
+                        "aim to distract them for as long as possible while their",
+                        "allies capitalize off the confusion.");
+        /*
+        ItemStack assassin = ItemStackUtil.createItem(Material.LEATHER_HELMET, "Assassin", Arrays.asList("Use stealth hacks", "and insane mobility to kill every1"));
+        ItemStack brute = ItemStackUtil.createItem(Material.DIAMOND_HELMET, "Brute", Arrays.asList("Use crowd control", "and filth to kill every1"));
+        ItemStack mage = ItemStackUtil.createItem(Material.GOLD_HELMET, "Mage", Arrays.asList("Use insane IQ", "and insane skills to kill every1"));
+        ItemStack knight = ItemStackUtil.createItem(Material.IRON_HELMET, "Knight", Arrays.asList("Use defense", "and brain to kill every1"));
+        ItemStack ranger = ItemStackUtil.createItem(Material.CHAINMAIL_HELMET, "Ranger", Arrays.asList("Use mobility", "and range to kill every1"));
+        */
+        cursor = 0;
     }
 
-    public static Inventory getClassSelection() {
-        Inventory menu = Bukkit.createInventory(null, 9, ChatColor.GOLD + "Class Selection");
-        menu.addItem(classItemList);
-        return menu;
-    }
-
-    /**
-     * Set the player's inventory to a hotbar selection
-     * @param player
-     * @param skillType
-     */
-    public static void getHotbarSelection(Player player, SkillType skillType){
-        Inventory inventory = player.getInventory();
-        inventory.clear();
-        for(ChampionsItem item : ChampionsItem.values()) {
-            SkillType[] skillTypes = item.getSkillType();
-            if(contains(skillTypes, skillType) || contains(skillTypes, SkillType.Global)) {
-                ItemStack itemStack = item.toItemStack();
-                inventory.setItem(item.getSlotID(), itemStack);
-            }
-        }
-        int tokenAmount = 10;
-        if(skillType == SkillType.Assassin || skillType == SkillType.Ranger) tokenAmount = 12;
-
-        inventory.setItem(17, new ItemStack(Material.IRON_INGOT, tokenAmount));
-    }
-    private static boolean contains(SkillType[] skillTypes, SkillType skillType) {
-        for(int i = 0; i < skillTypes.length; i++){
-            if(skillTypes[i] == skillType) return true;
-        }
-        return false;
+    private static void addClass(SkillType skillType, Material material, String... description) {
+        List<String> desc = Arrays.asList(description);
+        ItemStack item = ItemStackUtil.createItem(material, skillType.getName(), desc);
+        classItemList[cursor] = item;
+        cursor++;
     }
 
     /**
@@ -64,25 +103,30 @@ public class ChampionsInventory {
      */
     public static void clearHotbarSelection(Player player) {
         Inventory inv = player.getInventory();
-        for(ChampionsItem item : ChampionsItem.values()) {
-            if(inv.getItem(item.getSlotID()) != null) {
-                inv.setItem(item.getSlotID(), new ItemStack(Material.AIR, 1));
-            }
+        for(int i = 9; i < 36; i++) {
+            inv.setItem(i, new ItemStack(Material.AIR, 1));
         }
-        inv.setItem(17, new ItemStack(Material.AIR));
         Bukkit.getScheduler().runTaskLater(Main.instance, player::updateInventory, 1L);
-    }
-
-    private static ItemStack createItem(Material material, String name, List<String> desc) {
-        ItemStack item = new ItemStack(material);
-        ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName(name);
-        itemMeta.setLore(desc);
-        item.setItemMeta(itemMeta);
-        return item;
     }
 
     public static ItemStack[] getClassItemList() {
         return classItemList;
+    }
+
+    static void setHotBar(Inventory inventory, SkillType skillType) {
+        int[] itemArray;
+        switch (skillType) {
+            case Warden:
+                itemArray = new int[]{9, 10, 22, 22, 22, 22};
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + skillType);
+        }
+
+        for(int i = 0; i < itemArray.length; i++) {
+            int id = itemArray[i];
+            if(id < 0) continue;
+            inventory.setItem(i, ChampionsItem.getBySlotID(id).toItemStack());
+        }
     }
 }

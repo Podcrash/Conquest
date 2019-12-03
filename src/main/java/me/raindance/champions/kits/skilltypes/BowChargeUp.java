@@ -12,6 +12,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.util.SkillTitleSender;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumAnimation;
@@ -31,15 +32,20 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BowChargeUp extends Skill implements TimeResource {
+public abstract class BowChargeUp extends Skill implements TimeResource, ICooldown {
     private Map<String, Long> times = new HashMap<>();
     protected boolean isUsing = false;
     private float power = 0;
-    protected float rate = 0;
     private HashMap<Arrow, Float> charges;
-    public BowChargeUp(Player player, String name, int level, SkillType type, InvType invType, float cooldown, float rate) {
-        super(player, name, level, type, ItemType.BOW, invType, cooldown);
-        this.rate = rate;
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.BOW;
+    }
+
+    public abstract float getRate();
+    public BowChargeUp() {
+        super();
         charges = new HashMap<>();
 
     }
@@ -139,7 +145,7 @@ public abstract class BowChargeUp extends Skill implements TimeResource {
 
 
     protected void charge(){
-        power += rate;
+        power += getRate();
         power = (power >= 1f) ? 1f : power;
     }
     protected void charge(double boost){

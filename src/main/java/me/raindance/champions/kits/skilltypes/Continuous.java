@@ -12,8 +12,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public abstract class Continuous extends Instant implements TimeResource {
     private boolean useOnce = true;
-    public Continuous(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, int cooldown) {
-        super(player, name, level, type, itype, invType, cooldown);
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.SWORD;
+    }
+
+    public Continuous() {
+        super();
     }
 
     @Override
