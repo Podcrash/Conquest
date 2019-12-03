@@ -24,4 +24,10 @@ public class Brute extends ChampionsPlayer {
     public SkillType getType() {
         return SkillType.Brute;
     }
+
+
+    @Override
+    public int getHP() {
+        return 0;
+    }
 }

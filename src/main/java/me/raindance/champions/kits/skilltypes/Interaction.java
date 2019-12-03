@@ -6,6 +6,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -16,11 +17,11 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public abstract class Interaction extends Skill {
+public abstract class Interaction extends Skill implements ICooldown {
     private boolean hit = false;
 
-    public Interaction(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, int cooldown) {
-        super(player, name, level, type, itype, invType, cooldown);
+    public Interaction() {
+        super();
     }
 
     @EventHandler(
@@ -62,7 +63,7 @@ public abstract class Interaction extends Skill {
     }
 
     public String getUsedMessage(Player player) {
-        return String.format("%sSkill> %sYou can use %s%s %d%s on %s%s.",
-                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), getLevel(), ChatColor.GRAY, ChatColor.YELLOW, player.getName());
+        return String.format("%sSkill> %sYou can use %s%s %son %s%s.",
+                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, player.getName());
     }
 }

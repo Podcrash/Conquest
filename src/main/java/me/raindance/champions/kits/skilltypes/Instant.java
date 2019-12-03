@@ -19,8 +19,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class Instant extends Skill {
     private final Skill instance;
     protected boolean rightClickSkill = true;
-    public Instant(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, float cooldown) {
-        super(player, name, level, type, itype, invType, cooldown);
+    public Instant() {
+        super();
         instance = this;
     }
 

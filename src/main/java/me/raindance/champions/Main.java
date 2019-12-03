@@ -11,21 +11,17 @@ import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleRunnable;
 import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.listeners.GameDamagerConverterListener;
 import com.podcrash.api.mc.util.PlayerCache;
-import com.podcrash.api.mc.world.WorldManager;
 import com.podcrash.api.permissions.Perm;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
-import me.raindance.champions.inventory.InventoryData;
-import me.raindance.champions.inventory.update.InventoryUpdater;
 import me.raindance.champions.kits.ChampionsPlayerManager;
+import me.raindance.champions.kits.SkillInfo;
+import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.items.ItemHelper;
 import me.raindance.champions.listeners.*;
-import com.podcrash.api.mc.listeners.GameListener;
-import com.podcrash.api.mc.listeners.MapMaintainListener;
 import me.raindance.champions.listeners.maintainers.ApplyKitListener;
 import me.raindance.champions.listeners.maintainers.DomGameListener;
 import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
@@ -49,7 +45,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -97,14 +92,7 @@ public class Main extends JavaPlugin {
         }, executor);
     }
     private CompletableFuture<Void> setUpClasses() {
-        return CompletableFuture.runAsync(() -> {
-            InventoryData.addAssassin();
-            InventoryData.addRanger();
-            InventoryData.addMage();
-            InventoryData.addKnight();
-            InventoryData.addBrute();
-            InventoryData.addGlobal();
-        }, executor);
+        return CompletableFuture.runAsync(SkillInfo::setUp, executor);
     }
     private CompletableFuture<Void> registerInjectors() {
         return CompletableFuture.runAsync(() -> {
@@ -132,6 +120,7 @@ public class Main extends JavaPlugin {
         */
         instance = this;
 
+
         log.info("[GameManager] Making a lot of games");
         DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         GameManager.createGame(game);
@@ -143,7 +132,7 @@ public class Main extends JavaPlugin {
         CompletableFuture commands = registerCommands();
         CompletableFuture injectors = registerInjectors();
         CompletableFuture setups = setUp();
-        CompletableFuture setupClasses = setUpClasses();
+        //CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
 
         protocolManager = ProtocolLibrary.getProtocolManager();
@@ -168,13 +157,12 @@ public class Main extends JavaPlugin {
             commands,
             injectors,
             setups,
-            setupClasses,
+            //setupClasses,
             msgs
         );
 
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
-        Bukkit.getScheduler().runTaskTimer(Main.instance, new InventoryUpdater(), 0L, 1L);
 
         //This part is really only used for reloading
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
@@ -188,6 +176,13 @@ public class Main extends JavaPlugin {
         Communicator.readyGameLobby();
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
+
+
+
+
+        SkillInfo.setUp();
+        getLogger().info(SkillInfo.getSkills(SkillType.Warden).toString());
+
 
     }
     @Override

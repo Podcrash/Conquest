@@ -32,4 +32,10 @@ public class Ranger extends ChampionsPlayer {
     public SkillType getType() {
         return SkillType.Ranger;
     }
+
+
+    @Override
+    public int getHP() {
+        return 0;
+    }
 }

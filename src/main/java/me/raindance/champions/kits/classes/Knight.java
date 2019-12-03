@@ -25,4 +25,10 @@ public class Knight extends ChampionsPlayer {
     }
 
 
+
+    @Override
+    public int getHP() {
+        return 0;
+    }
+
 }

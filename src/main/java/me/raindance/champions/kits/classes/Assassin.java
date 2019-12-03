@@ -36,4 +36,9 @@ public class Assassin extends ChampionsPlayer {
         super.respawn();
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true, true);
     }
+
+    @Override
+    public int getHP() {
+        return 0;
+    }
 }

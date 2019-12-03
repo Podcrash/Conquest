@@ -11,6 +11,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.util.SkillTitleSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,13 +22,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 /*
     This is with swords most likely
  */
-public abstract class ChargeUp extends Skill implements TimeResource {
+public abstract class ChargeUp extends Skill implements TimeResource, ICooldown {
     protected boolean isUsing = false;
     private double power = 0;
-    protected double rate = 0;
-    public ChargeUp(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, float cooldown, float rate) {
-        super(player, name, level, type, itype, invType, cooldown);
-        this.rate = rate;
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.SWORD;
+    }
+
+    public abstract float getRate();
+    public ChargeUp() {
+        super();
     }
     @EventHandler(
             priority = EventPriority.HIGH
@@ -74,7 +80,7 @@ public abstract class ChargeUp extends Skill implements TimeResource {
     }
 
     protected void charge(){
-        power += rate;
+        power += getRate();
     }
     protected void charge(double boost){
         power += boost;

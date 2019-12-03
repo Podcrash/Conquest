@@ -6,6 +6,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
@@ -23,11 +24,17 @@ import java.util.HashMap;
 /*
     For arrow hits
  */
-public abstract class BowShotSkill extends Instant {
+public abstract class BowShotSkill extends Instant implements ICooldown {
     protected boolean isPrepared;
     private HashMap<Arrow, Float> arrowForceMap;
-    public BowShotSkill(Player player, String name, int level, SkillType type, ItemType itype, InvType invType, float cooldown, boolean boosted) {
-        super(player, name, level, type, itype, invType, cooldown);
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.BOW;
+    }
+
+    public BowShotSkill() {
+        super();
         arrowForceMap = new HashMap<>();
     }
     /*

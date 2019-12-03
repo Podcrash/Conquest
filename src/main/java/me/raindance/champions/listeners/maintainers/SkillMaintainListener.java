@@ -3,6 +3,7 @@ package me.raindance.champions.listeners.maintainers;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.effect.status.Status;
@@ -23,7 +24,7 @@ public class SkillMaintainListener extends ListenerBase {
             priority = EventPriority.HIGHEST
     )
     public void toCooldown(SkillCooldownEvent event){
-        if(event.getSkill().hasCooldown() && !((event.getSkill() instanceof Passive) )){
+        if(event.getSkill() instanceof ICooldown && !((event.getSkill() instanceof Passive) )){
             TimeHandler.repeatedTime(1, 0, new CooldownResource(event));
         }
     }

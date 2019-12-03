@@ -1,10 +1,13 @@
 package me.raindance.champions.inventory;
 
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.podcrash.api.db.ChampionsKitTable;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.map.JsonHelper;
 import me.raindance.champions.Configurator;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
@@ -32,7 +35,7 @@ import java.util.concurrent.Executors;
 
 public final class InvFactory {
     private static ChampionsKitTable table;
-    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static Map<String, Integer> buildMap = new HashMap<>();
     private static final Configurator kitConfigurator = Main.getConfigurator("kits");
     private InvFactory() {
@@ -56,33 +59,13 @@ public final class InvFactory {
         for (ItemStack book : menu.getContents()) {
             //only pass if it has the enchantent
             if(book == null || !book.containsEnchantment(Enchantment.DAMAGE_ALL)) continue;
-            Skill skill = InventoryData.getSkill(book);
-            if(skill == null) continue;
-            BookFormatter formatter = InventoryData.getSkillFormatter(skill);
-            Skill _skill = formatter.newInstance(player, book.getAmount());
-            skills.add(_skill);
+            SkillData data = InventoryData.itemStackToSkillData(book);
+            if(data == null) continue;
+            Skill skill = data.newInstance();
+            skill.setPlayer(player);
+            skills.add(skill);
         }
         return skills;
-    }
-
-    /**
-     * Usually used after {@link this#convertInventoryToSkills(Player, Inventory)}
-     * This will clear any duplicates by getting rid of one of the
-     * skills whose invtypes are similar.
-     * Ex: You cannot have evade or illusion at the same time.
-     * @param skills
-     */
-    private static void removeDuplicatedInvTypes(List<Skill> skills) {
-        //really bad check for skills of a different type
-        List<InvType> invTypes = new ArrayList<>();
-        Iterator<Skill> skillIterator = skills.iterator();
-        while(skillIterator.hasNext()) {
-            Skill skill = skillIterator.next();
-            InvType type = skill.getInvType();
-            // it just won't register :{
-            if(invTypes.contains(type)) skillIterator.remove();
-            else invTypes.add(type);
-        }
     }
 
     /**
@@ -93,31 +76,11 @@ public final class InvFactory {
      * @return
      */
     private static ChampionsPlayer findViaSkillType(SkillType skillType, Player player, List<Skill> skills) {
-        ChampionsPlayer newPlayer;
-        switch (skillType){
-            case Brute:
-                newPlayer = new Brute(player, skills);
-                break;
-            case Mage:
-                newPlayer = new Mage(player, skills);
-                break;
-            case Ranger:
-                newPlayer = new Ranger(player, skills);
-                break;
-            case Assassin:
-                newPlayer = new Assassin(player, skills);
-                break;
-            case Knight:
-                newPlayer = new Knight(player, skills);
-                break;
-            default:
-                throw new IllegalArgumentException("Skilltype cannot be all. from InvFactory:57");
-        }
-        return newPlayer;
+        return ChampionsPlayerManager.getInstance().newObj(player, skills, skillType);
     }
 
     /**
-     * Turn an inventory using the above methods {@link #convertInventoryToSkills(Player, Inventory)} {@link #removeDuplicatedInvTypes(List)} {@link #findViaSkillType(SkillType, Player, List)}
+     * Turn an inventory using the above methods {@link #convertInventoryToSkills(Player, Inventory)}
      * This will turn the inventory into a list of skills.
      * Then, remove the duplicated types.
      * Then, register the player.
@@ -128,7 +91,6 @@ public final class InvFactory {
      */
     public static ChampionsPlayer inventoryToChampion(Player player, Inventory menu, SkillType skillType) {
         List<Skill> skills = convertInventoryToSkills(player, menu);
-        removeDuplicatedInvTypes(skills);
         ChampionsPlayer newPlayer = findViaSkillType(skillType, player, skills);
         newPlayer.setDefaultHotbar();
 
@@ -145,9 +107,8 @@ public final class InvFactory {
      * @param skillType
      * @param item
      */
-    public static void clickAtBuildMenu(Player player, SkillType skillType, ItemStack item) {
+    public static void clickAtBuildMenu(Player player, SkillType skillType, ItemStack item, int buildID) {
         if(item == null || item.getType() == Material.AIR) return;
-        int buildID = Integer.valueOf(item.getItemMeta().getDisplayName().replaceAll("[^0-9]", ""));
         switch (item.getType()) {
             case INK_SACK:
                 if(item.getData() instanceof Dye && !((Dye) item.getData()).getColor().equals(DyeColor.GRAY))
@@ -204,84 +165,6 @@ public final class InvFactory {
     }
 
     /**
-     * Helper method to give a book the proper level of the inventory
-     * As well as the description and tokens.
-     * @param inventory
-     * @param uuid
-     * @param clasz
-     * @param buildID
-     * @return
-     */
-    private static CompletableFuture giveProperSkillLevels(final Inventory inventory, UUID uuid, String clasz, int buildID) {
-        String deserial = getKitTable().getJSONData(uuid, clasz, buildID);
-        if(deserial == null) return CompletableFuture.completedFuture(null);
-        return CompletableFuture.runAsync(() -> {
-            //vvvThis should be one function
-            JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
-            JsonObject skillObject = object.getAsJsonObject("skills");
-            Map<String, Integer> nameToLevel = new HashMap<>();
-            for (String stringID : skillObject.keySet()) {
-                Skill skill = InventoryData.getSkillById(Integer.valueOf(stringID));
-                int level = skillObject.get(stringID).getAsInt();
-
-                nameToLevel.put(skill.getName(), level);
-            }
-            //^^^^^
-            ItemStack gold = inventory.getItem(8);
-            int goldTokens = gold.getAmount();
-            for (ItemStack book : inventory.getContents()) {
-                if (book == null || book.getType() != Material.BOOK) continue;
-                BookFormatter bookFormatter = InventoryData.getSkillFormatter(book);
-                int level = nameToLevel.getOrDefault(bookFormatter.getName(), -1);
-                if (level == -1) continue;
-                book.setAmount(level);
-                book.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-                ItemMeta meta = book.getItemMeta();
-                meta.setDisplayName(bookFormatter.getHeader(level));
-                meta.setLore(bookFormatter.getDescription(level - 1));
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                book.setItemMeta(meta);
-                goldTokens -= level * bookFormatter.getSkillTokenWeight();
-            }
-            if(goldTokens == 0)
-                gold.setType(Material.REDSTONE);
-            gold.setAmount(goldTokens);
-
-        }, executor);
-    }
-
-    /**
-     * Give the proper item levels, taking away tokens if the item is shown in the hotbar.
-     * Uses the deserialized stirng to decide how much tokens to take away,
-     * based on the value of each item.
-     * @param inventory
-     * @param skillType
-     * @param uuid
-     * @param buildID
-     * @return
-     */
-    private static CompletableFuture giveProperItemLevels(final Inventory inventory, SkillType skillType, UUID uuid, int buildID) {
-        String deserial = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
-        if(deserial == null) return CompletableFuture.completedFuture(null);
-        return CompletableFuture.runAsync(() -> {
-            JsonObject object = ChampionsPlayerManager.getInstance().deserialize(deserial);
-            JsonObject skillObject = object.getAsJsonObject("items");
-            ItemStack iron = inventory.getItem(17);
-            int ironTokens = iron.getAmount();
-
-            for (String stringID : skillObject.keySet()) {
-                int itemID = skillObject.get(stringID).getAsInt();
-                ChampionsItem item = ChampionsItem.getBy(itemID, skillType);
-                inventory.setItem(Integer.valueOf(stringID), item.toItemStack());
-                ironTokens -= item.getTokenCost();
-            }
-            if(ironTokens == 0)
-                iron.setType(Material.REDSTONE);
-            iron.setAmount(ironTokens);
-        }, executor);
-    }
-
-    /**
      * Gets the basic skill selection for the skilltype.
      * Gets the basic hotbar selection for the skilltype.
      * Then adds both of the  edited skills and items via the stored strings.
@@ -291,18 +174,24 @@ public final class InvFactory {
      */
     private static void edit(Player player, SkillType skillType, int buildID) {
         buildMap.put(player.getName(), buildID);
-        Inventory inventory = MenuCreator.getInv(skillType);
-        ChampionsInventory.getHotbarSelection(player, skillType);
-
         UUID uuid = player.getUniqueId();
-        String clasz = skillType.getName();
+        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
+        if(json == null) {
+            Inventory inv = MenuCreator.createKitMenu(skillType);
+            MenuCreator.giveHotbarInventory(player, skillType);
+            player.openInventory(inv);
+            return;
+        }
 
-        CompletableFuture.allOf(
-            giveProperSkillLevels(inventory, uuid, clasz, buildID),
-            giveProperItemLevels(player.getInventory(), skillType, uuid, buildID)
-        ).join();
+        JsonObject kitJson = new JsonParser().parse(json).getAsJsonObject();
 
-        player.openInventory(inventory);
+        Integer[] skillIDs = JsonHelper.wrapInteger(kitJson.getAsJsonArray("skills"));
+        Inventory inv = MenuCreator.createKitMenu(skillType, skillIDs);
+
+        JsonObject itemsJson = kitJson.getAsJsonObject("items");
+        MenuCreator.giveHotBarInventory(player, itemsJson);
+
+        player.openInventory(inv);
     }
 
     /**
@@ -324,6 +213,9 @@ public final class InvFactory {
         buildMap.remove(player.getName());
     }
 
+    public static boolean currentlyEditing(Player player) {
+        return buildMap.containsKey(player.getName());
+    }
     /**
      * duh
      * @param player

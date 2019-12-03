@@ -1,14 +1,21 @@
 package me.raindance.champions.kits.enums;
 
+import me.raindance.champions.kits.Skill;
+
 public enum SkillType {
-    Brute("Brute"),
-    Knight("Knight"),
-    Ranger("Ranger"),
-    Mage("Mage"),
-    Assassin("Assassin"),
+    Brute("Brute"), Vanguard("Vanguard"), Berserker("Berserker"),
+    Knight("Knight"), Duelist("Duelist"), Warden("Warden"),
+    Ranger("Ranger"), Marksman("Marksman"), Hunter("Hunter"),
+    Mage("Mage"), Sorcerer("Sorcerer"), Druid("Druid"),
+    Assassin("Assassin"), Rogue("Rogue"), Thief("Thief"),
     Global("All");
 
-
+    /**
+     * Knight >> Duelist & Warden
+     * Ranger >> Marksman & Hunter
+     * Mage >> Sorcerer & Druid
+     * Assassin >> Rogue & Thief
+     */
     private String name;
 
     SkillType(String name) {
@@ -29,5 +36,10 @@ public enum SkillType {
     @Override
     public String toString() {
         return getName();
+    }
+
+    private final static SkillType[] details = SkillType.values();
+    public static SkillType[] details() {
+        return details;
     }
 }
