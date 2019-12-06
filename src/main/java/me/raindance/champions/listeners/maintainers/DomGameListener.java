@@ -64,7 +64,7 @@ public class DomGameListener extends ListenerBase {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
-        for(Player p : e.getGame().getPlayers()) p.sendMessage(startingMsg);
+        for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
 
         game.loadMap();
 
@@ -72,6 +72,7 @@ public class DomGameListener extends ListenerBase {
         //gamescoreboard.makeObjective();
         //gamescoreboard.setupScoreboard();
 
+        /*
         Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
             Location red = game.getRedSpawn().get(0);
             Location blue = game.getBlueSpawn().get(0);
@@ -105,6 +106,8 @@ public class DomGameListener extends ListenerBase {
             }
         }, 0L);
 
+         */
+
         game.sendColorTab(false);
         CapturePointDetector capture = new CapturePointDetector(game.getId());
         game.registerResources(
@@ -127,20 +130,10 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onGameDeath(GameDeathEvent e) {
-        TeamEnum victimTeam = TeamEnum.getByColor(e.getGame().getTeamColor(e.getWho()));
+        TeamEnum victimTeam = e.getGame().getTeamEnum(e.getWho());
         TeamEnum enemyTeam = null;
         Player victim = e.getWho();
-        switch(victimTeam) {
-            case RED:
-                e.getGame().increment("blue", 50);
-                enemyTeam = TeamEnum.BLUE;
-                break;
-            case BLUE:
-                e.getGame().increment("red", 50);
-                enemyTeam = TeamEnum.RED;
-                break;
-        }
-
+        e.getGame().increment(victimTeam, 50);
 
         ChampionsPlayer victimPlayer;
         if((victimPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim)) != null) {
@@ -174,7 +167,7 @@ public class DomGameListener extends ListenerBase {
             builder.append("!");
             e.getGame().broadcast(builder.toString());
             DomScoreboard scoreboard = (DomScoreboard) e.getGame().getGameScoreboard();
-            scoreboard.updateCapturePoint(teamColor, objective.getName());
+            scoreboard.updateCapturePoint(team, objective.getName());
             objective.spawnFirework();
         }else if(objective instanceof Emerald) {
 
@@ -186,10 +179,9 @@ public class DomGameListener extends ListenerBase {
         ItemObjective itemObjective = event.getItem();
         Player player = event.getWho();
         Game game = event.getGame();
-        String teamColor = game.getTeamColor(player);
-        TeamEnum team = TeamEnum.getByColor(teamColor);
+        TeamEnum team = game.getTeamEnum(player);
         if(itemObjective instanceof Emerald) {
-            game.increment(teamColor, 300);
+            game.increment(team, 300);
             StringBuilder builder = new StringBuilder();
             //builder.append(team.getChatColor());
             builder.append(ChatColor.DARK_GREEN);

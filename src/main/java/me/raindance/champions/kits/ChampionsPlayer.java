@@ -3,6 +3,7 @@ package me.raindance.champions.kits;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.podcrash.api.mc.game.TeamEnum;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -81,8 +82,8 @@ public abstract class ChampionsPlayer {
     public Game getGame() {
         return GameManager.getGame();
     }
-    public String getTeam() {
-        if (isInGame()) return GameManager.getGame().getTeamColor(player);
+    public TeamEnum getTeam() {
+        if (isInGame()) return GameManager.getGame().getTeamEnum(getPlayer());
         else return null;
     }
 
@@ -93,9 +94,7 @@ public abstract class ChampionsPlayer {
      * @return true/false
      */
     public boolean isAlly(Player player) {
-        String color;
-        if((color = getGame().getTeamColor(player)) == null) return true;
-        return isInGame() && color.equalsIgnoreCase(getTeam());
+        return getGame().isOnSameTeam(getPlayer(), player);
     }
 
     public Location getSpawnLocation() {
@@ -115,7 +114,7 @@ public abstract class ChampionsPlayer {
         this.resetCooldowns();
         player.setAllowFlight(false);
         player.setFlying(false);
-        List<Player> players = getGame() == null ? player.getWorld().getPlayers() : getGame().getPlayers();
+        List<Player> players = getGame() == null ? player.getWorld().getPlayers() : getGame().getBukkitPlayers();
         for(Player player : players){
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }

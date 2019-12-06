@@ -56,19 +56,19 @@ public class InventoryData {
                 Dye red = new Dye();
                 red.setColor(DyeColor.RED);
                 ItemStack itemStack = red.toItemStack(1);
-                setItemName(itemStack, "Passive A");
+                setItemName(itemStack, "Primary Passive");
                 return itemStack;
             case PASSIVEB:
                 Dye blue = new Dye();
                 blue.setColor(DyeColor.BLUE);
                 ItemStack itemStack1 = blue.toItemStack(1);
-                setItemName(itemStack1, "Passive A");
+                setItemName(itemStack1, "Secondary Passive");
                 return itemStack1;
-            case PASSIVEC:
+            case DROP:
                 Dye green = new Dye();
                 green.setColor(DyeColor.GREEN);
                 ItemStack itemStack2 = green.toItemStack(1);
-                setItemName(itemStack2, "Passive A");
+                setItemName(itemStack2, "Drop");
                 return itemStack2;
             default:
                 throw new IllegalArgumentException("Not allowed");

@@ -1,6 +1,7 @@
 package me.raindance.champions.commands;
 
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.TeamEnum;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,7 @@ public class TeamCommand extends CommandBase {
                 if (args[0].equalsIgnoreCase("red") || args[0].equalsIgnoreCase("blue")) {
                     String team = args[0].toLowerCase();
                     if (GameManager.hasPlayer(player) && !GameManager.getGame().isOngoing()) {
-                        GameManager.joinTeam(player, team);
+                        GameManager.joinTeam(player, TeamEnum.getByColor(team));
                     } else if(GameManager.getGame().isOngoing()) {
                         player.sendMessage(
                                 String.format(

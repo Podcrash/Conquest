@@ -5,7 +5,7 @@ import com.podcrash.api.db.PlayerPermissionsTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.permissions.Perm;
-import me.raindance.champions.game.map.MapManager;
+import me.raindance.champions.game.map.ChampionsMapManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -16,8 +16,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
 
 public class MapListener extends ListenerBase {
     public MapListener(JavaPlugin plugin) {
@@ -30,7 +28,7 @@ public class MapListener extends ListenerBase {
         PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
         if (table.hasRole(e.getPlayer().getUniqueId(), Perm.BUILD)) { //Switch out for permissions
             Player p = e.getPlayer();
-            MapManager mapper = MapManager.getInstance();
+            ChampionsMapManager mapper = ChampionsMapManager.getInstance();
             Block block = e.getClickedBlock();
             if (block.getState() instanceof Sign) {
                 Sign sign = (Sign) e.getClickedBlock().getState();

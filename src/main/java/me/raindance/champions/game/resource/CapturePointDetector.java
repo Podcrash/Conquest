@@ -19,6 +19,9 @@ public final class CapturePointDetector extends GameResource {
     private final CapturePoint[] capturePoints;
     private final boolean[] playersCurrentlyIn;
     private DomScoreboard scoreboard;
+
+    private TeamEnum red;
+    private TeamEnum blue;
     /**
      * > 0 = red
      * < 0 = blue
@@ -46,10 +49,13 @@ public final class CapturePointDetector extends GameResource {
                 this.bounds[i][2][b] = cbounds[b].getZ();
             }
         }
-        List<String> names = new ArrayList<>(getGame().getPlayerNames());
+        List<String> names = new ArrayList<>();
+        for(Player player : getGame().getBukkitPlayers()) names.add(player.getName());
         names.removeIf((name) -> getGame().isSpectating(name));
         this.players = names.toArray(new String[names.size()]);
         this.scoreboard = ((DomScoreboard) getGame().getGameScoreboard());
+        red = getGame().getTeam(0).getTeamEnum();
+        blue = getGame().getTeam(1).getTeamEnum();
     }
 
     public CapturePoint[] getCapturePoints() {
@@ -91,14 +97,15 @@ public final class CapturePointDetector extends GameResource {
         for(int p = 0; p < players.length; p++){
             boolean a = isInBound(i, Bukkit.getPlayer(players[p]));
             if(a) {
-                String color = getGame().getTeamColor(players[p]);
-                teamToColor.put(i, teamToColor.get(i) + TeamEnum.getByColor(color).getIntData());
+                TeamEnum team = getGame().getTeamEnum(Bukkit.getPlayer(players[p]));
+                teamToColor.put(i, teamToColor.get(i) + team.getIntData());
                 playersCurrentlyIn[i] = true;
             }else playersCurrentlyIn[i] = false;
         }
     }
 
     /**
+     * //TODO: clean this up to work with colors
      * Capture the point if there are players in it.
      * Positive = red
      * Negative = blue
@@ -112,11 +119,11 @@ public final class CapturePointDetector extends GameResource {
         int times = teamToColor.get(i);
         TeamEnum team = null;
         if(times > 0){
-            scoreboard.updateCurrentlyInCPoint(TeamEnum.RED.getName(), capturePoint.getName());
-            team = capturePoint.capture(TeamEnum.RED.getName(), times);
+            scoreboard.updateCurrentlyInCPoint(red, capturePoint.getName());
+            team = capturePoint.capture(red.getName(), times);
         }else if(times < 0){
-            scoreboard.updateCurrentlyInCPoint(TeamEnum.BLUE.getName(), capturePoint.getName());
-            team = capturePoint.capture(TeamEnum.BLUE.getName(), times * -1);
+            scoreboard.updateCurrentlyInCPoint(blue, capturePoint.getName());
+            team = capturePoint.capture(blue.getName(), times * -1);
         }else {
             if(capturePoint.getTeamColor() == TeamEnum.WHITE && capturePoint.isFull()) return;
             if(!playersCurrentlyIn[i]) {

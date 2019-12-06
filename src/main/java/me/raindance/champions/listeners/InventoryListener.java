@@ -1,6 +1,7 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
@@ -55,9 +56,9 @@ public class InventoryListener extends ListenerBase {
                 Game game = GameManager.getGame();
                 int id = game.getId();
                 if(woolData.getColor() == DyeColor.BLUE) {
-                    GameManager.joinTeam(event.getPlayer(), "blue");
+                    GameManager.joinTeam(event.getPlayer(), TeamEnum.BLUE);
                 }else if(woolData.getColor() == DyeColor.RED) {
-                    GameManager.joinTeam(event.getPlayer(), "red");
+                    GameManager.joinTeam(event.getPlayer(), TeamEnum.RED);
                 }
             }
 

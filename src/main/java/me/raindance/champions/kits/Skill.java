@@ -1,6 +1,7 @@
 package me.raindance.champions.kits;
 
 import com.podcrash.api.mc.damage.DamageSource;
+import com.podcrash.api.mc.game.TeamEnum;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import com.podcrash.api.mc.game.Game;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -43,7 +44,7 @@ public abstract class Skill implements ISkill, DamageSource {
     public Game getGame() {
         return getChampionsPlayer().getGame();
     }
-    public String getTeam() {
+    public TeamEnum getTeam() {
         return (isInGame()) ? getChampionsPlayer().getTeam() : null;
     }
 
@@ -64,7 +65,7 @@ public abstract class Skill implements ISkill, DamageSource {
      * @return
      */
     public List<Player> getPlayers(){
-        return getGame() == null ? getPlayer().getWorld().getPlayers() : getGame().getPlayers();
+        return getGame() == null ? getPlayer().getWorld().getPlayers() : getGame().getBukkitPlayers();
     }
     /*
     check if person is in water

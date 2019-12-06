@@ -1,13 +1,14 @@
 package me.raindance.champions.kits.enums;
 
 public enum InvType {
-    SWORD("Sword"),
-    AXE("Axe"),
-    SHOVEL("Shovel"),
-    BOW("Bow"),
-    PASSIVEA("Passive A"),
-    PASSIVEB("Passive B"),
-    PASSIVEC("Passive C");
+    SWORD("Sword"), //sword
+    AXE("Axe"), //axe
+    SHOVEL("Shovel"), //shovel
+    BOW("Bow"), //bow
+    PASSIVEA("Passive A"), //primary
+    PASSIVEB("Passive B"), //secondary
+    INNATE("Innate"), //Innate
+    DROP("Active");
 
     private String name;
     InvType(String name) {

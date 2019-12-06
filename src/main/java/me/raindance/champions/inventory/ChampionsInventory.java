@@ -91,7 +91,10 @@ public class ChampionsInventory {
     }
 
     private static void addClass(SkillType skillType, Material material, String... description) {
-        List<String> desc = Arrays.asList(description);
+        List<String> desc = new ArrayList<>();
+        for(String d : description) {
+            desc.add(ChatColor.GRAY + d);
+        }
         ItemStack item = ItemStackUtil.createItem(material, skillType.getName(), desc);
         classItemList[cursor] = item;
         cursor++;

@@ -1,9 +1,6 @@
 package me.raindance.champions.game.scoreboard;
 
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.game.GameType;
-import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import me.raindance.champions.game.DomGame;
@@ -21,26 +18,9 @@ import java.util.List;
  */
 public class DomScoreboard extends GameScoreboard {
     private List<CapturePoint> capturePoints;
-    private static HashMap<String, Integer> scoreHash = new HashMap<>();
-    //this is the scoreboard that we are going to be using.
-    private String[] scores;
 
     public DomScoreboard(int gameId) {
-        super(gameId, GameType.DOM);
-        this.scores = new String[]{
-                " ",
-                ChatColor.BOLD.toString() + ChatColor.BLUE + "Blue", //9
-                "0 ", //8
-                "  ",
-                ChatColor.BOLD.toString() + ChatColor.RED + "Red", //7
-                "0", //6
-                "", //5
-                "cp1", //4
-                "cp2", //3
-                "cp3", //2
-                "cp4", //1
-                "cp5" //0
-        };
+        super(12, gameId, GameType.DOM);
 
 
 
@@ -54,64 +34,73 @@ public class DomScoreboard extends GameScoreboard {
     public void setup(List<CapturePoint> capturePoints) {
         List<String> points = new ArrayList<>();
         points.add("");
-        points.add(ChatColor.RED + "Red");
-        points.add("");
-        points.add(ChatColor.BLUE + "Blue");
+        for(GTeam team : getGame().getTeams()) {
+            points.add("");
+            TeamEnum teamE = team.getTeamEnum();
+            points.add(teamE.getChatColor() + teamE.getName());
+        }
+        this.capturePoints = capturePoints;
+
         for(CapturePoint point : capturePoints) {
             points.add(point.getName());
         }
-        //convertScoreboard(points);
+
+        createGameScoreboard(ChatColor.LIGHT_PURPLE + "Imperium ", "Control", points);
     }
 
+    public void createScoreboard() {
+
+    }
     /**
      * Update the dom scoreboard values.
      */
     public void update(){
-        Game game = GameManager.getGame();
-        updateBlueScore(game.getBlueScore());
-        updateRedScore(game.getRedScore());
     }
-    private void updateRedScore(int score){
-        this.scores[5] = ChatColor.BOLD + Integer.toString(score);
-    }
-    private void updateBlueScore(int score){
-        this.scores[2] = ChatColor.BOLD + Integer.toString(score) + " ";
+
+    @Override
+    public void startScoreboardTimer() {
+
     }
 
     /**
      * Update if the point is captured
-     * @param teamColor the color in which the point was captured.
+     * @param team the team in which the point was captured.
      * @param capturePointName the name used to query to update
      */
-    public void updateCapturePoint(String teamColor, String capturePointName){
-        TeamEnum team = TeamEnum.getByColor(teamColor);
-        if(team == null) return;
-        for(int i = scores.length - 5; i < this.scores.length; i++){
-            if(this.scores[i].contains(capturePointName)){
-                this.scores[i] = team.getChatColor() + capturePointName;
-            }
+    public void updateCapturePoint(TeamEnum team, String capturePointName){
+        List<String> lines = getLines();
+        for(int i = 0; i < lines.size(); i++){
+            String line = lines.get(i);
+            if(!line.contains(capturePointName)) continue;
+            setLine(i, team.getChatColor() + capturePointName);
+            break;
         }
     }
 
     /**
      * Update if a player of a team color is standing on a point.
      * It is represented by a colored star character.
-     * @param teamColor the color in which the point was captured.
+     * @param team the color in which the point was captured.
      * @param capturePointName the name used to query to update
      */
-    public void updateCurrentlyInCPoint(String teamColor, String capturePointName) {
-        TeamEnum team = TeamEnum.getByColor(teamColor);
+    public void updateCurrentlyInCPoint(TeamEnum team, String capturePointName) {
         char star = '\u2605';
         String add = (team == null) ? "" : team.getChatColor().toString() + ChatColor.BOLD + star;
-        for(int i = scores.length - 5; i < this.scores.length; i++){
-            if(this.scores[i].contains(capturePointName)){
-                for(CapturePoint cPoint : capturePoints) {
-                    if(cPoint.getName().contains(capturePointName)) {
-                        this.scores[i] = cPoint.getTeamColor().getChatColor() + cPoint.getName() + add;
-                        return;
-                    }
-                }
+        List<String> lines = getLines();
+
+        String newLine = ""; //never happens.
+        for(CapturePoint capturePoint : capturePoints) {
+            if(capturePoint.getName().contains(capturePointName)) {
+                newLine = capturePoint.getTeamColor().getChatColor() + capturePoint.getName() + add;
+                break;
             }
+        }
+        if(newLine.isEmpty()) return;
+        for(int i = 0; i < lines.size(); i++){
+            String line = lines.get(i);
+            if(!line.contains(capturePointName)) continue;
+            setLine(i, newLine);
+            break;
         }
     }
 }

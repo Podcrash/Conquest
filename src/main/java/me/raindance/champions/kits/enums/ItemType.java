@@ -8,6 +8,12 @@ public enum ItemType {
     NULL(null);
     private String name;
 
+    private final static ItemType[] details = ItemType.values();
+
+    public static ItemType[] details() {
+        return details;
+    }
+
     ItemType(String name) {
         this.name = name;
     }
