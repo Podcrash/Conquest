@@ -51,15 +51,11 @@ public class PlayerJoinEventTest extends ListenerBase {
         if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
         if(GameManager.getGame() != null) {
-            if (GameManager.hasPlayer(e.getPlayer()))
-                GameManager.getGame().backToSpawn(e.getPlayer());
+            if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
+                GameManager.addSpectator(e.getPlayer());
             else {
-                if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
-                    GameManager.addSpectator(e.getPlayer());
-                else {
-                    p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                    GameManager.addPlayer(e.getPlayer());
-                }
+                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                GameManager.addPlayer(e.getPlayer());
             }
         }
         Main.getInstance().setupPermissions(p);

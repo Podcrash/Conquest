@@ -19,7 +19,7 @@ public class StartCommand extends CommandBase {
                     return false;
                 }
                 log(game.toString());
-                if (game.isLoadedMap()) {
+                if (game.hasChosenMap()) {
                     GameManager.startGame();
                 } else player.sendMessage("A map has not been set for Game #" + game.getId());
             } else player.sendMessage("You are currently not in a game");

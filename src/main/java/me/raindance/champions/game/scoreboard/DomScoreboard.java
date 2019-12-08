@@ -33,11 +33,10 @@ public class DomScoreboard extends GameScoreboard {
      */
     public void setup(List<CapturePoint> capturePoints) {
         List<String> points = new ArrayList<>();
-        points.add("");
         for(GTeam team : getGame().getTeams()) {
-            points.add("");
             TeamEnum teamE = team.getTeamEnum();
             points.add(teamE.getChatColor() + teamE.getName());
+            points.add("");
         }
         this.capturePoints = capturePoints;
 

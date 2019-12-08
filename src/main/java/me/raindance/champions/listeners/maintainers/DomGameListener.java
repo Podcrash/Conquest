@@ -19,6 +19,7 @@ import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
+import me.raindance.champions.game.map.DominateMap;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
@@ -29,10 +30,7 @@ import me.raindance.champions.kits.classes.Assassin;
 import me.raindance.champions.kits.classes.Brute;
 import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,6 +53,22 @@ public class DomGameListener extends ListenerBase {
         event.setArmorValue(championsVictim.getArmorValue());
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void mapLoad(GameMapLoadEvent event) {
+        if(!(event.getMap() instanceof DominateMap) || !(event.getGame() instanceof DomGame)) return;
+        DomGame game = (DomGame) event.getGame();
+        DominateMap domMap = (DominateMap) event.getMap();
+        World world = event.getWorld();
+        domMap.setGameWorld(world);
+        game.setCapturePoints(domMap.getCapturePoints());
+        game.setEmeralds(domMap.getEmeralds());
+        game.setRestocks(domMap.getRestocks());
+
+        GameScoreboard gameScoreboard;
+        if((gameScoreboard = game.getGameScoreboard()) instanceof DomScoreboard)
+            ((DomScoreboard) gameScoreboard).setup(game.getCapturePoints());
+    }
+
     @EventHandler
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
@@ -65,8 +79,6 @@ public class DomGameListener extends ListenerBase {
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
-
-        game.loadMap();
 
         GameScoreboard gamescoreboard = game.getGameScoreboard();
         //gamescoreboard.makeObjective();
