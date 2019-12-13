@@ -39,6 +39,7 @@ public class Condemn extends Passive implements ICooldown {
         StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.GROUND, 1.5F, 1);
         e.setDamage(e.getDamage() - 2);
         e.setModified(true);
+        e.addSource(this);
         ParticleGenerator.createBlockEffect(getPlayer().getLocation(), Material.WOODEN_DOOR.getId());
     }
 }

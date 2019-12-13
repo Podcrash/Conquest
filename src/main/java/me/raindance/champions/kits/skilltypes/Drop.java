@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class Drop extends Skill {
 
     @EventHandler
-    public void dropSkill(PlayerDropItemEvent e) {
+    public final void dropSkill(PlayerDropItemEvent e) {
         if(e.getPlayer() != getPlayer()) return;
         if(!isHolding()) return;
         if(!isInWater()) return;
@@ -20,6 +20,7 @@ public abstract class Drop extends Skill {
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
         drop(e);
+        e.setCancelled(true);
     }
 
     public abstract void drop(PlayerDropItemEvent e);

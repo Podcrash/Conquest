@@ -28,5 +28,6 @@ public class Adrenaline extends Passive {
         e.setVelocityModifierX(e.getVelocityModifierX() * 1.05);
         e.setVelocityModifierZ(e.getVelocityModifierZ() * 1.05);
         e.setModified(true);
+        e.addSource(this);
     }
 }

@@ -57,7 +57,6 @@ public class ChargeForward extends Drop implements ICooldown {
     @Override
     public void drop(PlayerDropItemEvent e) {
         if (!onCooldown()) {
-            getPlayer().sendMessage(getUsedMessage());
             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 1);
             selfTime = System.currentTimeMillis();
             this.setLastUsed(System.currentTimeMillis());

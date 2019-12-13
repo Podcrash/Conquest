@@ -38,6 +38,7 @@ public class SkillMaintainListener extends ListenerBase {
             return;
         }
         ChampionsPlayer championsPlayer = e.getSkill().getChampionsPlayer();
+        e.getPlayer().sendMessage(e.getSkill().getUsedMessage());
         if(championsPlayer.isSilenced()){
             e.setCancelled(true);
             e.getPlayer().sendMessage(String.format("%sCondition> %sYou are silenced for %s%.2f %sseconds",

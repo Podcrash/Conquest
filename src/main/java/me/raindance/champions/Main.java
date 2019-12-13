@@ -173,7 +173,7 @@ public class Main extends JavaPlugin {
                 InvFactory.applyLastBuild(p);
             }
         }
-        //Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
+        Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
 
         getLogger().info(SkillInfo.getSkills(SkillType.Warden).toString());
