@@ -13,6 +13,7 @@ import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.util.PlayerCache;
 import com.podcrash.api.permissions.Perm;
+import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
@@ -120,7 +121,6 @@ public class Main extends JavaPlugin {
         */
         instance = this;
 
-
         log.info("[GameManager] Making a lot of games");
         DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         GameManager.createGame(game);
@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
         CompletableFuture commands = registerCommands();
         CompletableFuture injectors = registerInjectors();
         CompletableFuture setups = setUp();
-        //CompletableFuture setupClasses = setUpClasses();
+        CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
 
         protocolManager = ProtocolLibrary.getProtocolManager();
@@ -157,7 +157,7 @@ public class Main extends JavaPlugin {
             commands,
             injectors,
             setups,
-            //setupClasses,
+            setupClasses,
             msgs
         );
 
@@ -173,17 +173,10 @@ public class Main extends JavaPlugin {
                 InvFactory.applyLastBuild(p);
             }
         }
-        Communicator.readyGameLobby();
-        Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
+        //Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
 
-
-
-
-        SkillInfo.setUp();
         getLogger().info(SkillInfo.getSkills(SkillType.Warden).toString());
-
-
     }
     @Override
     public void onLoad() {
