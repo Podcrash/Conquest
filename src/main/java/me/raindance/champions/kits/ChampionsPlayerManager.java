@@ -60,8 +60,6 @@ public class ChampionsPlayerManager {
         Bukkit.getPluginManager().callEvent(apply);
 
         cp.equip();
-        if(oldPlayer != null && oldPlayer.getSpawnLocation() != null)
-            cp.setSpawnLocation(oldPlayer.getSpawnLocation());
         cp.heal(20);
         cp.getPlayer().setFoodLevel(20);
         cp.effects();

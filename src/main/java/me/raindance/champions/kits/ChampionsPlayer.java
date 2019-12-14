@@ -35,7 +35,6 @@ public abstract class ChampionsPlayer {
     private double fallDamage = 0;
     private SoundWrapper sound; // sound when hit
     private EnergyBar ebar = null;
-    private Location spawnLocation = null;
     private JsonObject jsonObject;
 
     protected List<Skill> skills = null;
@@ -44,7 +43,6 @@ public abstract class ChampionsPlayer {
 
     public ChampionsPlayer(Player player) {
         this.player = player;
-        this.spawnLocation = player.getWorld().getSpawnLocation(); // so that stuff doesn't crash
         getDefaultHotbar();
     }
 
@@ -97,17 +95,9 @@ public abstract class ChampionsPlayer {
         return getGame().isOnSameTeam(getPlayer(), player);
     }
 
-    public Location getSpawnLocation() {
-        return spawnLocation;
-    }
-    public void setSpawnLocation(Location spawnLocation) {
-        this.spawnLocation = spawnLocation;
-    }
-
     public void respawn(){//TODO: Respawn with the hotbar.
         player.setFallDistance(0);
         StatusApplier.getOrNew(player).removeStatus(Status.values());
-        player.teleport(this.spawnLocation);
         getInventory().clear();
         this.restockInventory();
         this.equip();
@@ -121,6 +111,10 @@ public abstract class ChampionsPlayer {
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
 
+    /**
+     * TODO: make this method null
+     * This method should be overridden to set up special effects that classes need.
+     */
     public void effects() {
         if (this instanceof Assassin) {
             StatusApplier.getOrNew(this.getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);

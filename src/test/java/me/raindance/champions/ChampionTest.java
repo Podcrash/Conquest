@@ -1,5 +1,6 @@
 package me.raindance.champions;
 
+import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.inventory.MenuCreator;
 import me.raindance.champions.kits.SkillInfo;
@@ -21,10 +22,10 @@ public class ChampionTest {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        Assertions.assertTrue(Communicator.isReady());
         SkillInfo.setUp();
 
         System.out.println(SkillInfo.getSkills(SkillType.Warden));
-
     }
 
     @Test

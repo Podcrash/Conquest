@@ -80,46 +80,6 @@ public class DomGameListener extends ListenerBase {
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
 
-        GameScoreboard gamescoreboard = game.getGameScoreboard();
-        //gamescoreboard.makeObjective();
-        //gamescoreboard.setupScoreboard();
-
-        /*
-        Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
-            Location red = game.getRedSpawn().get(0);
-            Location blue = game.getBlueSpawn().get(0);
-
-            for (int i = 0; i < game.getBlueTeam().size(); i++) {
-                Location spawn = game.getBlueSpawn().get(i);
-                Player player = game.getBlueTeam().get(i);
-                ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
-                Vector vector = VectorUtil.fromAtoB(spawn, red);
-                spawn.setDirection(vector);
-                championsPlayer.setSpawnLocation(spawn);
-                player.teleport(spawn);
-                championsPlayer.restockInventory();
-            }
-            for (int i = 0; i < game.getRedTeam().size(); i++) {
-                Location spawn = game.getRedSpawn().get(i);
-                Player player = game.getRedTeam().get(i);
-                Vector vector = VectorUtil.fromAtoB(spawn, blue);
-                spawn.setDirection(vector);
-                ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
-                championsPlayer.setSpawnLocation(spawn);
-                player.teleport(spawn);
-                championsPlayer.restockInventory();
-            }
-
-            Location specSpawn = game.getGameWorld().getSpawnLocation();
-            for(int i = 0; i < game.getSpectators().size(); i++) {
-                Player player = game.getSpectators().get(i);
-                player.teleport(specSpawn);
-                player.setGameMode(GameMode.SPECTATOR);
-            }
-        }, 0L);
-
-         */
-
         game.sendColorTab(false);
         CapturePointDetector capture = new CapturePointDetector(game.getId());
         game.registerResources(
@@ -148,19 +108,17 @@ public class DomGameListener extends ListenerBase {
         e.getGame().increment(victimTeam, 50);
 
         ChampionsPlayer victimPlayer;
-        if((victimPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim)) != null) {
-            victimPlayer.getSkills().forEach(skill -> {
-                if(skill instanceof TogglePassive)
-                    if(((TogglePassive) skill).isToggled())
-                        ((TogglePassive) skill).toggle();
-            });
-        }
+        if((victimPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim)) == null) return;
+        victimPlayer.getSkills().forEach(skill -> {
+            if(skill instanceof TogglePassive)
+                if(((TogglePassive) skill).isToggled())
+                    ((TogglePassive) skill).toggle();
+        });
     }
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
         ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho()).respawn();
-        ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho()).getGame().getRespawning().remove(e.getWho());
     }
 
     @EventHandler

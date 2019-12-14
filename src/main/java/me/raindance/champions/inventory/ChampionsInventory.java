@@ -119,8 +119,12 @@ public class ChampionsInventory {
     static void setHotBar(Inventory inventory, SkillType skillType) {
         int[] itemArray;
         switch (skillType) {
+            //they won't be merged just in case for easy access
             case Warden:
                 itemArray = new int[]{9, 10, 22, 22, 22, 22};
+                break;
+            case Vanguard:
+                itemArray = new int[] {9, 10, 22, 22, 22, 22};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);

@@ -41,6 +41,10 @@ public class SkillData {
         String cache = Communicator.getCacheValue(getCleanName());
         if(cache == null) {
             DescriptorTable table = TableOrganizer.getTable(DataTableType.DESCRIPTIONS);
+            if(table == null) {
+                this.description = Arrays.asList("Error loading skill descriptions!", "null");
+                return;
+            }
             table.requestCache(getCleanName());
             String value = table.getValue(getCleanName());
             if(value == null || value.isEmpty())
