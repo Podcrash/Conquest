@@ -10,6 +10,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,12 +29,14 @@ public abstract class Interaction extends Skill implements ICooldown {
             priority = EventPriority.HIGHEST
     )
     public void rightClick(PlayerInteractAtEntityEvent event) {
+        Entity entity = event.getRightClicked();
+        if(!(entity instanceof LivingEntity)) return;
         if (event.getPlayer() == getPlayer() && isHolding()) {
             if (!isInWater()) {
                 SkillUseEvent useEvent = new SkillUseEvent(this);
                 Bukkit.getPluginManager().callEvent(useEvent);
                 if (useEvent.isCancelled()) return;
-                Bukkit.getScheduler().runTask(Main.instance, () -> doSkill(event.getRightClicked()));
+                Bukkit.getScheduler().runTask(Main.instance, () -> doSkill((LivingEntity) entity));
                 hit = true;
                 new BukkitRunnable() {
                     @Override
@@ -45,7 +48,7 @@ public abstract class Interaction extends Skill implements ICooldown {
         }
     }
 
-    public abstract void doSkill(Entity clickedEntity);
+    public abstract void doSkill(LivingEntity clickedEntity);
 
     @EventHandler(
             priority = EventPriority.MONITOR

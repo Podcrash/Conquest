@@ -31,6 +31,9 @@ public abstract class Drop extends Skill {
 
         ItemStack holding = getPlayer().getItemInHand();
         String name = holding.getItemMeta().getDisplayName().toUpperCase();
+        if(getItemType() != ItemType.NULL) {
+            return name.contains(getItemType().getName());
+        }
         for(ItemType w : weapons) {
             if(name.contains(w.getName())) return true;
         }

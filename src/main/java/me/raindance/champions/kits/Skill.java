@@ -99,6 +99,9 @@ public abstract class Skill implements ISkill, DamageSource {
     public Player getPlayer() {
         return Bukkit.getPlayer(playerName);
     }
+    public ChampionsPlayer getChampionsPlayer() {
+        return ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer());
+    }
     public void setPlayer(Player player) {
         this.playerName = player.getName();
     }

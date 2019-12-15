@@ -2,9 +2,6 @@ package me.raindance.champions.game;
 
 import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.map.BaseGameMap;
-import com.podcrash.api.mc.map.IMap;
-import com.podcrash.api.mc.map.MapManager;
-import me.raindance.champions.Main;
 import me.raindance.champions.game.map.DominateMap;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
@@ -13,15 +10,10 @@ import com.podcrash.api.mc.game.objects.objectives.Emerald;
 import com.podcrash.api.mc.game.objects.objectives.Restock;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import com.podcrash.api.mc.world.WorldManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class DomGame extends Game {
     private List<CapturePoint> capturePoints;
