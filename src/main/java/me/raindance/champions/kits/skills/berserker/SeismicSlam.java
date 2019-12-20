@@ -25,8 +25,8 @@ import java.util.List;
 @SkillMetadata(skillType = SkillType.Berserker, invType = InvType.AXE)
 public class SeismicSlam extends Instant implements TimeResource, ICooldown {
     private boolean usage = false;
-    private double reach;
-    private int damage;
+    private final double reach = Math.pow((5.5d), 2d);
+    private final int damage = 4;
 
     @Override
     public float getCooldown() {
@@ -41,12 +41,6 @@ public class SeismicSlam extends Instant implements TimeResource, ICooldown {
     @Override
     public ItemType getItemType() {
         return ItemType.AXE;
-    }
-
-    public SeismicSlam() {
-        super();
-        this.reach = FastMath.pow((5.5d), 2d);
-        this.damage = 4;
     }
 
     @Override

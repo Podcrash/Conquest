@@ -27,7 +27,7 @@ public final class SkillInfo {
     public static void setUp() {
         System.out.println("Loading classes");
         try {
-            List<String> list = Arrays.asList("warden", "duelist", "vanguard");
+            List<String> list = Arrays.asList("warden", "duelist", "vanguard", "berserker", "marksman", "hunter", "thief");
             for(String e : list)
                 SkillInfo.addSkills(e);
             skillData.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));
@@ -47,7 +47,7 @@ public final class SkillInfo {
 
             Skill skill = (Skill) emptyConstructor(skillClass);
             System.out.println("test2");
-            if(skill == null) throw new RuntimeException("skill cannot be null!");
+            if(skill == null) throw new RuntimeException("skill cannot be null! current at: " + info.getName());
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
             System.out.println("test3");
             SkillType skillType = annot.skillType();

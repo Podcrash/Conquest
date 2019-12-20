@@ -11,11 +11,13 @@ public class EnergyBar implements TimeResource {
     private double lastTimeUsed;
     private boolean cancel = false;
     private boolean enabled = true;
+    private double naturalRegenRate;
 
     public EnergyBar(Player p1, double eMax) {
         owner = p1;
         MAX_ENERGY = eMax;
         setEnergy(MAX_ENERGY);
+        this.naturalRegenRate = 0.5D;
         TimeHandler.repeatedTime(1,0, this);
     }
 
@@ -52,7 +54,7 @@ public class EnergyBar implements TimeResource {
     // timeHandler methods
     public void task() {
         if(System.currentTimeMillis() - lastTimeUsed >= 20 && energy <= MAX_ENERGY && enabled)
-            setEnergy(energy + 0.5);
+            setEnergy(energy + naturalRegenRate);
     }
 
     public boolean cancel()

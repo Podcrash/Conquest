@@ -9,6 +9,7 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
 import com.podcrash.api.mc.sound.SoundPlayer;
@@ -24,9 +25,9 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 
 @SkillMetadata(skillType = SkillType.Marksman, invType = InvType.BOW)
-public class ExplosiveBolt extends BowShotSkill implements ICooldown {
+public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct {
     private double range;
-    private final WrapperPlayServerWorldParticles particle;
+    private WrapperPlayServerWorldParticles particle;
     private WrapperPlayServerWorldParticles explosion;
 
     @Override
@@ -39,19 +40,12 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown {
         return "Explosive Bolt";
     }
 
-    public ExplosiveBolt() {
-        super();
+    @Override
+    public void afterConstruction() {
         this.range = FastMath.pow(5.5D, 2D);
-        this.particle = ParticleGenerator.createParticle(null, EnumWrappers.Particle.EXPLOSION_NORMAL, 2, 0,0,0);
+        particle = ParticleGenerator.createParticle(null, EnumWrappers.Particle.EXPLOSION_NORMAL, 2, 0,0,0);
+        explosion = ParticleGenerator.createParticle(null, EnumWrappers.Particle.EXPLOSION_HUGE, 1, 0,0,0);
 
-        /*
-        this.explosion = new WrapperPlayServerExplosion();
-        this.explosion.setRadius((float) Math.sqrt(this.range));
-        explosion.setPlayerVelocityX(0);
-        explosion.setPlayerVelocityY(0);
-        explosion.setPlayerVelocityZ(0);
-        */
-        this.explosion = ParticleGenerator.createParticle(null, EnumWrappers.Particle.EXPLOSION_HUGE, 1, 0,0,0);
     }
 
     @Override

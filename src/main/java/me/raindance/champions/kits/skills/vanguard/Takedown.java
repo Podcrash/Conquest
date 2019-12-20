@@ -12,6 +12,7 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.util.EntityUtil;
@@ -30,10 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.AXE)
-public class Takedown extends Instant implements ICooldown {
+public class Takedown extends Instant implements ICooldown, IConstruct {
     private final float hitbox = 0.55f;
     private CollideBeforeHitGround hitGround;
-
 
     @Override
     public float getCooldown() {
@@ -50,8 +50,9 @@ public class Takedown extends Instant implements ICooldown {
         return ItemType.AXE;
     }
 
-    public Takedown() {
-        super();
+    @Override
+    public void afterConstruction() {
+
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2);
         this.hitGround = new CollideBeforeHitGround(getPlayer())
                 .changeEvaluation(() -> (getPlayer().getNearbyEntities(hitbox, hitbox, hitbox).size() > 0) || EntityUtil.onGround(getPlayer()))

@@ -23,9 +23,7 @@ public class ChampionTest {
             e.printStackTrace();
         }
         Assertions.assertTrue(Communicator.isReady());
-        SkillInfo.setUp();
-
-        System.out.println(SkillInfo.getSkills(SkillType.Warden));
+        Assertions.assertDoesNotThrow(SkillInfo::setUp);
     }
 
     @Test

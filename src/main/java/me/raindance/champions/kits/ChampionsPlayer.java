@@ -15,6 +15,7 @@ import me.raindance.champions.kits.classes.Assassin;
 import me.raindance.champions.kits.classes.Mage;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundWrapper;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
@@ -66,8 +67,9 @@ public abstract class ChampionsPlayer {
     public void resetCooldowns() {
         for(Skill skill : skills) {
             skill.setLastUsed(0);
+            if(skill instanceof IConstruct)
+                ((IConstruct) skill).afterRespawn();
         }
-
     }
 
     public String getName() {
@@ -108,6 +110,8 @@ public abstract class ChampionsPlayer {
         for(Player player : players){
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
+
+
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
 

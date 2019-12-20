@@ -126,6 +126,15 @@ public class ChampionsInventory {
             case Vanguard:
                 itemArray = new int[] {9, 10, 22, 22, 22, 22};
                 break;
+            case Berserker:
+                itemArray = new int[] {28, 22, 22, 22, 22};
+                break;
+            case Duelist:
+                itemArray = new int[] {27, 22, 22, 22, 22};
+                break;
+            case Marksman:
+                itemArray = new int[] {9, 29, 22, 22, 22};
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);
         }
