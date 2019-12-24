@@ -10,22 +10,26 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.util.VectorUtil;
+import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.SWORD)
-public class ChainedHook extends ChargeUp {
+@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.AXE)
+public class ChainedHook extends Instant implements ICooldown {
     private float vect;
 
     @Override
@@ -34,8 +38,8 @@ public class ChainedHook extends ChargeUp {
     }
 
     @Override
-    public float getRate() {
-        return 0;
+    public ItemType getItemType() {
+        return ItemType.AXE;
     }
 
     public ChainedHook() {
@@ -44,9 +48,13 @@ public class ChainedHook extends ChargeUp {
     }
 
     @Override
+    protected void doSkill(PlayerInteractEvent event, Action action) {
+
+    }
+
     public void release() {
         Vector vector = getPlayer().getLocation().getDirection();
-        double charge = getCharge();
+        double charge = 0.75D;
         Vector itemVector = vector.clone().normalize().multiply(this.vect/1.25F);
         Location oldLocation = getPlayer().getLocation();
         Item itemItem = ItemManipulationManager.intercept(getPlayer(), Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(),itemVector.setY(itemVector.getY() + 0.2).multiply(0.5F + 0.5F * charge),

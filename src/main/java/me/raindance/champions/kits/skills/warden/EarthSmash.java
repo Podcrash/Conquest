@@ -26,14 +26,13 @@ public class EarthSmash extends Instant implements ICooldown {
         return 16;
     }
 
-    @EventHandler
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
-        if(!rightClickCheck(action) && onCooldown()) return;
+    public void doSkill(PlayerInteractEvent event, Action action) {
+        if(!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         Location location = getPlayer().getLocation();
-        List<Player> players = getPlayers();
-        for(Player enemy : players) {
+        List<LivingEntity> players = location.getWorld().getLivingEntities();
+        for(LivingEntity enemy : players) {
             if(isAlly(enemy) || getPlayer() == enemy) continue;
             double dist = location.distanceSquared(enemy.getLocation());
             if(dist > 16) continue;

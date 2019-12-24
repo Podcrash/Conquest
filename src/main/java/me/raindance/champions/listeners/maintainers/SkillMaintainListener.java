@@ -38,7 +38,6 @@ public class SkillMaintainListener extends ListenerBase {
             return;
         }
         ChampionsPlayer championsPlayer = e.getSkill().getChampionsPlayer();
-        e.getPlayer().sendMessage(e.getSkill().getUsedMessage());
         if(championsPlayer.isSilenced()){
             e.setCancelled(true);
             e.getPlayer().sendMessage(String.format("%sCondition> %sYou are silenced for %s%.2f %sseconds",
@@ -48,5 +47,7 @@ public class SkillMaintainListener extends ListenerBase {
                     StatusApplier.getOrNew(e.getPlayer()).getRemainingDuration(Status.SILENCE) / 1000L,
                     ChatColor.GRAY));
         }
+
+       // if(!e.isCancelled()) e.getPlayer().sendMessage(e.getSkill().getUsedMessage());
     }
 }

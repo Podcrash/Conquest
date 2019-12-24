@@ -76,12 +76,7 @@ public abstract class Skill implements ISkill, DamageSource {
     }
     protected boolean isHolding() {
         String name = getItemType().getName();
-        return name == null || getPlayer()
-                .getItemInHand()
-                .getType()
-                .name()
-                .toLowerCase()
-                .contains(name.toLowerCase());
+        return name == null || getPlayer().getItemInHand().getType().name().toLowerCase().contains(name.toLowerCase());
     }
 
     //getters

@@ -34,7 +34,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         packet.setEntityId(attacked.getEntityId());
         packet.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
 
-        AbstractPacket packet2 = ParticleGenerator.createBlockEffect(attacked.getLocation().toVector(), Material.WOODEN_DOOR.getId());
+        AbstractPacket packet2 = ParticleGenerator.createBlockEffect(attacked.getLocation().toVector(), Material.OBSIDIAN.getId());
         for(Player player : getPlayers()) {
             packet.sendPacket(player);
             packet2.sendPacket(player);

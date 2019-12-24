@@ -53,8 +53,10 @@ public abstract class ChampionsPlayer {
     public boolean equip(){
         if(armor[0] == null) return false;
         ItemStack[] armors = new ItemStack[4];
-        for(int i = 0; i < armors.length; i++){
-            net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(new ItemStack(armor[i]));
+        for(int i = 0; i < armor.length; i++){
+            Material mat = armor[i];
+            if(mat == null) continue;
+            net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(new ItemStack(mat));
             NBTTagCompound tag = new NBTTagCompound();
             tag.setBoolean("Unbreakable", true);
             nmsStack.setTag(tag);

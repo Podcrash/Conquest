@@ -135,6 +135,12 @@ public class ChampionsInventory {
             case Marksman:
                 itemArray = new int[] {9, 29, 22, 22, 22};
                 break;
+            case Hunter:
+                itemArray = new int[] {9, 29, 22, 22, 22};
+                break;
+            case Thief:
+                itemArray = new int[] {9, 29, 22, 22, 22};
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);
         }

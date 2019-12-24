@@ -51,7 +51,7 @@ public class Vigilance extends Instant implements TimeResource, ICooldown {
         applier.applyStatus(Status.WEAKNESS, duration, 0);
         applier.applyStatus(Status.RESISTANCE, duration, 2);
         applier.applyStatus(Status.SLOW, duration, 2);
-        applier.applyStatus(Status.ROOTED, duration, 1);
+        applier.applyStatus(Status.GROUND, duration, 1);
         TimeHandler.repeatedTime(1, 0, this);
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", 0.75F, 10, getPlayers());

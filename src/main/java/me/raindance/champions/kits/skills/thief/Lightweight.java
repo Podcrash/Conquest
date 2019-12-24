@@ -5,12 +5,14 @@ import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -26,7 +28,7 @@ public class Lightweight extends Passive implements IConstruct {
 
     @EventHandler
     public void fall(EntityDamageEvent e) {
-        if(e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+        if(getPlayer() == e.getEntity() && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             e.setDamage(e.getDamage() - 3);
         }
     }
@@ -34,6 +36,9 @@ public class Lightweight extends Passive implements IConstruct {
     @Override
     public void afterConstruction() {
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+        });
     }
 
     @Override

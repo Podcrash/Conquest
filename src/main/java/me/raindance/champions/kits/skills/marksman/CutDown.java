@@ -40,7 +40,7 @@ public class CutDown extends Passive {
     public void shootBow(EntityShootBowEvent e) {
         if(e.getEntity() == getPlayer()) {
             WrapperPlayServerWorldParticles packet =
-                    ParticleGenerator.createParticle(e.getProjectile().getLocation().toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0, 255,0}, 2,0,0,0);
+                    ParticleGenerator.createParticle(e.getProjectile().getLocation().toVector(), EnumWrappers.Particle.SPELL_INSTANT, new int[]{0, 255,0}, 2,0,0,0);
             ParticleGenerator.generateProjectile((Projectile) e.getProjectile(), packet);
         }
     }

@@ -1,6 +1,5 @@
 package me.raindance.champions.kits.skills.rogue;
 
-import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.damage.DamageApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -16,7 +15,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
@@ -88,6 +86,7 @@ public class PhantomDash extends Instant implements ICooldown {
 
         //teleport
         getPlayer().teleport(damager.getLocation());
+        this.pearl = null;
     }
 
     /**

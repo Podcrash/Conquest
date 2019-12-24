@@ -3,7 +3,6 @@ package me.raindance.champions.listeners;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.Main;
@@ -46,19 +45,6 @@ public class PlayerJoinEventTest extends ListenerBase {
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        putPlayerDB(p.getUniqueId());
-        InvFactory.applyLastBuild(p);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
-        if(GameManager.getGame() != null) {
-            if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
-                GameManager.addSpectator(e.getPlayer());
-            else {
-                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                GameManager.addPlayer(e.getPlayer());
-            }
-        }
-        Main.getInstance().setupPermissions(p);
         if (p.getWorld().getName().equals("world")) {
             p.getInventory().setItem(35, beacon);
             //adds the PermissionAttachment so permissions work on the players
@@ -78,8 +64,20 @@ public class PlayerJoinEventTest extends ListenerBase {
                     .build();
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
             CustomEntityFirework.spawn(p.getLocation(), effect, players.toArray(new Player[players.size()]));
-
         }
+        if(GameManager.getGame() != null) {
+            if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
+                GameManager.addSpectator(e.getPlayer());
+            else {
+                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                GameManager.addPlayer(e.getPlayer());
+            }
+        }
+        putPlayerDB(p.getUniqueId());
+        InvFactory.applyLastBuild(p);
+        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
+            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
+        Main.getInstance().setupPermissions(p);
     }
 
     @EventHandler

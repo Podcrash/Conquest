@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 public class Assurance extends Passive {
     @Override
     public String getName() {
-        return "Perserverance}";
+        return "Assurance";
     }
 
     @Override

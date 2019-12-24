@@ -6,6 +6,7 @@ import com.podcrash.api.db.ChampionsKitTable;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.util.MathUtil;
+import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.enums.InvType;
@@ -30,7 +31,8 @@ public class MenuCreator {
 
     public static Inventory createGeneralMenu() {
         ItemStack[] items = ChampionsInventory.getClassItemList();
-        Inventory inventory = Bukkit.createInventory(null, MathUtil.floor(9, items.length), "Class Menu");
+        int size =  MathUtil.ceil(9, items.length);
+        Inventory inventory = Bukkit.createInventory(null, size, "Class Menu");
         //this is safer, just in case items have some null elements
         for(ItemStack item : items)
             if(item != null) inventory.addItem(item);
@@ -43,10 +45,10 @@ public class MenuCreator {
         return invTypes.size();
     }
 
-    public static Inventory createKitMenu(SkillType skillType) {
-        return createKitMenu(skillType, new Integer[0]);
-    }
-    /**
+     public static Inventory createKitMenu(SkillType skillType) {
+     return createKitMenu(skillType, new Integer[0]);
+     }
+     /**
      * Create the kit menu
      * @param skillType
      * @param skillIDs
@@ -58,28 +60,32 @@ public class MenuCreator {
         System.out.println("Creating inventory with " + rows + " rows!");
         String title = ChatColor.GREEN + skillType.getName();
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
-        int i = 0;
+        Main.getInstance().getLogger().info("Inventory max size: " + inventory.getSize());
+        int cursor = 0;
         //get all the invtypes
+        invOuter:
         for(InvType invType : InvType.details()) {
             //get all the skills related to the invtype
             List<SkillData> dataList = SkillInfo.getSkills(invType);
+            boolean skillPresent = false;
             //make a cursor for the inventory
-            int entry = i + 1;
+            int entry = cursor + 1;
             for(SkillData data : dataList) {
                 //if the skilltype doesn't correspond, skip
                 if(data.getSkillType() != skillType) continue;
+                skillPresent = true;
                 ItemStack item = InventoryData.skillToItemStack(data);
-                if(skillSet.contains(data.getId()))
+                if(skillSet.contains(data.getId()) || data.getInvType() == InvType.INNATE)
                     item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
                 inventory.setItem(entry, item);
                 entry++;
                 //set the item and move the cursor
             }
-            if(dataList.size() > 0) {
+            if(skillPresent) {
                 //if the yielded list has skills for it, then set the item tag and move the primary
                 //cursor over 1 row
-                inventory.setItem(i, InventoryData.getInvItem(invType));
-                i += 9;
+                inventory.setItem(cursor, InventoryData.getInvItem(invType));
+                cursor += 9;
             }
         }
         return inventory;
@@ -134,7 +140,8 @@ public class MenuCreator {
                 final ItemMeta meta = item.getItemMeta();
 
                 meta.setDisplayName(name);
-                String dataJSON = table.getJSONData(uuid, clasz, i);
+                //String dataJSON = table.getJSONData(uuid, clasz, i);
+                String dataJSON = null;
                 if(name.contains("Apply Build") && dataJSON != null) {
                     Dye data = ((Dye) item.getData());
                     data.setColor(color);

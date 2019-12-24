@@ -13,49 +13,25 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.List;
 
-public class Marksman extends ChampionsPlayer {
+public class Hunter extends ChampionsPlayer {
 
-    public Marksman(Player player, List<Skill> skills) {
+    public Hunter(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
         setSound(new SoundWrapper("random.break", 0.95F, 115));
-        this.armor = new Material[]{Material.LEATHER_BOOTS, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_CHESTPLATE, Material.LEATHER_HELMET};
+        this.armor = new Material[]{Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_HELMET};
     }
 
     public String getName() {
-        return "Marksman";
-    }
-
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
+        return "Hunter";
     }
     public SkillType getType() {
-        return SkillType.Marksman;
+        return SkillType.Hunter;
     }
 
 
     @Override
     public int getHP() {
-        return 35;
-    }
-
-    @Override
-    public boolean equip() {
-        if(!super.equip()) return false;
-        EntityEquipment equipment = getPlayer().getEquipment();
-        colorRed(equipment.getBoots());
-        colorRed(equipment.getHelmet());
-        return true;
-    }
-
-    private void colorRed(ItemStack leatherArmor) {
-        LeatherArmorMeta meta = (LeatherArmorMeta) leatherArmor.getItemMeta();
-        meta.setColor(Color.RED);
-
-        leatherArmor.setItemMeta(meta);
+        return 40;
     }
 }

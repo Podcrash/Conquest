@@ -10,6 +10,9 @@ public enum InvType {
     INNATE("Innate"), //Innate
     DROP("Active");
 
+    //The reason why this is written out so that it stays in order.
+    private final static InvType[] details = new InvType[] {SWORD, AXE, SHOVEL, DROP, BOW, PASSIVEA, PASSIVEB, INNATE};;
+
     private String name;
     InvType(String name) {
         this.name = name;
@@ -20,7 +23,6 @@ public enum InvType {
     }
 
 
-    private final static InvType[] details = InvType.values();
     public static InvType[] details() {
         return details;
     }

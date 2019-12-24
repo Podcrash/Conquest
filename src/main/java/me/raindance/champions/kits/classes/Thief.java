@@ -2,17 +2,21 @@ package me.raindance.champions.kits.classes;
 
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundWrapper;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.List;
 
-public class Assassin extends ChampionsPlayer {
-    public Assassin(Player player, List<Skill> skills) {
+public class Thief extends ChampionsPlayer {
+    public Thief(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
         setFallDamage(1.5d);
@@ -20,25 +24,34 @@ public class Assassin extends ChampionsPlayer {
         this.armor = new Material[]{Material.LEATHER_BOOTS, Material.LEATHER_LEGGINGS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET};
     }
 
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
-    }
-
     public String getName() {
-        return "Assassin";
+        return "Thief";
     }
     public SkillType getType() {
-        return SkillType.Assassin;
-    }
-
-    @Override
-    public void respawn() {
-        super.respawn();
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true, true);
+        return SkillType.Thief;
     }
 
     @Override
     public int getHP() {
-        return 0;
+        return 30;
+    }
+
+
+    @Override
+    public boolean equip() {
+        if(!super.equip()) return false;
+        EntityEquipment equipment = getPlayer().getEquipment();
+        for(ItemStack armor : equipment.getArmorContents()) {
+            colorBlack(armor);
+        }
+        return true;
+    }
+
+    //TODO: itemstackutil methods for this
+    private void colorBlack(ItemStack leatherArmor) {
+        LeatherArmorMeta meta = (LeatherArmorMeta) leatherArmor.getItemMeta();
+        meta.setColor(Color.BLACK);
+
+        leatherArmor.setItemMeta(meta);
     }
 }

@@ -27,14 +27,11 @@ import java.util.List;
 public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeResource {
     private List<Arrow> arrows = new ArrayList<>();
 
-    public Longshot() {
-
-    }
-
     //TODO: Make this its own static method within the engine
     private void updateXP() {
         if(!onCooldown()) {
             getPlayer().setLevel(0);
+            getPlayer().setExp(0);
         }else {
             double cooldown = cooldown();
             int level = (int) Math.floor(cooldown);
@@ -84,13 +81,13 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
     @EventHandler(priority = EventPriority.LOW)
     protected void shotArrow(EntityShootBowEvent event) {
         if (event.isCancelled()) return;
-        if (!onCooldown()) {
-            if(getPlayer() != event.getEntity() && !(event.getProjectile() instanceof Arrow)) return;
-            if (getPlayer().isSneaking()) return;
-            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
-            arrows.add((Arrow) event.getProjectile());
-            this.setLastUsed(System.currentTimeMillis());
-        } else this.getPlayer().sendMessage(getCooldownMessage());
+        if (onCooldown()) return;
+        if(getPlayer() != event.getEntity() && !(event.getProjectile() instanceof Arrow)) return;
+        if (getPlayer().isSneaking()) return;
+
+        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
+        arrows.add((Arrow) event.getProjectile());
+        this.setLastUsed(System.currentTimeMillis());
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -99,7 +96,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         if(event.getCause() != Cause.PROJECTILE || event.getAttacker() != getPlayer()) return;
         Arrow arr = event.getArrow();
         event.setModified(true);
-        event.setDamage(event.getDamage() - 3);
+        event.setDamage(event.getDamage() - 1);
         if (!arrows.contains(arr)) return;
         Location vLocation = event.getVictim().getLocation();
         Location dLocation = getPlayer().getLocation();

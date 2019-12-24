@@ -26,7 +26,7 @@ public class MapListener extends ListenerBase {
     public void onTouch(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
-        if (table.hasRole(e.getPlayer().getUniqueId(), Perm.BUILD)) { //Switch out for permissions
+        if (e.getPlayer().hasPermission("champions.build")) { //Switch out for permissions
             Player p = e.getPlayer();
             ChampionsMapManager mapper = ChampionsMapManager.getInstance();
             Block block = e.getClickedBlock();

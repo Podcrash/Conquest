@@ -15,7 +15,7 @@ public class Warden extends ChampionsPlayer {
         super(player);
         this.skills = skills;
         setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 57));
-        this.armor = new Material[]{Material.IRON_BOOTS, Material.IRON_LEGGINGS, Material.IRON_CHESTPLATE, Material.DIAMOND_HELMET};
+        this.armor = new Material[]{Material.IRON_BOOTS, Material.IRON_LEGGINGS, Material.DIAMOND_CHESTPLATE, Material.IRON_HELMET};
     }
 
     public SkillType getType() {

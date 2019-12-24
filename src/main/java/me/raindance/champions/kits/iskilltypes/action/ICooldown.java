@@ -39,7 +39,7 @@ public interface ICooldown {
 
     default String getCanUseMessage() {
         return String.format(
-                "%sRecharge> %sYou can use %s%s %s.",
+                "%sRecharge> %sYou can use %s%s%s.",
                 ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
 }

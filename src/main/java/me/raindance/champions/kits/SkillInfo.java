@@ -21,8 +21,8 @@ public final class SkillInfo {
 
     //wondering if I should keep this.
     private final static Map<Integer, SkillData> idDataMap = new HashMap<>();
-    private final static Map<SkillType, List<Integer>> skillTypeCache = new EnumMap<>(SkillType.class);
-    private final static Map<InvType, List<Integer>> invTypeCache = new EnumMap<>(InvType.class);
+    private final static Map<SkillType, int[]> skillTypeCache = new EnumMap<>(SkillType.class);
+    private final static Map<InvType, int[]> invTypeCache = new EnumMap<>(InvType.class);
 
     public static void setUp() {
         System.out.println("Loading classes");
@@ -37,7 +37,6 @@ public final class SkillInfo {
         }
     }
     private static void addSkills(String championName) throws IOException, ClassNotFoundException {
-        System.out.println("test1");
         String path = "me.raindance.champions.kits.skills." + championName;
         ClassPath cp = ClassPath.from(Adrenaline.class.getClassLoader());
         Set<ClassPath.ClassInfo> classInfoSet = cp.getTopLevelClasses(path);
@@ -46,15 +45,12 @@ public final class SkillInfo {
             Class<?> skillClass = Class.forName(info.getName());
 
             Skill skill = (Skill) emptyConstructor(skillClass);
-            System.out.println("test2");
             if(skill == null) throw new RuntimeException("skill cannot be null! current at: " + info.getName());
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
-            System.out.println("test3");
             SkillType skillType = annot.skillType();
             InvType invType = annot.invType();
 
             addSkill(skillType, invType, skill);
-            System.out.println("test4");
         }
     }
     private static void addSkill(SkillType skillType, InvType invType, Skill skill) {
@@ -137,7 +133,9 @@ public final class SkillInfo {
             if(data.getSkillType() == skillType)
                 intList.add(i);
         }
-        skillTypeCache.put(skillType, intList);
+        int[] ids = new int[intList.size()];
+        for(int i = 0; i < ids.length; i++) ids[i] = intList.get(i);
+        skillTypeCache.put(skillType, ids);
     }
     private static void cacheInvType(InvType invType) {
         List<Integer> intList = new ArrayList<>();
@@ -146,7 +144,9 @@ public final class SkillInfo {
             if(data.getInvType() == invType)
                 intList.add(i);
         }
-        invTypeCache.put(invType, intList);
+        int[] ids = new int[intList.size()];
+        for(int i = 0; i < ids.length; i++) ids[i] = intList.get(i);
+        invTypeCache.put(invType, ids);
     }
 
     public static List<SkillData> getSkillData() {

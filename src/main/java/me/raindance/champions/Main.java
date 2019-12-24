@@ -175,8 +175,6 @@ public class Main extends JavaPlugin {
         }
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
-
-        getLogger().info(SkillInfo.getSkills(SkillType.Warden).toString());
     }
     @Override
     public void onLoad() {
@@ -189,6 +187,7 @@ public class Main extends JavaPlugin {
         Bukkit.getScheduler().cancelAllTasks();
         ChampionsPlayerManager.getInstance().clear();
         //CustomEntityType.unregisterEntities();
+        GameManager.destroyCurrentGame();
 
     }
 

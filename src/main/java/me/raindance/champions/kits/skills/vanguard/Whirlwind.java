@@ -9,6 +9,7 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.resources.TimeResource;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 @SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
-public class Whirlwind extends Instant implements ICooldown {
+public class Whirlwind extends Instant implements ICooldown, IConstruct {
     private int distance;
     private int distanceSquared;
     private int maxDamage;
@@ -52,7 +53,10 @@ public class Whirlwind extends Instant implements ICooldown {
         this.distanceSquared = distance * distance;
         this.maxDamage = 4;
         this.multiplier = 1.7F + 0.2F * 4;
+    }
 
+    @Override
+    public void afterConstruction() {
         if(pleaseLoad[4][1] == 0 && pleaseLoad[32][0] == 0) {
             final double pp = (6D * Math.PI);
             int length = pleaseLoad.length;
@@ -117,7 +121,7 @@ public class Whirlwind extends Instant implements ICooldown {
         spiral(center1);
         for(Player player : getPlayers()) {
 
-            if (player != getPlayer() /*|| isAlly(player)*/) {
+            if (player != getPlayer() && !isAlly(player)) {
                 Location center = center1.clone();
                 double diff = center.distanceSquared(player.getLocation());
 

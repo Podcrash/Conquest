@@ -32,8 +32,10 @@ public class InventoryData {
     }
 
     static ItemStack skillToItemStack(SkillData data) {
+        Material defaultMat = Material.BOOK;
+        if(data.getInvType() == InvType.INNATE) defaultMat = Material.NETHER_STAR;
         ItemStack item = ItemStackUtil.createItem(
-                Material.BOOK,
+                defaultMat,
                 ChatColor.BOLD + data.getName(),
                 data.getDescription());
         ItemMeta meta = item.getItemMeta();
@@ -68,8 +70,10 @@ public class InventoryData {
                 Dye green = new Dye();
                 green.setColor(DyeColor.GREEN);
                 ItemStack itemStack2 = green.toItemStack(1);
-                setItemName(itemStack2, "Drop");
+                setItemName(itemStack2, "Active Ability");
                 return itemStack2;
+            case INNATE:
+                return ItemStackUtil.createItem(Material.DIAMOND, "Innate Passive", null);
             default:
                 throw new IllegalArgumentException("Not allowed");
         }
