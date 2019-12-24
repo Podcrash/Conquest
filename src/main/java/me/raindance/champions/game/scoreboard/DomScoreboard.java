@@ -54,6 +54,7 @@ public class DomScoreboard extends GameScoreboard {
      * Update the dom scoreboard values.
      */
     public void update(){
+        for(GTeam team : getGame().getTeams()) updateScore(team.getTeamEnum());
     }
 
     @Override
@@ -61,6 +62,16 @@ public class DomScoreboard extends GameScoreboard {
 
     }
 
+    public void updateScore(TeamEnum team) {
+        List<String> lines = getLines();
+        for(int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if(line.contains(team.getName())) continue;
+            //prev is the exact same integer.
+            setLine(i-2, String.valueOf(getGame().getTeam(team).getScore()));
+            break;
+        }
+    }
     /**
      * Update if the point is captured
      * @param team the team in which the point was captured.
@@ -71,7 +82,7 @@ public class DomScoreboard extends GameScoreboard {
         for(int i = 0; i < lines.size(); i++){
             String line = lines.get(i);
             if(!line.contains(capturePointName)) continue;
-            setLine(i, team.getChatColor() + capturePointName);
+            setLine(i + 1, team.getChatColor() + capturePointName);
             break;
         }
     }
@@ -98,7 +109,7 @@ public class DomScoreboard extends GameScoreboard {
         for(int i = 0; i < lines.size(); i++){
             String line = lines.get(i);
             if(!line.contains(capturePointName)) continue;
-            setLine(i, newLine);
+            setLine(i + 1, newLine);
             break;
         }
     }
