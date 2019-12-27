@@ -20,7 +20,6 @@ import java.util.*;
 public abstract class Skill implements ISkill, DamageSource {
     private String playerName;
     protected final Skill instance = this;
-    private String canUseMessage;
     private long lastUsed = 0L;
 
     public Skill() {
