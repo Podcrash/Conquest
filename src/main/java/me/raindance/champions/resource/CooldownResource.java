@@ -35,7 +35,9 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public void task() {
-        Skill skill = ChampionsPlayerManager.getInstance().getChampionsPlayer(player).getCurrentSkillInHand();
+        ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
+        if(cPlayer == null) return;
+        Skill skill = cPlayer.getCurrentSkillInHand();
         if(skill != null && skill == this.skill) {
             WrappedChatComponent component = SkillTitleSender.coolDownBar(this.skill);
             TitleSender.sendTitle(player, component);
@@ -48,7 +50,7 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public boolean cancel() {
-        return !skill.onCooldown();
+        return skill == null || !skill.onCooldown();
     }
 
     @Override

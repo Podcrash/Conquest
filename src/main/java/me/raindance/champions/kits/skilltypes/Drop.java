@@ -29,6 +29,7 @@ public abstract class Drop extends Skill {
     public abstract void drop(PlayerDropItemEvent e);
 
     protected boolean isHolding(@Nonnull ItemStack dropped) {
+        if(dropped.getItemMeta() == null || dropped.getItemMeta().getDisplayName() == null) return false;
         ItemType[] weapons = ItemType.details();
 
         String name = dropped.getItemMeta().getDisplayName().toUpperCase();

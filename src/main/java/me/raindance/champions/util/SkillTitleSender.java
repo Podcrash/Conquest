@@ -24,8 +24,6 @@ public final class SkillTitleSender {
         */
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(skill.getName());
-        stringBuilder.append(' ');
-        stringBuilder.append(skill.getLevel());
         stringBuilder.append(": ");
         stringBuilder.append(ChatColor.BOLD);
         stringBuilder.append(ChatColor.GREEN);

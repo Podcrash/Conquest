@@ -32,4 +32,13 @@ public abstract class Passive extends Skill {
         }
         return null;
     }
+
+    /**
+     * Most of the time, this is null.
+     * @return
+     */
+    @Override
+    public ItemType getItemType() {
+        return ItemType.NULL;
+    }
 }

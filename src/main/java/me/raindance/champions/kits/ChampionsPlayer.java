@@ -4,24 +4,18 @@ package me.raindance.champions.kits;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.podcrash.api.mc.game.TeamEnum;
-import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.inventory.ChampionsItem;
-import me.raindance.champions.inventory.InventoryData;
-import me.raindance.champions.kits.classes.Assassin;
-import me.raindance.champions.kits.classes.Mage;
+import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.ItemArmor;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -121,15 +115,7 @@ public abstract class ChampionsPlayer {
      * TODO: make this method null
      * This method should be overridden to set up special effects that classes need.
      */
-    public void effects() {
-        if (this instanceof Assassin) {
-            StatusApplier.getOrNew(this.getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance,
-                    () -> StatusApplier.getOrNew(this.getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1), 4);
-        } else if (this instanceof Mage) {
-            this.setUsesEnergy(true);
-        }
-    }
+    public void effects() {}
 
     public String skillsRead() {
         StringBuilder builder = new StringBuilder();
@@ -277,7 +263,7 @@ public abstract class ChampionsPlayer {
     public Skill getCurrentSkillInHand() {
         final Material material = player.getItemInHand().getType();
         for(Skill skill : skills) {
-            if(skill.getItemType() == null) continue;
+            if(skill.getItemType() == null || skill.getItemType() == ItemType.NULL) continue;
             String name = skill.getItemType().getName();
             if(name != null && material.name().contains(name)) return skill;
         }

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(skillType = SkillType.Berserker, invType = InvType.AXE)
-public class SeismicSlam extends Instant implements TimeResource, ICooldown {
+public class SeismicShockwave extends Instant implements TimeResource, ICooldown {
     private boolean usage = false;
     private final double reach = Math.pow((5.5d), 2d);
     private final int damage = 4;
@@ -35,7 +35,7 @@ public class SeismicSlam extends Instant implements TimeResource, ICooldown {
 
     @Override
     public String getName() {
-        return "Seismic Slam";
+        return "Seismic Shockwave";
     }
 
     @Override

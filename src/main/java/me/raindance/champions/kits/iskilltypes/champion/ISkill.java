@@ -22,11 +22,6 @@ public interface ISkill extends Listener {
     String getName();
     ItemType getItemType();
 
-    //TODO: REMOVE THIS
-    default int getLevel() {
-        return 1;
-    }
-
     Player getPlayer();
     void setPlayer(Player player);
     default <T extends ChampionsPlayer> T getChampionsPlayer() {

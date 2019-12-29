@@ -44,7 +44,7 @@ public class DomScoreboard extends GameScoreboard {
             points.add(point.getName());
         }
 
-        createGameScoreboard(ChatColor.LIGHT_PURPLE + "Imperium ", "Control", points);
+        createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
     }
 
     public void createScoreboard() {

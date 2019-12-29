@@ -11,10 +11,8 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.events.ApplyKitEvent;
 import me.raindance.champions.inventory.ChampionsItem;
-import me.raindance.champions.inventory.InventoryData;
 import me.raindance.champions.inventory.SkillData;
-import me.raindance.champions.kits.classes.Knight;
-import me.raindance.champions.kits.enums.InvType;
+import me.raindance.champions.kits.classes.Duelist;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.IInjector;
@@ -22,7 +20,6 @@ import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
@@ -192,7 +189,9 @@ public class ChampionsPlayerManager {
     }
 
     public ChampionsPlayer defaultBuild(Player player) {
-        Knight knight = new Knight(player, new ArrayList<>());
+        List<Skill> skills = new ArrayList<>();
+
+        Duelist knight = new Duelist(player, skills);
         return knight;
     }
 

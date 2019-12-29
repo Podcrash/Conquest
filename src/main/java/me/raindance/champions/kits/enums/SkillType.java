@@ -3,11 +3,11 @@ package me.raindance.champions.kits.enums;
 import me.raindance.champions.kits.Skill;
 
 public enum SkillType {
-    Brute("Brute"), Vanguard("Vanguard"), Berserker("Berserker"),
-    Knight("Knight"), Duelist("Duelist"), Warden("Warden"),
-    Ranger("Ranger"), Marksman("Marksman"), Hunter("Hunter"),
-    Mage("Mage"), Sorcerer("Sorcerer"), Druid("Druid"),
-    Assassin("Assassin"), Rogue("Rogue"), Thief("Thief"),
+    Vanguard("Vanguard"), Berserker("Berserker"),
+    Duelist("Duelist"), Warden("Warden"),
+    Marksman("Marksman"), Hunter("Hunter"),
+    Sorcerer("Sorcerer"), Druid("Druid"),
+    Rogue("Rogue"), Thief("Thief"),
     Global("All");
 
     /**

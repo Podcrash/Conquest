@@ -40,7 +40,7 @@ public class Lunge extends Drop implements ICooldown {
     private void setVector() {
         getPlayer().setFallDistance(-1);
         Vector vector = getPlayer().getLocation().getDirection();
-        vector = vector.normalize().multiply(0.5d + 1.35d * 0.1D);
+        vector = vector.normalize().multiply(0.5d + 1.35d * 0.3D);
         vector.setY(vector.getY() + 0.2);
         double yMax = 0.5d + 0.82d * 0.1D;
         if (vector.getY() > yMax) vector.setY(yMax);

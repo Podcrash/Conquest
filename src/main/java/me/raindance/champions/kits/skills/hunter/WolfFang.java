@@ -25,7 +25,7 @@ public class WolfFang extends BowShotSkill {
 
     @Override
     public String getName() {
-        return "Roped Arrow";
+        return "Wolf Fang";
     }
 
     @Override

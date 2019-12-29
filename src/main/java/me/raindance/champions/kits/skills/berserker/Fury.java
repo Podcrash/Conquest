@@ -54,12 +54,11 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
         if(e.getAttacker() != getPlayer()) return;
         EnergyBar energyBar = getEnergyBar();
 
-        energyBar.setEnergy(energyBar.getEnergy() + 1);
         lastHit = System.currentTimeMillis();
 
-        if(energyBar.getEnergy() >= 4) {
-            getChampionsPlayer().heal(1);
-        }
+        double currentEnergy = energyBar.getEnergy();
+        if(currentEnergy >= 4) getChampionsPlayer().heal(1);
+        else energyBar.setEnergy(currentEnergy + 1);
     }
 
     @EventHandler

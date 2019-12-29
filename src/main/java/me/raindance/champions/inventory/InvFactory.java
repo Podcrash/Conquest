@@ -1,20 +1,17 @@
 package me.raindance.champions.inventory;
 
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.podcrash.api.db.ChampionsKitTable;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.map.JsonHelper;
-import me.raindance.champions.Configurator;
+import com.podcrash.api.mc.Configurator;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.classes.*;
-import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.ChatColor;
@@ -23,13 +20,10 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

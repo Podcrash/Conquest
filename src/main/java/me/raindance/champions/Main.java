@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.PlayerPermissionsTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -13,14 +14,12 @@ import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.util.PlayerCache;
 import com.podcrash.api.permissions.Perm;
-import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
-import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.items.ItemHelper;
 import me.raindance.champions.listeners.*;
 import me.raindance.champions.listeners.maintainers.ApplyKitListener;
@@ -44,6 +43,7 @@ import org.spigotmc.SpigotConfig;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -150,7 +150,7 @@ public class Main extends JavaPlugin {
 
         this.log.info(Bukkit.getWorlds().toString());
 
-        CompletableFuture.allOf(
+        CompletableFuture allFutures = CompletableFuture.allOf(
             kb,
             customEnchantment,
             listeners,
@@ -164,6 +164,11 @@ public class Main extends JavaPlugin {
         ParticleRunnable.start();
         PlayerCache.packetUpdater();
 
+        try {
+            allFutures.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
         //This part is really only used for reloading
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         if(players.size() > 0) {
