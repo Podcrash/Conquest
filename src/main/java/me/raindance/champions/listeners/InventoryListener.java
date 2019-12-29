@@ -125,7 +125,7 @@ public class InventoryListener extends ListenerBase {
         int slot = event.getSlot();
         ClickType clickType = event.getClick();
         boolean cancel = true;
-        if(inventory == null)  {
+        if(inventory == null || selected == null)  {
             event.setCancelled(cancel);
             return;
         }

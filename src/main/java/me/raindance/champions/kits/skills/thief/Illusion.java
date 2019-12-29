@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class Illusion extends Continuous implements ICooldown {
     private int entityID;
     private long time;
     private boolean a = true;
+    private Vector skeletonVec;
 
     @Override
     public float getCooldown() {
@@ -76,18 +78,19 @@ public class Illusion extends Continuous implements ICooldown {
     }
 
     private void despawn(LivingEntity skeleton) {
+        if(skeleton == null) return;
         skeleton.teleport(skeleton.getLocation().subtract(0, skeleton.getLocation().getY(), 0));
         if(!skeleton.isDead()) skeleton.damage(skeleton.getMaxHealth());
     }
 
     @Override
     public void task() {
-
+        skeletonVec = getSkeleton().getLocation().toVector();
     }
 
     @Override
     public boolean cancel() {
-        return !getPlayer().isBlocking() || (getSkeleton().isDead() ||
+        return !getPlayer().isBlocking() || (getSkeleton() == null || getSkeleton().isDead() ||
                 System.currentTimeMillis() - time >= duration * 1000L);
     }
 
@@ -95,9 +98,9 @@ public class Illusion extends Continuous implements ICooldown {
     public void cleanup() {
         super.cleanup();
         StatusApplier.getOrNew((getPlayer())).removeCloak();
-        Location location = getSkeleton().getLocation().clone();
         despawn(getSkeleton());
 
+        Location location = skeletonVec.toLocation(getPlayer().getWorld());
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location.toVector(), EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
         List<Player> players = getPlayers();
         for(Player player : players) {
