@@ -30,7 +30,7 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
     //rate of charges still not implemented
     private final int MAX_CHARGES = 4;
     private final int MAX_LEVEL = 4;
-    private int delay;
+    private int delay = 1;
     private int charges;
     private long lastTimeHit = 0;
 
@@ -46,7 +46,10 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
             return;
         }
 
-        if(StatusApplier.getOrNew(e.getPlayer()).getEffects().contains(Status.SLOW)) return;
+        if(StatusApplier.getOrNew(e.getPlayer()).getEffects().contains(Status.SLOW)) {
+            getPlayer().sendMessage(String.format("%sFlash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
+            return;
+        }
         double distance = 34D;
         Player player = getPlayer();
 

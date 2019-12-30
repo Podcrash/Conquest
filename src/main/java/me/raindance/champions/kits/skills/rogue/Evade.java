@@ -62,6 +62,10 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
             getPlayer().sendMessage(getCurrentChargeMessage());
         }
     }
+    private void removeCharge() {
+        charges--;
+        getPlayer().sendMessage(getCurrentChargeMessage());
+    }
 
     @Override
     public int getCurrentCharges() {

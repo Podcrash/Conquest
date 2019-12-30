@@ -106,7 +106,7 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
     }
 
     private class SmokeBombTrail implements TimeResource {
-        private final WrapperPlayServerWorldParticles smokeTrail = ParticleGenerator.createParticle(EnumWrappers.Particle.SMOKE_NORMAL, 2);
+        private final WrapperPlayServerWorldParticles smokeTrail = ParticleGenerator.createParticle(EnumWrappers.Particle.SMOKE_LARGE, 2);
         @Override
         public void task() {
             smokeTrail.setLocation(getPlayer().getLocation());

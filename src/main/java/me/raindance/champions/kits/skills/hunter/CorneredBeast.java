@@ -26,17 +26,14 @@ import java.util.Random;
 
 @SkillMetadata(skillType = SkillType.Hunter, invType = InvType.AXE)
 public class CorneredBeast extends Instant implements TimeResource, ICooldown {
-    private final int MAX_LEVEL = 4;
     private int count = 0;
     private int selfEffect;
-    private float selfReduction;
     private boolean _active;
     private long selfEffect1000;
     private final Random rand = new Random();
 
     public CorneredBeast() {
         this.selfEffect = 5;
-        this.selfReduction = 0.55f;
         this.selfEffect1000 = selfEffect * 1000L;
     }
 
@@ -52,7 +49,7 @@ public class CorneredBeast extends Instant implements TimeResource, ICooldown {
 
     @Override
     public ItemType getItemType() {
-        return null;
+        return ItemType.AXE;
     }
 
     @EventHandler(

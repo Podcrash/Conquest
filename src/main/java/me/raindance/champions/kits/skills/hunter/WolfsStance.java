@@ -14,6 +14,7 @@ import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.util.EntityUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,11 +37,11 @@ public class WolfsStance extends ChargeUp implements IConstruct {
             List<Entity> entities = getPlayer().getNearbyEntities(1.15, 1.15, 1.15);
             if (entities.size() == 0) return;
             for (Entity entity : entities) {
-                if (entity instanceof Player && entity != getPlayer()) {
+                if (entity instanceof LivingEntity && entity != getPlayer()) {
                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 0.5f, 1.0f);
-                    DamageApplier.damage((Player) entity, getPlayer(), damage * getCharge(), true);
-                    StatusApplier.getOrNew((Player) entity).applyStatus(Status.SLOW, effectTime, 0);
-                    getPlayer().sendMessage(String.format("You used Wolf's Pounce on %s", entity.getName()));
+                    DamageApplier.damage((LivingEntity) entity, getPlayer(), damage * getCharge(), true);
+                    StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 0);
+                    getPlayer().sendMessage(getUsedMessage((LivingEntity) entity));
                 }
             }
         });

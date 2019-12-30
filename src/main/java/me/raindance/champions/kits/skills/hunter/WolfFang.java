@@ -44,7 +44,7 @@ public class WolfFang extends BowShotSkill {
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
         getPlayer().sendMessage(String.format("You shot %s", victim.getName()));
-        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 6, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.BLEED, 6, 1);
     }
 
     @Override
