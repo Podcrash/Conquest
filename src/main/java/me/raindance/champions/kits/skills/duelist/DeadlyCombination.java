@@ -51,7 +51,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 2, 2);
         event.setDamage(event.getDamage() + 2);
         event.addSource(this);
-        getPlayer().sendMessage(getUsedMessage(event.getVictim()));
+        getPlayer().sendMessage(getUsedMessage(event.getVictim()).replace("used", "unleashed"));
 
         attacked = null;
     }
