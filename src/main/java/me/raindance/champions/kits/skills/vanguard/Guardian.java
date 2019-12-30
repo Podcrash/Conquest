@@ -35,7 +35,7 @@ public class Guardian extends Drop implements ICooldown {
 
     @Override
     public void drop(PlayerDropItemEvent e) {
-        if(!onCooldown()) return;
+        if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         active = true;
         //TODO: ANVIL PLACED SOUND

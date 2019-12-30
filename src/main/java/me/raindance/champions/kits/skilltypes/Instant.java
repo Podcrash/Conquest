@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Instant extends Skill {
     private final Skill instance;
-    protected boolean rightClickSkill = true;
     public Instant() {
         super();
         instance = this;
@@ -29,17 +29,11 @@ public abstract class Instant extends Skill {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (getPlayer() == e.getPlayer()) {
-                    if (isHolding()) {
-                        if (!isInWater()) {
-                            SkillUseEvent useEvent = new SkillUseEvent(instance);
-                            Bukkit.getPluginManager().callEvent(useEvent);
-                            if (useEvent.isCancelled()) return;
-                            doSkill(e, e.getAction());
-                        } else if(rightClickSkill && rightClickCheck(e.getAction()))
-                            getPlayer().sendMessage(getWaterMessage());
-                    }
-                }
+                if (!canUseSkill(e)) return;
+                SkillUseEvent useEvent = new SkillUseEvent(instance);
+                Bukkit.getPluginManager().callEvent(useEvent);
+                if (useEvent.isCancelled()) return;
+                doSkill(e, e.getAction());
             }
         }.runTask(Main.instance);
     }
@@ -49,18 +43,21 @@ public abstract class Instant extends Skill {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (getPlayer() == e.getPlayer()) {
-                    if (isHolding()) {
-                        if (!isInWater()) {
-                            SkillUseEvent useEvent = new SkillUseEvent(instance);
-                            Bukkit.getPluginManager().callEvent(useEvent);
-                            if (useEvent.isCancelled()) return;
-                            Main.getInstance().log.info("You arne't supposed to see this message");
-                        } else getPlayer().sendMessage(getWaterMessage());
-                    }
-                }
+                if (!canUseSkill(e)) return;
+                SkillUseEvent useEvent = new SkillUseEvent(instance);
+                Bukkit.getPluginManager().callEvent(useEvent);
+                if (useEvent.isCancelled()) return;
+                Main.getInstance().log.info("You arne't supposed to see this message");
             }
         }.runTask(Main.instance);
+    }
+
+    public boolean canUseSkill(PlayerEvent event) {
+        if(getPlayer() != event.getPlayer()) return false;
+        if(isInWater()) {
+            getPlayer().sendMessage(getWaterMessage());
+            return false;
+        } else return isHolding();
     }
 
 

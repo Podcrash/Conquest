@@ -37,7 +37,7 @@ public class Rally extends Drop implements ICooldown {
     @EventHandler
     @Override
     public void drop(PlayerDropItemEvent e) {
-        if(!onCooldown()) return;
+        if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         Location currentLoc = getPlayer().getLocation();
         SoundPlayer.sendSound(currentLoc, "mob.pig.death", 0.75F, 1);
