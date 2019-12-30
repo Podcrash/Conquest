@@ -6,6 +6,7 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -31,8 +32,11 @@ public class FatalStrike extends Passive {
 
     @EventHandler
     public void hit(DamageApplyEvent e) {
-        if(e.getAttacker() != getPlayer() && !(e.getVictim() instanceof Player)) return;
-        if(e.getVictim().getHealth() > e.getVictim().getMaxHealth()/2D) return;
+        //if the attacker is not the user return
+        if(e.getAttacker() != getPlayer()) return;
+        //if the victim is not below 50% health, return
+        if(!EntityUtil.isBelow(e.getVictim(), 0.5)) return;
+        //apply bleed + send a redstone block particle
         StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.BLEED, 3, 1);
         AbstractPacket packet = ParticleGenerator.createBlockEffect(e.getVictim().getLocation(), Material.REDSTONE.getId());
         PacketUtil.asyncSend(packet, getPlayers());

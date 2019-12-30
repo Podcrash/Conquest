@@ -86,8 +86,12 @@ public abstract class Skill implements ISkill, DamageSource {
 
     public String getUsedMessage() {
         return String.format(
-                "%s%s> %sYou used %s%s %s.",
+                "%s%s> %sYou used %s%s%s.",
                 ChatColor.BLUE, ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+    }
+    public String getUsedMessage(LivingEntity entity) {
+        return String.format("%sSkill> %sYou used %s%s %son %s%s.",
+                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, entity.getName());
     }
 
     public Player getPlayer() {

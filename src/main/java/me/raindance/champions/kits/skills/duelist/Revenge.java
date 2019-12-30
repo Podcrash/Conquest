@@ -33,27 +33,28 @@ public class Revenge extends Passive {//it is a passive because the other skillt
         return ItemType.NULL;
     }
 
-    @EventHandler(
-            priority = EventPriority.NORMAL
-    )
-    protected void hit(DamageApplyEvent e) {// looking into the hit com.podcrash.api.mc.events
+    @EventHandler(priority = EventPriority.NORMAL)
+    protected void hit(DamageApplyEvent e) {// looking into the hit events
         if (e.isCancelled()) return; //if the event is already cancelled, ie riposte, then don't do anything.
         /*
            There are two situations: one in which you are the victim and one in which you are the damager
          */
-        if (currentTime - System.currentTimeMillis() >= 5000L) {
+
+        //if too much time (5 seconds) has passed, reset the charges
+        if (currentTime - System.currentTimeMillis() >= 5000L)
             resetCharges();
-        }
-        if (e.getCause() == Cause.MELEE) {
-            if (e.getAttacker() == getPlayer()) {
-                e.setModified(true); //Modify the damage
-                e.addSource(this);
-                e.setDamage(e.getDamage() + getCurrentCharges() * 0.5); //set it
-                resetCharges(); //reset the charges so that it's not infinite
-            } else if (e.getVictim() == getPlayer()) {
-                addCharge(); //if hit, add another charge
-                currentTime = System.currentTimeMillis();
-            }
+        //we only care about melee attacks
+        if (e.getCause() != Cause.MELEE) return;
+
+        if (e.getAttacker() == getPlayer()) {
+            e.setModified(true); //Modify the damage
+            e.addSource(this);
+            double bonus = getCurrentCharges() * 0.5D;
+            e.setDamage(e.getDamage() + bonus); //set it
+            resetCharges(); //reset the charges so that it's not infinite
+        } else if (e.getVictim() == getPlayer()) {
+            addCharge(); //if hit, add another charge
+            currentTime = System.currentTimeMillis();
         }
 
     }
@@ -61,7 +62,7 @@ public class Revenge extends Passive {//it is a passive because the other skillt
     //all of these are set to private so that charges cannot be changed outside of themselves
     private void addCharge() {
         charges++;
-        if (charges * 0.5 > 1) {
+        if (charges > getMaxCharges()) {
             charges = getMaxCharges();
         }
     }

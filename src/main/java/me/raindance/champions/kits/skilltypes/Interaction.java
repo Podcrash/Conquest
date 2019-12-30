@@ -64,9 +64,4 @@ public abstract class Interaction extends Skill implements ICooldown {
             }
         }
     }
-
-    public String getUsedMessage(Player player) {
-        return String.format("%sSkill> %sYou can use %s%s %son %s%s.",
-                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, player.getName());
-    }
 }

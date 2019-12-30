@@ -61,6 +61,7 @@ public class ChargeForward extends Drop implements ICooldown {
             selfTime = System.currentTimeMillis();
             this.setLastUsed(System.currentTimeMillis());
             SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", 0.75F, 10);
+            getPlayer().sendMessage(getUsedMessage());
             use = true;
             new BullsChargeParticle().run(1, 1);
         }
@@ -80,6 +81,7 @@ public class ChargeForward extends Drop implements ICooldown {
                     SoundPlayer.sendSound(getPlayer().getLocation(), "random.break", 0.75F, 250);
                     SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", .75F, 20);
 
+                    getPlayer().sendMessage(getUsedMessage(e.getVictim()));
                     e.setDoKnockback(false);
                     use = false;
                 }

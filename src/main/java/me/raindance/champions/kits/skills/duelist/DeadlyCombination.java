@@ -27,6 +27,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
     private int i;
     @Override
     public void doSkill(LivingEntity clickedEntity) {
+        if(onCooldown()) return;
         this.attacked = clickedEntity;
         this.i = 0;
         setLastUsed(System.currentTimeMillis());
@@ -44,12 +45,13 @@ public class DeadlyCombination extends Interaction implements ICooldown {
     @EventHandler
     public void hit(DamageApplyEvent event) {
         if(attacked == null || event.getVictim() != attacked || event.getAttacker() != getPlayer()) return;
-        if(!(attacked instanceof Player)) return;
         i++;
 
         if(i < 2 && System.currentTimeMillis() - getLastUsed() > 3000L) return;
-        StatusApplier.getOrNew((Player) attacked).applyStatus(Status.SLOW, 2, 2);
-        DamageApplier.damage(attacked, getPlayer(), 2, this, false);
+        StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 2, 2);
+        event.setDamage(event.getDamage() + 2);
+        event.addSource(this);
+        getPlayer().sendMessage(getUsedMessage(event.getVictim()));
 
         attacked = null;
     }
