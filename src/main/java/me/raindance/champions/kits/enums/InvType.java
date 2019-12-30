@@ -11,7 +11,7 @@ public enum InvType {
     DROP("Active");
 
     //The reason why this is written out so that it stays in order.
-    private final static InvType[] details = new InvType[] {SWORD, AXE, SHOVEL, DROP, BOW, PASSIVEA, PASSIVEB, INNATE};;
+    private final static InvType[] details = new InvType[] {SWORD, SHOVEL, AXE, BOW, DROP, PASSIVEA, PASSIVEB, INNATE};
 
     private String name;
     InvType(String name) {

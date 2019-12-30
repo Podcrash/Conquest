@@ -29,16 +29,12 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
 
     //TODO: Make this its own static method within the engine
     private void updateXP() {
-        if(!onCooldown()) {
-            getPlayer().setLevel(0);
-            getPlayer().setExp(0);
-        }else {
+        if(!onCooldown()) getPlayer().setExp(0);
+        else {
             double cooldown = cooldown();
-            int level = (int) Math.floor(cooldown);
-            double decimal = cooldown - level;
+            double XP = cooldown / getCooldown();
 
-            getPlayer().setLevel(level);
-            getPlayer().setExp((float) decimal);
+            getPlayer().setExp((float) XP);
         }
 
     }

@@ -50,7 +50,8 @@ public class InfernoShot extends BowShotSkill implements IConstruct {
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
         if(isAlly(victim)) return;
         victim.setFireTicks(0);
-        float duration = 1.5F + (float) victim.getLocation().distance(shooter.getLocation())/scaling;
+        //float duration = 1.5F + (float) victim.getLocation().distance(shooter.getLocation())/scaling;
+        float duration = 7.5F;
         event.addSource(this);
         getPlayer().sendMessage("IncendiaryShot> You burned " + victim.getName() + " for " + duration + " seconds.");
         StatusApplier.getOrNew(victim).applyStatus(Status.FIRE, duration, 1, false);

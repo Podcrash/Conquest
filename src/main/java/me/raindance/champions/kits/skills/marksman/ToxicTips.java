@@ -60,7 +60,7 @@ public class ToxicTips extends Passive {
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
             e.addSource(this);
-            StatusApplier.getOrNew(player).applyStatus(Status.POISON, duration, 1);
+            StatusApplier.getOrNew(player).applyStatus(Status.POISON, duration, 0);
         }
     }
 }

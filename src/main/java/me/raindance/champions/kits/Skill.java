@@ -94,6 +94,12 @@ public abstract class Skill implements ISkill, DamageSource {
                 ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, entity.getName());
     }
 
+    //TODO: change verb to something else
+    public String getDurationMessage(LivingEntity entity, String verb, double duration) {
+        return String.format("%s%s> %sYou %s %s%s %sfor %s%f.",
+                ChatColor.BLUE, getName(), ChatColor.GRAY, verb, ChatColor.YELLOW, entity.getName(), ChatColor.GRAY, ChatColor.GREEN, duration);
+    }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(playerName);
     }
