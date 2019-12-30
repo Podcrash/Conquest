@@ -51,7 +51,7 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
                 Vector vector = getPlayer().getLocation().getDirection();
                 if(vector.getY() < 0) vector.setY(vector.getY() * -1);
                 vector.normalize();
-                vector.multiply(0.6);
+                vector.multiply(0.4);
                 vector.setY(vector.getY() + 0.8d);
                 if(vector.getY() > 0.8D) vector.setY(0.8);
                 if(EntityUtil.onGround(getPlayer())) vector.setY(vector.getY() + 0.2);

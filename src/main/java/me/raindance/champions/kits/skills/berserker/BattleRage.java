@@ -50,6 +50,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
     public void drop(PlayerDropItemEvent e) {
         if(e.getPlayer() != getPlayer() || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
+        getPlayer().sendMessage(getUsedMessage());
         EnergyBar energyBar = getChampionsPlayer().getEnergyBar();
         getChampionsPlayer().heal(energyBar.getEnergy());
 

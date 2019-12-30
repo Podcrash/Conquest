@@ -139,9 +139,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
         resetSpeed();
     }
 
-    @EventHandler(
-            priority = EventPriority.NORMAL
-    )
+    @EventHandler(priority = EventPriority.NORMAL)
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         if (event.getAttacker() == getPlayer()) {
