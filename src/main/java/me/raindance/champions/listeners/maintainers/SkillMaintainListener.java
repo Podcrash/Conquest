@@ -24,7 +24,7 @@ public class SkillMaintainListener extends ListenerBase {
             priority = EventPriority.HIGHEST
     )
     public void toCooldown(SkillCooldownEvent event){
-        if(event.getSkill() instanceof ICooldown && !((event.getSkill() instanceof Passive) )){
+        if(event.getSkill() instanceof ICooldown){
             TimeHandler.repeatedTime(1, 0, new CooldownResource(event));
         }
     }

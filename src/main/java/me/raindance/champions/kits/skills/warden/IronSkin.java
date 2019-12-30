@@ -32,10 +32,13 @@ public class IronSkin extends Passive implements ICooldown {
             priority = EventPriority.MONITOR
     )
     public void hit(DamageApplyEvent event) {
+        if(onCooldown()) return;
         if(event.isCancelled()) return;
         if (event.getCause() != Cause.MELEE) return;
         if (event.getVictim() == getPlayer()) {
             event.setModified(true);
+            setLastUsed(System.currentTimeMillis());
+            getPlayer().sendMessage(getUsedMessage());
             double subtract = event.getDamage() - 3;
             if (subtract < 0) subtract = 0;
             event.setDamage(subtract);

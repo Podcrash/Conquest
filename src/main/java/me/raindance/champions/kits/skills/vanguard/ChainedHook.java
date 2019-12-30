@@ -49,7 +49,9 @@ public class ChainedHook extends Instant implements ICooldown {
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-
+        if(!rightClickCheck(action) || onCooldown()) return;
+        setLastUsed(System.currentTimeMillis());
+        release();
     }
 
     public void release() {

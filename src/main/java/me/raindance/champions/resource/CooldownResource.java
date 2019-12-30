@@ -9,6 +9,7 @@ import me.raindance.champions.kits.Skill;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.TitleSender;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
+import me.raindance.champions.kits.skilltypes.Passive;
 import me.raindance.champions.util.SkillTitleSender;
 import org.bukkit.entity.Player;
 
@@ -38,7 +39,7 @@ public class CooldownResource implements TimeResource {
         ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
         if(cPlayer == null) return;
         Skill skill = cPlayer.getCurrentSkillInHand();
-        if(skill != null && skill == this.skill) {
+        if(skill != null && skill == this.skill || !(skill instanceof Passive)) {
             WrappedChatComponent component = SkillTitleSender.coolDownBar(this.skill);
             TitleSender.sendTitle(player, component);
             if(!switcher) switcher = true;

@@ -53,15 +53,15 @@ public class ConcussiveBlow extends Instant implements ICooldown {
                 1, 0, 0 , 0);
         Vector vector = eyeLoc.getDirection().normalize().multiply(velocity);
         if(vector.getY() > 0.75) vector.setY(0.75);
+
         for(Player p : getPlayers()) {
             ParticleGenerator.generate(p, packet);
-            if(p == getPlayer()) continue;
+            if(p == getPlayer() || p.getLocation().distanceSquared(center) > 10D) continue;
 
-            if(p != getPlayer() && p.getLocation().distanceSquared(center) <= 10D){
-                p.setVelocity(vector);
-            }
-            SoundPlayer.sendSound(p, "mob.zombie.metal", 0.8F, 57);
+            p.setVelocity(vector);
         }
+
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 1.1F, 57);
         this.setLastUsed(System.currentTimeMillis());
     }
 }

@@ -9,6 +9,7 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.time.TimeHandler;
@@ -18,11 +19,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @SkillMetadata(skillType = SkillType.Warden, invType = InvType.PASSIVEB)
-public class Fortitude extends Passive implements ICooldown {
+public class Fortitude extends Passive implements ICooldown, IConstruct {
     private TimeResource resource;
 
-    @SkillInit
-    public void init() {
+    @Override
+    public void afterConstruction() {
         resource = new TimeResource() {
             @Override
             public void task() {
