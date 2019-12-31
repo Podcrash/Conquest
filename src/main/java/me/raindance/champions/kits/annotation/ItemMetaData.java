@@ -1,8 +1,7 @@
 package me.raindance.champions.kits.annotation;
 
-
-import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Material;
+import org.bukkit.event.block.Action;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ItemMetaData {
     Material mat();
-    SkillType skillType() default SkillType.Global;
-
-
+    Action[] actions() default { Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK };
 }

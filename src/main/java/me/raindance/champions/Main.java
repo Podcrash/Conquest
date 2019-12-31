@@ -20,7 +20,7 @@ import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
-import me.raindance.champions.kits.items.ItemHelper;
+import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
 import me.raindance.champions.listeners.maintainers.ApplyKitListener;
 import me.raindance.champions.listeners.maintainers.DomGameListener;

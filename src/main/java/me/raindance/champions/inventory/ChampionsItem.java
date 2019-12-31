@@ -16,22 +16,38 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ChampionsItem {
-    STANDARD_SWORD(9, ChatColor.WHITE + "Standard Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "A regular iron sword"), Material.IRON_SWORD),
-    STANDARD_AXE(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "A regular iron axe"), Material.IRON_AXE),
+    //god help me,
+    // this needs a rework
+    STANDARD_SWORD(9, ChatColor.WHITE + "Standard Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SWORD),
+    STANDARD_AXE(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_AXE),
+    STANDARD_SHOVEL(11, ChatColor.WHITE + "Standard Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SPADE),
 
-    BOOSTER_SWORD(18, ChatColor.GOLD + "Booster Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "A boosted standard sword", ChatColor.GOLD + "that increases the level of the", ChatColor.GOLD + "skill binded by 2!", ChatColor.GRAY + "Please note that you have to", ChatColor.GRAY + "re-apply this kit to use booster weapons.", ChatColor.GRAY +"Sorry for the inconvenience."), Material.GOLD_SWORD),
-    BOOSTER_AXE(19, ChatColor.GOLD + "Booster Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "A boosted standard axe", ChatColor.GOLD + "that increases the level of the", ChatColor.GOLD + "skill binded by 2!", ChatColor.GRAY + "Please note that you have to", ChatColor.GRAY + "re-apply this kit to use booster weapons.", ChatColor.GRAY +"Sorry for the inconvenience."), Material.GOLD_AXE),
+    BOOSTER_SWORD(12, ChatColor.WHITE + "Booster Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SWORD),
+    BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
+    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
 
-    POWER_SWORD(27, ChatColor.AQUA + "Power Sword", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "does more damage", ChatColor.GOLD + "than standard swords!"), Material.DIAMOND_SWORD),
-    POWER_AXE(28, ChatColor.AQUA + "Power Axe", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "does more damage", ChatColor.GOLD + "than standard axes!"), Material.DIAMOND_AXE),
+    WOOD_SWORD(12, ChatColor.WHITE + "Tree Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
+    WOOD_AXE(13, ChatColor.WHITE + "Tree Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
+    WOOD_SHOVEL(14, ChatColor.WHITE + "Tree Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
+
+    STONE_SWORD(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD),
+    STONE_AXE(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE),
+
+    POWER_SWORD(27, ChatColor.AQUA + "Power Sword", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_SWORD),
+    POWER_AXE(28, ChatColor.AQUA + "Power Axe", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_AXE),
 
     STANDARD_BOW(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW),
-    RANGER_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 24, Arrays.asList(""), Material.ARROW),
-    ASSASSIN_ARROWS(20, ChatColor.WHITE + "Assassin Arrows", 12, Arrays.asList(""), Material.ARROW),
+    RANGER_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
+    ASSASSIN_ARROWS(20, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
 
-    MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "Restore your health!", ChatColor.GOLD + "Gives regeneration II for 4 seconds!"), Material.MUSHROOM_SOUP),
+    MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP),
     WATER_BOTTLE(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION),
     COBWEB(24, ChatColor.WHITE + "Cobweb", 4, Arrays.asList(ChatColor.GOLD + "Left click to throw", ChatColor.GOLD + "a temporary cobweb will be placed upon collision!"), Material.WEB),
+
+    SMOKE_BOMB(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE),
+    STUN_CHARGE(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF),
+    MEAD(3, ChatColor.WHITE + "Mead", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
+    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE)
     ;
 
     private int slotID;

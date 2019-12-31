@@ -1,8 +1,10 @@
-package me.raindance.champions.kits.items;
+package me.raindance.champions.kits.itemskill.item;
 
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.world.BlockUtil;
+import me.raindance.champions.kits.annotation.ItemMetaData;
+import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -11,15 +13,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-
+@ItemMetaData(mat = Material.WEB, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
 public class Web implements IItem {
-    public Web() {
 
+    @Override
+    public String getName() {
+        return "Cobweb";
     }
 
     @Override
-    public boolean useItem(Player player, Action action) {
-        if(action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK) return false;
+    public void useItem(Player player, Action action) {
         Location location = player.getLocation();
         Vector vector = location.getDirection();
         vector.normalize().multiply(1.2);
@@ -36,6 +39,5 @@ public class Web implements IItem {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(Long.toString(System.currentTimeMillis()));
         itemStack.setItemMeta(meta);
-        return true;
     }
 }
