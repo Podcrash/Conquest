@@ -26,7 +26,7 @@ public final class ItemActionData {
         return actionSet.contains(action);
     }
 
-    public void doItemAction(Player player) {
-        itemAction.useItem(player);
+    public void doItemAction(Player player, Action action) {
+        itemAction.useItem(player, action);
     }
 }

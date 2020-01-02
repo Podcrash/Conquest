@@ -39,7 +39,7 @@ public class CooldownResource implements TimeResource {
         ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
         if(cPlayer == null) return;
         Skill skill = cPlayer.getCurrentSkillInHand();
-        if(skill != null && skill == this.skill || !(skill instanceof Passive)) {
+        if(skill != null && skill == this.skill && !(skill instanceof Passive)) {
             WrappedChatComponent component = SkillTitleSender.coolDownBar(this.skill);
             TitleSender.sendTitle(player, component);
             if(!switcher) switcher = true;

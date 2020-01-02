@@ -27,7 +27,7 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         resource = new TimeResource() {
             @Override
             public void task() {
-                StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 1);
+                StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
             }
 
             @Override

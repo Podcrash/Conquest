@@ -36,12 +36,12 @@ public final class SkillInfo {
             e.printStackTrace();
         }
     }
-    private static void addSkills(String championName) throws IOException, ClassNotFoundException {
-        String path = "me.raindance.champions.kits.skills." + championName;
+    private static void addSkills(String skillTypeName) throws IOException, ClassNotFoundException {
+        String path = "me.raindance.champions.kits.skills." + skillTypeName;
         ClassPath cp = ClassPath.from(Adrenaline.class.getClassLoader());
         Set<ClassPath.ClassInfo> classInfoSet = cp.getTopLevelClasses(path);
+        StringBuilder skillsLoaded = new StringBuilder(skillTypeName + ": ");
         for(ClassPath.ClassInfo info : classInfoSet) {
-            System.out.println(info.getName());
             Class<?> skillClass = Class.forName(info.getName());
 
             Skill skill = (Skill) emptyConstructor(skillClass);
@@ -51,12 +51,13 @@ public final class SkillInfo {
             InvType invType = annot.invType();
 
             addSkill(skillType, invType, skill);
+            skillsLoaded.append(skill.getName()).append(" ");
         }
+        System.out.println(skillsLoaded.toString());
     }
     private static void addSkill(SkillType skillType, InvType invType, Skill skill) {
         //TODO: put more of this information in the annotations.
         SkillData data = new SkillData(skill, skill.getID(), skill.getName(), invType, skillType);
-        System.out.println(data);
         skillData.add(data);
     }
 

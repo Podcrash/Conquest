@@ -140,8 +140,7 @@ public class MenuCreator {
                 final ItemMeta meta = item.getItemMeta();
 
                 meta.setDisplayName(name);
-                //String dataJSON = table.getJSONData(uuid, clasz, i);
-                String dataJSON = null;
+                String dataJSON = table.getJSONData(uuid, clasz, i);
                 if(name.contains("Apply Build") && dataJSON != null) {
                     Dye data = ((Dye) item.getData());
                     data.setColor(color);

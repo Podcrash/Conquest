@@ -47,7 +47,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         if(attacked == null || event.getVictim() != attacked || event.getAttacker() != getPlayer()) return;
         i++;
 
-        if(i < 2 && System.currentTimeMillis() - getLastUsed() > 3000L) return;
+        if(i < 2 || System.currentTimeMillis() - getLastUsed() > 3000L) return;
         StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 2, 2);
         event.setDamage(event.getDamage() + 2);
         event.addSource(this);

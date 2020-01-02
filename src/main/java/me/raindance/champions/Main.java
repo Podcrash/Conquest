@@ -14,6 +14,8 @@ import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.util.PlayerCache;
 import com.podcrash.api.permissions.Perm;
+import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
@@ -60,7 +62,6 @@ public class Main extends JavaPlugin {
     // permissions HashMap
     private Map<UUID, PermissionAttachment> playerPermissions = new HashMap<>();
     //configurators
-    private Map<String, Configurator> configurators = new HashMap<>();
     private ExecutorService executor = Executors.newFixedThreadPool(8);
 
     private CompletableFuture<Void> registerMessengers() {
@@ -139,7 +140,10 @@ public class Main extends JavaPlugin {
         mapConfig = new File(getDataFolder(), "maps.yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
         saveMapConfig();
-        configurators.put("kits", new Configurator(this, "kits"));
+
+        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
+        spigot.registerConfigurator("kits");
+        spigot.registerConfigurator("skilldescriptions");
         List<String> domMaps = new ArrayList<>();
         domMaps.add("Sakura");
         domMaps.add("Delphic");
@@ -308,9 +312,5 @@ public class Main extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager() {
         return (protocolManager != null) ? protocolManager : ProtocolLibrary.getProtocolManager();
-    }
-
-    public static Configurator getConfigurator(String name) {
-        return instance.configurators.get(name);
     }
 }

@@ -3,7 +3,7 @@ package me.raindance.champions.kits.enums;
 public enum ItemType {
     SWORD("SWORD"),
     AXE("AXE"),
-    SHOVEL("SHOVEL"),
+    SHOVEL("SPADE"),
     BOW("BOW"),
     NULL(null);
     private String name;

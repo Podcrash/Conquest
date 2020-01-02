@@ -1,9 +1,12 @@
 package me.raindance.champions.kits.skills.vanguard;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -23,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Intimidation extends Instant implements TimeResource, ICooldown {
@@ -56,12 +60,15 @@ public class Intimidation extends Instant implements TimeResource, ICooldown {
     @Override
     public void task() {
         Location location = getPlayer().getLocation();
-        for (Player victim : getPlayers()) {
+        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.PORTAL, 2);
+        List<Player> players = getPlayers();
+        PacketUtil.asyncSend(particles, players);
+        for (Player victim : players) {
             if(victim == getPlayer() || isAlly(victim)) continue;
-            if(victim.getLocation().distanceSquared(location) <= 64) {
-                int slownesss = (int) ((getPlayer().getHealth() - victim.getHealth())/8D);
-                StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 1, slownesss, false, true);
-            }
+            if(victim.getLocation().distanceSquared(location) > 64) continue;
+            int slowLevel = (int) ((getPlayer().getHealth() - victim.getHealth())/8D);
+            StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 1, slowLevel, false, true);
+
         }
     }
 

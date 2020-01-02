@@ -38,7 +38,7 @@ public enum ChampionsItem {
 
     STANDARD_BOW(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW),
     RANGER_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
-    ASSASSIN_ARROWS(20, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
+    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
 
     MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP),
     WATER_BOTTLE(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION),

@@ -42,25 +42,20 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
      */
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if (!(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) {
-            return;
-        }
-        if(!onCooldown()){
-            isPrepared = true;// sound goes here
-            SoundPlayer.sendSound(getPlayer().getLocation(), "mob.blaze.breathe", 0.75f, 200);
-            this.getPlayer().sendMessage(String.format("%sSkill> %s%s %sprepared.", ChatColor.BLUE, ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
+        if (!(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) return;
+        if(onCooldown()) return;
+        isPrepared = true;// sound goes here
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.blaze.breathe", 0.75f, 200);
+        this.getPlayer().sendMessage(String.format("%sSkill> %s%s %sprepared.", ChatColor.BLUE, ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
 
-            this.setLastUsed(System.currentTimeMillis());
-            //arrowForceMap.keySet().removeIf(arr -> (arr.isDead() || !arr.isValid()));
-        }
+        this.setLastUsed(System.currentTimeMillis());
+        //arrowForceMap.keySet().removeIf(arr -> (arr.isDead() || !arr.isValid()));
     }
 
     /*
     Shooting the arrow
      */
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     public void shootBow(EntityShootBowEvent event){
         if(event.isCancelled() || !isPrepared) return;
         if(event.getEntity() instanceof Player && event.getProjectile() instanceof Arrow){
@@ -96,30 +91,24 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
     /*
                 Shooting a player
              */
-    @EventHandler(
-            priority = EventPriority.LOW
-    )
+    @EventHandler(priority = EventPriority.LOW)
     public void arrowShotPlayer(DamageApplyEvent event){
         if(event.isCancelled() || event.getCause() != Cause.PROJECTILE) return;
         LivingEntity livingEntity = event.getAttacker();
         Arrow proj = event.getArrow();
-        if(livingEntity == getPlayer() && proj.getShooter() instanceof Player){
-            if(arrowForceMap.containsKey(proj)){
-                if(event.getVictim() instanceof Player) {
-                    shotPlayer(event, (Player) proj.getShooter(), (Player) event.getVictim(), proj, arrowForceMap.get(proj));
-                }
-                //proj.remove();
-            }
-        }
+        if(livingEntity != getPlayer()) return;
+        if(!arrowForceMap.containsKey(proj)) return;
+        getPlayer().sendMessage(getUsedMessage(event.getVictim()).replace("used", "shot"));
+        shotPlayer(event, (Player) proj.getShooter(), (Player) event.getVictim(), proj, arrowForceMap.get(proj));
+
+        //proj.remove();
     }
     protected abstract void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force);
 
     /*
     Shooting the ground
      */
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     public void arrowShotGround(ProjectileHitEvent event){
         if(event.getEntity() instanceof Arrow ){
 

@@ -64,11 +64,11 @@ public class DomScoreboard extends GameScoreboard {
 
     public void updateScore(TeamEnum team) {
         List<String> lines = getLines();
-        for(int i = 0; i < lines.size(); i++) {
+        for(int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             if(line.contains(team.getName())) continue;
             //prev is the exact same integer.
-            setLine(i-2, String.valueOf(getGame().getTeam(team).getScore()));
+            setLine(i, String.valueOf(getGame().getTeam(team).getScore()));
             break;
         }
     }

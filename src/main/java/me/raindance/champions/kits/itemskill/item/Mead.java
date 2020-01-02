@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.itemskill.item;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerEntityStatus;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
@@ -28,8 +29,10 @@ public class Mead implements IItem {
         StatusApplier.getOrNew(player).applyStatus(Status.STRENGTH, 3, 0, true, true);
         Location location = player.getEyeLocation();
         SoundPlayer.sendSound(location, "random.splash", 0.75F, 88);
-        WrapperPlayServerWorldEvent red = ParticleGenerator.createBlockEffect(location, Material.BREAD.getId());
+        WrapperPlayServerEntityStatus status = new WrapperPlayServerEntityStatus();
+        status.setEntityId(WrapperPlayServerEntityStatus.Status.EATING_ACCEPTED);
+        status.setEntityId(player.getEntityId());
 
-        for(Player p : player.getWorld().getPlayers()) ParticleGenerator.generate(p, red);
+        for(Player p : player.getWorld().getPlayers()) ParticleGenerator.generate(p, status);
     }
 }

@@ -125,7 +125,7 @@ public class InventoryListener extends ListenerBase {
         int slot = event.getSlot();
         ClickType clickType = event.getClick();
         boolean cancel = true;
-        if(inventory == null || selected == null)  {
+        if(inventory == null || selected == null || selected.getType() == Material.AIR)  {
             event.setCancelled(cancel);
             return;
         }
@@ -155,7 +155,11 @@ public class InventoryListener extends ListenerBase {
 
     private void buildMenu(Player clicker, Inventory inventory, ItemStack selected) {
         SkillType skillType = SkillType.getByName(inventory.getName());
-        int buildID = Integer.parseInt(selected.getItemMeta().getDisplayName().replaceAll("[^0-9]", ""));
+
+        ItemMeta itemMeta = selected.getItemMeta();
+        String displayName = itemMeta.getDisplayName();
+        String cleanseNumbers = displayName.replaceAll("[^0-9]", "");
+        int buildID = Integer.parseInt(cleanseNumbers);
         InvFactory.clickAtBuildMenu(clicker, skillType, selected, buildID);
     }
 

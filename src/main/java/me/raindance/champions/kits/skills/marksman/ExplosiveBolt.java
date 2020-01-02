@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.marksman;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
@@ -78,6 +79,8 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct
                     vector.setY(vector.getY() + 0.1);
                 }
                 player.setVelocity(vector);
+
+                DamageApplier.damage(player, getPlayer(), 9 * divide, this, false);
             }
             SoundPlayer.sendSound(location, "random.explode", 0.9F, 70);
         }

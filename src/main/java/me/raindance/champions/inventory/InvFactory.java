@@ -8,6 +8,8 @@ import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.map.JsonHelper;
 import com.podcrash.api.mc.Configurator;
+import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -31,7 +33,7 @@ public final class InvFactory {
     private static ChampionsKitTable table;
     private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static Map<String, Integer> buildMap = new HashMap<>();
-    private static final Configurator kitConfigurator = Main.getConfigurator("kits");
+    private static final Configurator kitConfigurator = Pluginizer.getSpigotPlugin().getConfigurator("kits");
     private InvFactory() {
 
     }
@@ -154,6 +156,7 @@ public final class InvFactory {
 
         ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
         ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
+        cPlayer.restockInventory();
         SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
         setCurrent(player, skillType, buildID);
     }
@@ -169,8 +172,7 @@ public final class InvFactory {
     private static void edit(Player player, SkillType skillType, int buildID) {
         buildMap.put(player.getName(), buildID);
         UUID uuid = player.getUniqueId();
-        //String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
-        String json = null;
+        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
         if(json == null) {
             Inventory inv = MenuCreator.createKitMenu(skillType);
             MenuCreator.giveHotbarInventory(player, skillType);

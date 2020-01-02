@@ -43,9 +43,7 @@ public class FrostArrows extends Passive implements TimeResource, IPassiveTimer 
         return ItemType.BOW;
     }
 
-    @EventHandler(
-            priority = EventPriority.LOW
-    )
+    @EventHandler(priority = EventPriority.LOW)
     public void shoot(DamageApplyEvent e) {
         if (!isAlly(e.getVictim()) && e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
             if(!(e.getVictim() instanceof Player)) return;
@@ -53,7 +51,7 @@ public class FrostArrows extends Passive implements TimeResource, IPassiveTimer 
             e.addSource(this);
             StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 0);
             player.setSprinting(false);
-            affected.put(player.getName(), System.currentTimeMillis());
+            affected.put(player.getName(), System.currentTimeMillis() + 2000L);
         }
     }
 

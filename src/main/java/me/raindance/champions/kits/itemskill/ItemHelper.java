@@ -94,9 +94,9 @@ public class ItemHelper extends ListenerBase {
         Player p = e.getPlayer();
         Action action = e.getAction();
         if(itemHandler.actionContains(action)) {
-            itemHandler.doItemAction(p);
+            itemHandler.doItemAction(p, action);
             removeItemFromHand(p);
-        }
+        }else e.setCancelled(true);
     }
 
     private void removeItemFromHand(Player player) {

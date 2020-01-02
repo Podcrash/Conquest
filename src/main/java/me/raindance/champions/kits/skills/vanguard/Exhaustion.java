@@ -24,6 +24,7 @@ public class Exhaustion extends Passive {
 
     @EventHandler
     public void skill(SkillUseEvent e) {
+        if(e.isCancelled()) return;
         if(e.getPlayer() == getPlayer()) {
             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.WEAKNESS, 3, 1);
         }

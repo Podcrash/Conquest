@@ -3,16 +3,25 @@ package me.raindance.champions.inventory;
 import com.podcrash.api.db.DataTableType;
 import com.podcrash.api.db.DescriptorTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.Configurator;
+import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
+import org.bukkit.ChatColor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class SkillData {
     private final int id;
@@ -38,6 +47,7 @@ public class SkillData {
         return getName().toLowerCase().replace(" ", "");
     }
     private void requestDescription() {
+        /*
         String cache = Communicator.getCacheValue(getCleanName());
         if(cache == null) {
             DescriptorTable table = TableOrganizer.getTable(DataTableType.DESCRIPTIONS);
@@ -51,6 +61,31 @@ public class SkillData {
                 this.description = Arrays.asList("Error loading skill descriptions!", "null");
             else this.description = Arrays.asList(value.split("\n"));
         }else this.description = Arrays.asList(cache.split("\n"));
+         */
+        if(description != null && description.size() != 0) return;
+        Configurator configurator = Pluginizer.getSpigotPlugin().getConfigurator("skilldescriptions");
+        CompletableFuture future = new CompletableFuture();
+        configurator.readList(getCleanName(), list -> {
+            if(list.size() != 0) {
+                List<String> desc = new ArrayList<>();
+                for(Object objLine : list) {
+                    if(objLine == null)  {
+                        desc.add(null);
+                    }else {
+                        String line = objLine.toString();
+                        line = ChatColor.RESET + ChatUtil.chat(line);
+                        desc.add(line);
+                    }
+                }
+                this.description = desc;
+            }
+            future.complete(null);
+        });
+        try {
+            future.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 
     private Constructor<Skill> initConstructor(Skill skill) {
@@ -79,8 +114,6 @@ public class SkillData {
     }
 
     public List<String> getDescription() {
-        if(description.get(description.size() - 1).equalsIgnoreCase("null"))
-            requestDescription();
         return description;
     }
 

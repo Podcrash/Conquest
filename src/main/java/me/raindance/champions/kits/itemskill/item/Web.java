@@ -13,7 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-@ItemMetaData(mat = Material.WEB, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.WEB, actions = {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class Web implements IItem {
 
     @Override

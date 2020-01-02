@@ -66,7 +66,7 @@ public class DomGame extends Game {
 
     @Override
     public Location spectatorSpawn() {
-        return null;
+        return getGameWorld().getSpawnLocation();
     }
 
     @Override
