@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BowChargeUp extends Skill implements TimeResource, ICooldown {
+public abstract class BowChargeUp extends Skill implements TimeResource {
     private Map<String, Long> times = new HashMap<>();
     protected boolean isUsing = false;
     private float power = 0;
@@ -52,7 +52,7 @@ public abstract class BowChargeUp extends Skill implements TimeResource, ICooldo
 
     @EventHandler(priority = EventPriority.HIGH)
     public void block(PlayerInteractEvent e){
-        if(e.getPlayer() != this.getPlayer() || !onCooldown()) return;
+        if(e.getPlayer() != this.getPlayer()) return;
         if(!rightClickCheck(e.getAction()) || !isHolding()) return;
         if(isInWater()) return;
 
@@ -63,15 +63,14 @@ public abstract class BowChargeUp extends Skill implements TimeResource, ICooldo
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void shoot(EntityShootBowEvent e){
-        if(e.getEntity() == getPlayer() && e.getProjectile() instanceof Arrow){
-            Arrow a = (Arrow) e.getProjectile();
-            charges.put(a, getCharge());
+        if(e.getEntity() != getPlayer() || !(e.getProjectile() instanceof Arrow)) return;
+        Arrow a = (Arrow) e.getProjectile();
+        charges.put(a, getCharge());
 
-            SkillUseEvent useEvent = new SkillUseEvent(this);
-            Bukkit.getPluginManager().callEvent(useEvent);
-            doShoot(a, charges.get(a));
-            resetCharge();
-        }
+        SkillUseEvent useEvent = new SkillUseEvent(this);
+        Bukkit.getPluginManager().callEvent(useEvent);
+        doShoot(a, charges.get(a));
+        resetCharge();
     }
 
 

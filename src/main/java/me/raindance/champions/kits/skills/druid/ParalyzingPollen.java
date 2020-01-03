@@ -1,6 +1,10 @@
 package me.raindance.champions.kits.skills.druid;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -11,6 +15,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -51,6 +56,8 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
 
         //spawn the enderpearl, we may need custom of these classes but for now this is fine.
         this.projectile = getPlayer().launchProjectile(EnderPearl.class, mulitplied);
+        WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(projectile.getLocation(), Material.FLOWER_POT.getId());
+        ParticleGenerator.generateProjectile(projectile, packet);
     }
 
     @Override
