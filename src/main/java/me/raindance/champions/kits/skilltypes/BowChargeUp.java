@@ -50,33 +50,25 @@ public abstract class BowChargeUp extends Skill implements TimeResource, ICooldo
 
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGH
-    )
+    @EventHandler(priority = EventPriority.HIGH)
     public void block(PlayerInteractEvent e){
-        if(e.getPlayer() == this.getPlayer()){
-            if(rightClickCheck(e.getAction()) && isHolding()){
-                if(!onCooldown()) {
-                    SkillUseEvent useEvent = new SkillUseEvent(this);
-                    Bukkit.getPluginManager().callEvent(useEvent);
-                    if(useEvent.isCancelled()) return;
-                    if(!isInWater()) {
-                        times.put(getPlayer().getName(), System.currentTimeMillis());
-                        unregister();
-                        TimeHandler.repeatedTime(1, 0, this);
-                    } else getPlayer().sendMessage(getWaterMessage());
-                }
-            }
-        }
+        if(e.getPlayer() != this.getPlayer() || !onCooldown()) return;
+        if(!rightClickCheck(e.getAction()) || !isHolding()) return;
+        if(isInWater()) return;
+
+        times.put(getPlayer().getName(), System.currentTimeMillis());
+        unregister();
+        TimeHandler.repeatedTime(1, 0, this);
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void shoot(EntityShootBowEvent e){
         if(e.getEntity() == getPlayer() && e.getProjectile() instanceof Arrow){
             Arrow a = (Arrow) e.getProjectile();
             charges.put(a, getCharge());
+
+            SkillUseEvent useEvent = new SkillUseEvent(this);
+            Bukkit.getPluginManager().callEvent(useEvent);
             doShoot(a, charges.get(a));
             resetCharge();
         }
@@ -85,9 +77,7 @@ public abstract class BowChargeUp extends Skill implements TimeResource, ICooldo
 
     public abstract void doShoot(Arrow arrow, float charge);
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void shoot(DamageApplyEvent e){
         if(e.getAttacker() == getPlayer() && charges.containsKey(e.getArrow()) && e.getCause() == Cause.PROJECTILE){
             shootPlayer(e.getArrow(), charges.get(e.getArrow()), e);
@@ -97,9 +87,7 @@ public abstract class BowChargeUp extends Skill implements TimeResource, ICooldo
     public abstract void shootPlayer(Arrow arrow, float charge, DamageApplyEvent e);
 
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void ground(ProjectileHitEvent e){
         Projectile proj = e.getEntity();
         if(proj instanceof Arrow){

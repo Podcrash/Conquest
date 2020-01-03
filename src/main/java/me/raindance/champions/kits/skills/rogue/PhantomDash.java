@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,30 +37,27 @@ public class PhantomDash extends Instant implements ICooldown {
     //We are using the instant base class to format this
 
     //we are going to be storing our own instance of the pearl here to reference it in another event.
-    private EnderPearl pearl; //nevermind
+    private Projectile pearl; //nevermind
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
         //if the action isn't right click or if there is on cooldowm
-        if(rightClickCheck(action) || onCooldown()) return;
+        if(!rightClickCheck(action) || onCooldown()) return;
 
         //Set the cooldown
         setLastUsed(System.currentTimeMillis());
 
         //Get the direction of the player because we need to launch projectile
         Location currentLocOfPlayer = getPlayer().getLocation();
-        //These are slightly different, as noted by the name of the functions
-        Location launchLocation = getPlayer().getEyeLocation();
 
         Vector direction = currentLocOfPlayer.getDirection();
-        World world = currentLocOfPlayer.getWorld();
 
-        //spawn the enderpearl, we may need custom of these classes but for now this is fine.
-        this.pearl = world.spawn(launchLocation, EnderPearl.class);
         //we will also be assuming that the pearl doesn't have a velocity when it spawns.
 
-        Vector mulitplied = direction.multiply(4.2F); //magic number
-        pearl.setVelocity(mulitplied);
+        Vector mulitplied = direction.multiply(2.4F); //magic number
+
+        //spawn the enderpearl, we may need custom of these classes but for now this is fine.
+        this.pearl = getPlayer().launchProjectile(EnderPearl.class, mulitplied);
 
         //AT THIS POINT: we have spawned the ender pearl.
     }
@@ -84,6 +82,11 @@ public class PhantomDash extends Instant implements ICooldown {
         //damage
         DamageApplier.damage((LivingEntity) victim, getPlayer(), 5, this, false);
 
+        Vector direction = getPlayer().getLocation().getDirection();
+
+        Location endLoc = damager.getLocation();
+        //save the original direction
+        endLoc.setDirection(direction);
         //teleport
         getPlayer().teleport(damager.getLocation());
         this.pearl = null;

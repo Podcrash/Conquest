@@ -91,8 +91,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
     protected void doSkill(PlayerInteractEvent event, Action action) {
         if (!rightClickCheck(action) || EntityUtil.onGround(getPlayer())) {
             if(!onCooldown()) {
-                getPlayer().sendMessage(String.format("%s%s> %sYou cannot use %sTakedown%s while grounded.",
-                        ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY));
+                getPlayer().sendMessage(getMustGroundMessage());
             }
             return;
         }

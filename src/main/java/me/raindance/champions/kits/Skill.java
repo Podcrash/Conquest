@@ -86,8 +86,7 @@ public abstract class Skill implements ISkill, DamageSource {
     }
 
     public String getUsedMessage() {
-        return String.format(
-                "%s%s> %sYou used %s%s%s.",
+        return String.format("%s%s> %sYou used %s%s%s.",
                 ChatColor.BLUE, ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
     public String getUsedMessage(LivingEntity entity) {
@@ -99,6 +98,11 @@ public abstract class Skill implements ISkill, DamageSource {
     public String getDurationMessage(LivingEntity entity, String verb, double duration) {
         return String.format("%s%s> %sYou %s %s%s %sfor %s%f.",
                 ChatColor.BLUE, getName(), ChatColor.GRAY, verb, ChatColor.YELLOW, entity.getName(), ChatColor.GRAY, ChatColor.GREEN, duration);
+    }
+
+    public String getMustGroundMessage() {
+        return String.format("%s%s> %sYou cannot use %s%s%s while grounded.",
+                ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
 
     public Player getPlayer() {

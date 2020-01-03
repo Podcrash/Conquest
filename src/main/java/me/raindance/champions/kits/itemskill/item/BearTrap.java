@@ -49,7 +49,7 @@ public class BearTrap implements IItem, ItemListener {
             for(Player p : item.getWorld().getPlayers()) {
                 packet2.sendPacket(p);
             }
-            SoundPlayer.sendSound(item.getLocation(), "dig.stone", 1.25F, 66);
+            SoundPlayer.sendSound(player, "random.door_open", 1F, 66);
         });
         ownerItem.put(item.getEntityId(), player.getName());
     }
@@ -86,7 +86,8 @@ public class BearTrap implements IItem, ItemListener {
                 DamageApplier.damage(entity, owner, 3, instance, false);
                 StatusApplier.getOrNew(entity).applyStatus(Status.ROOTED, 3, 0);
             }
-
+            SoundPlayer.sendSound(owner, "random.door_close", 1F, 66);
+            SoundPlayer.sendSound(item.getLocation(), "random.door_close", 1F, 66);
             item.remove();
         }
     }

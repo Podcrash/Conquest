@@ -34,10 +34,10 @@ public class PreemptiveStrike extends Passive implements ICooldown {
     @EventHandler
     public void hit(DamageApplyEvent e) {
         if(onCooldown() || e.getAttacker() != getPlayer()) return;
-        if(!(e.getVictim() instanceof Player)) return;
         setLastUsed(System.currentTimeMillis());
-        StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.WEAKNESS, 4, 0);
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.guardian.curse", 0.9F, 90);
+        StatusApplier.getOrNew(e.getVictim()).applyStatus(Status.WEAKNESS, 4, 0);
+        getPlayer().sendMessage(getUsedMessage(e.getVictim()));
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.guardian.curse", 0.75F, 90);
 
     }
 }

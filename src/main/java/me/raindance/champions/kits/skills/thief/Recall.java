@@ -3,24 +3,16 @@ package me.raindance.champions.kits.skills.thief;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.location.Coordinate;
-import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.*;
 import me.raindance.champions.kits.skilltypes.Drop;
-import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.time.TimeHandler;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 import java.util.LinkedList;
@@ -62,7 +54,7 @@ public class Recall extends Drop implements ICooldown, IContinuousPassive, IPass
         if (getPlayer() != null) TimeHandler.repeatedTimeSeconds(1, 0L, this);
     }
 
-    public void drop(PlayerDropItemEvent e) {
+    public boolean drop(PlayerDropItemEvent e) {
         if(!onCooldown()) {
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_UNFECT, 2.0F, 2.0F);
             Location start = getPlayer().getLocation();
@@ -73,7 +65,9 @@ public class Recall extends Drop implements ICooldown, IContinuousPassive, IPass
             this.setLastUsed(System.currentTimeMillis());
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_UNFECT, 2.0F, 2.0F);
             getPlayer().setFallDistance(0);
+            return true;
         } else this.getPlayer().sendMessage(getCooldownMessage());
+        return false;
     }
 
 

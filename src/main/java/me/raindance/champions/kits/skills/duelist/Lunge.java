@@ -29,12 +29,12 @@ public class Lunge extends Drop implements ICooldown {
     }
 
     @Override
-    public void drop(PlayerDropItemEvent e) {
-        if(onCooldown()) return;
+    public boolean drop(PlayerDropItemEvent e) {
+        if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "item.fireCharge.use", 0.8F, 90);
         setVector();
-
+        return true;
     }
 
     private void setVector() {

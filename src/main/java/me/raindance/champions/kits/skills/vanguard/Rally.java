@@ -8,12 +8,9 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.iskilltypes.action.IDropPassive;
 import me.raindance.champions.kits.skilltypes.Drop;
-import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 @SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.DROP)
@@ -33,14 +30,12 @@ public class Rally extends Drop implements ICooldown {
         return ItemType.NULL;
     }
 
-
-    @EventHandler
     @Override
-    public void drop(PlayerDropItemEvent e) {
-        if(onCooldown()) return;
+    public boolean drop(PlayerDropItemEvent e) {
+        if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         Location currentLoc = getPlayer().getLocation();
-        SoundPlayer.sendSound(currentLoc, "mob.pig.death", 0.75F, 1);
+        SoundPlayer.sendSound(currentLoc, "mob.horse.gallop", 0.75F, 1);
         for(Player other : getPlayers()) {
             if(!isAlly(other)) continue;
             Location otherLoc = other.getLocation();
@@ -48,5 +43,6 @@ public class Rally extends Drop implements ICooldown {
             if(distSquared > 9D) continue;
             StatusApplier.getOrNew(other).applyStatus(Status.SPEED, 3, 1, true, true);
         }
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package me.raindance.champions.kits.iskilltypes.action;
 
 import me.raindance.champions.kits.ChampionsPlayer;
+import me.raindance.champions.kits.EnergyBar;
 import net.md_5.bungee.api.ChatColor;
 
 public interface IEnergy {
@@ -16,13 +17,16 @@ public interface IEnergy {
         return getEnergyUsage() / 20D;
     }
 
+    default void useEnergy() {
+        useEnergy(getEnergyUsage());
+    }
     /**
      * decrease the champions energy
      * @param energy
      */
     default void useEnergy(double energy){
-
-        getChampionsPlayer().getEnergyBar().setEnergy(getChampionsPlayer().getEnergyBar().getEnergy() - energy);
+        EnergyBar ebar = getChampionsPlayer().getEnergyBar();
+        ebar.setEnergy(ebar.getEnergy() - energy);
     }
 
     /**
@@ -31,7 +35,7 @@ public interface IEnergy {
      * @return
      */
     default boolean hasEnergy(double energy) {
-        return (getChampionsPlayer().getEnergyBar().getEnergy() - energy  >= 0);
+        return (getEnergyBar().getEnergy() - energy  >= 0);
     }
 
     /**
@@ -51,5 +55,9 @@ public interface IEnergy {
                 getName(),
                 ChatColor.GRAY
         );
+    }
+
+    default EnergyBar getEnergyBar() {
+        return getChampionsPlayer().getEnergyBar();
     }
 }

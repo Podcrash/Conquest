@@ -9,9 +9,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Drop;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
@@ -34,12 +32,13 @@ public class Guardian extends Drop implements ICooldown {
     }
 
     @Override
-    public void drop(PlayerDropItemEvent e) {
-        if(onCooldown()) return;
+    public boolean drop(PlayerDropItemEvent e) {
+        if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         active = true;
         //TODO: ANVIL PLACED SOUND
         new GuardianProtect().run(2, 0);
+        return true;
     }
 
     @EventHandler

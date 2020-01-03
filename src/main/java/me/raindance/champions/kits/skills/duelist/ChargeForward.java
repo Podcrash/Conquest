@@ -11,19 +11,14 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Drop;
-import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.resources.EntityParticleResource;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.Arrays;
-
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
+@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.DROP)
 public class ChargeForward extends Drop implements ICooldown {
     private long selfTime;
     private boolean use;
@@ -55,16 +50,16 @@ public class ChargeForward extends Drop implements ICooldown {
     }
 
     @Override
-    public void drop(PlayerDropItemEvent e) {
-        if (!onCooldown()) {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 1);
-            selfTime = System.currentTimeMillis();
-            this.setLastUsed(System.currentTimeMillis());
-            SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", 0.75F, 10);
-            getPlayer().sendMessage(getUsedMessage());
-            use = true;
-            new BullsChargeParticle().run(1, 1);
-        }
+    public boolean drop(PlayerDropItemEvent e) {
+        if (onCooldown()) return false;
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 1);
+        selfTime = System.currentTimeMillis();
+        this.setLastUsed(System.currentTimeMillis());
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", 0.75F, 10);
+        getPlayer().sendMessage(getUsedMessage());
+        use = true;
+        new BullsChargeParticle().run(1, 1);
+        return true;
     }
 
     @EventHandler(

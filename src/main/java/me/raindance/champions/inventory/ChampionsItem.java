@@ -26,9 +26,9 @@ public enum ChampionsItem {
     BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
     BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
 
-    WOOD_SWORD(12, ChatColor.WHITE + "Tree Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
-    WOOD_AXE(13, ChatColor.WHITE + "Tree Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
-    WOOD_SHOVEL(14, ChatColor.WHITE + "Tree Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
+    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
+    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
+    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
 
     STONE_SWORD(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD),
     STONE_AXE(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE),

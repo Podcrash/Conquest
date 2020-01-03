@@ -117,47 +117,46 @@ public class ChampionsInventory {
     }
 
     static void setHotBar(Inventory inventory, SkillType skillType) {
-        int[] itemArray;
+        ChampionsItem[] itemArray;
         switch (skillType) {
             //they won't be merged just in case for easy access
             case Warden:
-                itemArray = new int[]{9, 10, 22, 22, 22, 22};
+                itemArray = new ChampionsItem[]{ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Vanguard:
-                itemArray = new int[] {11, 10, 22, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SHOVEL, ChampionsItem.STANDARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Berserker:
-                itemArray = new int[] {28, 3, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.POWER_AXE, ChampionsItem.MEAD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Duelist:
-                itemArray = new int[] {27, 22, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.POWER_SWORD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Marksman:
-                itemArray = new int[] {9, 29, 22, 22, 20};
+                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.RANGER_ARROWS};
                 break;
             case Hunter:
-                itemArray = new int[] {9, 10, 29, 22, 22, 22, 4};
+                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.RANGER_ARROWS};
                 break;
             case Thief:
-                itemArray = new int[] {18, 19, 29, 20, 2, 24};
+                itemArray = new ChampionsItem[] {ChampionsItem.STONE_SWORD, ChampionsItem.STONE_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.ASSASSIN_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB};
                 break;
             case Rogue:
-                itemArray = new int[] {27, 28, 22, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.POWER_SWORD, ChampionsItem.POWER_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Druid:
-                itemArray = new int[] {31, 32, 33, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.WOOD_SWORD, ChampionsItem.WOOD_AXE, ChampionsItem.WOOD_SHOVEL, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Sorcerer:
-                itemArray = new int[] {12, 13, 14, 22, 22, 22};
+                itemArray = new ChampionsItem[] {ChampionsItem.BOOSTER_SWORD, ChampionsItem.BOOSTER_AXE, ChampionsItem.BOOSTER_SHOVEL, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);
         }
 
         for(int i = 0; i < itemArray.length; i++) {
-            int id = itemArray[i];
-            if(id < 0) continue;
-            inventory.setItem(i, ChampionsItem.getBySlotID(id).toItemStack());
+            ChampionsItem id = itemArray[i];
+            inventory.setItem(i, id.toItemStack());
         }
     }
 }

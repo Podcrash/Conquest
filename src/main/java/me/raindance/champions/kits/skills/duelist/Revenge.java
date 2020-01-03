@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 //How to make a class from scratch
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
+@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
 public class Revenge extends Passive implements ICooldown {//it is a passive because the other skilltypes do not match what I am trying to do: control damage
     //It's going to implement charges, since it has the ability to stack (at least twice). Nevermind, it is only going to implement the part where
     //it will gain charges, the other stuff has stuff to do with time.

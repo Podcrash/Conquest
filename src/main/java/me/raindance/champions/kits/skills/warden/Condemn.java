@@ -36,7 +36,7 @@ public class Condemn extends Passive implements ICooldown {
         if(onCooldown() || e.getAttacker() != getPlayer()) return;
         if(!(e.getVictim() instanceof Player)) return;
         setLastUsed(System.currentTimeMillis());
-        getPlayer().sendMessage(getUsedMessage(e.getVictim()).replace("use", "unleashed"));
+        getPlayer().sendMessage(getUsedMessage(e.getVictim()).replace("used", "unleashed"));
         StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.GROUND, 1.5F, 1);
         e.setDamage(e.getDamage() - 2);
         e.setModified(true);

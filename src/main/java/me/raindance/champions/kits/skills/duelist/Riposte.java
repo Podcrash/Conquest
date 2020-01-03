@@ -44,19 +44,14 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
 
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
-            return;
-        }
-        if (!onCooldown()) {
-            time = System.currentTimeMillis();
-            isRiposting = true;
-            TimeHandler.repeatedTime(1, 0, this);
-        }
+        if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
+        if (onCooldown()) return;
+        time = System.currentTimeMillis();
+        isRiposting = true;
+        TimeHandler.repeatedTime(1, 0, this);
     }
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         LivingEntity player = event.getVictim();

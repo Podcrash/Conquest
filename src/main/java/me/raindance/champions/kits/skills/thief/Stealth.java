@@ -53,10 +53,10 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
         return ItemType.NULL;
     }
 
-    public void drop(PlayerDropItemEvent e) {
+    public boolean drop(PlayerDropItemEvent e) {
         if (onCooldown()) {
             this.getPlayer().sendMessage(getCooldownMessage());
-            return;
+            return false;
         }
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
         applier.applyStatus(Status.CLOAK, duration, 1);
@@ -71,7 +71,7 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
         getPlayer().getWorld().playEffect(getPlayer().getLocation(), Effect.EXPLOSION_HUGE, 1);
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 2f, 0.5f);
         this.setLastUsed(System.currentTimeMillis());
-        this.getPlayer().sendMessage(getUsedMessage());
+        return true;
     }
 
     /*

@@ -10,14 +10,11 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Drop;
-import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
-
-import java.util.Arrays;
 
 
 @SkillMetadata(skillType = SkillType.Berserker, invType = InvType.DROP)
@@ -34,11 +31,12 @@ public class Cleave extends Drop implements ICooldown {
     }
 
     @Override
-    public void drop(PlayerDropItemEvent e) {
-        if(onCooldown()) return;
+    public boolean drop(PlayerDropItemEvent e) {
+        if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
+        return true;
         //TODO: Cleave particle effects?
     }
 

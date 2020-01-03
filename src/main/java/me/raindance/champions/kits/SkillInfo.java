@@ -27,7 +27,7 @@ public final class SkillInfo {
     public static void setUp() {
         System.out.println("Loading classes");
         try {
-            final List<String> list = Arrays.asList("warden", "duelist", "vanguard", "berserker", "marksman", "hunter", "thief", "rogue");
+            final List<String> list = Arrays.asList("warden", "duelist", "vanguard", "berserker", "marksman", "hunter", "thief", "rogue", "druid");
             for(String e : list)
                 SkillInfo.addSkills(e);
             skillData.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));

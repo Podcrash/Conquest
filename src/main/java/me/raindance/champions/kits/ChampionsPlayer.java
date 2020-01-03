@@ -229,6 +229,7 @@ public abstract class ChampionsPlayer {
             ebar = new EnergyBar(player, maxEnergy);
         } else {
             if(ebar == null) return;
+            ebar.unregister();
             ebar.stop();
             ebar = null;
         }

@@ -53,11 +53,12 @@ public abstract class Instant extends Skill {
     }
 
     public boolean canUseSkill(PlayerEvent event) {
-        if(getPlayer() != event.getPlayer()) return false;
-        if(isInWater()) {
+        if (getPlayer() != event.getPlayer() || !isHolding()) return false;
+
+        if (isInWater()) {
             getPlayer().sendMessage(getWaterMessage());
             return false;
-        } else return isHolding();
+        } else return true;
     }
 
 

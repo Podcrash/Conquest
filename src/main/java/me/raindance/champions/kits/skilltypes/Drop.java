@@ -1,11 +1,9 @@
 package me.raindance.champions.kits.skilltypes;
 
-import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.ItemType;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,18 +20,21 @@ public abstract class Drop extends Skill {
         SkillUseEvent useEvent = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        getPlayer().sendMessage(getUsedMessage());
-        drop(e);
+        if(drop(e)) getPlayer().sendMessage(getUsedMessage());
         e.setCancelled(true);
     }
 
-    public abstract void drop(PlayerDropItemEvent e);
+    /**
+     * true if the skill is used.
+     * @param e
+     * @return
+     */
+    public abstract boolean drop(PlayerDropItemEvent e);
 
     protected boolean isHolding(@Nonnull ItemStack dropped) {
-        if(dropped.getItemMeta() == null || dropped.getItemMeta().getDisplayName() == null) return false;
         ItemType[] weapons = ItemType.details();
 
-        String name = dropped.getItemMeta().getDisplayName().toUpperCase();
+        String name = dropped.getType().name().toUpperCase();;
         if(getItemType() != ItemType.NULL) {
             return name.contains(getItemType().getName());
         }
