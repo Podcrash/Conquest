@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.BOW)
+@SkillMetadata(id = 503, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct {
     private double range;
     private WrapperPlayServerWorldParticles particle;

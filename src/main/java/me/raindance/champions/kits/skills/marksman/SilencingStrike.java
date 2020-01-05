@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.SWORD)
+@SkillMetadata(id = 509, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class SilencingStrike extends Interaction {
     private final float duration = 2;
     private final double damage = 2;

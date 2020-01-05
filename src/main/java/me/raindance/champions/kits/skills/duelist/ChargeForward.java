@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.DROP)
+@SkillMetadata(id = 301, skillType = SkillType.Duelist, invType = InvType.DROP)
 public class ChargeForward extends Drop implements ICooldown {
     private long selfTime;
     private boolean use;

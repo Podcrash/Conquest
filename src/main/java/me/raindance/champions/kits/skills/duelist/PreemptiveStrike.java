@@ -13,7 +13,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 306, skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
 public class PreemptiveStrike extends Passive implements ICooldown {
 
     @Override

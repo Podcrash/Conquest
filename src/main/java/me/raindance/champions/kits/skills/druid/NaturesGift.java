@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.AXE)
+@SkillMetadata(id = 204, skillType = SkillType.Druid, invType = InvType.AXE)
 public class NaturesGift extends Instant implements ICooldown, IEnergy {
     @Override
     public float getCooldown() {

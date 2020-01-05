@@ -16,7 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.AXE)
+@SkillMetadata(id = 705, skillType = SkillType.Thief, invType = InvType.AXE)
 public class Leap extends Instant implements ICooldown {
     @Override
     public float getCooldown() {

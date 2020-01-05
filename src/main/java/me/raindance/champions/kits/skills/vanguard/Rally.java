@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.DROP)
+@SkillMetadata(id = 806, skillType = SkillType.Vanguard, invType = InvType.DROP)
 public class Rally extends Drop implements ICooldown {
     @Override
     public float getCooldown() {

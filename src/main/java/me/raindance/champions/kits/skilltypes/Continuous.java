@@ -32,7 +32,7 @@ public abstract class Continuous extends Instant implements TimeResource {
 
     protected abstract void doContinuousSkill();
 
-    protected void start(){
+    protected void startContinuousAction(){
         TimeHandler.repeatedTime(1,0, this);
     }
 

@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
 public class CutDown extends Passive {
     private final int duration = 4;
 

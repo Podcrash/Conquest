@@ -41,7 +41,7 @@ import java.util.Random;
 import java.util.Set;
 
 //TODO: path finding algorithm (bruh)
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.SWORD)
+@SkillMetadata(id = 208, skillType = SkillType.Druid, invType = InvType.SWORD)
 public class TangleVines extends Instant implements TimeResource, IEnergy, ICooldown {
     private Location currentPointer;
     private boolean usage;

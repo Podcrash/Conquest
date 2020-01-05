@@ -9,7 +9,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 101, skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
 public class Assurance extends Passive {
     @Override
     public String getName() {

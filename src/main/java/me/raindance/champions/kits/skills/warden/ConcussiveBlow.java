@@ -17,7 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.AXE)
+@SkillMetadata(id = 902, skillType = SkillType.Warden, invType = InvType.AXE)
 public class ConcussiveBlow extends Instant implements ICooldown {
     private float velocity;
 

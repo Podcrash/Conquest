@@ -16,7 +16,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.BOW)
+@SkillMetadata(id = 407, skillType = SkillType.Hunter, invType = InvType.BOW)
 public class WolfFang extends BowShotSkill {
 
     public WolfFang() {

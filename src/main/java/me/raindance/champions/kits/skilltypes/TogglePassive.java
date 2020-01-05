@@ -34,7 +34,7 @@ public abstract class TogglePassive extends Drop {
         //the reason why this is inverted is because the message sent is before the toggle method is called
         //meaning, it will be inverted before it's called, but to the user it's confusing
         //so we invert it
-        String status = (!isToggled()) ? ChatColor.GOLD + "Enabled" : ChatColor.RED + "Disabled";
+        String status = (isToggled()) ? ChatColor.GOLD + "Enabled" : ChatColor.RED + "Disabled";
         return String.format(ChatColor.BLUE + "Skill> " + ChatColor.RESET + ChatColor.GREEN + "%s: %s", getName(), status);
     }
 

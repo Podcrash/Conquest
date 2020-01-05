@@ -9,6 +9,7 @@ import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
      */
     @Override
     protected void doSkill(PlayerInteractEvent event, Action action) {
-        if (!(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) return;
+        if (rightClickCheck(action)) return;
         if(onCooldown()) return;
         isPrepared = true;// sound goes here
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.blaze.breathe", 0.75f, 200);

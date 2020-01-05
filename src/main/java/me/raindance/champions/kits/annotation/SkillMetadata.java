@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface SkillMetadata {
+    int id();
     SkillType skillType() default SkillType.Global;
     InvType invType() default InvType.SWORD;
 }

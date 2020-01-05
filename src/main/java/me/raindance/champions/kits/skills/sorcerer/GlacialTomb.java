@@ -1,0 +1,134 @@
+package me.raindance.champions.kits.skills.sorcerer;
+
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.item.ItemManipulationManager;
+import com.podcrash.api.mc.util.PacketUtil;
+import me.raindance.champions.kits.annotation.SkillMetadata;
+import me.raindance.champions.kits.enums.InvType;
+import me.raindance.champions.kits.enums.ItemType;
+import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.IConstruct;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
+import me.raindance.champions.kits.iskilltypes.action.IEnergy;
+import me.raindance.champions.kits.skilltypes.Instant;
+import com.podcrash.api.mc.sound.SoundWrapper;
+import com.podcrash.api.mc.world.BlockUtil;
+import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateTime;
+import org.bukkit.*;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
+
+import java.util.*;
+
+@SkillMetadata(id = 1004, skillType = SkillType.Sorcerer, invType = InvType.AXE)
+public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstruct {
+    private final Random random = new Random();
+    private WrapperPlayServerWorldParticles particles;
+    private String NAME;
+    private int energy;
+    private int duration;
+
+    private List<Vector> tempArrayList = new ArrayList<>();
+
+    public GlacialTomb() {
+        this.energy = 80;
+        this.duration = 4;
+        setCanUseWhileCooldown(true);
+    }
+
+    @Override
+    public void afterConstruction() {
+        particles = ParticleGenerator.createParticle(null, EnumWrappers.Particle.SNOW_SHOVEL, 1, 0,0,0);
+        NAME = getPlayer().getName()  + getName();
+    }
+
+    @Override
+    public float getCooldown() {
+        return 20;
+    }
+
+    @Override
+    public String getName() {
+        return "Glacial Tomb";
+    }
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.AXE;
+    }
+
+    @Override
+    protected void doSkill(PlayerInteractEvent event, Action action) {
+        if(!rightClickCheck(action)) return;
+        if(!onCooldown()) {
+            if(!hasEnergy()) {
+                getPlayer().sendMessage(getNoEnergyMessage());
+                return;
+            }
+            this.setLastUsed(System.currentTimeMillis());
+            useEnergy(energy);
+            launch();
+        }else {
+            //if the time elapsed is too long, cancel
+            if(getCooldown() - cooldown() > duration) return;
+            detomb();
+        }
+    }
+
+    private void launch() {
+        Location location = getPlayer().getEyeLocation();
+        Vector vector = location.getDirection();
+        vector.normalize().multiply(1.15D);
+
+        Item item = ItemManipulationManager.intercept(getPlayer(), Material.ICE, location, vector, ((item1, entity) -> {
+            Location location1 = item1.getLocation();
+            if(entity == null) location1.add(new Vector(0,1,0));
+            entomb(location1);
+            item1.getWorld().playEffect(location1, Effect.STEP_SOUND, 79);
+            item1.remove();
+        }));
+        ItemMeta meta = item.getItemStack().getItemMeta();
+        item.setCustomName("RITB");
+        meta.setDisplayName(NAME + item.getEntityId());
+        item.getItemStack().setItemMeta(meta);
+        ParticleGenerator.generateEntity(item, particles, new SoundWrapper("random.fizz", 0.6F, 88));
+        item.getWorld().playSound(item.getLocation(), Sound.SILVERFISH_HIT, 2f, 1f);
+    }
+
+    private void entomb(Location location) {
+        Set<Vector> blocks = BlockUtil.getOuterBlocksWithinRange(location, 4, true);
+        World world = location.getWorld();
+        for(Vector block : blocks) {
+            int totalDuration = 3 * this.duration/4 + (int) (0.5F + this.duration/4 * random.nextFloat());
+            BlockUtil.restoreAfterBreak(block.toLocation(world), Material.ICE, (byte) 0, totalDuration);
+            tempArrayList.add(block);
+        }
+    }
+
+    private void detomb() {
+        int i = 0;
+        for(Vector block : tempArrayList) {
+            Location blockLoc = block.toLocation(getPlayer().getWorld());
+            if(blockLoc.getBlock().getType() != Material.ICE) continue;
+            BlockUtil.setBlock(blockLoc, Material.AIR);
+            if(i % 6 == 0) {
+                WrapperPlayServerWorldEvent event = ParticleGenerator.createBlockEffect(block, Material.ICE.getId());
+                PacketUtil.asyncSend(event, getPlayers());
+            }
+            i++;
+        }
+        tempArrayList.clear();
+    }
+
+    @Override
+    public int getEnergyUsage() {
+        return energy;
+    }
+}

@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.Random;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+@SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class Whirlwind extends Instant implements ICooldown, IConstruct {
     private int distance;
     private int distanceSquared;

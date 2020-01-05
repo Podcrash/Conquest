@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.INNATE)
+@SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.INNATE)
 public class ComboAttack extends Passive {
     private int bonus = 0;
     private long lastHit = 0;

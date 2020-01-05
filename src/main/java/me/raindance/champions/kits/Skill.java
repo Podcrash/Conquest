@@ -16,7 +16,6 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
 
-@SkillMetadata
 public abstract class Skill implements ISkill, DamageSource {
     private String playerName;
     protected final Skill instance = this;
@@ -141,13 +140,18 @@ public abstract class Skill implements ISkill, DamageSource {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Skill)) return false;
+
         Skill skill = (Skill) o;
-        return Objects.equals(getID(), skill.getID());
+
+        return playerName != null ?
+                playerName.equals(skill.playerName) && skill.getItemType() == getItemType() && getID() == skill.getID()
+                : skill.playerName == null;
     }
 
     @Override
     public int hashCode() {
-        return getID();
+        if(playerName == null) return getID();
+        else return Objects.hash(playerName, getItemType(), getID());
     }
 }

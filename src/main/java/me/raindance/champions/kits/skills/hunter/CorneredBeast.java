@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.Arrays;
 import java.util.Random;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.AXE)
+@SkillMetadata(id = 401, skillType = SkillType.Hunter, invType = InvType.AXE)
 public class CorneredBeast extends Instant implements TimeResource, ICooldown {
     private int count = 0;
     private int selfEffect;

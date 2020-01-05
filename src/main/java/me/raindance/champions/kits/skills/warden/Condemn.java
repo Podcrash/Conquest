@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.warden;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -14,7 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 903, skillType = SkillType.Warden, invType = InvType.PASSIVEA)
 public class Condemn extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
@@ -34,6 +35,7 @@ public class Condemn extends Passive implements ICooldown {
     @EventHandler
     public void damage(DamageApplyEvent e) {
         if(onCooldown() || e.getAttacker() != getPlayer()) return;
+        if(e.getCause() != Cause.MELEE && e.getCause() != Cause.MELEESKILL) return;
         if(!(e.getVictim() instanceof Player)) return;
         setLastUsed(System.currentTimeMillis());
         getPlayer().sendMessage(getUsedMessage(e.getVictim()).replace("used", "unleashed"));

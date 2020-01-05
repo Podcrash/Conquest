@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.AXE)
+@SkillMetadata(id = 406, skillType = SkillType.Hunter, invType = InvType.AXE)
 public class Swiftness extends Instant implements TimeResource, ICooldown {
     private final int selfEffect = 4;
     private final float selfReduction = 0.4F;

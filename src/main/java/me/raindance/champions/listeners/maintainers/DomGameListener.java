@@ -69,7 +69,7 @@ public class DomGameListener extends ListenerBase {
         game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
-            Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
+            Main.instance.getLogger().info(String.format("Can't startContinuousAction game %d, not enough players!", game.getId()));
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);

@@ -8,7 +8,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 106, skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
 public class Perserverance extends Passive {
     @Override
     public String getName() {

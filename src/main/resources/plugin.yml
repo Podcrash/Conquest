@@ -16,7 +16,7 @@ commands:
       usage: /leave
   start:
       description: Start a game.
-      usage: /start
+      usage: /startContinuousAction
   end:
     description: End a game.
     usage: /end <GameID>
@@ -90,6 +90,6 @@ permissions:
         Champions.host: true
         Champions.developer: true
     Champions.host:
-      description: Permission to set maps, start, and end games.
+      description: Permission to set maps, startContinuousAction, and end games.
     Champions.developer:
       description: Permission to use developer-only commands that could greatly impact the server.

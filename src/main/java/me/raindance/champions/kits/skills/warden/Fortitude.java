@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 906, skillType = SkillType.Warden, invType = InvType.PASSIVEB)
 public class Fortitude extends Passive implements ICooldown, IConstruct {
     private TimeResource resource;
 

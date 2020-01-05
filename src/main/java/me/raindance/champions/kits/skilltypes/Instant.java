@@ -6,6 +6,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,9 +20,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Instant extends Skill {
     private final Skill instance;
+    private boolean canUseWhileCooldown;
     public Instant() {
         super();
         instance = this;
+        canUseWhileCooldown = false;
     }
 
     @EventHandler( priority = EventPriority.HIGHEST )
@@ -54,13 +57,22 @@ public abstract class Instant extends Skill {
 
     public boolean canUseSkill(PlayerEvent event) {
         if (getPlayer() != event.getPlayer() || !isHolding()) return false;
+        if(!canUseWhileCooldown && this instanceof ICooldown)
+            if((((ICooldown) this).onCooldown())) return false;
 
+        if(!(this instanceof BowShotSkill) && event instanceof PlayerInteractEvent) {
+            if(!rightClickCheck(((PlayerInteractEvent) event).getAction()))
+                return false;
+        }
         if (isInWater()) {
             getPlayer().sendMessage(getWaterMessage());
             return false;
         } else return true;
     }
 
+    protected void setCanUseWhileCooldown(boolean canUseWhileCooldown) {
+        this.canUseWhileCooldown = canUseWhileCooldown;
+    }
 
     protected abstract void doSkill(PlayerInteractEvent event, Action action);
 }

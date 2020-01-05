@@ -3,19 +3,15 @@ package me.raindance.champions.kits.skills.druid;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.time.resources.TimeResource;
-import com.sun.corba.se.spi.ior.IdentifiableFactory;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
-import me.raindance.champions.kits.skilltypes.Drop;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerDropItemEvent;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.DROP)
+@SkillMetadata(id = 203, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Miasma extends TogglePassive implements IEnergy, TimeResource {
     @Override
     public void toggle() {
@@ -57,10 +53,9 @@ public class Miasma extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public void cleanup() {
-        if(!hasEnergy()) {
+        if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
             getPlayer().sendMessage(getToggleMessage() + '\n' + getNoEnergyMessage());
         }
-
     }
 }

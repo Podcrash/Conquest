@@ -11,7 +11,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 402, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
 public class Footwork extends Passive {
     @Override
     public String getName() {

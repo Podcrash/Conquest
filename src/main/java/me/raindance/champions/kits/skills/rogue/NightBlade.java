@@ -21,7 +21,7 @@ import org.bukkit.event.EventHandler;
  * Details:
  * When activated, makes a blaze sound, similar to how the sound is for preparing a bow ability.
  */
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 606, skillType = SkillType.Rogue, invType = InvType.PASSIVEB)
 public class NightBlade extends Passive implements ICooldown {
 
     @Override

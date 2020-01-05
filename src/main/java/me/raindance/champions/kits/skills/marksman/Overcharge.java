@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 508, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
 public class Overcharge extends BowChargeUp {
     private final double bonusDamage;
     private final float rate;

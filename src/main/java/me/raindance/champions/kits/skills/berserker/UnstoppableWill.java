@@ -16,7 +16,7 @@ import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.AXE)
+@SkillMetadata(id = 109, skillType = SkillType.Berserker, invType = InvType.AXE)
 public class UnstoppableWill extends Instant implements ICooldown {
 
     @Override
@@ -43,7 +43,7 @@ public class UnstoppableWill extends Instant implements ICooldown {
             if(status.isNegative())
                 applier.removeStatus(status);
         });
-        applier.applyStatus(Status.RESISTANCE, 4, 1);
+        applier.applyStatus(Status.RESISTANCE, 4, 0);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.hit", 0.8F, 70);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.VILLAGER_ANGRY, 4);
         packet.setLocation(getPlayer().getEyeLocation());

@@ -24,7 +24,7 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.SWORD)
+@SkillMetadata(id = 704, skillType = SkillType.Thief, invType = InvType.SWORD)
 public class Illusion extends Continuous implements ICooldown {
     private final int duration = 3;
     private int entityID;
@@ -64,7 +64,7 @@ public class Illusion extends Continuous implements ICooldown {
             Disguiser.disguise(skeleton, getPlayer(), true, getPlayers());
             forceStop();
 
-            start();
+            startContinuousAction();
         } //else this.getEntity().sendMessage(getCooldownMessage());
     }
 

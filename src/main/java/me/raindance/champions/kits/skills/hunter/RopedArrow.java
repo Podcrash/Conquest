@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.BOW)
+@SkillMetadata(id = 404, skillType = SkillType.Hunter, invType = InvType.BOW)
 public class RopedArrow extends BowShotSkill {
 
     public RopedArrow() {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.INNATE)
+@SkillMetadata(id = 506, skillType = SkillType.Marksman, invType = InvType.INNATE)
 public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeResource {
     private List<Arrow> arrows = new ArrayList<>();
 

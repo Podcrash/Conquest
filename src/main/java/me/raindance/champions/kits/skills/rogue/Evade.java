@@ -29,11 +29,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.SWORD)
+@SkillMetadata(id = 604, skillType = SkillType.Rogue, invType = InvType.SWORD)
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
     private boolean isEvading = false;
     private long time;
-    private int charges = 2;
+    private int charges = 3;
 
     @Override
     public void task() {
@@ -52,15 +52,14 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
     @Override
     public void start() {
-        run(75, 0);
+        runAsync(75, 0);
     }
 
     @Override
     public void addCharge() {
-        if(charges < getMaxCharges()) {
-            charges++;
-            getPlayer().sendMessage(getCurrentChargeMessage());
-        }
+        if(charges >= getMaxCharges()) return;
+        charges++;
+        getPlayer().sendMessage(getCurrentChargeMessage());
     }
     private void removeCharge() {
         charges--;
@@ -237,6 +236,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
             SoundPlayer.sendSound(getPlayer(),"note.pling", 0.75F, 2);
             setLastUsed(System.currentTimeMillis());
             isEvading = false;
+            removeCharge();
         }
     }
 

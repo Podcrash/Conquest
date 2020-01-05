@@ -32,7 +32,7 @@ import org.bukkit.util.Vector;
  * The pearl emits the particles of an ender pearl landing when it lands.
  */
 
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.AXE)
+@SkillMetadata(id = 607, skillType = SkillType.Rogue, invType = InvType.AXE)
 public class PhantomDash extends Instant implements ICooldown {
     //We are using the instant base class to format this
 

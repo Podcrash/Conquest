@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.SWORD)
+@SkillMetadata(id = 904, skillType = SkillType.Warden, invType = InvType.SWORD)
 public class DefensiveStance extends Skill {
     @Override
     public String getName() {

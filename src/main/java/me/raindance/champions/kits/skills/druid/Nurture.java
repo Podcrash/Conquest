@@ -12,12 +12,11 @@ import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.DROP)
+@SkillMetadata(id = 205, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Nurture extends TogglePassive implements IEnergy, TimeResource {
     @Override
     public void toggle() {
         run(1, 0);
-
     }
 
     @Override

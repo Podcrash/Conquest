@@ -52,7 +52,7 @@ public class Druid extends ChampionsPlayer {
     //TODO: itemstackutil methods for this
     private void colorGreen(ItemStack leatherArmor) {
         LeatherArmorMeta meta = (LeatherArmorMeta) leatherArmor.getItemMeta();
-        meta.setColor(Color.BLACK);
+        meta.setColor(Color.GREEN);
 
         leatherArmor.setItemMeta(meta);
     }

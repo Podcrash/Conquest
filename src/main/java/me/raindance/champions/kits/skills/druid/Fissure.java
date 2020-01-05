@@ -25,7 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.AXE)
+@SkillMetadata(id = 201, skillType = SkillType.Druid, invType = InvType.AXE)
 public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown {
     private final Vector up = new Vector(0, 1, 0);
     private float damage;
@@ -63,7 +63,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
             return;
         }
         if(!(EntityUtil.onGround(getPlayer()))) {
-            getPlayer().sendMessage(String.format("%sSkill> %sYou must be grounded to use Fissure.", ChatColor.BLUE, ChatColor.GRAY));
+            getPlayer().sendMessage(getMustGroundMessage());
             return;
         }
 
@@ -75,7 +75,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
         current = start.clone();
         run(3, 0);
         Location sstart = start.clone();
-        end = sstart.clone().add(dir.clone().multiply(14));
+        end = sstart.clone().add(dir.clone().multiply(7));
         Vector startVector = start.toVector();
         while(BlockUtil.get2dDistanceSquared(startVector, sstart.add(dir).toVector()) <= 49) {
             if(BlockUtil.isPassable(sstart.getBlock())) {

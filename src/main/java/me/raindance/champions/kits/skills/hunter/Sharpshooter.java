@@ -23,7 +23,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.INNATE)
+@SkillMetadata(id = 405, skillType = SkillType.Hunter, invType = InvType.INNATE)
 public class Sharpshooter extends Passive implements ICharge {
     private final HashMap<Integer, Float> forceMap = new HashMap<>();
     private final int MAX_CHARGES = 4;

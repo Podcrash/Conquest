@@ -48,7 +48,7 @@ public interface IEnergy {
 
     default String getNoEnergyMessage() {
         return String.format(
-                "%sEnergy> %sYou are too exhausted to use %s%s %s.",
+                "%sEnergy> %sYou are too exhausted to use %s%s%s.",
                 ChatColor.BLUE,
                 ChatColor.GRAY,
                 ChatColor.GREEN,

@@ -27,7 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.DROP)
+@SkillMetadata(id = 710, skillType = SkillType.Thief, invType = InvType.DROP)
 public class Stealth extends Drop implements ICooldown, IConstruct {
     private final int duration = 8;
     private SmokeBombTrail trail;

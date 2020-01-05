@@ -13,7 +13,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 403, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
 public class KillShot extends Passive {
     @Override
     public String getName() {

@@ -25,7 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.AXE)
+@SkillMetadata(id = 605, skillType = SkillType.Rogue, invType = InvType.AXE)
 public class Flash extends Instant implements ICharge, IPassiveTimer {
     //rate of charges still not implemented
     private final int MAX_CHARGES = 4;

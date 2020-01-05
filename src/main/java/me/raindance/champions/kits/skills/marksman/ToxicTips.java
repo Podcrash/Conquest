@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 510, skillType = SkillType.Marksman, invType = InvType.PASSIVEB)
 public class ToxicTips extends Passive {
     private final int duration = 4;
 

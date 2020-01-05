@@ -22,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.BOW)
+@SkillMetadata(id = 507, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class MarkedForDeath extends BowShotSkill {
     private final int MAX_LEVEL = 4;
     private Map<String, Long> victims;

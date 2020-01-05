@@ -10,7 +10,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.INNATE)
+@SkillMetadata(id = 803, skillType = SkillType.Vanguard, invType = InvType.INNATE)
 public class Exhaustion extends Passive {
     @Override
     public String getName() {

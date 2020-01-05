@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.SWORD)
+@SkillMetadata(id = 502, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class Disengage extends Instant implements TimeResource, ICooldown {
     private final int MAX_LEVEL = 4;
     private boolean isDisengaging;

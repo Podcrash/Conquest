@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.BOW)
+@SkillMetadata(id = 701, skillType = SkillType.Thief, invType = InvType.BOW)
 public class AdhesiveArrow extends BowShotSkill {
 
     public AdhesiveArrow() {

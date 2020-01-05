@@ -12,7 +12,7 @@ import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.INNATE)
+@SkillMetadata(id = 105, skillType = SkillType.Berserker, invType = InvType.INNATE)
 public class Fury extends Passive implements IPassiveTimer, TimeResource {
     private long lastHit;
     @Override

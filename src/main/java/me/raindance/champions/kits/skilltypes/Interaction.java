@@ -19,15 +19,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Interaction extends Skill implements ICooldown {
+    protected boolean canMiss = true;
     private boolean hit = false;
 
     public Interaction() {
         super();
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void rightClick(PlayerInteractAtEntityEvent event) {
         Entity entity = event.getRightClicked();
         if(!(entity instanceof LivingEntity)) return;
@@ -51,18 +50,25 @@ public abstract class Interaction extends Skill implements ICooldown {
 
     public abstract void doSkill(LivingEntity clickedEntity);
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     public void miss(PlayerInteractEvent event) {
+        if(!canMiss) return;
         if (event.getPlayer() == getPlayer() && isHolding() && rightClickCheck(event.getAction())) {
             if (!onCooldown()) {
                 if (!hit && !isInWater()) {
                     getPlayer().sendMessage(String.format("%sSkill> %sYou missed %s%s%s.",
                             ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(),ChatColor.GRAY));
                     this.setLastUsed(System.currentTimeMillis());
+                    missSkill();
                 }
             }
         }
+    }
+
+    /**
+     * Override this if necessary
+     */
+    public void missSkill() {
+
     }
 }

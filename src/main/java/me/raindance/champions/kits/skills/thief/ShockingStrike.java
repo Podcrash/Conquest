@@ -14,7 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.SWORD)
+@SkillMetadata(id = 708, skillType = SkillType.Thief, invType = InvType.SWORD)
 public class ShockingStrike extends Interaction implements ICooldown {
     private String victimName;
     @Override

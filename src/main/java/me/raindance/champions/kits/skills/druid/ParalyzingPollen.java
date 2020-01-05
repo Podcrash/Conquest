@@ -7,6 +7,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -16,17 +17,14 @@ import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.SHOVEL)
+@SkillMetadata(id = 207, skillType = SkillType.Druid, invType = InvType.SHOVEL)
 public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
     private Projectile projectile;
     @Override
@@ -55,7 +53,8 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
         Vector mulitplied = direction.multiply(2.4F); //magic number
 
         //spawn the enderpearl, we may need custom of these classes but for now this is fine.
-        this.projectile = getPlayer().launchProjectile(EnderPearl.class, mulitplied);
+        this.projectile = getPlayer().launchProjectile(Egg.class, mulitplied);
+        projectile.setShooter(getPlayer());
         WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(projectile.getLocation(), Material.FLOWER_POT.getId());
         ParticleGenerator.generateProjectile(projectile, packet);
     }
@@ -71,13 +70,10 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
     }
 
     @EventHandler
-    public void enderPearlHit(EntityDamageByEntityEvent event) {
+    public void eggHit(EntityDamageByEntityEvent event) {
         //checks
         Entity damager = event.getDamager();
 
-        //if the damager is not a pearl or the pearl we need, return.
-        //if(!(damager instanceof EnderPearl) || damager != this.pearl) return;
-        //actually, just do this: check if the pearl is not the damager
         if(damager != this.projectile) return;
         Entity victim = event.getEntity();// victim
 
@@ -85,6 +81,7 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
         if(!(victim instanceof LivingEntity)) return;
 
         StatusApplier.getOrNew((LivingEntity) victim).applyStatus(Status.ROOTED, 2, 0);
+        SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.8F, 20);
         event.setCancelled(true);
         this.projectile = null;
     }

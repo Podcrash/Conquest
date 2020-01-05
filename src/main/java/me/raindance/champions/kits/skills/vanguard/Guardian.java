@@ -13,7 +13,7 @@ import me.raindance.champions.kits.skilltypes.Drop;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.DROP)
+@SkillMetadata(id = 804, skillType = SkillType.Vanguard, invType = InvType.DROP)
 public class Guardian extends Drop implements ICooldown {
     private boolean active;
     @Override

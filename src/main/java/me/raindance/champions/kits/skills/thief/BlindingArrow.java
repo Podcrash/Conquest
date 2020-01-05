@@ -17,7 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.BOW)
+@SkillMetadata(id = 702, skillType = SkillType.Thief, invType = InvType.BOW)
 public class BlindingArrow extends BowShotSkill {
     private final int duration = 4;
 

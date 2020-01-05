@@ -20,11 +20,15 @@ import org.bukkit.util.Vector;
 import static com.podcrash.api.mc.world.BlockUtil.isSafe;
 import static com.podcrash.api.mc.world.BlockUtil.playerIsHere;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.AXE)
+@SkillMetadata(id = 703, skillType = SkillType.Thief, invType = InvType.AXE)
 public class Blink extends Instant implements ICooldown {
     private final double distance = 20;
     private final int deblinkThreshold = 2; // in seconds
     private Location prevLocation;
+
+    public Blink() {
+        setCanUseWhileCooldown(true);
+    }
 
     @Override
     public float getCooldown() {

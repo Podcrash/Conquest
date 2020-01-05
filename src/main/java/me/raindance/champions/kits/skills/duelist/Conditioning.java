@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 302, skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
 public class Conditioning extends Passive {
     private Hologram hologram;
 
@@ -35,7 +35,7 @@ public class Conditioning extends Passive {
     @EventHandler
     public void kill(DeathApplyEvent event) {
         if(event.getAttacker() != getPlayer()) return;
-        if(event.getCause() != Cause.MELEE || event.getCause() != Cause.MELEESKILL) return;
+        if(event.getCause() != Cause.MELEE && event.getCause() != Cause.MELEESKILL) return;
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.ABSORPTION, 40, 1, false);
     }
 }

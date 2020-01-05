@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.AXE)
+@SkillMetadata(id = 102, skillType = SkillType.Berserker, invType = InvType.DROP)
 public class BattleRage extends Drop implements ICooldown, IEnergy {
     @Override
     public int getEnergyUsage() {
@@ -40,7 +40,6 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
     public boolean drop(PlayerDropItemEvent e) {
         if(e.getPlayer() != getPlayer() || onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
-        getPlayer().sendMessage(getUsedMessage());
         EnergyBar energyBar = getChampionsPlayer().getEnergyBar();
         getChampionsPlayer().heal(energyBar.getEnergy());
 

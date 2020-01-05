@@ -8,7 +8,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 /**
  * This is a placeholder, this doesn't actually do anything
  */
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.INNATE)
+@SkillMetadata(id = 202, skillType = SkillType.Druid, invType = InvType.INNATE)
 public class LivingMana extends Passive {
     @Override
     public String getName() {

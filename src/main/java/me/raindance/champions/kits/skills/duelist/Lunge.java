@@ -11,7 +11,7 @@ import me.raindance.champions.kits.skilltypes.Drop;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.DROP)
+@SkillMetadata(id = 305, skillType = SkillType.Duelist, invType = InvType.DROP)
 public class Lunge extends Drop implements ICooldown {
     @Override
     public String getName() {

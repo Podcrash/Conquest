@@ -21,7 +21,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.SWORD)
+@SkillMetadata(id = 303, skillType = SkillType.Duelist, invType = InvType.SWORD)
 public class DeadlyCombination extends Interaction implements ICooldown {
     private LivingEntity attacked = null;
     private int i;

@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.INNATE)
+@SkillMetadata(id = 706, skillType = SkillType.Thief, invType = InvType.INNATE)
 public class Lightweight extends Passive implements IConstruct {
     @EventHandler
     public void hit(DamageApplyEvent event) {

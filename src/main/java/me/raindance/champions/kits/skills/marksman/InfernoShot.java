@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Marksman, invType = InvType.BOW)
+@SkillMetadata(id = 505, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class InfernoShot extends BowShotSkill implements IConstruct {
     private WrapperPlayServerWorldParticles fire;
     private final float scaling = 6;

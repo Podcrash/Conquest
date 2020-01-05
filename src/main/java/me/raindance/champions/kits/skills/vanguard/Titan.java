@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 808, skillType = SkillType.Vanguard, invType = InvType.PASSIVEA)
 public class Titan extends Passive {
     @Override
     public String getName() {

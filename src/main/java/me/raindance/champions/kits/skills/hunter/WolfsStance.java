@@ -24,7 +24,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Hunter, invType = InvType.SWORD)
+@SkillMetadata(id = 408, skillType = SkillType.Hunter, invType = InvType.SWORD)
 public class WolfsStance extends ChargeUp implements IConstruct {
     private final double damage = 4;
     private final int effectTime = 3;

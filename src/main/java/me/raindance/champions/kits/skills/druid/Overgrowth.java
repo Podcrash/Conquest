@@ -11,8 +11,12 @@ import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Interaction;
 import org.bukkit.entity.LivingEntity;
 
-@SkillMetadata(skillType = SkillType.Druid, invType = InvType.SWORD)
+@SkillMetadata(id = 206, skillType = SkillType.Druid, invType = InvType.SWORD)
 public class Overgrowth extends Interaction implements ICooldown, IEnergy {
+    public Overgrowth() {
+        this.canMiss = false;
+    }
+
     @Override
     public void doSkill(LivingEntity clickedEntity) {
         if(onCooldown()) return;
@@ -23,7 +27,7 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 0;
+        return 5;
     }
 
     @Override

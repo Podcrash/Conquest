@@ -11,7 +11,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 907, skillType = SkillType.Warden, invType = InvType.PASSIVEB)
 public class IronSkin extends Passive implements ICooldown {
     @Override
     public float getCooldown() {

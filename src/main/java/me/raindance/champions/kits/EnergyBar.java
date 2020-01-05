@@ -30,10 +30,10 @@ public class EnergyBar implements TimeResource {
 
     // getters and setters
     public void setEnergy(double energy) {
-        double finalEnergy = (energy / MAX_ENERGY);
-        if(finalEnergy > MAX_ENERGY) finalEnergy = MAX_ENERGY;
+        if(energy > MAX_ENERGY) energy = MAX_ENERGY;
 
-        float xp = (finalEnergy >= 1D) ? 0.99999F : (float) finalEnergy;
+        float xp = (float) (energy / MAX_ENERGY);
+        if(xp >= 1F) xp = .99999999F;
         getPlayer().setExp(xp);
         this.energy = energy;
         lastTimeUsed = System.currentTimeMillis();

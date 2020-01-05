@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.AXE)
+@SkillMetadata(id = 807, skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Takedown extends Instant implements ICooldown, IConstruct {
     private final float hitbox = 0.55f;
     private CollideBeforeHitGround hitGround;

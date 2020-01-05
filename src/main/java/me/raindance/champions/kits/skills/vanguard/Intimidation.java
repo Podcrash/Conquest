@@ -28,7 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.Arrays;
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.AXE)
+@SkillMetadata(id = 805, skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Intimidation extends Instant implements TimeResource, ICooldown {
     public Intimidation() {
         super();

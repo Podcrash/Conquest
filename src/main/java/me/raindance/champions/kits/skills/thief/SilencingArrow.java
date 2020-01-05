@@ -16,7 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.BOW)
+@SkillMetadata(id = 709, skillType = SkillType.Thief, invType = InvType.BOW)
 public class SilencingArrow extends BowShotSkill {
     private final int duration = 4;
 

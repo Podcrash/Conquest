@@ -27,7 +27,7 @@ public final class SkillInfo {
     public static void setUp() {
         System.out.println("Loading classes");
         try {
-            final List<String> list = Arrays.asList("warden", "duelist", "vanguard", "berserker", "marksman", "hunter", "thief", "rogue", "druid");
+            final List<String> list = Arrays.asList("warden", "duelist", "vanguard", "berserker", "marksman", "hunter", "thief", "rogue", "druid", "sorcerer");
             for(String e : list)
                 SkillInfo.addSkills(e);
             skillData.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));
@@ -49,16 +49,23 @@ public final class SkillInfo {
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
             SkillType skillType = annot.skillType();
             InvType invType = annot.invType();
+            int skillID = annot.id();
+            if(idDataMap.keySet().contains(skillID)) {
+                String errMessage = "two skill cannot have the same two ids!\n Skills in conflict: ";
+                errMessage += skill + "\n" + SkillInfo.getSkill(skillID);
 
-            addSkill(skillType, invType, skill);
+                throw new IllegalStateException(errMessage);
+            }
+            addSkill(skillID, skillType, invType, skill);
             skillsLoaded.append(skill.getName()).append(" ");
         }
         System.out.println(skillsLoaded.toString());
     }
-    private static void addSkill(SkillType skillType, InvType invType, Skill skill) {
+    private static void addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
         //TODO: put more of this information in the annotations.
-        SkillData data = new SkillData(skill, skill.getID(), skill.getName(), invType, skillType);
+        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType);
         skillData.add(data);
+        idDataMap.put(skillID, data);
     }
 
     private static <T> T emptyConstructor(Class<T> clazz) {

@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.SWORD)
+@SkillMetadata(id = 905, skillType = SkillType.Warden, invType = InvType.SWORD)
 public class EarthSmash extends Instant implements ICooldown {
     @Override
     public float getCooldown() {
@@ -36,7 +36,7 @@ public class EarthSmash extends Instant implements ICooldown {
             if(isAlly(enemy) || getPlayer() == enemy) continue;
             double dist = location.distanceSquared(enemy.getLocation());
             if(dist > 16) continue;
-            pound(location, enemy, dist/16D);
+            pound(location, enemy, (16D - dist)/16D);
         }
         ParticleGenerator.generateRangeParticles(location, 8, true);
     }

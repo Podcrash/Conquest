@@ -81,6 +81,7 @@ public class ChampionsPlayerManager {
             HandlerList.unregisterAll(skill);
             Main.getInstance().getLogger().info(String.format("%s unregistered from %s", skill.getName(), skill.getPlayer()));
             if (skill instanceof TimeResource) TimeHandler.unregister((TimeResource) skill);
+            if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).stop();
         }
         clearPacketListeners(cplayer);
         cplayer.setUsesEnergy(false);
@@ -116,7 +117,10 @@ public class ChampionsPlayerManager {
         for (int i = 0, size = skillsJson.size(); i < size; i++) {
             int id = skillsJson.get(i).getAsInt();
             SkillData data = SkillInfo.getSkill(id);
-            skillWord.add(data.getName());
+            if(data == null) {
+                System.out.println(id);
+                SkillInfo.getSkills(SkillType.Druid).forEach(System.out::println);
+            }else skillWord.add(data.getName());
         }
         return skillWord;
     }

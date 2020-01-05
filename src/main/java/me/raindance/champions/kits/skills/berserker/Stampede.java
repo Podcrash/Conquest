@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 108, skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
 public class Stampede extends Passive implements IPassiveTimer, ICharge {
     private int charges = 0;
     private long time;

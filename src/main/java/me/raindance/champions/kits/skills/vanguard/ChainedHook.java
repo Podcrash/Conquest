@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+@SkillMetadata(id = 801, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class ChainedHook extends Instant implements ICooldown {
     private float vect;
 

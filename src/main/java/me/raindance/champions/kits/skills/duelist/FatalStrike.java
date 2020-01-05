@@ -17,7 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 304, skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
 public class FatalStrike extends Passive {
 
     @Override

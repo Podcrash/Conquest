@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Random;
 
-@SkillMetadata(skillType = SkillType.Warden, invType = InvType.AXE)
+@SkillMetadata(id = 908, skillType = SkillType.Warden, invType = InvType.AXE)
 public class Vigilance extends Instant implements TimeResource, ICooldown {
     private boolean active = false;
     @Override

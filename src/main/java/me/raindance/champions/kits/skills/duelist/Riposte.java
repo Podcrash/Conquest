@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Arrays;
 
-@SkillMetadata(skillType = SkillType.Duelist, invType = InvType.SWORD)
+@SkillMetadata(id = 308, skillType = SkillType.Duelist, invType = InvType.SWORD)
 public class Riposte extends Instant implements TimeResource, ICooldown {
     private boolean isRiposting = false;
     private boolean ripoSuccess;

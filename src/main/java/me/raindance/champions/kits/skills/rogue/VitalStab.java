@@ -21,7 +21,7 @@ import org.bukkit.entity.LivingEntity;
  * When activated, plays the sound of a TNT block being primed.
  * Vital Stab can miss.
  */
-@SkillMetadata(skillType = SkillType.Rogue, invType = InvType.SWORD)
+@SkillMetadata(id = 609, skillType = SkillType.Rogue, invType = InvType.SWORD)
 public class VitalStab extends Interaction {
     @Override
     public void doSkill(LivingEntity clickedEntity) {

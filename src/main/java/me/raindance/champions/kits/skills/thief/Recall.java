@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 import java.util.LinkedList;
 
-@SkillMetadata(skillType = SkillType.Thief, invType = InvType.DROP)
+@SkillMetadata(id = 707, skillType = SkillType.Thief, invType = InvType.DROP)
 public class Recall extends Drop implements ICooldown, IContinuousPassive, IPassiveTimer, IConstruct {
     private double health;
 

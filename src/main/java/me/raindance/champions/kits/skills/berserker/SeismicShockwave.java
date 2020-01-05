@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.AXE)
+@SkillMetadata(id = 107, skillType = SkillType.Berserker, invType = InvType.AXE)
 public class SeismicShockwave extends Instant implements TimeResource, ICooldown {
     private boolean usage = false;
     private final double reach = Math.pow((5.5d), 2d);

@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 
-@SkillMetadata(skillType = SkillType.Berserker, invType = InvType.DROP)
+@SkillMetadata(id = 104, skillType = SkillType.Berserker, invType = InvType.DROP)
 public class Cleave extends Drop implements ICooldown {
     private float multiplier;
     public Cleave() {
