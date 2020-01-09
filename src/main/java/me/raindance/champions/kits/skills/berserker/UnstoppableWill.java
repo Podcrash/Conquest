@@ -14,7 +14,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
 @SkillMetadata(id = 109, skillType = SkillType.Berserker, invType = InvType.AXE)
 public class UnstoppableWill extends Instant implements ICooldown {
@@ -35,7 +35,7 @@ public class UnstoppableWill extends Instant implements ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());

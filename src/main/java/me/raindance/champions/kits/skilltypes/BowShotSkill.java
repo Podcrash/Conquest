@@ -2,14 +2,11 @@ package me.raindance.champions.kits.skilltypes;
 
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
-import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
-import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,7 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
 import java.util.HashMap;
 
@@ -42,7 +39,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
     Preparing an arrow (left click)
      */
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (rightClickCheck(action)) return;
         if(onCooldown()) return;
         isPrepared = true;// sound goes here

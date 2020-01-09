@@ -207,7 +207,10 @@ public abstract class ChampionsPlayer {
         return false;
     }
     public void restockInventory() {
+        int size = this.defaultHotbar.length;
+        System.out.println(size);
         for (int i = 0; i < 9; i++) {
+            if(i >= size) this.getInventory().setItem(i, null);
             ItemStack item = this.defaultHotbar[i];
             if(item != null) this.getInventory().setItem(i, item.clone());
             else this.getInventory().setItem(i, null);

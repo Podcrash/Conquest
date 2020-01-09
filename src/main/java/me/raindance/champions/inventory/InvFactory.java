@@ -173,6 +173,8 @@ public final class InvFactory {
         buildMap.put(player.getName(), buildID);
         UUID uuid = player.getUniqueId();
         String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
+        player.getInventory().clear();
+        player.updateInventory();
         if(json == null) {
             Inventory inv = MenuCreator.createKitMenu(skillType);
             MenuCreator.giveHotbarInventory(player, skillType);

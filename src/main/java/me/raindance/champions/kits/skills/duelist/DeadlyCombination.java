@@ -50,6 +50,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         if(i < 2 || System.currentTimeMillis() - getLastUsed() > 3000L) return;
         StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 2, 2);
         event.setDamage(event.getDamage() + 2);
+        event.setModified(true);
         event.addSource(this);
         getPlayer().sendMessage(getUsedMessage(event.getVictim()).replace("used", "unleashed"));
 

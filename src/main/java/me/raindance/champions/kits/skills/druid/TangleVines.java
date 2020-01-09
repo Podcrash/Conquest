@@ -15,7 +15,6 @@ import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.mc.world.BlockUtil;
-import com.sun.prism.shader.Mask_TextureRGB_AlphaTest_Loader;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -24,13 +23,12 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import net.jafama.FastMath;
-import net.minecraft.server.v1_8_R3.BlockCactus;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
@@ -51,8 +49,8 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
-        if(!rightClickCheck(action) || onCooldown() || usage) return;
+    protected void doSkill(PlayerEvent event, Action action) {
+        if(usage || !rightClickCheck(action) || onCooldown()) return;
         if(!EntityUtil.onGround(getPlayer())) {
             getPlayer().sendMessage(getMustGroundMessage());
             return;
@@ -84,7 +82,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         currentPointer.add(direction);
         Block eval = currentPointer.getBlock();
         Material evalType = eval.getType();
-        if(locationIsValidForRupture(eval, evalType))
+        if(!locationIsValidForRupture(eval, evalType))
             currentPointer.subtract(direction);
 
     }

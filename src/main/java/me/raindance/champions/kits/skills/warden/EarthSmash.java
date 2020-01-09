@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.warden;
 
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.util.VectorUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -11,10 +12,8 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -27,8 +26,9 @@ public class EarthSmash extends Instant implements ICooldown {
     }
 
     @Override
-    public void doSkill(PlayerInteractEvent event, Action action) {
+    public void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
+        if(!EntityUtil.onGround(getPlayer())) return;
         setLastUsed(System.currentTimeMillis());
         Location location = getPlayer().getLocation();
         List<LivingEntity> players = location.getWorld().getLivingEntities();
@@ -44,8 +44,8 @@ public class EarthSmash extends Instant implements ICooldown {
     private void pound(Location currentLoc, LivingEntity entity, double multiplier) {
         DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
         Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation());
-        vector.setY(vector.getY() + 0.5D)
-            .multiply(multiplier);
+        vector.multiply(multiplier).setY(vector.getY() + 0.3D);
+        if(vector.getY() > 0.35D) vector.setY(0.35D);
         entity.setVelocity(vector);
     }
 

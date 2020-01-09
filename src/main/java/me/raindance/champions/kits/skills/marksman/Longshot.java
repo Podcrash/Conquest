@@ -78,7 +78,8 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
     protected void shotArrow(EntityShootBowEvent event) {
         if (event.isCancelled()) return;
         if (onCooldown()) return;
-        if(getPlayer() != event.getEntity() && !(event.getProjectile() instanceof Arrow)) return;
+        if(getPlayer() != event.getEntity()) return;
+        if(!(event.getProjectile() instanceof Arrow)) return;
         if (getPlayer().isSneaking()) return;
 
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);

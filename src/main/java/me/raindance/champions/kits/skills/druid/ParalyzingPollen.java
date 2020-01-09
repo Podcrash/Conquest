@@ -1,9 +1,6 @@
 package me.raindance.champions.kits.skills.druid;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -21,7 +18,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 207, skillType = SkillType.Druid, invType = InvType.SHOVEL)
@@ -38,7 +35,7 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         //Set the cooldown
         setLastUsed(System.currentTimeMillis());

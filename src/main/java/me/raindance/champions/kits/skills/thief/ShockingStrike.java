@@ -16,24 +16,13 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 @SkillMetadata(id = 708, skillType = SkillType.Thief, invType = InvType.SWORD)
 public class ShockingStrike extends Interaction implements ICooldown {
-    private String victimName;
     @Override
     public void doSkill(LivingEntity victim) {
         if(isAlly(victim)) return;
 
-        this.victimName = victim.getName();
         StatusApplier.getOrNew(victim).applyStatus(Status.SHOCK, 5, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 5, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BAT_HURT, 1.0f, 1.5f);
-        TimeHandler.delayTime(5000, () -> {
-            victimName = "";
-        });
-    }
-
-    @EventHandler
-    public void sprint(PlayerToggleSprintEvent event) {
-        if(!event.getPlayer().getName().equalsIgnoreCase(victimName)) return;
-        if(!event.isSprinting()) return;
-        event.setCancelled(true);
     }
 
     @Override

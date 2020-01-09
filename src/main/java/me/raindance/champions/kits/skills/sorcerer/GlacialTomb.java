@@ -16,12 +16,10 @@ import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.world.BlockUtil;
-import net.minecraft.server.v1_8_R3.PacketPlayOutUpdateTime;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
@@ -65,7 +63,7 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action)) return;
         if(!onCooldown()) {
             if(!hasEnergy()) {

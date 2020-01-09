@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 705, skillType = SkillType.Thief, invType = InvType.AXE)
@@ -34,7 +34,7 @@ public class Leap extends Instant implements ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
         Player player = getPlayer();
         //idk the proper value

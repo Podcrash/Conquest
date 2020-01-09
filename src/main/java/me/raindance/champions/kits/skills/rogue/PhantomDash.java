@@ -8,7 +8,6 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,7 +15,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
@@ -40,7 +39,7 @@ public class PhantomDash extends Instant implements ICooldown {
     private Projectile pearl; //nevermind
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         //if the action isn't right click or if there is on cooldowm
         if(!rightClickCheck(action) || onCooldown()) return;
 

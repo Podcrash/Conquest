@@ -18,7 +18,7 @@ import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
 import java.util.Random;
 
@@ -42,13 +42,13 @@ public class Vigilance extends Instant implements TimeResource, ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action) || !isHolding()) return;
         if (onCooldown()) return;
 
         int duration = 4;
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
-        applier.applyStatus(Status.WEAKNESS, duration, 0);
+        applier.applyStatus(Status.WEAKNESS, duration, 1);
         applier.applyStatus(Status.RESISTANCE, duration, 2);
         applier.applyStatus(Status.SLOW, duration, 2);
         applier.applyStatus(Status.GROUND, duration, 1);

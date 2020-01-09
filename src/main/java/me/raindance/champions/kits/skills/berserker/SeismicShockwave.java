@@ -16,10 +16,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(id = 107, skillType = SkillType.Berserker, invType = InvType.AXE)
@@ -44,14 +43,14 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (rightClickCheck(action)) {
             if (!this.onCooldown() && !usage) {
                 usage = true;
                 Vector vector = getPlayer().getLocation().getDirection();
                 if(vector.getY() < 0) vector.setY(vector.getY() * -1);
                 vector.normalize();
-                vector.multiply(0.4);
+                vector.multiply(0.3);
                 vector.setY(vector.getY() + 0.8d);
                 if(vector.getY() > 0.8D) vector.setY(0.8);
                 if(EntityUtil.onGround(getPlayer())) vector.setY(vector.getY() + 0.2);

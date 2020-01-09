@@ -18,13 +18,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.podcrash.api.mc.world.BlockUtil.getAllPlayersHere;
 import static com.podcrash.api.mc.world.BlockUtil.getPlayersInArea;
 
 @SkillMetadata(id = 1007, skillType = SkillType.Sorcerer, invType = InvType.AXE)
@@ -60,7 +58,7 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
     }
 
     @Override
-    public void doSkill(PlayerInteractEvent event, Action action) {
+    public void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action) || onCooldown()) return;
         if(!hasEnergy()) {
             getPlayer().sendMessage(getNoEnergyMessage());

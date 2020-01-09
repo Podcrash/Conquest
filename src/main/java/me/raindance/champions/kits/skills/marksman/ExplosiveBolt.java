@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 @SkillMetadata(id = 503, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct {
+    private int damage = 7;
     private double range;
     private WrapperPlayServerWorldParticles particle;
     private WrapperPlayServerWorldParticles explosion;
@@ -80,7 +81,7 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct
                 }
                 player.setVelocity(vector);
 
-                DamageApplier.damage(player, getPlayer(), 9 * divide, this, false);
+                DamageApplier.damage(player, getPlayer(), damage * divide, this, false);
             }
             SoundPlayer.sendSound(location, "random.explode", 0.9F, 70);
         }

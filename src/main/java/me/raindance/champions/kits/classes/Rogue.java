@@ -46,7 +46,7 @@ public class Rogue extends ChampionsPlayer {
     //TODO: itemstackutil methods for this
     private void colorWhite(ItemStack leatherArmor) {
         LeatherArmorMeta meta = (LeatherArmorMeta) leatherArmor.getItemMeta();
-        meta.setColor(Color.BLACK);
+        meta.setColor(Color.WHITE);
 
         leatherArmor.setItemMeta(meta);
     }

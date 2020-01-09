@@ -15,11 +15,11 @@ import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Arrays;
@@ -63,7 +63,7 @@ public class Swiftness extends Instant implements TimeResource, ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             if (_active) _active = false;
         } else if (!onCooldown() && action != Action.PHYSICAL) {

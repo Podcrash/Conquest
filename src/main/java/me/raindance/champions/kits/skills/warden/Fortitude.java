@@ -57,12 +57,10 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         return ItemType.NULL;
     }
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     protected void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
-        if (event.getVictim() == getPlayer() && event.getCause() == Cause.MELEE) {
+        if (event.getVictim() == getPlayer()) {
             hit();
         }
     }
@@ -83,4 +81,10 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         TimeHandler.unregister(resource);
         TimeHandler.delayTime(5, resource);
     }
+
+    @Override
+    public void setLastUsed(long time) {
+        this.setLastUsedDirect(time);
+    }
+
 }

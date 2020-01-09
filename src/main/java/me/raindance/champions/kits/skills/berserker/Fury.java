@@ -28,7 +28,7 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @Override
     public void start() {
-        run(10, 20);
+        run(10, 0);
     }
 
     @Override

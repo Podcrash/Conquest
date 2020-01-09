@@ -45,6 +45,7 @@ public class Guardian extends Drop implements ICooldown {
     public void hit(DamageApplyEvent e) {
         if(!active) return;
         if(e.getVictim() == getPlayer()) {
+            e.setModified(true);
             e.setDoKnockback(false);
             return;
         }

@@ -11,7 +11,6 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.util.VectorUtil;
@@ -22,11 +21,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
 
 @SkillMetadata(id = 801, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class ChainedHook extends Instant implements ICooldown {
@@ -48,7 +45,7 @@ public class ChainedHook extends Instant implements ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         release();
@@ -56,7 +53,7 @@ public class ChainedHook extends Instant implements ICooldown {
 
     public void release() {
         Vector vector = getPlayer().getLocation().getDirection();
-        double charge = 0.75D;
+        double charge = 0.275D;
         Vector itemVector = vector.clone().normalize().multiply(this.vect/1.25F);
         Location oldLocation = getPlayer().getLocation();
         Item itemItem = ItemManipulationManager.intercept(getPlayer(), Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(),itemVector.setY(itemVector.getY() + 0.2).multiply(0.5F + 0.5F * charge),

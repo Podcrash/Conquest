@@ -15,13 +15,11 @@ import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
-import java.util.Arrays;
 import java.util.Random;
 
 @SkillMetadata(id = 401, skillType = SkillType.Hunter, invType = InvType.AXE)
@@ -52,25 +50,11 @@ public class CorneredBeast extends Instant implements TimeResource, ICooldown {
         return ItemType.AXE;
     }
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
-    public void leftclickBlock(PlayerInteractEvent e) {
-        if (e.getPlayer() == getPlayer() && _active &&
-                (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)) {
-            count++;
-            if (count >= 2) {
-                _active = false;
-
-            }
-        }
-    }
-
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (rightClickCheck(action)) {
             if (!onCooldown()) {
-                StatusApplier.getOrNew(getPlayer()).applyStatus(Status.STRENGTH, selfEffect, 3, false);
+                StatusApplier.getOrNew(getPlayer()).applyStatus(Status.STRENGTH, selfEffect, 1, false);
                 _active = true;
                 count = 0;
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_GROWL, 1f, 1f);
@@ -81,16 +65,17 @@ public class CorneredBeast extends Instant implements TimeResource, ICooldown {
         }
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent e) {
         if(e.isCancelled()) return;
-        if (_active && getPlayer() == e.getAttacker()) {
-            e.setModified(true);
+        if(!_active) return;
+        if (getPlayer() == e.getAttacker()) {
             e.addSource(this);
-            e.setDoKnockback(false);
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 1f, 1);
+        }else if (getPlayer() == e.getVictim()) {
+            e.addSource(() -> "Cornered Beast Weakness");
+            e.setModified(true);
+            e.setDamage(e.getDamage() + 1);
         }
     }
 

@@ -8,8 +8,6 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICharge;
-import me.raindance.champions.kits.iskilltypes.action.IConstruct;
-import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.sound.SoundPlayer;
@@ -26,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 604, skillType = SkillType.Rogue, invType = InvType.SWORD)
@@ -81,7 +79,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
         if (hasCharges()) {
             time = System.currentTimeMillis();

@@ -14,7 +14,7 @@ import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 902, skillType = SkillType.Warden, invType = InvType.AXE)
@@ -43,12 +43,12 @@ public class ConcussiveBlow extends Instant implements ICooldown {
 
     //TODO: MATH
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(action != Action.RIGHT_CLICK_BLOCK  && action != Action.RIGHT_CLICK_AIR) return;
         if(onCooldown()) return;
 
         Location eyeLoc = getPlayer().getEyeLocation();
-        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(0.5d));
+        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(0.25d));
         AbstractPacket packet = ParticleGenerator.createParticle(center.toVector(), EnumWrappers.Particle.EXPLOSION_LARGE,
                 1, 0, 0 , 0);
         Vector vector = eyeLoc.getDirection().normalize().multiply(velocity);

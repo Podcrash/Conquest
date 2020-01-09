@@ -19,11 +19,8 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
-import java.util.Random;
 
 @SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class Whirlwind extends Instant implements ICooldown, IConstruct {
@@ -110,7 +107,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action)) return;
         if(onCooldown()){
             return;

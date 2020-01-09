@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 import static com.podcrash.api.mc.world.BlockUtil.isSafe;
@@ -45,7 +45,7 @@ public class Blink extends Instant implements ICooldown {
         return ItemType.AXE;
     }
 
-    protected void doSkill(PlayerInteractEvent e, Action action) {
+    protected void doSkill(PlayerEvent e, Action action) {
         if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
         Player player = getPlayer();
         if (!this.onCooldown()) {

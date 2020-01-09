@@ -22,7 +22,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 605, skillType = SkillType.Rogue, invType = InvType.AXE)
@@ -41,7 +41,7 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
     }
 
 
-    protected void doSkill(PlayerInteractEvent e, Action action) {
+    protected void doSkill(PlayerEvent e, Action action) {
         if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
             return;
         }

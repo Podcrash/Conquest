@@ -1,14 +1,11 @@
 package me.raindance.champions.kits.skilltypes;
 
 import me.raindance.champions.Main;
-import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
-import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
 public abstract class Continuous extends Instant implements TimeResource {
     private boolean useOnce = true;
@@ -23,7 +20,7 @@ public abstract class Continuous extends Instant implements TimeResource {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(rightClickCheck(action)){
             doContinuousSkill();
             useOnce = false;

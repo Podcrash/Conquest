@@ -70,7 +70,9 @@ public class PlayerJoinEventTest extends ListenerBase {
         }
         if(GameManager.getGame() != null) {
             if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
-                GameManager.addSpectator(e.getPlayer());
+                if(GameManager.getGame().contains(e.getPlayer()))
+                    e.getPlayer().teleport(GameManager.getGame().getTeam(e.getPlayer()).getSpawn(e.getPlayer()));
+                else GameManager.addSpectator(e.getPlayer());
             else {
                 p.teleport(Bukkit.getWorld("world").getSpawnLocation());
                 GameManager.addPlayer(e.getPlayer());

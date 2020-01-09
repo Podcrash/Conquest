@@ -17,10 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
 
 @SkillMetadata(id = 502, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class Disengage extends Instant implements TimeResource, ICooldown {
@@ -50,7 +48,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action) || onCooldown()) return;
         isDisengaging = true;
         time = System.currentTimeMillis();

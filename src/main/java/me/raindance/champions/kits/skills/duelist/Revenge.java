@@ -22,7 +22,6 @@ import java.util.Set;
 public class Revenge extends Passive implements ICooldown {//it is a passive because the other skilltypes do not match what I am trying to do: control damage
     //It's going to implement charges, since it has the ability to stack (at least twice). Nevermind, it is only going to implement the part where
     //it will gain charges, the other stuff has stuff to do with time.
-    private long currentTime;
     private boolean dealBonus;
     @Override
     public String getName() {
@@ -47,7 +46,7 @@ public class Revenge extends Passive implements ICooldown {//it is a passive bec
          */
 
         //we only care about melee attacks
-        if (e.getCause() != Cause.MELEE) return;
+        if (e.getCause() != Cause.MELEE || onCooldown()) return;
 
         if (e.getAttacker() == getPlayer() && dealBonus) {
             e.setModified(true); //Modify the damage
@@ -57,7 +56,7 @@ public class Revenge extends Passive implements ICooldown {//it is a passive bec
             reset(); //reset the charges so that it's not infinite
         } else if (e.getVictim() == getPlayer()) {
             dealBonus = true;
-            currentTime = System.currentTimeMillis();
+            setLastUsed(System.currentTimeMillis());
         }
 
     }

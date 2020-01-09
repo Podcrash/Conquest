@@ -11,13 +11,10 @@ import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-
-import java.util.Arrays;
+import org.bukkit.event.player.PlayerEvent;
 
 @SkillMetadata(id = 308, skillType = SkillType.Duelist, invType = InvType.SWORD)
 public class Riposte extends Instant implements TimeResource, ICooldown {
@@ -43,7 +40,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
         if (onCooldown()) return;
         time = System.currentTimeMillis();

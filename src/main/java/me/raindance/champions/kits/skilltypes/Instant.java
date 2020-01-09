@@ -3,12 +3,8 @@ package me.raindance.champions.kits.skilltypes;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
-import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -20,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Instant extends Skill {
     private final Skill instance;
+    private volatile boolean isUsed;
     private boolean canUseWhileCooldown;
     public Instant() {
         super();
@@ -29,30 +26,15 @@ public abstract class Instant extends Skill {
 
     @EventHandler( priority = EventPriority.HIGHEST )
     public void interact(PlayerInteractEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!canUseSkill(e)) return;
-                SkillUseEvent useEvent = new SkillUseEvent(instance);
-                Bukkit.getPluginManager().callEvent(useEvent);
-                if (useEvent.isCancelled()) return;
-                doSkill(e, e.getAction());
-            }
-        }.runTask(Main.instance);
+        if (!canUseSkill(e)) return;
+        skill(e, e.getAction());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractAtEntityEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!canUseSkill(e)) return;
-                SkillUseEvent useEvent = new SkillUseEvent(instance);
-                Bukkit.getPluginManager().callEvent(useEvent);
-                if (useEvent.isCancelled()) return;
-                Main.getInstance().log.info("You arne't supposed to see this message");
-            }
-        }.runTask(Main.instance);
+        if (!canUseSkill(e)) return;
+        skill(e, Action.RIGHT_CLICK_AIR);
+        Main.getInstance().log.info("You arne't supposed to see this message");
     }
 
     public boolean canUseSkill(PlayerEvent event) {
@@ -73,6 +55,14 @@ public abstract class Instant extends Skill {
     protected void setCanUseWhileCooldown(boolean canUseWhileCooldown) {
         this.canUseWhileCooldown = canUseWhileCooldown;
     }
-
-    protected abstract void doSkill(PlayerInteractEvent event, Action action);
+    private void skill(PlayerEvent event, Action action) {
+        if(!isUsed) return;
+        SkillUseEvent useEvent = new SkillUseEvent(instance);
+        Bukkit.getPluginManager().callEvent(useEvent);
+        if (useEvent.isCancelled()) return;
+        isUsed = true;
+        doSkill(event, action);
+        isUsed = false;
+    }
+    protected abstract void doSkill(PlayerEvent event, Action action);
 }

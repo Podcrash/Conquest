@@ -17,18 +17,14 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.sound.SoundWrapper;
-import net.jafama.FastMath;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
 
 @SkillMetadata(id = 1009, skillType = SkillType.Sorcerer, invType = InvType.SHOVEL)
 public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstruct {
@@ -66,7 +62,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         if(!hasEnergy()) {
             getPlayer().sendMessage(getNoEnergyMessage());

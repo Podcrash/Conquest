@@ -15,13 +15,12 @@ import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.world.BlockUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
@@ -55,7 +54,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action)) return;
         if(onCooldown()) return;
         if(!hasEnergy()) {

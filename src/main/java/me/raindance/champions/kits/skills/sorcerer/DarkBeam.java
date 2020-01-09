@@ -3,7 +3,6 @@ package me.raindance.champions.kits.skills.sorcerer;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -12,10 +11,8 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
-import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.mob.CustomEntityFirework;
 import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.ColorMaker;
 import com.podcrash.api.mc.world.BlockUtil;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Color;
@@ -23,13 +20,9 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
-
-import java.util.Arrays;
 
 import static com.podcrash.api.mc.world.BlockUtil.*;
 
@@ -57,7 +50,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(onCooldown() || !rightClickCheck(action)) return;
         setLastUsed(System.currentTimeMillis());
         release();

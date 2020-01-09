@@ -35,17 +35,12 @@ public class SilencingStrike extends Interaction {
     }
 
     @Override
-    public void doSkill(LivingEntity clickedEntity) {
-        if (!onCooldown()) {
-            if (clickedEntity instanceof Player) {
-                Player victim = (Player) clickedEntity;
-                if(!getPlayer().canSee(victim)) return;
-                StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
-                DamageApplier.damage(victim, getPlayer(), damage, this, false);
-                this.setLastUsed(System.currentTimeMillis());
-                SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.say", 0.9F, 77);
-                getPlayer().sendMessage(getUsedMessage(victim));
-            }
-        }
+    public void doSkill(LivingEntity victim) {
+        if (onCooldown()) return;
+        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
+        DamageApplier.damage(victim, getPlayer(), damage, this, false);
+        this.setLastUsed(System.currentTimeMillis());
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);
+        getPlayer().sendMessage(getUsedMessage(victim));
     }
 }

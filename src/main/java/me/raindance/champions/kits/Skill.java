@@ -118,8 +118,11 @@ public abstract class Skill implements ISkill, DamageSource {
         return lastUsed;
     }
     public void setLastUsed(long lastUsed) {
-        this.lastUsed = lastUsed;
+        setLastUsedDirect(lastUsed);
         coolDownEvent();
+    }
+    protected void setLastUsedDirect(long lastUsed) {
+        this.lastUsed = lastUsed;
     }
     public void coolDownEvent() {
         SkillCooldownEvent event = new SkillCooldownEvent(this);

@@ -7,25 +7,18 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PacketUtil;
-import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.time.resources.TimeResource;
-import com.podcrash.api.mc.util.MathUtil;
-import net.jafama.FastMath;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
-import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(id = 805, skillType = SkillType.Vanguard, invType = InvType.AXE)
@@ -35,7 +28,7 @@ public class Intimidation extends Instant implements TimeResource, ICooldown {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.horse.angry", 1.2F, 77);

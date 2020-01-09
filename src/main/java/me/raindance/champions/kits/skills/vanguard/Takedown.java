@@ -24,10 +24,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(id = 807, skillType = SkillType.Vanguard, invType = InvType.AXE)
@@ -88,7 +87,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action) || EntityUtil.onGround(getPlayer())) {
             if(!onCooldown()) {
                 getPlayer().sendMessage(getMustGroundMessage());

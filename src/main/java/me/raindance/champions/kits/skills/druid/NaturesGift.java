@@ -11,7 +11,7 @@ import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEvent;
 
 @SkillMetadata(id = 204, skillType = SkillType.Druid, invType = InvType.AXE)
 public class NaturesGift extends Instant implements ICooldown, IEnergy {
@@ -26,7 +26,7 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
     }
 
     @Override
-    protected void doSkill(PlayerInteractEvent event, Action action) {
+    protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         getGame().consumeBukkitPlayer(this::buff);
         useEnergy(getEnergyUsage());
