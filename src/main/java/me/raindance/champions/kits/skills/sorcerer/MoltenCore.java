@@ -40,7 +40,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     private byte a = 0;
     public MoltenCore() {
-        this.energy = 40;
+        this.energy = 30;
     }
 
     @Override
@@ -70,7 +70,6 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     private void buff(Location location) {
         StatusApplier playerApplier = StatusApplier.getOrNew(getPlayer());
-        playerApplier.applyStatus(Status.SPEED, 1, 0);
         if(getPlayer().getFireTicks() > 0)
             playerApplier.removeStatus(Status.FIRE);
 

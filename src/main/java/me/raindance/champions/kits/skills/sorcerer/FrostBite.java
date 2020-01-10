@@ -31,7 +31,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
     private int energy;
     public FrostBite() {
         this.amnt = 4;
-        this.energy = 40;
+        this.energy = 50;
     }
 
     @Override
@@ -146,8 +146,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
             Snowball snowball = (Snowball) event.getDamager();
             if(NAME.equalsIgnoreCase(snowball.getCustomName())){
                 event.setCancelled(true);
-                DamageApplier.damage(victim, getPlayer(), 1, false);
-                victim.setVelocity(snowball.getVelocity().multiply(0.05).add(new Vector(0, 0.1, 0)));
+                DamageApplier.damage(victim, getPlayer(), 0.1, false);
                 StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 2, 1);
             }
         }

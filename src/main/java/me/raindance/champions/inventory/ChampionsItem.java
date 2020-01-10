@@ -22,13 +22,13 @@ public enum ChampionsItem {
     STANDARD_AXE(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_AXE),
     STANDARD_SHOVEL(11, ChatColor.WHITE + "Standard Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SPADE),
 
-    BOOSTER_SWORD(12, ChatColor.WHITE + "Booster Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SWORD),
-    BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
-    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
+    BOOSTER_SWORD(12, ChatColor.WHITE + "Booster Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SWORD),
+    BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
+    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
 
-    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
-    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
-    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
+    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
+    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
+    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
 
     STONE_SWORD(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD),
     STONE_AXE(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE),

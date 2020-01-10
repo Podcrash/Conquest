@@ -11,6 +11,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
 import net.jafama.FastMath;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
@@ -41,7 +42,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
 
     @Override
     public void start() {
-        run(1, 1);
+        run(1, 0);
     }
 
     @Override

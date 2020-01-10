@@ -46,7 +46,7 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
             return;
         }
 
-        if(StatusApplier.getOrNew(e.getPlayer()).getEffects().contains(Status.SLOW)) {
+        if(StatusApplier.getOrNew(e.getPlayer()).has(Status.SLOW)) {
             getPlayer().sendMessage(String.format("%sFlash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
             return;
         }

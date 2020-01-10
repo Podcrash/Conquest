@@ -44,7 +44,7 @@ public class SkillData {
     }
 
     private String getCleanName() {
-        return getName().toLowerCase().replace(" ", "");
+        return getName().toLowerCase().replaceAll("[^A-Za-z0-9]", "").replace(" ", "");
     }
     private void requestDescription() {
         /*

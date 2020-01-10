@@ -20,17 +20,15 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.util.Vector;
 
 import java.util.List;
 
 @SkillMetadata(id = 704, skillType = SkillType.Thief, invType = InvType.SWORD)
 public class Illusion extends Continuous implements ICooldown {
     private final int duration = 3;
-    private int entityID;
     private long time;
     private boolean a = true;
-    private Vector skeletonVec;
+    private Skeleton skeleton;
 
     @Override
     public float getCooldown() {
@@ -43,10 +41,7 @@ public class Illusion extends Continuous implements ICooldown {
     }
 
     public LivingEntity getSkeleton() {
-        for(LivingEntity entity : getPlayer().getWorld().getLivingEntities()) {
-            if(entity.getEntityId() == entityID) return entity;
-        }
-        return null;
+        return skeleton;
     }
     @Override
     protected void doContinuousSkill() {
@@ -56,7 +51,7 @@ public class Illusion extends Continuous implements ICooldown {
             StatusApplier.getOrNew((getPlayer())).applyStatus(Status.CLOAK, duration, 1);
             time = System.currentTimeMillis();
             Skeleton skeleton = spawn();
-            entityID = skeleton.getEntityId();
+            this.skeleton = skeleton;
             EntityEquipment entityEquipment = skeleton.getEquipment();
             entityEquipment.setArmorContents(getPlayer().getInventory().getArmorContents());
             entityEquipment.setItemInHand(getPlayer().getItemInHand());
@@ -85,7 +80,6 @@ public class Illusion extends Continuous implements ICooldown {
 
     @Override
     public void task() {
-        skeletonVec = getSkeleton().getLocation().toVector();
     }
 
     @Override
@@ -100,7 +94,7 @@ public class Illusion extends Continuous implements ICooldown {
         StatusApplier.getOrNew((getPlayer())).removeCloak();
         despawn(getSkeleton());
 
-        Location location = skeletonVec.toLocation(getPlayer().getWorld());
+        Location location = skeleton.getLocation();
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location.toVector(), EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
         List<Player> players = getPlayers();
         for(Player player : players) {

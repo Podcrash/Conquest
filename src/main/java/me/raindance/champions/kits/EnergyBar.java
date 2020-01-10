@@ -4,9 +4,11 @@ import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 
 public class EnergyBar implements TimeResource {
-    private double energy;
+    private volatile double energy;
     private double MAX_ENERGY;
     private String ownerName;
     private double lastTimeUsed;
@@ -78,5 +80,20 @@ public class EnergyBar implements TimeResource {
     
     private Player getPlayer() {
         return Bukkit.getPlayer(ownerName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EnergyBar)) return false;
+
+        EnergyBar energyBar = (EnergyBar) o;
+
+        return Objects.equals(ownerName, energyBar.ownerName);
+    }
+
+    @Override
+    public int hashCode() {
+        return ownerName != null ? ownerName.hashCode() : 0;
     }
 }

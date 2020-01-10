@@ -16,7 +16,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Instant extends Skill {
     private final Skill instance;
-    private volatile boolean isUsed;
     private boolean canUseWhileCooldown;
     public Instant() {
         super();
@@ -32,8 +31,10 @@ public abstract class Instant extends Skill {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractAtEntityEvent e) {
+        /*
         if (!canUseSkill(e)) return;
         skill(e, Action.RIGHT_CLICK_AIR);
+         */
         Main.getInstance().log.info("You arne't supposed to see this message");
     }
 
@@ -56,13 +57,10 @@ public abstract class Instant extends Skill {
         this.canUseWhileCooldown = canUseWhileCooldown;
     }
     private void skill(PlayerEvent event, Action action) {
-        if(!isUsed) return;
         SkillUseEvent useEvent = new SkillUseEvent(instance);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        isUsed = true;
         doSkill(event, action);
-        isUsed = false;
     }
     protected abstract void doSkill(PlayerEvent event, Action action);
 }

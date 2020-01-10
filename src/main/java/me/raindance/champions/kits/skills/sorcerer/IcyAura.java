@@ -37,7 +37,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
     private double radiusSquared;
     private final Random random = new Random();
     public IcyAura() {
-        this.energeUsage = 30;
+        this.energeUsage = 20;
         this.radius = 5;
         this.radiusSquared = FastMath.pow(radius, 2);
     }
@@ -114,7 +114,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public boolean cancel() {
-        return !isToggled() || !hasEnergy();
+        return !isToggled() || !hasEnergy(getEnergyUsageTicks());
     }
 
     @Override

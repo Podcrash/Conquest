@@ -3,6 +3,8 @@ package me.raindance.champions.kits.skills.thief;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -10,6 +12,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import net.jafama.FastMath;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -49,6 +52,10 @@ public class Blink extends Instant implements ICooldown {
         if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
         Player player = getPlayer();
         if (!this.onCooldown()) {
+            if(StatusApplier.getOrNew(getPlayer()).has(Status.SLOW)) {
+                getPlayer().sendMessage(String.format("%sFlash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
+                return;
+            }
             player.setFallDistance(0);
             blink();
             player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 0.4f, 1.2f);

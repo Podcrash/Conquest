@@ -4,6 +4,7 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -23,6 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 import static com.podcrash.api.mc.world.BlockUtil.*;
 
@@ -52,6 +55,11 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(onCooldown() || !rightClickCheck(action)) return;
+        if(!hasEnergy()) {
+            getPlayer().sendMessage(getNoEnergyMessage());
+            return;
+        }
+        useEnergy();
         setLastUsed(System.currentTimeMillis());
         release();
     }
@@ -79,30 +87,31 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         Location cur = getPlayer().getEyeLocation();
         Vector inc = cur.getDirection().normalize();
         cur.add(inc);
-
-        Location endLoc = null;
-        World world = getPlayer().getWorld();
+        List<Player> players = getPlayers();
         for(int i = 0; i < range; i += 1) {
-            if(isPassable(cur.getBlock())  && playerIsHere(cur, getPlayers()) == null) {
-                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
-                world.getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
-                cur.add(inc);
-            } else {
-                endLoc = cur;
-                break;
-            }
+            //if the block wasn't passible, stop
+            if(!isPassable(cur.getBlock())) break;
+            List<Player> allPlayers = getAllPlayersHere(cur, players);
+            //if the only player was the shooter, keep going
+
+            if(allPlayers.size() > 0)
+                if(allPlayers.contains(getPlayer()) && allPlayers.size() == 1) continue;
+                else break;
+            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
+            PacketUtil.asyncSend(packet, players);
+            cur.add(inc);
         }
-        burst(endLoc);
+        burst(cur, players);
     }
 
-    private void burst(Location endLoc) {
+    private void burst(Location endLoc, List<Player> players) {
         if (endLoc == null) return;
-        CustomEntityFirework.spawn(endLoc, firework, getPlayers());
+        CustomEntityFirework.spawn(endLoc, firework, players);
         SoundPlayer.sendSound(endLoc, "fireworks.launch", 1F, 63);
         SoundPlayer.sendSound(getPlayer().getLocation(), "fireworks.launch", 1F, 63);
         int dist = 4;
         int distS = dist * dist;
-        for (Player p : BlockUtil.getPlayersInArea(endLoc, 4, getPlayers())) {
+        for (Player p : BlockUtil.getPlayersInArea(endLoc, 4, players)) {
             if (isAlly(p) && p == getPlayer()) continue;
             double distanceS = p.getLocation().distanceSquared(endLoc);
             double delta = 1D - distanceS / distS;

@@ -37,6 +37,10 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
+        if(!hasEnergy()) {
+            getPlayer().sendMessage(getNoEnergyMessage());
+            return;
+        }
         //Set the cooldown
         setLastUsed(System.currentTimeMillis());
 

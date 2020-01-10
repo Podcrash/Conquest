@@ -25,6 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 @SkillMetadata(id = 710, skillType = SkillType.Thief, invType = InvType.DROP)
@@ -77,32 +79,30 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
     /*
     This must be changed to GameDamageEvent later
      */
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractEvent event) {
+        if(event.getPlayer() == getPlayer())
+            cancelInvis(getPlayer());
+    }
+
+    @EventHandler
+    public void interact(PlayerInteractAtEntityEvent event) {
+        if(event.getPlayer() == getPlayer())
+            cancelInvis(getPlayer());
+    }
+
+    public void cancelInvis(Player player) {
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
-        Player player = event.getPlayer();
         if (isInvis && player == getPlayer() && applier.isCloaked()) {
             applier.removeCloak();
             isInvis = false;
         }
     }
-
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
-        StatusApplier applier = StatusApplier.getOrNew(getPlayer());
-        if (isInvis && applier.isCloaked() && event.getCause() != Cause.MELEE) {
-            LivingEntity victim = event.getVictim();
-            LivingEntity damager = event.getAttacker();
-            if (victim == getPlayer() || damager == getPlayer()) {
-                applier.removeCloak();
-                isInvis = false;
-            }
-        }
+        if(event.getVictim() == getPlayer() || event.getAttacker() == getPlayer())
+            cancelInvis(getPlayer());
     }
 
     private class SmokeBombTrail implements TimeResource {

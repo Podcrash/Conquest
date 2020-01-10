@@ -20,7 +20,6 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 302, skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
 public class Conditioning extends Passive {
-    private Hologram hologram;
 
     @Override
     public String getName() {
@@ -36,6 +35,8 @@ public class Conditioning extends Passive {
     public void kill(DeathApplyEvent event) {
         if(event.getAttacker() != getPlayer()) return;
         if(event.getCause() != Cause.MELEE && event.getCause() != Cause.MELEESKILL) return;
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.ABSORPTION, 40, 1, false);
+        System.out.println("Do conditioning: " + (event.getAttacker() != getPlayer()));
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.ABSORPTION, 40, 1, false, true);
+        getPlayer().sendMessage(getUsedMessage());
     }
 }

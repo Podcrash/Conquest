@@ -24,7 +24,7 @@ public class Sorcerer extends ChampionsPlayer {
         super.effects();
         this.setUsesEnergy(true, 200);
         getEnergyBar().toggleRegen(true);
-        getEnergyBar().setNaturalRegenRate(1);
+        getEnergyBar().setNaturalRegenRate(2);
     }
 
     @Override

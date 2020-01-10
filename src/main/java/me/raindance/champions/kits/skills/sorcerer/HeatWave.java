@@ -33,12 +33,12 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
     private int energyUsage;
     private double fireSpeed;
     private float duration;
-    private final int damage = 1;
+    private final double damage = 0.1;
 
     private ItemClearer clearer;
 
     public HeatWave() {
-        energyUsage = 30;
+        energyUsage = 40;
         fireSpeed = 1.05 + (0.15 * 4);
         duration = 5;
     }

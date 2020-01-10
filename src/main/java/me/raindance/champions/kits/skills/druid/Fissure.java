@@ -30,7 +30,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
     private float damage;
     public Fissure() {
         super();
-        this.damage = 7F;
+        this.damage = 2F;
     }
 
     @Override
