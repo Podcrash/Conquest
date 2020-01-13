@@ -90,7 +90,7 @@ public class SkillData {
 
     private Constructor<Skill> initConstructor(Skill skill) {
         try {
-            return (Constructor<Skill>) skill.getClass().getConstructor(null);
+            return (Constructor<Skill>) skill.getClass().getConstructor((Class<?>[]) null);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
             return null;

@@ -205,6 +205,8 @@ public final class InvFactory {
         int id = buildMap.get(player.getName());
         String data = championsPlayer.serialize().toString();
         String current = getKitTable().getJSONData(uuid, clasz, id);
+        Pluginizer.getLogger().info("save1: " + data);
+        Pluginizer.getLogger().info("current: " + current);
         if(current == null) getKitTable().set(uuid, clasz, id, data);
         else getKitTable().alter(uuid, clasz, id, data);
 

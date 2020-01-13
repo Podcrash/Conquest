@@ -1,5 +1,6 @@
 package me.raindance.champions.inventory;
 
+import com.podcrash.api.mc.util.ChatUtil;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagInt;
 import net.minecraft.server.v1_8_R3.NBTTagList;
@@ -26,9 +27,9 @@ public enum ChampionsItem {
     BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
     BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
 
-    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SWORD),
-    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_AXE),
-    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.WOOD_SPADE),
+    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SWORD),
+    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_AXE),
+    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SPADE),
 
     STONE_SWORD(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD),
     STONE_AXE(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE),
@@ -37,8 +38,9 @@ public enum ChampionsItem {
     POWER_AXE(28, ChatColor.AQUA + "Power Axe", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_AXE),
 
     STANDARD_BOW(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW),
-    RANGER_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
-    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
+    MARKSMAN_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 40, Arrays.asList(""), Material.ARROW),
+    HUNTER_ARROWS(25, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
+    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 12, Arrays.asList(""), Material.ARROW),
 
     MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP),
     WATER_BOTTLE(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION),
@@ -46,7 +48,7 @@ public enum ChampionsItem {
 
     SMOKE_BOMB(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE),
     STUN_CHARGE(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF),
-    MEAD(3, ChatColor.WHITE + "Mead", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
+    MEAD(3, ChatColor.WHITE + "BREAD", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
     BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE)
     ;
 
@@ -125,8 +127,9 @@ public enum ChampionsItem {
 
         }
         ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(name);
-        if(material.equals(Material.GOLD_AXE) || material.equals(Material.GOLD_SWORD)) meta.addEnchant(Enchantment.DURABILITY, 5, true);
+        meta.setDisplayName(ChatColor.RESET + name);
+        if(material.equals(Material.GOLD_AXE) || material.equals(Material.GOLD_SWORD) || material.equals(Material.GOLD_SPADE))
+            meta.addEnchant(Enchantment.DURABILITY, 5, true);
         List<String> arrays = new ArrayList<>(desc);
         meta.setLore(arrays);
         itemStack.setItemMeta(meta);
@@ -142,8 +145,10 @@ public enum ChampionsItem {
     }
 
     public static ChampionsItem getByName(String name) {
+        name = ChatUtil.purge(name);
         for(ChampionsItem item : details()) {
-            if(item.getName().equals(name)) return item;
+            String unfiltered = ChatUtil.purge(item.getName());
+            if(unfiltered.equals(name)) return item;
         }
         return null;
     }
