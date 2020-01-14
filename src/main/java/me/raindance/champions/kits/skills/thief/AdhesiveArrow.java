@@ -43,7 +43,7 @@ public class AdhesiveArrow extends BowShotSkill {
 
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
-        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 1.5F, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 5F, 1);
     }
 
     @Override

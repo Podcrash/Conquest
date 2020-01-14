@@ -109,7 +109,7 @@ public class PhantomDash extends Instant implements ICooldown {
     //Generator methods for this
     @Override
     public float getCooldown() {
-        return 10;
+        return 7;
     }
 
 

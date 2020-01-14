@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 //when there's a better item system, change this
-@ItemMetaData(mat = Material.REDSTONE_LAMP_OFF, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.REDSTONE_LAMP_OFF, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class StunCharge implements IItem, ItemListener {
     private static Set<Integer> itemIDs;
     private StunChargeProxy proxy;
@@ -40,8 +40,8 @@ public class StunCharge implements IItem, ItemListener {
         vector.multiply(0);
         Item item = ItemManipulationManager.spawnItem(Material.REDSTONE_LAMP_OFF, location);
         itemIDs.add(item.getEntityId());
-        item.setPickupDelay(100);
-        TimeHandler.delayTime(99, () -> {
+        item.setPickupDelay(25);
+        TimeHandler.delayTime(25, () -> {
             AbstractPacket packet2 = ParticleGenerator.createBlockEffect(item.getLocation().toVector(), Material.OBSIDIAN.getId());
             for(Player p : item.getWorld().getPlayers()) {
                 packet2.sendPacket(p);

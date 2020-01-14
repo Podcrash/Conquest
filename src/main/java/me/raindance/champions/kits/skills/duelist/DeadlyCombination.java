@@ -28,6 +28,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
     @Override
     public void doSkill(LivingEntity clickedEntity) {
         if(onCooldown()) return;
+        if(isAlly(clickedEntity)) return;
         this.attacked = clickedEntity;
         this.i = 0;
         setLastUsed(System.currentTimeMillis());

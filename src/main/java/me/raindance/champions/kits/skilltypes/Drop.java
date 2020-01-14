@@ -3,6 +3,7 @@ package me.raindance.champions.kits.skilltypes;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.ItemType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -17,6 +18,9 @@ public abstract class Drop extends Skill {
         if(e.getPlayer() != getPlayer()) return;
         if(!isHolding(e.getItemDrop().getItemStack())) return;
         if(isInWater()) return;
+        //check for cooldown
+        if(this instanceof ICooldown && ((ICooldown) this).onCooldown()) return;
+
         SkillUseEvent useEvent = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;

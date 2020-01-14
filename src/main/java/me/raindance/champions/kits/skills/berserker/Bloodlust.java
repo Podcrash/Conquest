@@ -26,7 +26,7 @@ import java.util.Arrays;
 @SkillMetadata(id = 103, skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
 public class Bloodlust extends Passive {
     private int duration;
-    private PotionEffect strength, speed, regen;
+    private PotionEffect strength, speed;
     private Bloodlust instance;
     private BloodlustParticleResource resource;
     private long current;
@@ -76,13 +76,11 @@ public class Bloodlust extends Passive {
             int speedLevel = potencySpeed + 1;
             if(speedLevel > 2) speedLevel = 2;
             this.speed = new PotionEffect(PotionEffectType.SPEED, duration * 20, speedLevel);
-            this.regen = new PotionEffect(PotionEffectType.REGENERATION, duration * 20, speedLevel);
             getChampionsPlayer().heal(0.5D);
             Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
                 boolean a = getPlayer().addPotionEffect(strength, true);
                 boolean b = getPlayer().addPotionEffect(speed, true);
-                boolean c = getPlayer().addPotionEffect(regen, true);
-                if(a && b && c) {
+                if(a && b) {
                     getPlayer().sendMessage(String.format("%sBrute> %sYou gained Bloodlust.", ChatColor.BLUE, ChatColor.GRAY));
                     current = System.currentTimeMillis();
                 }

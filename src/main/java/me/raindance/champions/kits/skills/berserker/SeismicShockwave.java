@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.berserker;
 
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -15,6 +16,7 @@ import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
@@ -63,6 +65,10 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
         }
     }
 
+    @EventHandler
+    public void die(DeathApplyEvent event) {
+        if(event.getPlayer() == getPlayer()) usage = false;
+    }
     @Override
     public void task() {
 

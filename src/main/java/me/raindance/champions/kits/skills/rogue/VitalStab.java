@@ -30,7 +30,7 @@ public class VitalStab extends Interaction {
         DamageApplier.damage(clickedEntity, getPlayer(), 6, this, false);
         StatusApplier.getOrNew(clickedEntity).applyStatus(Status.BLEED, 5, 1);
         //TODO:
-        SoundPlayer.sendSound(clickedEntity.getLocation(), "tnt.primed", 0.9F, 64);
+        SoundPlayer.sendSound(clickedEntity.getLocation(), "random.anvil_land", 0.9F, 110);
     }
 
     @Override

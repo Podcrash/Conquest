@@ -53,10 +53,11 @@ public class Revenge extends Passive implements ICooldown {//it is a passive bec
             e.addSource(this);
             final double bonus = 2;
             e.setDamage(e.getDamage() + bonus); //set it
+            getPlayer().sendMessage(getUsedMessage(e.getVictim()));
+            setLastUsed(System.currentTimeMillis());
             reset(); //reset the charges so that it's not infinite
         } else if (e.getVictim() == getPlayer()) {
             dealBonus = true;
-            setLastUsed(System.currentTimeMillis());
         }
 
     }

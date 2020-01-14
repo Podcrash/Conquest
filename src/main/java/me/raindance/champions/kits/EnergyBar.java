@@ -1,6 +1,7 @@
 package me.raindance.champions.kits;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.ExpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 
 public class EnergyBar implements TimeResource {
-    private volatile double energy;
+    private double energy;
     private double MAX_ENERGY;
     private String ownerName;
     private double lastTimeUsed;
@@ -21,12 +22,12 @@ public class EnergyBar implements TimeResource {
         MAX_ENERGY = eMax;
         setEnergy(MAX_ENERGY);
         this.naturalRegenRate = 0.5D;
-        TimeHandler.repeatedTime(1,0, this);
+        TimeHandler.repeatedTimeAsync(1,0, this);
     }
 
     // this is called whenever the player switches kits, and essentially cleans things up by removing the xp bar and canceling the mana regen
     public void stop() {
-        getPlayer().setExp(0);
+        setExp(0);
         cancel = true;
     }
 
@@ -36,11 +37,14 @@ public class EnergyBar implements TimeResource {
 
         float xp = (float) (energy / MAX_ENERGY);
         if(xp >= 1F) xp = .99999999F;
-        getPlayer().setExp(xp);
+        setExp(xp);
         this.energy = energy;
         lastTimeUsed = System.currentTimeMillis();
     }
 
+    private void setExp(float xp) {
+        ExpUtil.updateExp(getPlayer(), xp);
+    }
     public void setMaxEnergy(double MAX_ENERGY) {
         this.MAX_ENERGY = MAX_ENERGY;
         setEnergy(MAX_ENERGY);

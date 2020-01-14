@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.classes;
 
+import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
@@ -16,6 +17,7 @@ public class Sorcerer extends ChampionsPlayer {
     public Sorcerer(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
+        setSound(new SoundWrapper("random.break", 0.95F, 90));
         this.armor = new Material[]{Material.GOLD_BOOTS, Material.GOLD_LEGGINGS, Material.GOLD_CHESTPLATE, Material.GOLD_HELMET};
     }
 

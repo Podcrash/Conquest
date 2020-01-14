@@ -81,7 +81,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         if (onCooldown()) return;
         if(getPlayer() != event.getEntity()) return;
         if(!(event.getProjectile() instanceof Arrow)) return;
-        if (getPlayer().isSneaking()) return;
+        if (!getPlayer().isSneaking()) return;
 
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
         arrows.add((Arrow) event.getProjectile());
@@ -99,6 +99,8 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         Location vLocation = event.getVictim().getLocation();
         Location dLocation = getPlayer().getLocation();
         double distance = vLocation.distance(dLocation);
-        event.setDamage(event.getDamage() + ((3.8 * .0009) * FastMath.pow(distance, 2)));
+        double damage = event.getDamage() + ((3.8 * .0009667) * FastMath.pow(distance, 2));
+        event.setDamage(damage);
+        event.setChangeXP(damage);
     }
 }

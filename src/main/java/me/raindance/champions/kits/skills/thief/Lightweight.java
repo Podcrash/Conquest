@@ -5,6 +5,7 @@ import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -14,6 +15,7 @@ import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @SkillMetadata(id = 706, skillType = SkillType.Thief, invType = InvType.INNATE)
@@ -26,19 +28,25 @@ public class Lightweight extends Passive implements IConstruct {
         event.setDoKnockback(false);
     }
 
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void fall(EntityDamageEvent e) {
         if(getPlayer() == e.getEntity() && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            e.setDamage(e.getDamage() - 3);
+            double totalDamage = e.getDamage() - 3;
+            if(totalDamage <= 0) {
+                e.setCancelled(true);
+                return;
+            }
+            e.setDamage(totalDamage);
         }
     }
 
     @Override
     public void afterConstruction() {
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
-        });
+        boolean hasSpeed = StatusApplier.getOrNew(getPlayer()).has(Status.SPEED);
+
+        Pluginizer.getLogger().info("[Lightweight] Attempted to apply the speed a total of " + hasSpeed + " times!");
     }
 
     @Override

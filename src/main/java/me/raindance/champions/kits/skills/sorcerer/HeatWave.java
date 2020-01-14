@@ -33,7 +33,7 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
     private int energyUsage;
     private double fireSpeed;
     private float duration;
-    private final double damage = 0.1;
+    private final double damage = 0.1D;
 
     private ItemClearer clearer;
 
@@ -91,7 +91,7 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
 
     @Override
     public boolean cancel() {
-        return !getPlayer().isBlocking();
+        return !getPlayer().isBlocking() || !hasEnergy(getEnergyUsageTicks());
     }
 
     private void shootFire() {
@@ -132,7 +132,7 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
             Iterator<Item> infernoIterator = infernoItems.iterator();
             while(infernoIterator.hasNext()) {
                 Item item = infernoIterator.next();
-                if(!EntityUtil.onGround(item) || item.getLocation().distanceSquared(getPlayer().getLocation()) <= 64) continue;
+                if(!EntityUtil.onGround(item) && item.getLocation().distanceSquared(getPlayer().getLocation()) <= 64) continue;
                 item.remove();
                 infernoIterator.remove();
             }
@@ -145,7 +145,6 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
 
         @Override
         public void cleanup() {
-
         }
     }
 }

@@ -4,6 +4,8 @@ import com.abstractpackets.packetwrapper.AbstractPacket;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -30,7 +32,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
     private float damage;
     public Fissure() {
         super();
-        this.damage = 2F;
+        this.damage = 7F;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
         setLastUsed(System.currentTimeMillis());
         Location playerLocation = getPlayer().getLocation();
         dir = playerLocation.getDirection().setY(0).normalize();
-        start = playerLocation.subtract(new Vector(0, 0.4, 0));
+        start = playerLocation.add(new Vector(dir.getX(), -0.4, dir.getZ()));
         current = start.clone();
         run(3, 0);
         Location sstart = start.clone();
@@ -82,7 +84,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
                 if(BlockUtil.isPassable(sstart.getBlock())) break;
             }
             WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(sstart, sstart.getBlock().getType().getId());
-            PacketUtil.syncSend(packet, getPlayers());
+            PacketUtil.asyncSend(packet, getPlayers());
 
         }
     }
@@ -126,6 +128,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
         for(Player player : getPlayers()) {
             if (player != getPlayer() && !isAlly(player) && player.getLocation().distanceSquared(ref) <= 1.3225D) {
                 DamageApplier.damage(player, getPlayer(), (i/7D) * damage, this, true);
+                StatusApplier.getOrNew(player).applyStatus(Status.SLOW, 3, 0);
             }
         }
         current.add(dir);

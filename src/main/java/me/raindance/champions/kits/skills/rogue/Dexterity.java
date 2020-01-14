@@ -31,7 +31,7 @@ public class Dexterity extends Passive {
 
     @EventHandler
     public void damage(DamageApplyEvent e) {
-        if(e.getAttacker() == getPlayer())
+        if(e.getAttacker() == getPlayer() && !isAlly(e.getVictim()))
             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 0);
     }
 }

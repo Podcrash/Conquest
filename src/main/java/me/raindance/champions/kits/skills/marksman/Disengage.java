@@ -56,9 +56,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
         getPlayer().sendMessage(String.format("Skill> You are trying to %s", getName()));
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent event) {
         if (isDisengaging && event.getVictim() == getPlayer() && event.getCause() == Cause.MELEE) {
             if (!(event.getAttacker() instanceof Player)) return;

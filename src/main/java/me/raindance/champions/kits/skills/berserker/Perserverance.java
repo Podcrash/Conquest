@@ -1,15 +1,19 @@
 package me.raindance.champions.kits.skills.berserker;
 
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 106, skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
-public class Perserverance extends Passive {
+public class Perserverance extends Passive implements ICooldown {
     @Override
     public String getName() {
         return "Perserverance";
@@ -20,14 +24,18 @@ public class Perserverance extends Passive {
         return ItemType.NULL;
     }
 
+    @Override
+    public float getCooldown() {
+        return 9;
+    }
+
     @EventHandler
     public void damage(DamageApplyEvent e) {
         if(getPlayer() != e.getVictim()) return;
-        if(getPlayer().getMaxHealth() * 0.5D > getPlayer().getHealth()) return;
+        if(!EntityUtil.isBelow(getPlayer(), 0.4)) return;
 
-        e.setVelocityModifierX(e.getVelocityModifierX() * 0.9);
-        e.setVelocityModifierY(e.getVelocityModifierY() * 0.9);
-        e.setVelocityModifierZ(e.getVelocityModifierZ() * 0.9);
-        e.setModified(true);
+        if(onCooldown()) return;
+        setLastUsed(System.currentTimeMillis());
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 2);
     }
 }

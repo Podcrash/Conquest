@@ -28,7 +28,7 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @Override
     public void start() {
-        run(10, 0);
+        run(1, 0);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @EventHandler
     public void hit(DamageApplyEvent e) {
-        if(e.getAttacker() != getPlayer()) return;
+        if(e.getAttacker() != getPlayer() || isAlly(e.getVictim())) return;
         EnergyBar energyBar = getEnergyBar();
 
         lastHit = System.currentTimeMillis();

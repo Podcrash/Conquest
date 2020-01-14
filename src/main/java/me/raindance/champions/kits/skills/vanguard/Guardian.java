@@ -50,7 +50,7 @@ public class Guardian extends Drop implements ICooldown {
             return;
         }
         if(!isAlly(e.getVictim()) || e.getCause() != Cause.MELEE) return;
-        if(e.getVictim().getLocation().distanceSquared(getPlayer().getLocation()) >= 9) return;
+        if(e.getVictim().getLocation().distanceSquared(getPlayer().getLocation()) >= 4) return;
         e.setDamage(.8D * e.getDamage());
         e.setModified(true);
 

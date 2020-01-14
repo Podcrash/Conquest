@@ -20,14 +20,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @SkillMetadata(id = 507, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class MarkedForDeath extends BowShotSkill {
-    private final int MAX_LEVEL = 4;
-    private Map<String, Long> victims;
-
+    private Set<String> victims;
     public MarkedForDeath() {
+        victims = new HashSet<>();
     }
 
     @Override
@@ -55,7 +56,7 @@ public class MarkedForDeath extends BowShotSkill {
         StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, 4, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BLAZE_BREATH, 1.0f, 1.5f);
         event.addSource(this);
-        victims.put(victim.getName(), System.currentTimeMillis() + 1000L * (long) 4);
+        victims.add(victim.getName());
         //shooter.sendMessage("You marked " + victim.getName() + " for " + duration + " seconds.");
     }
 
@@ -68,18 +69,10 @@ public class MarkedForDeath extends BowShotSkill {
     public void damage(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         LivingEntity entity = event.getVictim();
-        if(victims.containsKey(entity.getName()) && System.currentTimeMillis() <= victims.get(entity.getName())) {
+        if(victims.contains(entity.getName()) && StatusApplier.getOrNew(entity).has(Status.MARKED)) {
             event.addSource(this);
             event.setModified(true);
             event.setDamage(event.getDamage() + 2);
-        }
-    }
-
-    @EventHandler
-    public void death(DeathApplyEvent event) {
-        if(victims.containsKey(event.getPlayer().getName())) {
-            long time = victims.get(event.getPlayer().getName());
-            victims.remove(event.getPlayer().getName());
         }
     }
 }

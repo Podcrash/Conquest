@@ -59,9 +59,7 @@ public class Sharpshooter extends Passive implements ICharge {
                 && e.getArrow() != null && e.getCause() == Cause.PROJECTILE;
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGH
-    )
+    @EventHandler(priority = EventPriority.HIGH)
     public void shoot(DamageApplyEvent e) {
         if (checkIfValidShooter(e)) {
             justMissed = false;
@@ -69,7 +67,8 @@ public class Sharpshooter extends Passive implements ICharge {
             e.setModified(true);
             e.setDamage(e.getDamage() + getCurrentCharges() * 2);
             int id = e.getArrow().getEntityId();
-            if(forceMap.get(id) >= 0.9F) addCharge();
+            //if(forceMap.get(id) >= 0.9F)
+                addCharge();
             forceMap.remove(id);
             getPlayer().sendMessage(String.format("%s bonus: %d", getName(), getCurrentCharges()));
             e.addSource(this);

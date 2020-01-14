@@ -60,6 +60,7 @@ public abstract class Instant extends Skill {
         SkillUseEvent useEvent = new SkillUseEvent(instance);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
+        getPlayer().sendMessage(getUsedMessage());
         doSkill(event, action);
     }
     protected abstract void doSkill(PlayerEvent event, Action action);

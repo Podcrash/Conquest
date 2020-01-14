@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
 public class KillShot extends Passive {
     @Override
     public String getName() {
-        return "KillShot";
+        return "Kill Shot";
     }
 
     @Override

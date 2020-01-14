@@ -29,9 +29,8 @@ import org.bukkit.util.Vector;
 public class Flash extends Instant implements ICharge, IPassiveTimer {
     //rate of charges still not implemented
     private final int MAX_CHARGES = 4;
-    private final int MAX_LEVEL = 4;
     private int delay = 1;
-    private int charges;
+    private int charges = MAX_CHARGES;
     private long lastTimeHit = 0;
 
 
@@ -82,9 +81,12 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
     @EventHandler
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
+        /*
         if(event.getVictim() == getPlayer()) {
             lastTimeHit = System.currentTimeMillis();
         }
+
+         */
     }
 
     public void task() {

@@ -40,7 +40,7 @@ public enum ChampionsItem {
     STANDARD_BOW(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW),
     MARKSMAN_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 40, Arrays.asList(""), Material.ARROW),
     HUNTER_ARROWS(25, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
-    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 12, Arrays.asList(""), Material.ARROW),
+    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
 
     MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP),
     WATER_BOTTLE(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION),
@@ -48,8 +48,9 @@ public enum ChampionsItem {
 
     SMOKE_BOMB(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE),
     STUN_CHARGE(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF),
-    MEAD(3, ChatColor.WHITE + "BREAD", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
-    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE)
+    MEAD(3, ChatColor.WHITE + "Bread", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
+    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE),
+    ELIXIR(5, ChatColor.WHITE + "Elixir", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop Elixir, which splashes an aura of healing"), Material.POTION, (byte) 37)
     ;
 
     private int slotID;
@@ -58,21 +59,26 @@ public enum ChampionsItem {
     private int damage;
     private List<String> desc;
     private Material material;
+    private byte data = 0;
 
     private static final ChampionsItem[] details = ChampionsItem.values();
 
     public static ChampionsItem[] details() {
         return details;
     }
-    ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material) {
+    ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material, byte data) {
         this.slotID = slotID;
         this.name = name;
         this.count = count;
         this.damage = damage;
         this.desc = desc;
         this.material = material;
+        this.data = data;
     }
 
+    ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material) {
+        this(slotID, name, count, damage, desc, material, (byte) 0);
+    }
     ChampionsItem(int slotID, String name, int count, List<String> desc, Material material) {
         this(slotID, name, count, 0, desc, material);
     }

@@ -44,8 +44,8 @@ public class EarthSmash extends Instant implements ICooldown {
     private void pound(Location currentLoc, LivingEntity entity, double multiplier) {
         DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
         Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation());
-        vector.multiply(multiplier).setY(vector.getY() + 0.3D);
-        if(vector.getY() > 0.35D) vector.setY(0.35D);
+        vector.multiply(multiplier * 1.4D).setY(vector.getY() + 0.4D);
+        if(vector.getY() > 0.4D) vector.setY(0.4D);
         entity.setVelocity(vector);
     }
 

@@ -45,6 +45,7 @@ public class WolfFang extends BowShotSkill {
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
         getPlayer().sendMessage(String.format("You shot %s", victim.getName()));
         StatusApplier.getOrNew(victim).applyStatus(Status.BLEED, 6, 1);
+        SoundPlayer.sendSound(victim.getLocation(), "mob.wolf.growl", 1F, 90);
     }
 
     @Override

@@ -9,6 +9,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 @SkillMetadata(id = 803, skillType = SkillType.Vanguard, invType = InvType.INNATE)
 public class Exhaustion extends Passive {
@@ -22,7 +23,7 @@ public class Exhaustion extends Passive {
         return ItemType.NULL;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void skill(SkillUseEvent e) {
         if(e.isCancelled()) return;
         if(e.getPlayer() == getPlayer()) {

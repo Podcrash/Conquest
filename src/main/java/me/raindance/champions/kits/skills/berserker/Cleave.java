@@ -57,7 +57,7 @@ public class Cleave extends Drop implements ICooldown {
         Location victLoc = e.getVictim().getLocation();
         for(Player player : getPlayers()){
             //TODO change it so that it will affect players based on vector
-            if(isAlly(player) || e.getVictim() == player || getPlayer() == player || victLoc.distanceSquared(player.getLocation()) > 2.25D) continue;
+            if(isAlly(player) || e.getVictim() == player || getPlayer() == player || victLoc.distanceSquared(player.getLocation()) > 4D) continue;
             DamageApplier.damage(player, getPlayer(), e.getDamage() * (double) multiplier, this, true);
             DamageApplier.nativeApplyKnockback(player, getPlayer());
         }

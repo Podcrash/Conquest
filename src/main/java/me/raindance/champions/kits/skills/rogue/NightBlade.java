@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.rogue;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
@@ -41,7 +42,10 @@ public class NightBlade extends Passive implements ICooldown {
 
     @EventHandler
     public void damage(DamageApplyEvent event) {
-        if(onCooldown() || event.getAttacker() != getPlayer()) return;
+        if(onCooldown()) return;
+        if(event.getAttacker() != getPlayer() || isAlly(event.getVictim())) return;
+        if(event.getCause() != Cause.MELEE && event.getCause() != Cause.MELEESKILL) return;
+        getPlayer().sendMessage(getUsedMessage(event.getVictim()));
         setLastUsed(System.currentTimeMillis());
         event.addSource(this);
         StatusApplier.getOrNew(event.getVictim()).applyStatus(Status.BLIND, 2, 1);

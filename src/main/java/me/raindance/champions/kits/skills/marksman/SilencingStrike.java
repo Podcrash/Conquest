@@ -41,6 +41,5 @@ public class SilencingStrike extends Interaction {
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);
-        getPlayer().sendMessage(getUsedMessage(victim));
     }
 }

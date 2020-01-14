@@ -1,6 +1,7 @@
 package me.raindance.champions.kits.skilltypes;
 
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillInteractEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
@@ -18,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+//TODO: remove ICooldown dependency
 public abstract class Interaction extends Skill implements ICooldown {
     protected boolean canMiss = true;
     private boolean hit = false;
@@ -30,22 +32,25 @@ public abstract class Interaction extends Skill implements ICooldown {
     public void rightClick(PlayerInteractAtEntityEvent event) {
         Entity entity = event.getRightClicked();
         if(!(entity instanceof LivingEntity)) return;
-        if (event.getPlayer() == getPlayer() && isHolding()) {
-            if (!isInWater()) {
-                SkillUseEvent useEvent = new SkillUseEvent(this);
-                Bukkit.getPluginManager().callEvent(useEvent);
-                if (useEvent.isCancelled()) return;
-                getPlayer().sendMessage(getUsedMessage((LivingEntity) entity));
-                Bukkit.getScheduler().runTask(Main.instance, () -> doSkill((LivingEntity) entity));
-                hit = true;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        hit = false;
-                    }
-                }.runTaskLater(Main.instance, 1L);
-            } else if (!onCooldown()) getPlayer().sendMessage(getWaterMessage());
+        if (event.getPlayer() != getPlayer() || !isHolding()) return;
+        if (isInWater()) {
+            getPlayer().sendMessage(getWaterMessage());
+            return;
         }
+        if(onCooldown()) return;
+        LivingEntity victim = (LivingEntity) entity;
+        SkillUseEvent useEvent = new SkillInteractEvent(this, victim);
+        Bukkit.getPluginManager().callEvent(useEvent);
+        if (useEvent.isCancelled()) return;
+        getPlayer().sendMessage(getUsedMessage(victim));
+        doSkill(victim);
+        hit = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                hit = false;
+            }
+        }.runTaskLater(Main.instance, 0L);
     }
 
     public abstract void doSkill(LivingEntity clickedEntity);

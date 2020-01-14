@@ -27,11 +27,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
+import java.util.List;
+
 @SkillMetadata(id = 604, skillType = SkillType.Rogue, invType = InvType.SWORD)
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
     private boolean isEvading = false;
     private long time;
-    private int charges = 3;
+    private int charges = 2;
 
     @Override
     public void task() {
@@ -71,7 +73,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
     @Override
     public int getMaxCharges() {
-        return 3;
+        return 2;
     }
 
     private boolean hasCharges() {
@@ -81,6 +83,8 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
+        //if in roughly quarter of a second you right click again, then don't start it (which shouldn't be humanly possible)
+        if(System.currentTimeMillis() - time <= 225) return;
         if (hasCharges()) {
             time = System.currentTimeMillis();
             isEvading = true;
@@ -205,10 +209,11 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     }
 
     private class ActiveEvade implements TimeResource {
+        private final double godmode = 600D;
         @Override
         public void task() {
-            long nextTime = time + 600L;
-            double timeLeft = (nextTime - System.currentTimeMillis())/1000D;
+            long nextTime = time + (long) godmode;
+            double timeLeft = (nextTime - System.currentTimeMillis())/godmode;
             TitleSender.sendTitle(getPlayer(), TitleSender.simpleTime("Evade: ",
                     MathUtil.round(timeLeft, 2) + " s",timeLeft, 1D));
         }

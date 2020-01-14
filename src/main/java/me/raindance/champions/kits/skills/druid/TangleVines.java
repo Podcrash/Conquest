@@ -12,6 +12,7 @@ import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.mc.world.BlockUtil;
@@ -77,7 +78,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         //find initial direction to go to.
         Vector direction = VectorUtil.fromAtoB(currentPointer, crosshairView).normalize();
         //SLOOOOOWWWW DOWN
-        direction.multiply(0.25D);
+        direction.multiply(0.5D);
 
         currentPointer.add(direction);
         Block eval = currentPointer.getBlock();
@@ -147,13 +148,40 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
             //if the player is less than 1.5 blocks away from the explosion
             //or is an enemy
             //or is the user
-            if(player.getLocation().distanceSquared(currentPointer) > 2.25 || isAlly(player) || player == getPlayer()) continue;
+            if(isAlly(player) || player == getPlayer()) continue;
+            if(!canTrap(currentPointer, player.getLocation())) continue;
             //do effects
             StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, 1.5F, 0);
             DamageApplier.damage(player, getPlayer(), 4, this, false);
         }
     }
 
+    /**
+     * TODO: MOVE TO LOCATION UTIL SOMEHOW
+     * Check to see if any player is above a certain point within a certain range
+     * @param currentPointer
+     * @param victimLoc
+     * @return
+     */
+    private boolean canTrap(Location currentPointer, Location victimLoc) {
+        int x1 = currentPointer.getBlockX() - 1;
+        int x2 = currentPointer.getBlockX() + 1;
+        int z1 = currentPointer.getBlockZ() - 1;
+        int z2 = currentPointer.getBlockZ() + 1;
+        int y = currentPointer.getBlockY();
+
+        int testX = victimLoc.getBlockX();
+        int testY = victimLoc.getBlockZ();
+        int testZ = victimLoc.getBlockZ();
+
+        //3 blocks is the safe grace.
+        if(testY >= y && testY - y <= 3) {
+            if(x1 <= testX && testX <= x2) {
+                return z1 <= testZ && testZ <= z2;
+            }
+        }
+        return false;
+    }
     @Override
     public void task() {
         useEnergy(getEnergyUsageTicks());
