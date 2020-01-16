@@ -23,7 +23,7 @@ public final class ItemActionData {
     }
 
     public boolean materialEquals(Material material, MaterialData matData) {
-        return this.material == material && (this.matId == -1) || this.matId == matData.getData();
+        return this.material == material && ((this.matId == -1) || this.matId == matData.getData());
     }
     public boolean actionContains(Action action) {
         return actionSet.contains(action);

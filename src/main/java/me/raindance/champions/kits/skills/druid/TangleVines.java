@@ -166,8 +166,10 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     private boolean canTrap(Location currentPointer, Location victimLoc) {
         int x1 = currentPointer.getBlockX() - 1;
         int x2 = currentPointer.getBlockX() + 1;
+
         int z1 = currentPointer.getBlockZ() - 1;
         int z2 = currentPointer.getBlockZ() + 1;
+
         int y = currentPointer.getBlockY();
 
         int testX = victimLoc.getBlockX();

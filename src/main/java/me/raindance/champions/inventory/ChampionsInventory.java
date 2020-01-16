@@ -136,7 +136,7 @@ public class ChampionsInventory {
                 itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.HUNTER_ARROWS};
                 break;
             case Thief:
-                itemArray = new ChampionsItem[] {ChampionsItem.STONE_SWORD, ChampionsItem.STONE_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.ASSASSIN_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB};
+                itemArray = new ChampionsItem[] {ChampionsItem.STONE_SWORD, ChampionsItem.STONE_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.ASSASSIN_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB, ChampionsItem.ELIXIR};
                 break;
             case Rogue:
                 itemArray = new ChampionsItem[] {ChampionsItem.POWER_SWORD, ChampionsItem.POWER_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
