@@ -44,7 +44,6 @@ public abstract class Continuous extends Instant implements TimeResource {
     @Override
     public void cleanup() {
         TimeHandler.unregister(this);
-        Main.getInstance().getLogger().info("cleanup continuous called");
         useOnce = true;
     }
 }

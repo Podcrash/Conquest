@@ -7,15 +7,31 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
+import me.raindance.champions.kits.skilltypes.Instant;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerEvent;
 
-@SkillMetadata(id = 203, skillType = SkillType.Druid, invType = InvType.DROP)
-public class Miasma extends TogglePassive implements IEnergy, TimeResource {
-    @Override
+@SkillMetadata(id = 203, skillType = SkillType.Druid, invType = InvType.SHOVEL)
+public class Miasma extends Instant implements IEnergy, TimeResource, ICooldown {
+    private final float duration = 10;
     public void toggle() {
         run(1, 0);
+    }
+
+    @Override
+    protected void doSkill(PlayerEvent event, Action action) {
+        if(!rightClickCheck(action) || onCooldown()) return;
+        setLastUsed(System.currentTimeMillis());
+        toggle();
+    }
+
+    @Override
+    public float getCooldown() {
+        return 22;
     }
 
     @Override
@@ -25,18 +41,19 @@ public class Miasma extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public ItemType getItemType() {
-        return ItemType.NULL;
+        return ItemType.SHOVEL;
     }
 
     @Override
     public int getEnergyUsage() {
-        return 40;
+        return 80;
     }
 
     @Override
     public void task() {
+
+        //TODO: Particles
         getGame().consumeBukkitPlayer(this::debuff);
-        useEnergy(getEnergyUsageTicks());
     }
 
     private void debuff(Player victim) {
@@ -48,14 +65,11 @@ public class Miasma extends TogglePassive implements IEnergy, TimeResource {
     }
     @Override
     public boolean cancel() {
-        return !isToggled() || !hasEnergy(getEnergyUsageTicks());
+        return System.currentTimeMillis() - getLastUsed() > duration;
     }
 
     @Override
     public void cleanup() {
-        if(!hasEnergy(getEnergyUsageTicks())) {
-            forceToggle();
-            getPlayer().sendMessage(getToggleMessage() + '\n' + getNoEnergyMessage());
-        }
+        getPlayer().sendMessage(getUsedMessage().replace("used", "ended"));
     }
 }
