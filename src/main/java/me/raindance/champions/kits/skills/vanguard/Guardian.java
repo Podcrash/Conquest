@@ -1,8 +1,12 @@
 package me.raindance.champions.kits.skills.vanguard;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -12,6 +16,8 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Drop;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
+
+import java.util.Random;
 
 @SkillMetadata(id = 804, skillType = SkillType.Vanguard, invType = InvType.DROP)
 public class Guardian extends Drop implements ICooldown {
@@ -36,7 +42,7 @@ public class Guardian extends Drop implements ICooldown {
         if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         active = true;
-        //TODO: ANVIL PLACED SOUND
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.death", 0.85F, 92);
         new GuardianProtect().run(2, 0);
         return true;
     }
@@ -58,10 +64,17 @@ public class Guardian extends Drop implements ICooldown {
 
     }
 
-    private class GuardianProtect implements TimeResource {
+    private final class GuardianProtect implements TimeResource {
+        private Random rand;
+        private GuardianProtect() {
+            rand = new Random();
+        }
         @Override
         public void task() {
-            //TODO: particles
+            WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
+                    EnumWrappers.Particle.SPELL_MOB, new int[]{211, 211, 211}, 5,
+                    rand.nextFloat() / 2f, 0.25f + (rand.nextFloat() - 0.15f), rand.nextFloat() / 2f);
+            getPlayer().getWorld().getPlayers().forEach(player -> ParticleGenerator.generate(player, particle));
         }
 
         @Override

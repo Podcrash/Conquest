@@ -2,8 +2,8 @@ package me.raindance.champions.inventory;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.podcrash.api.db.ChampionsKitTable;
-import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.tables.ChampionsKitTable;
+import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
@@ -19,13 +19,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MenuCreator {
 
@@ -134,20 +131,24 @@ public class MenuCreator {
                 Material material = materials[k];
                 String name = names[k] + i;
                 int slot = rowStarts[index] + slots[k];
-                ItemStack item = (material == Material.INK_SACK) ?
+                final ItemStack item = (material == Material.INK_SACK) ?
                         new ItemStack(material, 1, DyeColor.GRAY.getData()) :
                         new ItemStack(material);
                 final ItemMeta meta = item.getItemMeta();
 
+
                 meta.setDisplayName(name);
-                String dataJSON = table.getJSONData(uuid, clasz, i);
-                if(name.contains("Apply Build") && dataJSON != null) {
-                    Dye data = ((Dye) item.getData());
-                    data.setColor(color);
-                    item = new ItemStack(Material.INK_SACK, 1, data.getData());
-                    meta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
-                }
-                item.setItemMeta(meta);
+                table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
+                    if(name.contains("Apply Build") && dataJSON != null) {
+                        Dye data = ((Dye) item.getData());
+                        data.setColor(color);
+                        item.setType(Material.INK_SACK);
+                        item.setAmount(1);
+                        item.setData(data);
+                        meta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
+                    }
+                    item.setItemMeta(meta);
+                });
                 inventory.setItem(slot, item);
             }
         }

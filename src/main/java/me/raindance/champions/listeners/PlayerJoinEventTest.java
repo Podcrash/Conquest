@@ -1,7 +1,7 @@
 package me.raindance.champions.listeners;
 
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.PlayerTable;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.listeners.ListenerBase;
@@ -17,12 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.Collection;
 import java.util.Random;

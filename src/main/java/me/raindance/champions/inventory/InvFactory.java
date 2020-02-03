@@ -3,14 +3,12 @@ package me.raindance.champions.inventory;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.podcrash.api.db.ChampionsKitTable;
-import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.tables.ChampionsKitTable;
+import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.map.JsonHelper;
 import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.plugin.Pluginizer;
-import com.podcrash.api.plugin.PodcrashSpigot;
-import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;

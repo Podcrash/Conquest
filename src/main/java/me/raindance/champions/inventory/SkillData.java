@@ -1,12 +1,8 @@
 package me.raindance.champions.inventory;
 
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.DescriptorTable;
-import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.plugin.Pluginizer;
-import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -15,7 +11,6 @@ import org.bukkit.ChatColor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -64,8 +59,9 @@ public class SkillData {
          */
         if(description != null && description.size() != 0) return;
         Configurator configurator = Pluginizer.getSpigotPlugin().getConfigurator("skilldescriptions");
-        CompletableFuture future = new CompletableFuture();
+        CompletableFuture<Void> future = new CompletableFuture<>();
         configurator.readList(getCleanName(), list -> {
+            if(list == null) return;
             if(list.size() != 0) {
                 List<String> desc = new ArrayList<>();
                 for(Object objLine : list) {

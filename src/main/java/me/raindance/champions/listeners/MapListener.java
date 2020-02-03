@@ -1,10 +1,9 @@
 package me.raindance.champions.listeners;
 
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.RanksTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.permissions.Perm;
 import me.raindance.champions.game.map.ChampionsMapManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,7 +24,7 @@ public class MapListener extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onTouch(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
+        RanksTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
         if (e.getPlayer().hasPermission("champions.build")) { //Switch out for permissions
             Player p = e.getPlayer();
             ChampionsMapManager mapper = ChampionsMapManager.getInstance();

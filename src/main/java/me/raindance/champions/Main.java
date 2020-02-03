@@ -2,10 +2,10 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.PlayerPermissionsTable;
+import com.podcrash.api.db.pojos.Rank;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.RanksTable;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -123,6 +123,11 @@ public class Main extends JavaPlugin {
         instance = this;
 
         log.info("[GameManager] Making a lot of games");
+
+        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
+        spigot.registerConfigurator("kits");
+        spigot.registerConfigurator("skilldescriptions");
+
         DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         GameManager.createGame(game);
         log.info("Created game " + game.getName());
@@ -141,9 +146,6 @@ public class Main extends JavaPlugin {
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
         saveMapConfig();
 
-        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
-        spigot.registerConfigurator("kits");
-        spigot.registerConfigurator("skilldescriptions");
         List<String> domMaps = new ArrayList<>();
         domMaps.add("Sakura");
         domMaps.add("Delphic");
@@ -280,19 +282,6 @@ public class Main extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
 
             PermissionAttachment attachment = this.playerPermissions.get(player.getUniqueId());
-            PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
-            List<Perm> perms = table.getRoles(player.getUniqueId());
-            boolean a = false;
-            for(Perm perm : Perm.values()) {
-                if(perms.contains(perm)) {
-                    player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, perm.name()));
-                    a = true;
-                }
-                for(String permission : perm.getPermissions()) {
-                    attachment.setPermission(permission, a);
-                }
-                a = false;
-            }
             String[] disallowedPerms = new String[] {
                     "bukkit.command.reload",
                     "bukkit.command.timings",
@@ -304,6 +293,16 @@ public class Main extends JavaPlugin {
             Main.getInstance().getLogger().info("Disabling bad permissions");
             for(String disallowed : disallowedPerms)
                 attachment.setPermission(disallowed, false);
+
+            RanksTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
+            table.getRanksAsync(player.getUniqueId()).thenAcceptAsync(ranks -> {
+                for(Rank r : ranks) {
+                    player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, r.getName()));
+                    for(String permission : r.getPermissions()) {
+                        attachment.setPermission(permission, true);
+                    }
+                }
+            }, executor);
         });
     }
 
