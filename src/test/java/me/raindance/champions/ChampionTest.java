@@ -1,11 +1,8 @@
 package me.raindance.champions;
 
-import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.redis.Communicator;
-import me.raindance.champions.inventory.MenuCreator;
+import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.enums.SkillType;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

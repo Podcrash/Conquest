@@ -145,8 +145,9 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
             if(charges == 0) return;
             event.setModified(true);
             event.addSource(this);
-            event.setVelocityModifierX(1 + charges * 0.5);
-            event.setVelocityModifierZ(1 + charges * 0.5);
+            event.setVelocityModifierX(event.getVelocityModifierX() * 2);
+            event.setVelocityModifierY(event.getVelocityModifierY() * 1.25D);
+            event.setVelocityModifierZ(event.getVelocityModifierZ() * 2);
             getPlayer().getWorld().playSound(event.getVictim().getLocation(), Sound.ZOMBIE_WOOD, 0.5f, 1);
             reset();
             check(getPlayer().isSprinting());

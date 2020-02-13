@@ -130,26 +130,23 @@ public class MenuCreator {
             for(int k = 0; k < materials.length; k++) {
                 Material material = materials[k];
                 String name = names[k] + i;
-                int slot = rowStarts[index] + slots[k];
-                final ItemStack item = (material == Material.INK_SACK) ?
-                        new ItemStack(material, 1, DyeColor.GRAY.getData()) :
-                        new ItemStack(material);
+                final int slot = rowStarts[index] + slots[k];
+                final ItemStack item = new ItemStack(material);
                 final ItemMeta meta = item.getItemMeta();
 
 
                 meta.setDisplayName(name);
-                table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
-                    if(name.contains("Apply Build") && dataJSON != null) {
-                        Dye data = ((Dye) item.getData());
-                        data.setColor(color);
-                        item.setType(Material.INK_SACK);
-                        item.setAmount(1);
-                        item.setData(data);
-                        meta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
-                    }
-                    item.setItemMeta(meta);
-                });
+                item.setItemMeta(meta);
                 inventory.setItem(slot, item);
+                if(name.contains("Apply Build")) {
+                    table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
+                        ItemStack duplicate =  new ItemStack(Material.INK_SACK, 1, color.getData());
+                        ItemMeta futureMeta = item.getItemMeta();
+                        futureMeta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
+                        duplicate.setItemMeta(futureMeta);
+                        inventory.setItem(slot, duplicate);
+                    });
+                }
             }
         }
         return inventory;

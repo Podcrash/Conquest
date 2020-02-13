@@ -23,6 +23,7 @@ import java.util.*;
 
 @SkillMetadata(id = 1003, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassiveTimer {
+    private int i = 0;
     private final Random random = new Random();
     private SnowballRemover remover;
     private String NAME;
@@ -99,6 +100,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
     public void task() {
         double energyUsage = getEnergyUsageTicks();
         if(hasEnergy(energyUsage)) {
+            if(i++ % 2 == 0) return;
             blizzard();
             useEnergy(energyUsage);
         } else {

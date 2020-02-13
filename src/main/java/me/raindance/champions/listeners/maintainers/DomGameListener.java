@@ -14,7 +14,7 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.redis.Communicator;
+import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.map.DominateMap;

@@ -20,8 +20,7 @@ public class SmokeBomb implements IItem {
     public void useItem(Player player, Action action) {
         Location location = player.getLocation();
         Vector vector = location.getDirection();
-        vector.multiply(0.9D);
-        vector.setY(vector.getY() + 0.2);
+        vector = throwVector(vector);
         ItemManipulationManager.intercept(player, Material.FIREWORK_CHARGE, player.getEyeLocation(), vector, this::bomb);
     }
 

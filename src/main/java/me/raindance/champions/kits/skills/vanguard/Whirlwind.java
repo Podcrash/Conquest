@@ -122,12 +122,17 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
             double diff = center.distanceSquared(player.getLocation());
             if (diff > distanceSquared) continue;
 
-            Vector toCenter = VectorUtil.fromAtoB(player.getLocation(), getPlayer().getLocation());
-            toCenter.normalize().setY(0.24D);
-            double percentage = diff / distanceSquared;
-            toCenter.multiply(multiplier * percentage);
-            player.setVelocity(toCenter);
-            DamageApplier.damage(player, getPlayer(), (double) maxDamage * (1D - percentage), this, false);
+            whirlwind(player);
         }
+    }
+
+    private void whirlwind(Player player) {
+        Vector toCenter = VectorUtil.fromAtoB(player.getLocation(), getPlayer().getLocation());
+        double percentage = 1D - (toCenter.lengthSquared() / distanceSquared);
+        Vector addDir = getPlayer().getLocation().getDirection().multiply(1.5D);
+        toCenter.add(addDir).setY(0.24D);
+
+        player.setVelocity(toCenter);
+        DamageApplier.damage(player, getPlayer(), (double) maxDamage * percentage, this, false);
     }
 }

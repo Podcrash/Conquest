@@ -36,9 +36,11 @@ public class StunCharge implements IItem, ItemListener {
     @Override
     public void useItem(Player player, Action action) {
         Location location = player.getLocation();
-        Vector vector = location.getDirection();
-        vector.multiply(0);
-        Item item = ItemManipulationManager.spawnItem(Material.REDSTONE_LAMP_OFF, location);
+
+        Vector direction = location.getDirection();
+        Vector vector = new Vector(0, 0, 0);
+        if(isLeft(action)) vector = throwVector(direction);
+        Item item = ItemManipulationManager.regular(Material.REDSTONE_LAMP_OFF, location, vector);
         itemIDs.add(item.getEntityId());
         item.setPickupDelay(25);
         TimeHandler.delayTime(25, () -> {

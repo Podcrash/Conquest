@@ -12,6 +12,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,7 +107,17 @@ public enum ChampionsItem {
     }
 
     public ItemStack toItemStack(){
-        ItemStack itemStack = new ItemStack(material, count, data);
+        ItemStack itemStack;
+        switch (this) {
+            case ELIXIR:
+                Potion potion = new Potion(PotionType.INSTANT_HEAL, 2);
+                potion.setSplash(true);
+                itemStack = potion.toItemStack(1);
+                break;
+            default:
+                itemStack = new ItemStack(material, count, data);
+                break;
+        }
         if(Enchantment.DURABILITY.canEnchantItem(itemStack)) {
             /*Not sure which one is correct
 

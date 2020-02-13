@@ -28,6 +28,7 @@ import java.util.List;
 
 @SkillMetadata(id = 1005, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiveTimer {
+    private int i = 0;
     private final List<Item> infernoItems = new ArrayList<>();
     private String NAME;
     private int energyUsage;
@@ -83,9 +84,10 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
     @Override
     public void task() {
         if (hasEnergy(getEnergyUsageTicks())) {
+            useEnergy(getEnergyUsageTicks());
+            if(i++ % 2 == 0) return;
             shootFire();
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.GHAST_FIREBALL, 0.1f, 1f);
-            useEnergy(getEnergyUsageTicks());
         } else this.getPlayer().sendMessage(getNoEnergyMessage());
     }
 
