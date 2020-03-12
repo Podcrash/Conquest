@@ -1,6 +1,8 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.MathUtil;
@@ -129,6 +131,8 @@ public class InventoryListener extends ListenerBase {
             event.setCancelled(cancel);
             return;
         }
+
+        if(ownInventory(player, inventory) && !InvFactory.currentlyEditing(player)) return;
         boolean kitMenu = isKitSelectMenu(inventory),
                 build = isBuildMenu(inventory),
                 classMenu = isClassMenu(inventory),
@@ -150,6 +154,7 @@ public class InventoryListener extends ListenerBase {
         String name = item.getItemMeta().getDisplayName();
         SkillType skillType = SkillType.getByName(name);
         Inventory inv = MenuCreator.createKitTemplate(p, skillType);
+        StatusApplier.getOrNew(p).removeStatus(Status.values());
         p.openInventory(inv);
     }
 

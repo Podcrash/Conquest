@@ -27,7 +27,7 @@ public class VitalStab extends Interaction {
     public void doSkill(LivingEntity clickedEntity) {
         if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
-        DamageApplier.damage(clickedEntity, getPlayer(), 6, this, false);
+        DamageApplier.damage(clickedEntity, getPlayer(), 8, this, false);
         StatusApplier.getOrNew(clickedEntity).applyStatus(Status.BLEED, 5, 1);
         //TODO:
         SoundPlayer.sendSound(clickedEntity.getLocation(), "random.anvil_land", 0.9F, 110);

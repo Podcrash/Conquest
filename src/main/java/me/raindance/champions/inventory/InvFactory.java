@@ -1,13 +1,15 @@
 package me.raindance.champions.inventory;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.map.JsonHelper;
 import com.podcrash.api.mc.Configurator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -168,6 +170,7 @@ public final class InvFactory {
      * @param buildID
      */
     private static void edit(Player player, SkillType skillType, int buildID) {
+        StatusApplier.getOrNew(player).removeStatus(Status.values());
         buildMap.put(player.getName(), buildID);
         UUID uuid = player.getUniqueId();
         String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
@@ -182,7 +185,7 @@ public final class InvFactory {
 
         JsonObject kitJson = new JsonParser().parse(json).getAsJsonObject();
 
-        Integer[] skillIDs = JsonHelper.wrapInteger(kitJson.getAsJsonArray("skills"));
+        Integer[] skillIDs = wrapInteger(kitJson.getAsJsonArray("skills"));
         Inventory inv = MenuCreator.createKitMenu(skillType, skillIDs);
 
         JsonObject itemsJson = kitJson.getAsJsonObject("items");
@@ -191,6 +194,14 @@ public final class InvFactory {
         player.openInventory(inv);
     }
 
+    private static Integer[] wrapInteger(JsonArray array) {
+        int size = array.size();
+        Integer[] ids = new Integer[size];
+        for(int i = 0; i < size; i++) {
+            ids[i] = array.get(i).getAsInt();
+        }
+        return ids;
+    }
     /**
      * When a player closes the inventory,
      * have it be applied as well as save it as the current build.

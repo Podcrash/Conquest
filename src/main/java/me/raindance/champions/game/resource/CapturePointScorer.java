@@ -9,7 +9,7 @@ import com.podcrash.api.mc.game.resources.GameResource;
 public class CapturePointScorer extends GameResource {
     private CapturePoint[] capturePoints;
     public CapturePointScorer(CapturePointDetector detector) {
-        super(detector.getGameID(), detector.getTicks(), detector.getDelayTicks());
+        super(detector.getGameID(), 10, detector.getDelayTicks());
         capturePoints = detector.getCapturePoints();
     }
 

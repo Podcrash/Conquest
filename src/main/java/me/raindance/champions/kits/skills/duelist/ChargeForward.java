@@ -25,7 +25,7 @@ public class ChargeForward extends Drop implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 8;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ChargeForward extends Drop implements ICooldown {
             if(e.getVictim() instanceof  Player) {
                 if (1000 * 3 >= (System.currentTimeMillis() - selfTime)) {
                     Player victim = (Player) e.getVictim();
-                    StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 1, 1);
+                    StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 1, 2);
                     StatusApplier.getOrNew(getPlayer()).removeVanilla(Status.SPEED);
                     SoundPlayer.sendSound(getPlayer().getLocation(), "random.break", 0.75F, 250);
                     SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", .75F, 20);

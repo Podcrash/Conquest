@@ -48,6 +48,6 @@ public class ComboAttack extends Passive {
 
     @Override
     public String getName() {
-        return "Combo Attack";
+        return "Chain Attack";
     }
 }

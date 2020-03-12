@@ -19,7 +19,7 @@ public abstract class TogglePassive extends Drop {
         return true;
     }
 
-    protected void forceToggle() {
+    public void forceToggle() {
         toggled = !toggled;
     }
 

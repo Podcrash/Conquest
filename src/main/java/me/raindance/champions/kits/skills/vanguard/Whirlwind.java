@@ -18,6 +18,7 @@ import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
@@ -49,7 +50,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
     public Whirlwind() {
         this.distance = 5;
         this.distanceSquared = distance * distance;
-        this.maxDamage = 4;
+        this.maxDamage = 5;
         this.multiplier = 2.7F;
     }
 
@@ -122,17 +123,19 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
             double diff = center.distanceSquared(player.getLocation());
             if (diff > distanceSquared) continue;
 
-            whirlwind(player);
+            whirlwind(player, diff);
         }
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
-    private void whirlwind(Player player) {
-        Vector toCenter = VectorUtil.fromAtoB(player.getLocation(), getPlayer().getLocation());
-        double percentage = 1D - (toCenter.lengthSquared() / distanceSquared);
-        Vector addDir = getPlayer().getLocation().getDirection().multiply(1.5D);
-        toCenter.add(addDir).setY(0.24D);
+    private void whirlwind(LivingEntity player, double dist) {
+        Vector toCenter = VectorUtil.fromAtoB(player.getLocation(), getPlayer().getLocation()).normalize();
+        double percentage = (dist / distanceSquared) + 0.5;
+        if(percentage > 1) percentage = 1D;
+        toCenter.multiply(percentage * 1.25).setY(0.24D);
 
         player.setVelocity(toCenter);
-        DamageApplier.damage(player, getPlayer(), (double) maxDamage * percentage, this, false);
+        DamageApplier.damage(player, getPlayer(), maxDamage, this, false);
     }
 }

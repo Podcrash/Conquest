@@ -3,6 +3,7 @@ package me.raindance.champions.game.scoreboard;
 import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.game.DomGame;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ public class DomScoreboard extends GameScoreboard {
     private List<CapturePoint> capturePoints;
 
     public DomScoreboard(int gameId) {
-        super(12, gameId, GameType.DOM);
+        super(13, gameId, GameType.DOM);
 
 
 
@@ -64,9 +65,12 @@ public class DomScoreboard extends GameScoreboard {
 
     public void updateScore(TeamEnum team) {
         List<String> lines = getLines();
-        for(int i = 1; i < lines.size(); i++) {
+
+        String lowerTeam = team.getName().toLowerCase();
+        for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if(line.contains(team.getName())) continue;
+            //Pluginizer.getLogger().info(line.toLowerCase()+ " vs " + lowerTeam);
+            if(!line.toLowerCase().contains(lowerTeam)) continue;
             //prev is the exact same integer.
             setLine(i, String.valueOf(getGame().getTeam(team).getScore()));
             break;

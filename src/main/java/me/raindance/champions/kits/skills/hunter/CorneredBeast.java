@@ -37,7 +37,7 @@ public class CorneredBeast extends Instant implements TimeResource, ICooldown {
 
     @Override
     public float getCooldown() {
-        return 21;
+        return 16;
     }
 
     @Override

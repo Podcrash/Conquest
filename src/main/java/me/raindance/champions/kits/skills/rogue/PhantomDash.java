@@ -1,6 +1,14 @@
 package me.raindance.champions.kits.skills.rogue;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.mc.util.VectorUtil;
+import com.podcrash.api.mc.world.BlockUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -8,6 +16,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -58,7 +67,11 @@ public class PhantomDash extends Instant implements ICooldown {
         //spawn the enderpearl, we may need custom of these classes but for now this is fine.
         this.pearl = getPlayer().launchProjectile(EnderPearl.class, mulitplied);
 
+        SoundPlayer.sendSound(getPlayer().getLocation(), "random.bow", 0.85F, 30);
+        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.PORTAL, 1);
+        ParticleGenerator.generateProjectile(pearl, particles);
         //AT THIS POINT: we have spawned the ender pearl.
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler
@@ -66,28 +79,35 @@ public class PhantomDash extends Instant implements ICooldown {
         //checks
         Entity damager = event.getDamager();
 
+        Pluginizer.getLogger().info("t1");
         //if the damager is not a pearl or the pearl we need, return.
         //if(!(damager instanceof EnderPearl) || damager != this.pearl) return;
         //actually, just do this: check if the pearl is not the damager
         if(damager != this.pearl) return;
         Entity victim = event.getEntity();// victim
 
+        Pluginizer.getLogger().info("t2");
         //we want to check if the damager hit is an actual living damager and not something random (like item frames)
         if(!(victim instanceof LivingEntity)) return;
 
+        Pluginizer.getLogger().info("t3");
         //at this point, the pearl has hit some living damager,
         //so we need to do 5 damage and have the user teleport.
 
         //damage
-        DamageApplier.damage((LivingEntity) victim, getPlayer(), 5, this, false);
+        if(!isAlly((LivingEntity) victim)) {
+            Pluginizer.getLogger().info("t3.5");
+            DamageApplier.damage((LivingEntity) victim, getPlayer(), 8, this, false);
+        }
 
-        Vector direction = getPlayer().getLocation().getDirection();
 
-        Location endLoc = damager.getLocation();
-        //save the original direction
-        endLoc.setDirection(direction);
+        Pluginizer.getLogger().info("t4");
+        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.SMOKE_LARGE, 10);
+        particles.setLocation(victim.getLocation());
+        PacketUtil.asyncSend(particles, getPlayers());
         //teleport
-        getPlayer().teleport(damager.getLocation());
+        getPlayer().teleport(evade((LivingEntity) victim, victim.getLocation()));
+        SoundPlayer.sendSound(getPlayer(), "mob.endermen.portal", 0.85F, 73);
         this.pearl = null;
     }
 
@@ -106,10 +126,49 @@ public class PhantomDash extends Instant implements ICooldown {
         e.setCancelled(true);
     }
 
+    /**
+     * this is the other evade code used in the Evade skill
+     * this is slightly modified for the player to always touch the ground
+     * @param entity
+     * @param victimLocation
+     * @return
+     */
+    private Location evade(LivingEntity entity, Location victimLocation) {
+        // Based on the damager's location
+        // End Location
+        double constantY = victimLocation.getY() + 0.01d;
+        Location tempLocation = victimLocation.clone();
+        Vector vect = victimLocation.getDirection().normalize().multiply(-2.25);
+        Location behind = victimLocation.add(vect);
+        double d = 0.05;
+        double inc = 0.05;
+        double x2 = behind.getX(), y2 = behind.getY(), z2 = behind.getZ();
+        // x1,y2,z1
+        double x1 = tempLocation.getX(), y1 = tempLocation.getY(), z1 = tempLocation.getZ();
+        // Possible points
+        while (d < 1) {
+            // x2,y2,z2
+
+            double x = x1 + d * (x2 - x1);
+            double z = z1 + d * (z2 - z1);
+            Location testLocation = new Location(victimLocation.getWorld(), x, constantY, z);
+
+            d += inc;
+
+            if (!BlockUtil.isPassable(testLocation.getBlock())) break;
+            tempLocation = testLocation;
+            if (testLocation.distanceSquared(behind) < 0.20)
+                break;
+
+        }
+
+        return tempLocation.setDirection(VectorUtil.fromAtoB(tempLocation, entity.getLocation()).normalize());
+    }
+
     //Generator methods for this
     @Override
     public float getCooldown() {
-        return 7;
+        return 5;
     }
 
 

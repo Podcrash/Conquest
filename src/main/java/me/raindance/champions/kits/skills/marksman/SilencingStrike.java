@@ -16,12 +16,12 @@ import java.util.Arrays;
 
 @SkillMetadata(id = 509, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class SilencingStrike extends Interaction {
-    private final float duration = 2;
-    private final double damage = 2;
+    private final float duration = 4;
+    private final double damage = 4;
 
     @Override
     public float getCooldown() {
-        return 17;
+        return 10;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SilencingStrike extends Interaction {
     @Override
     public void doSkill(LivingEntity victim) {
         if (onCooldown()) return;
-        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 4);
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);

@@ -15,7 +15,7 @@ public class InvisCommand extends CommandBase {
             if (args.length == 1) {
                 try {
                     int duration = Integer.parseInt(args[0]);
-                    StatusApplier.getOrNew(player).applyStatus(Status.STRENGTH, 50, duration);
+                    StatusApplier.getOrNew(player).applyStatus(Status.BLEED, 50, duration);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }

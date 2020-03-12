@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 //when there's a better item system, change this
-@ItemMetaData(mat = Material.STONE_PLATE, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.STONE_PLATE, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class BearTrap implements IItem, ItemListener {
     private static Map<Integer, String> ownerItem;
     private BearTrapProxy proxy;
@@ -40,11 +40,12 @@ public class BearTrap implements IItem, ItemListener {
     @Override
     public void useItem(Player player, Action action) {
         Location location = player.getLocation();
-        Vector vector = location.getDirection();
-        vector.multiply(0);
-        Item item = ItemManipulationManager.spawnItem(Material.STONE_PLATE, location);
-        item.setPickupDelay(100);
-        TimeHandler.delayTime(99, () -> {
+        Vector direction = location.getDirection();
+        Vector vector = new Vector(0, 0, 0);
+        if(isLeft(action)) vector = throwVector(direction);
+        Item item = ItemManipulationManager.regular(Material.STONE_PLATE, location, vector);
+        item.setPickupDelay(25);
+        TimeHandler.delayTime(25, () -> {
             AbstractPacket packet2 = ParticleGenerator.createBlockEffect(item.getLocation().toVector(), Material.OBSIDIAN.getId());
             for(Player p : item.getWorld().getPlayers()) {
                 packet2.sendPacket(p);

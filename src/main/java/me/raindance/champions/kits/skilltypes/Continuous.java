@@ -24,6 +24,7 @@ public abstract class Continuous extends Instant implements TimeResource {
         if(rightClickCheck(action)){
             doContinuousSkill();
             useOnce = false;
+            getPlayer().sendMessage(getUsedMessage());
         }
     }
 

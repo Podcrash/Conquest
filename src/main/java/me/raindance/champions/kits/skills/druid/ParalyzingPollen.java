@@ -59,6 +59,7 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
         projectile.setShooter(getPlayer());
         WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(projectile.getLocation(), Material.FLOWER_POT.getId());
         ParticleGenerator.generateProjectile(projectile, packet);
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @Override

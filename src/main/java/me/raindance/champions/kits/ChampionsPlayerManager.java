@@ -14,12 +14,14 @@ import me.raindance.champions.inventory.ChampionsItem;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.classes.Duelist;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.IInjector;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
@@ -42,6 +44,7 @@ public class ChampionsPlayerManager {
         if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).start();
         if (skill instanceof IConstruct) ((IConstruct) skill).doConstruct();
         if (skill instanceof IInjector) addPacketListener(getChampionsPlayer(skill.getPlayer()), ((IInjector) skill).inject());
+        if (skill instanceof ICharge) skill.getPlayer().sendMessage(String.format("%s%s> %sMaximum Charges: %d", ChatColor.BLUE, skill.getName(), ChatColor.GOLD, ((ICharge) skill).getMaxCharges()));
     }
 
     public void addChampionsPlayer(ChampionsPlayer cplayer) {

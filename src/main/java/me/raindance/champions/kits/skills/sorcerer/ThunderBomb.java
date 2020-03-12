@@ -31,7 +31,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
     private WrapperPlayServerWorldParticles particles;
     private String NAME;
     private int energy = 80;
-    private float distance = 4;
+    private float distance = 16;
     private int damage = 6;
 
     @Override
@@ -92,6 +92,8 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         item.getItemStack().setItemMeta(meta);
         ParticleGenerator.generateEntity(item, particles, new SoundWrapper("random.fizz", 0.6F, 88));
         SoundPlayer.sendSound(item.getLocation(), "mob.silverfish.hit", 1F, 90);
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
 }

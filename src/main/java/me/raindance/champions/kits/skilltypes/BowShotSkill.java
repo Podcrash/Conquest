@@ -55,7 +55,8 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void shootBow(EntityShootBowEvent event){
-        if(event.isCancelled() || !isPrepared) return;
+        if(!isPrepared) return;
+        if(event.isCancelled()) return;
         if(event.getEntity() instanceof Player && event.getProjectile() instanceof Arrow){
             Player player = (Player) event.getEntity();
             if(player == getPlayer()){

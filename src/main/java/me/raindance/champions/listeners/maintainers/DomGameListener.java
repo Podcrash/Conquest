@@ -1,5 +1,6 @@
 package me.raindance.champions.listeners.maintainers;
 
+import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
@@ -7,6 +8,7 @@ import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
+import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.objects.objectives.Emerald;
 import com.podcrash.api.mc.game.objects.objectives.Restock;
@@ -17,13 +19,13 @@ import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
-import me.raindance.champions.game.map.DominateMap;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
+import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -49,14 +51,22 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void mapLoad(GameMapLoadEvent event) {
-        if(!(event.getMap() instanceof DominateMap) || !(event.getGame() instanceof DomGame)) return;
+        if(!(event.getMap() instanceof ConquestMap) || !(event.getGame() instanceof DomGame)) return;
         DomGame game = (DomGame) event.getGame();
-        DominateMap domMap = (DominateMap) event.getMap();
+        ConquestMap domMap = (ConquestMap) event.getMap();
         World world = event.getWorld();
-        domMap.setGameWorld(world);
-        game.setCapturePoints(domMap.getCapturePoints());
+        game.setCapturePoints(domMap.getCapturePointPojos());
         game.setEmeralds(domMap.getEmeralds());
         game.setRestocks(domMap.getRestocks());
+
+        for (WinObjective winObjective : game.getWinObjectives()) {
+            winObjective.setWorld(world);
+        }
+
+        for (ItemObjective itemObjective : game.getItemObjectives()) {
+            itemObjective.setWorld(world);
+        }
+
 
         GameScoreboard gameScoreboard;
         if((gameScoreboard = game.getGameScoreboard()) instanceof DomScoreboard)
@@ -90,6 +100,7 @@ public class DomGameListener extends ListenerBase {
     public void onEnd(GameEndEvent e) {
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
     }
 
@@ -99,13 +110,14 @@ public class DomGameListener extends ListenerBase {
         TeamEnum victimTeam = e.getGame().getTeamEnum(e.getWho());
         TeamEnum enemyTeam = null;
         Player victim = e.getWho();
-        e.getGame().increment(victimTeam, 50);
+        if(e.getWho() != e.getKiller())
+            e.getGame().increment(victimTeam, 50);
 
         List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
-                ((TogglePassive) skill).toggle();
+                ((TogglePassive) skill).forceToggle();
         }
     }
 
@@ -122,12 +134,17 @@ public class DomGameListener extends ListenerBase {
             String teamColor = ((CapturePoint) objective).getColor();
             TeamEnum team = TeamEnum.getByColor(teamColor);
             StringBuilder builder = new StringBuilder();
-            builder.append(team.getChatColor());
-            builder.append(ChatColor.BOLD);
-            builder.append(team.getName());
-            builder.append(" has captured ");
-            builder.append(objective.getName());
-            builder.append("!");
+            if(team != TeamEnum.WHITE) {
+                builder.append(team.getChatColor());
+                builder.append(ChatColor.BOLD);
+                builder.append(team.getName());
+                builder.append(" has captured ");
+                builder.append(objective.getName());
+                builder.append("!");
+            }else {
+                builder.append(team.getChatColor()).append(ChatColor.BOLD);
+                builder.append(objective.getName()).append("is now neutralized!");
+            }
             e.getGame().broadcast(builder.toString());
             DomScoreboard scoreboard = (DomScoreboard) e.getGame().getGameScoreboard();
             scoreboard.updateCapturePoint(team, objective.getName());
@@ -162,6 +179,18 @@ public class DomGameListener extends ListenerBase {
         game.getGameResources().forEach(resource -> {
             if(resource instanceof ItemObjectiveSpawner){
                 ((ItemObjectiveSpawner) resource).setItemTime(itemObjective, System.currentTimeMillis());
+            }
+        });
+    }
+
+    @EventHandler
+    public void resurect(GameResurrectEvent e) {
+        ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho());
+        championsPlayer.getSkills().forEach(skill -> {
+            if(skill instanceof ICharge) {
+                for(int i = 0; i < ((ICharge) skill).getMaxCharges(); i++) {
+                    ((ICharge) skill).addCharge();
+                }
             }
         });
     }

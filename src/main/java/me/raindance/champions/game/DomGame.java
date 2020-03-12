@@ -1,15 +1,19 @@
 package me.raindance.champions.game;
 
+import com.podcrash.api.db.pojos.map.BaseMap;
+import com.podcrash.api.db.pojos.map.CapturePointPojo;
+import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.db.pojos.map.Point;
 import com.podcrash.api.mc.game.*;
-import com.podcrash.api.mc.map.BaseGameMap;
-import me.raindance.champions.game.map.DominateMap;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.objects.objectives.Emerald;
 import com.podcrash.api.mc.game.objects.objectives.Restock;
+import io.netty.channel.DefaultMaxBytesRecvByteBufAllocator;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import me.raindance.champions.kits.skills.hunter.Rest;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -37,6 +41,11 @@ public class DomGame extends Game {
     public GameScoreboard getGameScoreboard() {
         if(scoreboard == null) scoreboard = new DomScoreboard(this.getId());
         return scoreboard;
+    }
+
+    @Override
+    public String getMode() {
+        return "conquest";
     }
 
     public List<CapturePoint> getCapturePoints() {
@@ -75,8 +84,8 @@ public class DomGame extends Game {
     }
 
     @Override
-    public Class<? extends BaseGameMap> getMapClass() {
-        return DominateMap.class;
+    public Class<? extends BaseMap> getMapClass() {
+        return ConquestMap.class;
     }
 
     @Override
@@ -89,16 +98,28 @@ public class DomGame extends Game {
             .build();
     }
 
-    public void setCapturePoints(List<CapturePoint> capturePoints) {
-        this.capturePoints = capturePoints;
+    public void setCapturePoints(List<CapturePointPojo> capturePoints) {
+        List<CapturePoint> points = new ArrayList<>();
+        for(CapturePointPojo pojo : capturePoints) {
+            points.add(new CapturePoint(pojo));
+        }
+        this.capturePoints = points;
     }
 
-    public void setEmeralds(List<Emerald> emeralds) {
-        this.emeralds = emeralds;
+    public void setEmeralds(List<Point> emeralds) {
+        List<Emerald> points = new ArrayList<>();
+        for(Point pojo : emeralds) {
+            points.add(new Emerald(pojo));
+        }
+        this.emeralds = points;
     }
 
-    public void setRestocks(List<Restock> restocks) {
-        this.restocks = restocks;
+    public void setRestocks(List<Point> restocks) {
+        List<Restock> points = new ArrayList<>();
+        for(Point pojo : restocks) {
+            points.add(new Restock(pojo));
+        }
+        this.restocks = points;
     }
 
     //TODO

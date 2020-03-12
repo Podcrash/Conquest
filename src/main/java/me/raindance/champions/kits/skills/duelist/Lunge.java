@@ -25,7 +25,7 @@ public class Lunge extends Drop implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 13;
+        return 6;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Lunge extends Drop implements ICooldown {
         getPlayer().setFallDistance(-1);
         Vector vector = getPlayer().getLocation().getDirection();
         vector = vector.normalize().multiply(0.5d + 1.35d * 0.15D);
-        vector.setY(vector.getY() + 0.2);
+        vector.setY(vector.getY() + 0.4);
         double yMax = 0.5d + 0.82d * 0.1D;
         if (vector.getY() > yMax) vector.setY(yMax);
         if (EntityUtil.onGround(getPlayer())) vector.setY(vector.getY() + 0.2);

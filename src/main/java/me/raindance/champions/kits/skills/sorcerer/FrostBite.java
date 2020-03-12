@@ -148,7 +148,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
             Snowball snowball = (Snowball) event.getDamager();
             if(NAME.equalsIgnoreCase(snowball.getCustomName())){
                 event.setCancelled(true);
-                DamageApplier.damage(victim, getPlayer(), 0.1, false);
+                DamageApplier.damage(victim, getPlayer(), 0.1, this, false);
                 StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 2, 1);
             }
         }

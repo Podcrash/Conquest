@@ -35,7 +35,6 @@ public class Cleave extends Drop implements ICooldown {
         if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
         return true;
         //TODO: Cleave particle effects?
     }

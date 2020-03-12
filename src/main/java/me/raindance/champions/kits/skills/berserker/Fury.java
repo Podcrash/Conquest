@@ -28,12 +28,13 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @Override
     public void start() {
+        lastHit = System.currentTimeMillis() - 3000;
         run(1, 0);
     }
 
     @Override
     public void task() {
-        if(lastHit != 0 && System.currentTimeMillis() - lastHit > 3000) {
+        if(lastHit != 0 && System.currentTimeMillis() - lastHit >= 3000) {
             lastHit = 0;
             getEnergyBar().setEnergy(0);
         }

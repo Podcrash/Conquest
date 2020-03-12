@@ -7,6 +7,7 @@ import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.util.EntityUtil;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import me.raindance.champions.kits.itemskill.ItemListener;

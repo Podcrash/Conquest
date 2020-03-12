@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.druid;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -23,6 +24,7 @@ public class LivingMana extends Passive implements IEnergy {
     @EventHandler
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
+        if(event.getCause() == Cause.CUSTOM) return;
         if(event.getAttacker() == getPlayer()) {
             getEnergyBar().setEnergy(getEnergyBar().getEnergy() + 10);
         }

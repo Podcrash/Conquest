@@ -91,7 +91,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
             if(current.getRelative(BlockFace.UP).getType() == Material.AIR && current.getRelative(BlockFace.DOWN).getType() != Material.AIR) {
                 if(minus < current.getY() && current.getY() <= currentY){
                     WrapperPlayServerWorldParticles snow = ParticleGenerator.createParticle(up.toVector(), EnumWrappers.Particle.SNOW_SHOVEL, 1,
-                            random.nextFloat() * 0.5F, 0.3F, random.nextFloat() * 0.5F);
+                            random.nextFloat() * 0.5F, 2.75F, random.nextFloat() * 0.5F);
                     PacketUtil.syncSend(snow, getPlayers());
                 }
             }

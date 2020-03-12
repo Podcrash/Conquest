@@ -49,6 +49,8 @@ public class ChainedHook extends Instant implements ICooldown {
         if(!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         release();
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     public void release() {
@@ -68,7 +70,7 @@ public class ChainedHook extends Instant implements ICooldown {
                     if(addY > 1.35F) addY = 1.35F;
                     entity.setVelocity(newVect.setY(addY));
                     SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.75F, 50);
-                    if(entity instanceof Player) DamageApplier.damage(entity, getPlayer(), charge * 3, this, false);
+                    DamageApplier.damage(entity, getPlayer(), 6, this, false);
                 }));
         itemItem.setPickupDelay(1000);
         ItemMeta meta = itemItem.getItemStack().getItemMeta();
@@ -78,7 +80,7 @@ public class ChainedHook extends Instant implements ICooldown {
         SoundWrapper sound = new SoundWrapper("fire.ignite", 0.8F, 70);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2);
 
-        Bukkit.getScheduler().runTaskLater(Main.instance, () -> ParticleGenerator.generateEntity(itemItem, packet, sound), 1L);
+        ParticleGenerator.generateEntity(itemItem, packet, sound);
     }
 
     @Override

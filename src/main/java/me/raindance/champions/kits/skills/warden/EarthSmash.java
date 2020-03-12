@@ -33,19 +33,22 @@ public class EarthSmash extends Instant implements ICooldown {
         Location location = getPlayer().getLocation();
         List<LivingEntity> players = location.getWorld().getLivingEntities();
         for(LivingEntity enemy : players) {
-            if(isAlly(enemy) || getPlayer() == enemy) continue;
+            if(getPlayer() == enemy) continue;
             double dist = location.distanceSquared(enemy.getLocation());
             if(dist > 16) continue;
-            pound(location, enemy, 1.1D - ((16D - dist)/16D));
+            pound(location, enemy, 1.33333D - ((16D - dist)/16D));
         }
-        ParticleGenerator.generateRangeParticles(location, 4.5, true);
+        ParticleGenerator.generateRangeParticles(location, 8, true);
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     private void pound(Location currentLoc, LivingEntity entity, double multiplier) {
-        DamageApplier.damage(entity, getPlayer(), multiplier * (5D/1.1D), this, false);
-        Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation());
-        vector.multiply(multiplier * 1.6D).setY(vector.getY() + 0.5D);
-        if(vector.getY() > 0.5D) vector.setY(0.5D);
+        if(multiplier > 1) multiplier = 1;
+        if(!isAlly(entity)) DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
+        Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation()).normalize();
+        vector.multiply(multiplier * 1.25D).setY(vector.getY() + 1);
+        if(vector.getY() > 1D) vector.setY(1D);
         entity.setVelocity(vector);
     }
 

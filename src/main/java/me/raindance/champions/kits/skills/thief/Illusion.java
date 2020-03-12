@@ -92,7 +92,6 @@ public class Illusion extends Continuous implements ICooldown {
     public void cleanup() {
         super.cleanup();
         StatusApplier.getOrNew((getPlayer())).removeCloak();
-        despawn(getSkeleton());
 
         Location location = skeleton.getLocation();
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location.toVector(), EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
@@ -102,9 +101,11 @@ public class Illusion extends Continuous implements ICooldown {
                 StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 1);
             }
         }
-        PacketUtil.syncSend(particles, players);
+        PacketUtil.asyncSend(particles, players);
         for (int i=0 ; i<2 ; i++) location.getWorld().playSound(location, Sound.FIZZ, 2f, 0.4f);
         this.setLastUsed(System.currentTimeMillis());
         a = true;
+
+        despawn(getSkeleton());
     }
 }

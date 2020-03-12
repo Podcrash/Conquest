@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.hunter;
 
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
@@ -61,27 +63,24 @@ public class Sharpshooter extends Passive implements ICharge {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void shoot(DamageApplyEvent e) {
-        if (checkIfValidShooter(e)) {
-            justMissed = false;
-            time = System.currentTimeMillis();
-            e.setModified(true);
-            e.setDamage(e.getDamage() + getCurrentCharges() * 2);
-            int id = e.getArrow().getEntityId();
-            //if(forceMap.get(id) >= 0.9F)
-                addCharge();
-            forceMap.remove(id);
-            getPlayer().sendMessage(String.format("%s bonus: %d", getName(), getCurrentCharges()));
-            e.addSource(this);
-            playSound();
-            miss = 0;
-            start();
-            Bukkit.getScheduler().runTaskLater(Main.instance, () -> justMissed = true, 3L);
-        }
+        if (!checkIfValidShooter(e)) return;
+        justMissed = false;
+        time = System.currentTimeMillis();
+        e.setModified(true);
+        e.setDamage(e.getDamage() + getCurrentCharges() * 2);
+        int id = e.getArrow().getEntityId();
+        //if(forceMap.get(id) >= 0.9F)
+            addCharge();
+        forceMap.remove(id);
+        getPlayer().sendMessage(getCurrentChargeMessage());
+        e.addSource(this);
+        playSound();
+        miss = 0;
+        start();
+        Bukkit.getScheduler().runTaskLater(Main.instance, () -> justMissed = true, 3L);
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(ProjectileHitEvent e) {
         if (e.getEntity().getShooter() == getPlayer()) {
             Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
@@ -92,7 +91,7 @@ public class Sharpshooter extends Passive implements ICharge {
                         if (charges != 0) {
                             resetCharge();
                             playSound();
-                            getPlayer().sendMessage(String.format("%s bonus: %d", getName(), getCurrentCharges()));
+                            getPlayer().sendMessage(getCurrentChargeMessage());
                         }
                     }
                 }
@@ -100,6 +99,17 @@ public class Sharpshooter extends Passive implements ICharge {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void fall(EntityDamageEvent e) {
+        if(getPlayer() == e.getEntity() && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            double totalDamage = e.getDamage() - 4;
+            if(totalDamage <= 0) {
+                e.setDamage(0);
+                e.setCancelled(true);
+            }
+            e.setDamage(totalDamage);
+        }
+    }
     @Override
     public void addCharge() {
         if (charges < MAX_CHARGES) charges++;
@@ -141,7 +151,7 @@ public class Sharpshooter extends Passive implements ICharge {
     @Override
     public void cleanup() {
         resetCharge();
-        getPlayer().sendMessage(String.format("%s%s bonus: %s%d", ChatColor.GRAY, getName(), ChatColor.GREEN, getCurrentCharges()));
+        getPlayer().sendMessage(getCurrentChargeMessage());
         playSound();
     }
 

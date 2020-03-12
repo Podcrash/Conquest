@@ -64,11 +64,10 @@ public abstract class Instant extends Skill {
     }
     private boolean skill(PlayerEvent event, Action action) {
         if(this.use) return false;
-        this.use = true;
         SkillUseEvent useEvent = new SkillUseEvent(instance);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return false;
-        getPlayer().sendMessage(getUsedMessage());
+        this.use = true;
         doSkill(event, action);
         TimeHandler.delayTime(1L, () -> use = false);
         return true;

@@ -259,7 +259,6 @@ public class Main extends JavaPlugin {
             getCommand("copyworld").setExecutor(new CopyWorldCommand());
             getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
             getCommand("ping").setExecutor(new PingCommand());
-            getCommand("mapinfo").setExecutor(new InfoMapCommand());
             getCommand("rc").setExecutor(new ReloadChampionsCommand());
             getCommand("spec").setExecutor(new SpecCommand());
             getCommand("view").setExecutor(new ViewCommand());

@@ -12,6 +12,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +35,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 12;
     }
 
     @Override
@@ -59,8 +60,8 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent event) {
         if (isDisengaging && event.getVictim() == getPlayer() && event.getCause() == Cause.MELEE) {
-            if (!(event.getAttacker() instanceof Player)) return;
-            Player victim = (Player) event.getAttacker();
+            if (isAlly(event.getAttacker())) return;
+            LivingEntity victim = event.getAttacker();
             event.setCancelled(true);
             isDisengaging = false;
             tempFallCancel = true;
@@ -76,7 +77,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
     }
 
     @EventHandler(
-            priority = EventPriority.HIGH
+            priority = EventPriority.LOW
     )
     public void fall(EntityDamageEvent event) {
         if (tempFallCancel && event.getCause() == EntityDamageEvent.DamageCause.FALL) {

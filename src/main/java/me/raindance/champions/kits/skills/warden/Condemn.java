@@ -5,6 +5,7 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -19,7 +20,7 @@ import org.bukkit.event.EventHandler;
 public class Condemn extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
-        return 18;
+        return 9;
     }
 
     @Override
@@ -36,13 +37,14 @@ public class Condemn extends Passive implements ICooldown {
     public void damage(DamageApplyEvent e) {
         if(onCooldown() || e.getAttacker() != getPlayer()) return;
         if(e.getCause() != Cause.MELEE && e.getCause() != Cause.MELEESKILL) return;
-        if(!(e.getVictim() instanceof Player)) return;
+        if(isAlly(e.getVictim())) return;
         setLastUsed(System.currentTimeMillis());
         getPlayer().sendMessage(getUsedMessage(e.getVictim()).replace("used", "unleashed"));
         StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.GROUND, 1.5F, 1);
         e.setDamage(e.getDamage() - 2);
         e.setModified(true);
         e.addSource(this);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.hit", 0.7F, 77);
         ParticleGenerator.createBlockEffect(getPlayer().getLocation(), Material.WOODEN_DOOR.getId());
     }
 }

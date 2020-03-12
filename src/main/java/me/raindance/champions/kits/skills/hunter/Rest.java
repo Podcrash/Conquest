@@ -10,11 +10,10 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Continuous;
-import org.bukkit.event.EventHandler;
 
 import java.util.Random;
 
-@SkillMetadata(id = 409, skillType = SkillType.Marksman, invType = InvType.SWORD)
+@SkillMetadata(id = 409, skillType = SkillType.Hunter, invType = InvType.SWORD)
 public class Rest extends Continuous {
     private boolean active;
     private Random rand;
@@ -49,11 +48,14 @@ public class Rest extends Continuous {
         return "Rest";
     }
 
+    /*
     @EventHandler
     public void damage(DamageApplyEvent event) {
-        if(!active || event.getVictim() == getPlayer()) return;
+        if(!active || event.getVictim() != getPlayer()) return;
         event.setModified(true);
         event.addSource(this);
         event.setDamage(event.getDamage() + 1);
     }
+
+     */
 }

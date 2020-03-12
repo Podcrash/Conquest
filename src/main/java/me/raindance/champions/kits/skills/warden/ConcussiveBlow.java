@@ -64,5 +64,7 @@ public class ConcussiveBlow extends Instant implements ICooldown {
 
         if(makeSound) SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 1.1F, 57);
         this.setLastUsed(System.currentTimeMillis());
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 }

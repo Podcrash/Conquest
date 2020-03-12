@@ -18,8 +18,8 @@ public class Overcharge extends BowChargeUp {
     private final float rate;
 
     public Overcharge() {
-        this.rate = (0.4f + 0.1f * 2) / 20f;
-        this.bonusDamage = 5;
+        this.rate = (1.2f) / 20f;
+        this.bonusDamage = 8;
     }
 
     @Override

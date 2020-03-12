@@ -73,6 +73,8 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
         useEnergy(energyUsage);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "item.fireCharge.use", 0.75F, 63, getPlayers());
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler

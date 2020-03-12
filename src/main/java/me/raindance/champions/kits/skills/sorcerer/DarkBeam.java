@@ -62,6 +62,8 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         useEnergy();
         setLastUsed(System.currentTimeMillis());
         release();
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @Override

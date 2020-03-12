@@ -29,15 +29,17 @@ public class Lightweight extends Passive implements IConstruct {
     }
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void fall(EntityDamageEvent e) {
         if(getPlayer() == e.getEntity() && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             double totalDamage = e.getDamage() - 3;
             if(totalDamage <= 0) {
+                e.setDamage(0);
                 e.setCancelled(true);
-                return;
             }
             e.setDamage(totalDamage);
+            Pluginizer.getLogger().info(getPlayer().getName() + " lightweight cancelled " + e.getDamage());
+            Pluginizer.getLogger().info(e.isCancelled() + "");
         }
     }
 

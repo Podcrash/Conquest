@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.sorcerer;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.Main;
@@ -122,6 +123,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
     public void damage(DamageApplyEvent event) {
         if(!isToggled() || event.getAttacker() != getPlayer()) return;
         if(event.getVictim().getFireTicks() <= 0) return;
+        if(event.getCause() != Cause.MELEE) return;
         event.addSource(this);
         event.setModified(true);
         event.setDamage(event.getDamage() + 2);

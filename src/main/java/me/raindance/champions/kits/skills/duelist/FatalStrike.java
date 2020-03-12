@@ -37,6 +37,7 @@ public class FatalStrike extends Passive {
         //if the victim is not below 50% health, return
         if(!EntityUtil.isBelow(e.getVictim(), 0.5)) return;
         //apply bleed + send a redstone block particle
+        if(isAlly(e.getVictim())) return;
         StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.BLEED, 3, 1);
         AbstractPacket packet = ParticleGenerator.createBlockEffect(e.getVictim().getLocation(), Material.REDSTONE.getId());
         PacketUtil.asyncSend(packet, getPlayers());

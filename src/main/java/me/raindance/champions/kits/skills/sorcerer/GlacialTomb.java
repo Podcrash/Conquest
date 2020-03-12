@@ -73,6 +73,8 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
             this.setLastUsed(System.currentTimeMillis());
             useEnergy(energy);
             launch();
+
+            getPlayer().sendMessage(getUsedMessage());
         }else {
             //if the time elapsed is too long, cancel
             if(getCooldown() - cooldown() > duration) return;

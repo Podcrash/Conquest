@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 /**
@@ -41,6 +45,8 @@ public final class SkillInfo {
         ClassPath cp = ClassPath.from(Adrenaline.class.getClassLoader());
         Set<ClassPath.ClassInfo> classInfoSet = cp.getTopLevelClasses(path);
         StringBuilder skillsLoaded = new StringBuilder(skillTypeName + ": ");
+
+        List<CompletableFuture<Void>> voids = new ArrayList<>();
         for(ClassPath.ClassInfo info : classInfoSet) {
             Class<?> skillClass = Class.forName(info.getName());
 
@@ -56,16 +62,26 @@ public final class SkillInfo {
 
                 throw new IllegalStateException(errMessage);
             }
-            addSkill(skillID, skillType, invType, skill);
+            SkillData data = addSkill(skillID, skillType, invType, skill);
+            voids.add(data.requestDescription());
             skillsLoaded.append(skill.getName()).append(" ");
         }
         System.out.println(skillsLoaded.toString());
+
+        try {
+            CompletableFuture.allOf(voids.toArray(new CompletableFuture[voids.size()]))
+                .get(5000, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+        }
     }
-    private static void addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
+    private static SkillData addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
         //TODO: put more of this information in the annotations.
         SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType);
         skillData.add(data);
         idDataMap.put(skillID, data);
+
+        return data;
     }
 
     private static <T> T emptyConstructor(Class<T> clazz) {

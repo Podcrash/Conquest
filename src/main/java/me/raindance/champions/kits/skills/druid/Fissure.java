@@ -68,6 +68,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
             return;
         }
 
+        getPlayer().sendMessage(getUsedMessage());
         useEnergy();
         setLastUsed(System.currentTimeMillis());
         Location playerLocation = getPlayer().getLocation();

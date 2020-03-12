@@ -16,6 +16,7 @@ import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.mc.world.BlockUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -53,12 +54,13 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     protected void doSkill(PlayerEvent event, Action action) {
         if(usage || !rightClickCheck(action) || onCooldown()) return;
         if(!EntityUtil.onGround(getPlayer())) {
-            getPlayer().sendMessage(getMustGroundMessage());
+            getPlayer().sendMessage(getMustGroundMessage().replace("grounded", "airborne"));
             return;
         }
         usage = true;
         currentPointer = BlockUtil.getHighestUnderneath(getPlayer().getLocation());
         players = getPlayers();
+        getPlayer().sendMessage(getUsedMessage());
         run(1, 0);
     }
 
@@ -72,13 +74,14 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     private void movePointer(Location currentPointer) {
         Location crosshairView = getPlayer().getTargetBlock((HashSet<Byte>) null, 25).getLocation();
         //pseudo correction, just in case the pointer tries to go in air.
-        if(crosshairView.getBlock().getType() == Material.AIR)
-            crosshairView = BlockUtil.getHighestUnderneath(crosshairView);
+        if(crosshairView.getBlock().getType() == Material.AIR) {
+            BlockUtil.getHighestUnderneath(crosshairView);
+        }
 
         //find initial direction to go to.
         Vector direction = VectorUtil.fromAtoB(currentPointer, crosshairView).normalize();
         //SLOOOOOWWWW DOWN
-        direction.multiply(0.5D);
+        direction.multiply(0.25D);
 
         currentPointer.add(direction);
         Block eval = currentPointer.getBlock();
@@ -164,20 +167,21 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
      * @return
      */
     private boolean canTrap(Location currentPointer, Location victimLoc) {
-        int x1 = currentPointer.getBlockX() - 1;
-        int x2 = currentPointer.getBlockX() + 1;
+        double x1 = currentPointer.getX() - 1.5;
+        double x2 = currentPointer.getX() + 1.5;
 
-        int z1 = currentPointer.getBlockZ() - 1;
-        int z2 = currentPointer.getBlockZ() + 1;
+        double z1 = currentPointer.getZ() - 1.5;
+        double z2 = currentPointer.getZ() + 1.5;
 
-        int y = currentPointer.getBlockY();
+        double y1 = currentPointer.getY();
+        double y2 = y1 + 3;
 
-        int testX = victimLoc.getBlockX();
-        int testY = victimLoc.getBlockZ();
-        int testZ = victimLoc.getBlockZ();
+        double testX = victimLoc.getX();
+        double testY = victimLoc.getY();
+        double testZ = victimLoc.getZ();
 
         //3 blocks is the safe grace.
-        if(testY >= y && testY - y <= 3) {
+        if(y1 <= testY && testY <= y2) {
             if(x1 <= testX && testX <= x2) {
                 return z1 <= testZ && testZ <= z2;
             }
@@ -223,7 +227,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     @Override
     public String getName() {
-        return "Tangled Vines";
+        return "Tangle Vines";
     }
 
     @Override

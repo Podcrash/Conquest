@@ -46,6 +46,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
         time = System.currentTimeMillis();
         isRiposting = true;
         TimeHandler.repeatedTime(1, 0, this);
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -57,7 +58,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
             event.setCancelled(true);
             TimeHandler.unregister(this);
             LivingEntity victim = event.getAttacker();
-            player.sendMessage("Skill> You parried " + victim.getName());
+            getPlayer().sendMessage(getUsedMessage(victim).replace("used", "replaced"));
             player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 0.5f, 1.6f);
             ripoSuccess = true;
             ripoSuccessTime = System.currentTimeMillis();

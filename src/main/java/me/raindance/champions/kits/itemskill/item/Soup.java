@@ -14,7 +14,7 @@ import org.bukkit.event.block.Action;
 
 import java.util.Random;
 
-@ItemMetaData(mat = Material.MUSHROOM_SOUP)
+@ItemMetaData(mat = Material.MUSHROOM_SOUP, actions = {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
 public class Soup implements IItem {
     @Override
     public String getName() {

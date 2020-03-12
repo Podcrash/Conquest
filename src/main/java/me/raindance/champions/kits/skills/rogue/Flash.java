@@ -103,7 +103,7 @@ public class Flash extends Instant implements ICharge, IPassiveTimer {
 
     public void addCharge() {
         if(System.currentTimeMillis() - lastTimeHit <= delay * 1000L) return;
-        if (getCurrentCharges() < MAX_CHARGES && System.currentTimeMillis() - getLastUsed() >= 4000L) {
+        if (getCurrentCharges() < MAX_CHARGES && System.currentTimeMillis() - getLastUsed() >= 3000L) {
             charges++;
             this.getPlayer().sendMessage(getCurrentChargeMessage());
             setLastUsed(System.currentTimeMillis());

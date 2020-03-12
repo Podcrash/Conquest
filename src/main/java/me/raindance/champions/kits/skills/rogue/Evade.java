@@ -33,7 +33,7 @@ import java.util.List;
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
     private boolean isEvading = false;
     private long time;
-    private int charges = 2;
+    private int charges = 3;
 
     @Override
     public void task() {
@@ -73,7 +73,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
     @Override
     public int getMaxCharges() {
-        return 2;
+        return 3;
     }
 
     private boolean hasCharges() {
@@ -88,7 +88,8 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
         if (hasCharges()) {
             time = System.currentTimeMillis();
             isEvading = true;
-            TimeHandler.repeatedTime(1, 0, new ActiveEvade());
+            getPlayer().sendMessage(getUsedMessage());
+            TimeHandler.repeatedTimeAsync(1, 0, new ActiveEvade());
         } else this.getPlayer().sendMessage(getNoChargeMessage());
     }
 
@@ -239,6 +240,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
                     ChatColor.BLUE, ChatColor.GRAY));
             SoundPlayer.sendSound(getPlayer(),"note.pling", 0.75F, 2);
             setLastUsed(System.currentTimeMillis());
+            TitleSender.sendTitle(getPlayer(), TitleSender.emptyTitle());
             isEvading = false;
             removeCharge();
         }

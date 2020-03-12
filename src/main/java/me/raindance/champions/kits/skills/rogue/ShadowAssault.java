@@ -42,7 +42,7 @@ public class ShadowAssault extends Passive implements ICooldown {
         getPlayer().sendMessage(getUsedMessage(event.getVictim()));
         setLastUsed(System.currentTimeMillis());
         event.addSource(this);
-        event.setDamage(event.getDamage() + 3);
+        event.setDamage(event.getDamage() + 5);
         event.setModified(true);
 
     }

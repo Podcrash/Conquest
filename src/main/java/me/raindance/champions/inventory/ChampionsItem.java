@@ -26,9 +26,9 @@ public enum ChampionsItem {
     STANDARD_AXE(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_AXE),
     STANDARD_SHOVEL(11, ChatColor.WHITE + "Standard Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SPADE),
 
-    BOOSTER_SWORD(12, ChatColor.WHITE + "Booster Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SWORD),
-    BOOSTER_AXE(13, ChatColor.WHITE + "Booster Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_AXE),
-    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Booster Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.GOLD_SPADE),
+    BOOSTER_SWORD(12, ChatColor.WHITE + "Spell Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SWORD),
+    BOOSTER_AXE(13, ChatColor.WHITE + "Spell Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_AXE),
+    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Spell Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SPADE),
 
     WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SWORD),
     WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_AXE),
@@ -52,7 +52,7 @@ public enum ChampionsItem {
     SMOKE_BOMB(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE),
     STUN_CHARGE(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF),
     MEAD(3, ChatColor.WHITE + "Bread", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
-    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE),
+    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE),
     ELIXIR(5, ChatColor.WHITE + "Elixir", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop Elixir, which splashes an aura of healing"), Material.POTION, (byte) 16421)
     ;
 

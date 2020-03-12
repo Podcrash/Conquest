@@ -50,6 +50,7 @@ public class FrostArrows extends Passive implements TimeResource, IPassiveTimer 
             Player player = (Player) e.getVictim();
             e.addSource(this);
             StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 0);
+            StatusApplier.getOrNew(player).applyStatus(Status.WEAKNESS, duration, 0);
             player.setSprinting(false);
             affected.put(player.getName(), System.currentTimeMillis() + 2000L);
         }

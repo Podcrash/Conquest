@@ -27,7 +27,7 @@ import java.util.*;
 @SkillMetadata(id = 406, skillType = SkillType.Hunter, invType = InvType.AXE)
 public class Swiftness extends Instant implements TimeResource, ICooldown {
     private final int selfEffect = 4;
-    private final float selfReduction = 0.4F;
+    private final float selfReduction = 0.6F;
     private boolean _active;
     private final Random rand = new Random();
 

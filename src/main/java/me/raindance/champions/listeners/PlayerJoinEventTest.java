@@ -3,6 +3,7 @@ package me.raindance.champions.listeners;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.Main;
@@ -12,7 +13,9 @@ import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import com.podcrash.api.mc.mob.CustomEntityFirework;
+import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -46,6 +49,8 @@ public class PlayerJoinEventTest extends ListenerBase {
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (p.getWorld().getName().equals("world")) {
+
+            ((CraftLivingEntity) e.getPlayer()).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
             p.getInventory().setItem(35, beacon);
             //adds the PermissionAttachment so permissions work on the players
 
@@ -88,6 +93,7 @@ public class PlayerJoinEventTest extends ListenerBase {
         ChampionsPlayerManager cm = ChampionsPlayerManager.getInstance();
         ChampionsPlayer cplayer = cm.getChampionsPlayer(p);
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
+        StatusApplier.getOrNew(p).removeStatus(Status.values());
         StatusApplier.remove(e.getPlayer());
         if(!GameManager.getGame().isOngoing()) {
             GameManager.removePlayer(e.getPlayer());

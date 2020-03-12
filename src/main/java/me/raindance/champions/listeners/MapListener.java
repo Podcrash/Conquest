@@ -4,16 +4,11 @@ import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.RanksTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import me.raindance.champions.game.map.ChampionsMapManager;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MapListener extends ListenerBase {
@@ -27,6 +22,7 @@ public class MapListener extends ListenerBase {
         RanksTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
         if (e.getPlayer().hasPermission("champions.build")) { //Switch out for permissions
             Player p = e.getPlayer();
+            /*
             ChampionsMapManager mapper = ChampionsMapManager.getInstance();
             Block block = e.getClickedBlock();
             if (block.getState() instanceof Sign) {
@@ -44,6 +40,8 @@ public class MapListener extends ListenerBase {
                 if (mapper.registerSpawn(p, block, wool)) p.sendMessage("Success");
                 else p.sendMessage("Failure to set a spawn");
             }
+
+             */
         }
 
     }

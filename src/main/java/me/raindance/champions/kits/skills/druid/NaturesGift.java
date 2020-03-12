@@ -31,11 +31,12 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
         getGame().consumeBukkitPlayer(this::buff);
         useEnergy(getEnergyUsage());
         setLastUsed(System.currentTimeMillis());
+        getPlayer().sendMessage(getUsedMessage());
 
     }
 
     private void buff(Player victim) {
-        if(victim != getPlayer() && !isAlly(victim)) return;
+        if(victim == getPlayer() || !isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
 
         StatusApplier.getOrNew(victim).applyStatus(Status.STRENGTH, 3, 0, false);

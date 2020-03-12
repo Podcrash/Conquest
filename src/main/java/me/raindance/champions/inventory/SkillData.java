@@ -34,14 +34,12 @@ public class SkillData {
         this.skillType = skillType;
 
         this.constructor = initConstructor(skill);
-
-        requestDescription();
     }
 
     private String getCleanName() {
         return getName().toLowerCase().replaceAll("[^A-Za-z0-9]", "").replace(" ", "");
     }
-    private void requestDescription() {
+    public CompletableFuture<Void> requestDescription() {
         /*
         String cache = Communicator.getCacheValue(getCleanName());
         if(cache == null) {
@@ -57,7 +55,7 @@ public class SkillData {
             else this.description = Arrays.asList(value.split("\n"));
         }else this.description = Arrays.asList(cache.split("\n"));
          */
-        if(description != null && description.size() != 0) return;
+        if(description != null && description.size() != 0) return CompletableFuture.completedFuture(null);
         Configurator configurator = Pluginizer.getSpigotPlugin().getConfigurator("skilldescriptions");
         CompletableFuture<Void> future = new CompletableFuture<>();
         configurator.readList(getCleanName(), list -> {
@@ -77,11 +75,8 @@ public class SkillData {
             }
             future.complete(null);
         });
-        try {
-            future.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
-        }
+
+        return future;
     }
 
     private Constructor<Skill> initConstructor(Skill skill) {
