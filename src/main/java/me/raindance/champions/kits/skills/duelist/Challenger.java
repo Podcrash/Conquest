@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SkillMetadata(id = 309, skillType = SkillType.Duelist, invType = InvType.INNATE)
-public class DuelistPassive extends Passive implements IPassiveTimer, TimeResource {
+public class Challenger extends Passive implements IPassiveTimer, TimeResource {
     @Override
     public void start() {
         runAsync(5,0);
@@ -50,6 +50,6 @@ public class DuelistPassive extends Passive implements IPassiveTimer, TimeResour
 
     @Override
     public String getName() {
-        return "Insert name of Duelist passive here";
+        return "Challenger";
     }
 }
