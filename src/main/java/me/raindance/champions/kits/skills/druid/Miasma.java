@@ -96,7 +96,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
                 double z = pleaseLoad[i][1];
                 Vector vector = new Vector(x, 0, z);
                 playerLocation.add(vector);
-                float[] data = random.nextFloat() < 0.5 ? new float[]{0F, 0F, 1} :  new float[]{-2, 1F, 0.694F};
+                float[] data = random.nextFloat() < 0.5 ? new float[]{0F, 0F, 1} :  new float[]{-1, 1F, 0.694F};
                 WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(playerLocation.toVector(),
                         EnumWrappers.Particle.REDSTONE,0,
                         data[0], data[1], data[2]);
