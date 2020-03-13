@@ -107,7 +107,7 @@ public class PhantomDash extends Instant implements ICooldown {
         PacketUtil.asyncSend(particles, getPlayers());
         //teleport
         getPlayer().teleport(evade((LivingEntity) victim, victim.getLocation()));
-        SoundPlayer.sendSound(getPlayer(), "mob.endermen.portal", 0.85F, 73);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.portal", 0.85F, 73);
         this.pearl = null;
     }
 
