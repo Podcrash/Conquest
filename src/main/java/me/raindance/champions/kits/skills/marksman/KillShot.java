@@ -36,8 +36,10 @@ public class KillShot extends Passive {
         if(event.getAttacker() != getPlayer() || event.getCause() != Cause.PROJECTILE || isAlly(event.getVictim())) return;
         LivingEntity entity = event.getVictim();
 
+        System.out.println("pass1");
         if(!EntityUtil.isBelow(entity, 0.4)) return;
 
+        System.out.println("pass2");
         event.setModified(true);
         event.setDamage(event.getDamage() + 4);
     }

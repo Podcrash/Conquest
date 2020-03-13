@@ -50,8 +50,4 @@ public class Overcharge extends BowChargeUp {
     public void shootGround(Arrow arrow, float charge) {
 
     }
-
-    public int getMaxLevel() {
-        return 3;
-    }
 }

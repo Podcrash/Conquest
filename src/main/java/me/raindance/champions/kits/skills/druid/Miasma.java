@@ -73,7 +73,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
             @Override
             public void task() {
                 for(int i = a; i < 5; i++) {
-                    playerLocation.getWorld().playSound(playerLocation, Sound.FIZZ, 2f, 1f + (float) ((i/10D % (Math.PI / 2d)) / (Math.PI / 2)));
+                    playerLocation.getWorld().playSound(playerLocation, Sound.FIZZ, 1.5f, 1f + (float) ((i/10D % (Math.PI / 2d)) / (Math.PI / 2)));
                 }
                 a++;
             }
@@ -96,10 +96,11 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
                 double z = pleaseLoad[i][1];
                 Vector vector = new Vector(x, 0, z);
                 playerLocation.add(vector);
-                float[] data = random.nextFloat() < 0.5 ? new float[]{1F, 0F, 1} :  new float[]{0, 1F, 0.694F};
+                float[] data = random.nextFloat() < 0.5 ? new float[]{0F, 0F, 1} :  new float[]{-2, 1F, 0.694F};
                 WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(playerLocation.toVector(),
-                        EnumWrappers.Particle.REDSTONE,4,
-                        0.05F, 0.35F, 0.05F);
+                        EnumWrappers.Particle.REDSTONE,0,
+                        data[0], data[1], data[2]);
+                particle.setParticleData(1);
                 playerLocation.subtract(vector);
                 PacketUtil.asyncSend(particle, getPlayers());
             }
