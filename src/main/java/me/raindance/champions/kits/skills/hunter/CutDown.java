@@ -1,4 +1,4 @@
-package me.raindance.champions.kits.skills.marksman;
+package me.raindance.champions.kits.skills.hunter;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
@@ -18,7 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
-@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 403, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
 public class CutDown extends Passive {
     private final int duration = 4;
 
@@ -44,9 +44,7 @@ public class CutDown extends Passive {
             ParticleGenerator.generateProjectile((Projectile) e.getProjectile(), packet);
         }
     }
-    @EventHandler(
-            priority = EventPriority.LOW
-    )
+    @EventHandler(priority = EventPriority.LOW)
     public void shoot(DamageApplyEvent e) {
         if (!isAlly(e.getVictim()) && e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
             if(!(e.getVictim() instanceof Player)) return;

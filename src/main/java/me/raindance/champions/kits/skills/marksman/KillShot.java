@@ -1,4 +1,4 @@
-package me.raindance.champions.kits.skills.hunter;
+package me.raindance.champions.kits.skills.marksman;
 
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
@@ -13,7 +13,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 403, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
 public class KillShot extends Passive {
     @Override
     public String getName() {
