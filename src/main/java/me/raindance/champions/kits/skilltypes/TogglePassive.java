@@ -14,13 +14,17 @@ public abstract class TogglePassive extends Drop {
     }
 
     public boolean drop(PlayerDropItemEvent event) {
-        forceToggle(); //is this right?
-        toggle();
+        runToggle();
         return true;
     }
 
+    protected void runToggle() {
+        forceToggle(); //is this right?
+        toggle();
+    }
     public void forceToggle() {
         toggled = !toggled;
+        getPlayer().sendMessage(getToggleMessage());
     }
 
     public boolean isToggled() {

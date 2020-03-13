@@ -16,7 +16,6 @@ import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
-import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -97,9 +96,9 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
                 double z = pleaseLoad[i][1];
                 Vector vector = new Vector(x, 0, z);
                 playerLocation.add(vector);
-                int[] data = random.nextFloat() < 0.5 ? new int[]{255, 0, 255} :  new int[]{0, 255, 177};
+                float[] data = random.nextFloat() < 0.5 ? new float[]{1F, 0F, 1} :  new float[]{0, 1F, 0.694F};
                 WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(playerLocation.toVector(),
-                        EnumWrappers.Particle.REDSTONE,  data,4,
+                        EnumWrappers.Particle.REDSTONE,4,
                         0.05F, 0.35F, 0.05F);
                 playerLocation.subtract(vector);
                 PacketUtil.asyncSend(particle, getPlayers());

@@ -115,7 +115,6 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
     public void cleanup() {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
-            getPlayer().sendMessage(getToggleMessage() + '\n' + getNoEnergyMessage());
         }
     }
 

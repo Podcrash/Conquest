@@ -24,7 +24,7 @@ public abstract class Drop extends Skill {
         SkillUseEvent useEvent = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        if(drop(e)) getPlayer().sendMessage(getUsedMessage());
+        drop(e);
         e.setCancelled(true);
     }
 

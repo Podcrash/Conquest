@@ -13,6 +13,12 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
+/**
+ *
+ Kill Shot
+ Cooldown: N/A
+ Description: Your arrows deal 4 bonus damage to enemies under 40% health.
+ */
 @SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
 public class KillShot extends Passive {
     @Override

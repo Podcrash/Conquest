@@ -67,6 +67,9 @@ public class RoseArmor extends TogglePassive implements TimeResource, IEnergy {
     @Override
     public void cleanup() {
         StatusApplier.getOrNew(getPlayer()).removeStatus(Status.RESISTANCE);
+        if(!hasEnergy(getEnergyUsageTicks())) {
+            forceToggle();
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
