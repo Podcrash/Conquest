@@ -8,6 +8,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,10 @@ public class Challenger extends Passive implements IPassiveTimer, TimeResource {
                 return;
             }
         }
-        if(i == 0) return;
+        if(i == 0) {
+            StatusApplier.getOrNew(getPlayer()).removeStatus(Status.STRENGTH, Status.RESISTANCE);
+            return;
+        }
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.STRENGTH, Integer.MAX_VALUE, 0);
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.RESISTANCE, Integer.MAX_VALUE, 0);
     }
