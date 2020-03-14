@@ -19,7 +19,13 @@ public abstract class Drop extends Skill {
         if(!isHolding(e.getItemDrop().getItemStack())) return;
         if(isInWater()) return;
         //check for cooldown
-        if(this instanceof ICooldown && ((ICooldown) this).onCooldown()) return;
+        if(this instanceof ICooldown) {
+            ICooldown cooldownSkill = (ICooldown) this;
+            if(cooldownSkill.onCooldown()) {
+                getPlayer().sendMessage(cooldownSkill.getCooldownMessage());
+                return;
+            }
+        }
 
         SkillUseEvent useEvent = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(useEvent);
