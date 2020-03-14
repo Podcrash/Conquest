@@ -2,6 +2,7 @@ package me.raindance.champions.kits.skills.marksman;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,9 +74,9 @@ public class MarkedForDeath extends BowShotSkill {
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void damage(DamageApplyEvent event) {
-        if(event.isCancelled()) return;
+        if(event.isCancelled() || event.getCause() != Cause.MELEE) return;
         LivingEntity entity = event.getVictim();
         synchronized (victims) {
             if (victims.contains(entity.getName()) && StatusApplier.getOrNew(entity).has(Status.MARKED) && victims.contains(entity.getName())) {
