@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 @SkillMetadata(id = 509, skillType = SkillType.Marksman, invType = InvType.SWORD)
-public class SilencingStrike extends Interaction {
-    private final float duration = 4;
+public class Disarm extends Interaction {
+    private final float duration = 1.5F;
     private final double damage = 4;
 
     @Override
@@ -26,7 +26,7 @@ public class SilencingStrike extends Interaction {
 
     @Override
     public String getName() {
-        return "Silencing Strike";
+        return "Disarm";
     }
 
     @Override
@@ -37,7 +37,9 @@ public class SilencingStrike extends Interaction {
     @Override
     public void doSkill(LivingEntity victim) {
         if (onCooldown()) return;
-        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 4);
+        if(isAlly(victim)) return;
+        getPlayer().sendMessage(getUsedMessage(victim));
+        StatusApplier.getOrNew(victim).applyStatus(Status.WEAKNESS, duration, 99);
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);
