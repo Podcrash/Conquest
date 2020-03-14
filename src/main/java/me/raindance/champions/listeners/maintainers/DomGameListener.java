@@ -12,6 +12,7 @@ import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.objects.objectives.Emerald;
 import com.podcrash.api.mc.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.resources.HealthBarResource;
 import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
@@ -90,7 +91,8 @@ public class DomGameListener extends ListenerBase {
                 new ScoreboardRepeater(game.getId()),
                 new ItemObjectiveSpawner(game.getId()),
                 capture,
-                new CapturePointScorer(capture)
+                new CapturePointScorer(capture),
+                new HealthBarResource(game.getId())
         );
         game.broadcast(e.getMessage());
     }

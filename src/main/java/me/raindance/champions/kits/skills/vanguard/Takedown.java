@@ -99,12 +99,13 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
 
     @Override
     public boolean canUseSkill(PlayerEvent event) {
+        if(!super.canUseSkill(event)) return false;
         boolean a = EntityUtil.onGround(event.getPlayer());
         if(a) {
             if(!onCooldown()) {
                 getPlayer().sendMessage(getMustGroundMessage());
             }
         }
-        return !a  && super.canUseSkill(event);
+        return !a;
     }
 }
