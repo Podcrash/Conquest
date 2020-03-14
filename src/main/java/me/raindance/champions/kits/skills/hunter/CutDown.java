@@ -7,6 +7,7 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -50,7 +51,7 @@ public class CutDown extends Passive {
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
             e.addSource(this);
-            if(player.getMaxHealth() * 0.5D >= player.getHealth()) return;
+            if(EntityUtil.isBelow(player, 0.5)) return;
             e.setDamage(e.getDamage() + 3);
         }
     }
