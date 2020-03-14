@@ -7,6 +7,7 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.time.TimeHandler;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -26,7 +27,7 @@ import java.util.Set;
 
 @SkillMetadata(id = 507, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class MarkedForDeath extends BowShotSkill {
-    private Set<String> victims;
+    private final Set<String> victims;
     public MarkedForDeath() {
         victims = new HashSet<>();
     }
@@ -53,10 +54,16 @@ public class MarkedForDeath extends BowShotSkill {
     @Override
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
         if(event.isCancelled()) return;
-        StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, 4, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, 3, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BLAZE_BREATH, 1.0f, 1.5f);
         event.addSource(this);
-        victims.add(victim.getName());
+        synchronized (victims) {
+            victims.add(victim.getName());
+        }
+        getPlayer().sendMessage(getUsedMessage(victim));
+        event.setModified(true);
+        event.setDamage(1);
+        TimeHandler.delayTime(3 * 20L, () -> victims.remove(victim.getName()));
         //shooter.sendMessage("You marked " + victim.getName() + " for " + duration + " seconds.");
     }
 
@@ -69,10 +76,13 @@ public class MarkedForDeath extends BowShotSkill {
     public void damage(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         LivingEntity entity = event.getVictim();
-        if(victims.contains(entity.getName()) && StatusApplier.getOrNew(entity).has(Status.MARKED)) {
-            event.addSource(this);
-            event.setModified(true);
-            event.setDamage(event.getDamage() + 2);
+        synchronized (victims) {
+            if (victims.contains(entity.getName()) && StatusApplier.getOrNew(entity).has(Status.MARKED) && victims.contains(entity.getName())) {
+                event.addSource(this);
+                event.setModified(true);
+                event.setDamage(event.getDamage() + 15);
+                victims.remove(entity.getName());
+            }
         }
     }
 }
