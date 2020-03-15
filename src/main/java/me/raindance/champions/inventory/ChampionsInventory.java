@@ -92,7 +92,7 @@ public class ChampionsInventory {
         for(String d : description) {
             desc.add(ChatColor.GRAY + d);
         }
-        ItemStack item = ItemStackUtil.createItem(material, ChatColor.BOLD + skillType.getName(), desc);
+        ItemStack item = ItemStackUtil.createItem(material, String.format("%s%s%s", ChatColor.RESET, ChatColor.BOLD, skillType.getName()), desc);
         classItemList[cursor] = item;
         cursor++;
     }
