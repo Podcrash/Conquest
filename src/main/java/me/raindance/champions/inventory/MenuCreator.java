@@ -28,11 +28,26 @@ public class MenuCreator {
 
     public static Inventory createGeneralMenu() {
         ItemStack[] items = ChampionsInventory.getClassItemList();
-        int size =  MathUtil.ceil(9, items.length);
-        Inventory inventory = Bukkit.createInventory(null, size, "Class Menu");
+        int size =  MathUtil.ceil(9, items.length * 2);
+        Inventory inventory = Bukkit.createInventory(null, 45, "Class Menu");
         //this is safer, just in case items have some null elements
+        /*
         for(ItemStack item : items)
-            if(item != null) inventory.addItem(item);
+            if(item != null)
+                inventory.addItem(item);
+        */
+
+        inventory.setItem(9, items[0]);
+        inventory.setItem(11, items[2]);
+        inventory.setItem(13, items[4]);
+        inventory.setItem(15, items[6]);
+        inventory.setItem(17, items[8]);
+        inventory.setItem(27, items[1]);
+        inventory.setItem(29, items[3]);
+        inventory.setItem(31, items[5]);
+        inventory.setItem(33, items[7]);
+        inventory.setItem(35, items[9]);
+
         return inventory;
     }
 
