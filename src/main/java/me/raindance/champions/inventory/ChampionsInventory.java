@@ -23,7 +23,7 @@ public class ChampionsInventory {
                 "Wardens function as off-tanks, boasting",
                 "damage-soaking capabilities and crowd control.",
                 "While they lack mobility, they make up for it with",
-                "their considerable skrimishing ability.");
+                "their considerable skirmishing ability.");
 
         addClass(SkillType.Duelist, Material.DIAMOND_SWORD,
                 "Duelists excel in fighting enemies one by one",
@@ -39,7 +39,7 @@ public class ChampionsInventory {
         addClass(SkillType.Berserker, Material.DIAMOND_AXE, 
                 "Berserkers are mobile, close-range fighters capable",
                         "of dealing with multiple enemies. Though somewhat",
-                        "fraile, they can become a huge threat in teamfights",
+                        "frail, they can become a huge threat in teamfights",
                         "if left unchecked. ");
 
         addClass(SkillType.Marksman, Material.BOW, 
@@ -92,7 +92,7 @@ public class ChampionsInventory {
         for(String d : description) {
             desc.add(ChatColor.GRAY + d);
         }
-        ItemStack item = ItemStackUtil.createItem(material, skillType.getName(), desc);
+        ItemStack item = ItemStackUtil.createItem(material, ChatColor.BOLD + skillType.getName(), desc);
         classItemList[cursor] = item;
         cursor++;
     }

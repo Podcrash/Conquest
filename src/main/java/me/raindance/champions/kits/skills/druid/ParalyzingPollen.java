@@ -83,6 +83,9 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
         //we want to check if the damager hit is an actual living damager and not something random (like item frames)
         if(!(victim instanceof LivingEntity)) return;
 
+        //don't allow friendly fire with this skill
+        if(isAlly((LivingEntity)victim)) return;
+
         StatusApplier.getOrNew((LivingEntity) victim).applyStatus(Status.ROOTED, 2, 0);
         SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.8F, 20);
         event.setCancelled(true);

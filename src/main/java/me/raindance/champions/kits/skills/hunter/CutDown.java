@@ -48,6 +48,10 @@ public class CutDown extends Passive {
     @EventHandler(priority = EventPriority.LOW)
     public void shoot(DamageApplyEvent e) {
         if (!isAlly(e.getVictim()) && e.getAttacker() == getPlayer() && e.getArrow() != null && e.getCause() == Cause.PROJECTILE) {
+            if(isAlly(e.getVictim())) {
+                e.setCancelled(true);
+                return;
+            }
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
             e.addSource(this);
