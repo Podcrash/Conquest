@@ -28,9 +28,10 @@ public abstract class TogglePassive extends Drop {
     }
 
     public boolean isToggled() {
-        if(toggled && isInWater())
+        if(toggled && isInWater()) {
             toggled = false;
             getPlayer().sendMessage(getWaterMessage());
+        }
         return toggled;
     }
 
