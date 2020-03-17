@@ -8,6 +8,7 @@ import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
+import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import me.raindance.champions.kits.itemskill.ItemListener;
@@ -75,7 +76,7 @@ public class BearTrap implements IItem, ItemListener {
         public void itemPickUp(PlayerPickupItemEvent e) {
             Item item = e.getItem();
             String ownerName = ownerItem.getOrDefault(item.getEntityId(), null);
-            if(ownerName == null) return;
+            if(ownerName == null || ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()).getGame().isRespawning(e.getPlayer())) return;
             Player owner = Bukkit.getPlayer(ownerName);
 
             e.setCancelled(true);

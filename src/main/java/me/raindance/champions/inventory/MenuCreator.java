@@ -70,7 +70,7 @@ public class MenuCreator {
         Set<Integer> skillSet = new HashSet<>(Arrays.asList(skillIDs));
         final int rows = calculateRows(skillType);
         System.out.println("Creating inventory with " + rows + " rows!");
-        String title = ChatColor.GREEN + skillType.getName();
+        String title = ChatColor.DARK_GRAY + skillType.getName();
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
         Main.getInstance().getLogger().info("Inventory max size: " + inventory.getSize());
         int cursor = 0;
@@ -124,12 +124,12 @@ public class MenuCreator {
         return Bukkit.createInventory(null, 54, String.format("%s%s", color, stype));
     }
     private static Inventory createCopyMenu(String stype) {
-        return createCopyMenu(ChatColor.GREEN.toString(), stype);
+        return createCopyMenu(ChatColor.DARK_GRAY.toString(), stype);
     }
 
     public static Inventory createKitTemplate(Player player, SkillType skillType) {
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
-        Inventory inventory = createCopyMenu(ChatColor.BLACK.toString(), skillType.getName() + " Build");
+        Inventory inventory = createCopyMenu(ChatColor.DARK_GRAY.toString(), skillType.getName() + " Build");
         DyeColor[] colors = new DyeColor[]{DyeColor.RED, DyeColor.BLUE, DyeColor.YELLOW, DyeColor.GREEN};
         int[] rowStarts = new int[] {20, 22, 24, 26};
 

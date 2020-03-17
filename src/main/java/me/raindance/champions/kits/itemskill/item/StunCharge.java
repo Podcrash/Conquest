@@ -8,6 +8,7 @@ import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.util.EntityUtil;
+import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import me.raindance.champions.kits.itemskill.ItemListener;
@@ -67,7 +68,8 @@ public class StunCharge implements IItem, ItemListener {
         @EventHandler
         public void itemPickUp(PlayerPickupItemEvent e) {
             Item item = e.getItem();
-            if(!itemIDs.contains(item.getEntityId())) return;
+
+            if(!itemIDs.contains(item.getEntityId()) || ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()).getGame().isRespawning(e.getPlayer())) return;
             e.setCancelled(true);
             Location land = item.getLocation();
             World world = land.getWorld();
