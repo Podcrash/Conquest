@@ -93,10 +93,10 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
 
     public void cancelInvis(Player player) {
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
-        if (isInvis && player == getPlayer() && applier.isCloaked()) {
+        if (isInvis && applier.isCloaked()) {
             applier.removeCloak();
-            isInvis = false;
         }
+        isInvis = false;
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent event) {
@@ -107,6 +107,7 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
 
     private class SmokeBombTrail implements TimeResource {
         private final WrapperPlayServerWorldParticles smokeTrail = ParticleGenerator.createParticle(EnumWrappers.Particle.SMOKE_LARGE, 2);
+        private final StatusApplier applier = StatusApplier.getOrNew(getPlayer());
         @Override
         public void task() {
             smokeTrail.setLocation(getPlayer().getLocation());
@@ -115,7 +116,7 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
 
         @Override
         public boolean cancel() {
-            return !isInvis;
+            return !applier.isCloaked();
         }
 
         @Override
