@@ -28,7 +28,6 @@ public class ComboAttack extends Passive {
         if(event.getAttacker() != getPlayer()) return;
         if (System.currentTimeMillis() - lastHit > 2 * 1000) reset();
         event.addSource(this);
-        event.setDoKnockback(false);
         lastHit = System.currentTimeMillis();
         LivingEntity victim = event.getVictim();
         event.setModified(true);
