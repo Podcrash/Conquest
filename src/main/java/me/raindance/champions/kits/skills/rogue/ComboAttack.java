@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.INNATE)
+@SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
 public class ComboAttack extends Passive {
     private int bonus = 0;
     private long lastHit = 0;
@@ -28,7 +28,6 @@ public class ComboAttack extends Passive {
         if(event.getAttacker() != getPlayer()) return;
         if (System.currentTimeMillis() - lastHit > 2 * 1000) reset();
         event.addSource(this);
-        event.setDoKnockback(false);
         lastHit = System.currentTimeMillis();
         LivingEntity victim = event.getVictim();
         event.setModified(true);

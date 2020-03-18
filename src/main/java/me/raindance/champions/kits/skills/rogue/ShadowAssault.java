@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
  * Cooldown: 7 seconds
  * Description: Your next melee attack deals 3 bonus damage. Shadow Assault then goes on cooldown.
  */
-@SkillMetadata(id = 608, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 608, skillType = SkillType.Rogue, invType = InvType.PASSIVEB)
 public class ShadowAssault extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
@@ -42,7 +42,7 @@ public class ShadowAssault extends Passive implements ICooldown {
         getPlayer().sendMessage(getUsedMessage(event.getVictim()));
         setLastUsed(System.currentTimeMillis());
         event.addSource(this);
-        event.setDamage(event.getDamage() + 5);
+        event.setDamage(event.getDamage() + 3);
         event.setModified(true);
 
     }

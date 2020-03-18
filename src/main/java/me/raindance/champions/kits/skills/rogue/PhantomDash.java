@@ -97,7 +97,7 @@ public class PhantomDash extends Instant implements ICooldown {
         //damage
         if(!isAlly((LivingEntity) victim)) {
             Pluginizer.getLogger().info("t3.5");
-            DamageApplier.damage((LivingEntity) victim, getPlayer(), 8, this, false);
+            DamageApplier.damage((LivingEntity) victim, getPlayer(), 6, this, false);
         }
 
 
