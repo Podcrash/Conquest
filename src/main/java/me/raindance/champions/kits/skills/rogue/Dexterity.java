@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
  * Cooldown: N/A
  * Description: Your melee attacks grant you Speed I for 3 seconds.
  */
-@SkillMetadata(id = 603, skillType = SkillType.Rogue, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 603, skillType = SkillType.Rogue, invType = InvType.INNATE)
 public class Dexterity extends Passive {
     @Override
     public String getName() {

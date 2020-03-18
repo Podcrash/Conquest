@@ -17,7 +17,7 @@ import org.bukkit.event.EventPriority;
 
 @SkillMetadata(id = 601, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
 public class Backstab extends Passive {
-    private final float bonus = 4;
+    private final float bonus = 3;
 
     @Override
     public String getName() {
