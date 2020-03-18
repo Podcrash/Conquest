@@ -95,11 +95,15 @@ public class PlayerJoinEventTest extends ListenerBase {
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
         StatusApplier.getOrNew(p).removeStatus(Status.values());
         StatusApplier.remove(e.getPlayer());
+
+        if (cplayer != null)
+            cm.removeChampionsPlayer(cplayer);
+
+
+        if(GameManager.getGame() == null) return;
         if(!GameManager.getGame().isOngoing()) {
             GameManager.removePlayer(e.getPlayer());
         }
-        if (cplayer != null)
-            cm.removeChampionsPlayer(cplayer);
     }
 
     @EventHandler

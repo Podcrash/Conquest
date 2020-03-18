@@ -9,9 +9,7 @@ import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.objects.objectives.Emerald;
-import com.podcrash.api.mc.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.objects.objectives.*;
 import com.podcrash.api.mc.game.resources.HealthBarResource;
 import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
@@ -57,8 +55,10 @@ public class DomGameListener extends ListenerBase {
         ConquestMap domMap = (ConquestMap) event.getMap();
         World world = event.getWorld();
         game.setCapturePoints(domMap.getCapturePointPojos());
-        game.setEmeralds(domMap.getEmeralds());
+        game.setDiamonds(domMap.getDiamonds());
         game.setRestocks(domMap.getRestocks());
+        game.setLandmines(domMap.getMines());
+        game.setStars(domMap.getStars());
 
         for (WinObjective winObjective : game.getWinObjectives()) {
             winObjective.setWorld(world);
@@ -145,13 +145,13 @@ public class DomGameListener extends ListenerBase {
                 builder.append("!");
             }else {
                 builder.append(team.getChatColor()).append(ChatColor.BOLD);
-                builder.append(objective.getName()).append("is now neutralized!");
+                builder.append(objective.getName()).append(" is now neutralized!");
             }
-            e.getGame().broadcast(builder.toString());
-            DomScoreboard scoreboard = (DomScoreboard) e.getGame().getGameScoreboard();
+            game.broadcast(builder.toString());
+            DomScoreboard scoreboard = (DomScoreboard) game.getGameScoreboard();
             scoreboard.updateCapturePoint(team, objective.getName());
             objective.spawnFirework();
-        }else if(objective instanceof Emerald) {
+        }else if(objective instanceof Diamond) {
 
         }else e.getWho().sendMessage(e.getMessage());
     }
@@ -162,20 +162,26 @@ public class DomGameListener extends ListenerBase {
         Player player = event.getWho();
         Game game = event.getGame();
         TeamEnum team = game.getTeamEnum(player);
-        if(itemObjective instanceof Emerald) {
-            game.increment(team, 300);
+        if(itemObjective instanceof Diamond) {
+            game.increment(team, 200);
             StringBuilder builder = new StringBuilder();
-            //builder.append(team.getChatColor());
-            builder.append(ChatColor.DARK_GREEN);
+            builder.append(team.getChatColor());
+            builder.append(player.getName());
+            builder.append(ChatColor.AQUA);
             builder.append(ChatColor.BOLD);
-            builder.append(team.getName());
             //builder.append(ChatColor.GREEN);
-            builder.append(" has gained 300 points!");
+            builder.append(" has collected 200 points!");
             game.broadcast(builder.toString());
         }else if(itemObjective instanceof Restock) {
             ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
             cPlayer.restockInventory();
             player.sendMessage(ChatColor.YELLOW + ChatColor.BOLD.toString() + "You recieved supplies!");
+        }else if(itemObjective instanceof Landmine) {
+            player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "You collected a landmine!");
+        }else if(itemObjective instanceof Star) {
+            player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
+            game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+
         }
         itemObjective.spawnFirework();
         game.getGameResources().forEach(resource -> {
@@ -186,7 +192,7 @@ public class DomGameListener extends ListenerBase {
     }
 
     @EventHandler
-    public void resurect(GameResurrectEvent e) {
+    public void resurrect(GameResurrectEvent e) {
         ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho());
         championsPlayer.getSkills().forEach(skill -> {
             if(skill instanceof ICharge) {

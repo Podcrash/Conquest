@@ -61,7 +61,7 @@ public class Sharpshooter extends Passive implements ICharge {
                 && e.getArrow() != null && e.getCause() == Cause.PROJECTILE;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void shoot(DamageApplyEvent e) {
         if (!checkIfValidShooter(e)) return;
         justMissed = false;
