@@ -102,7 +102,6 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
             player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, 5);
             isEvading = false;
             event.setCancelled(true);
-            TimeHandler.unregister(this);
 
             Location tp = d((Player) player, damager);
             player.sendMessage(getUsedMessage());
