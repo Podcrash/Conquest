@@ -1,4 +1,4 @@
-package me.raindance.champions.kits.itemskill.item;
+package me.raindance.champions.kits.itemskill;
 
 import com.podcrash.api.mc.callback.helpers.TrapSetter;
 import com.podcrash.api.mc.events.TrapPrimeEvent;
@@ -8,12 +8,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class TrapItem implements IItem {
+public abstract class TrapItem implements IItem, Listener {
     private Map<Integer, String> itemOwners;
     private long delay;
     public TrapItem(long delay) {
@@ -21,9 +22,9 @@ public abstract class TrapItem implements IItem {
         this.delay = delay;
     }
 
-    abstract Item throwItem(Player player, Action action);
-    abstract void primeTrap(Item item);
-    abstract void snareTrap(Player owner, Player player, Item item);
+    protected abstract Item throwItem(Player player, Action action);
+    protected abstract void primeTrap(Item item);
+    protected abstract void snareTrap(Player owner, Player player, Item item);
 
     @Override
     public void useItem(Player player, Action action) {
