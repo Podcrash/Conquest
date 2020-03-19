@@ -17,6 +17,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -60,8 +61,13 @@ public class ItemHelper extends ListenerBase {
 
             IItem item = (IItem) emptyConstructor(itemClass);
 
-            if(item instanceof ItemListener)
+            //TODO: remove this part
+            if(item instanceof ItemListener )
                 Bukkit.getPluginManager().registerEvents(((ItemListener) item).getHelperListener(), Main.getInstance());
+
+            if(item instanceof TrapItem)
+                Bukkit.getPluginManager().registerEvents((Listener) item, Main.getInstance());
+
             if(item == null) throw new RuntimeException("item cannot be null! current at: " + info.getName());
             ItemMetaData annot = itemClass.getAnnotation(ItemMetaData.class);
             Material mat = annot.mat();
