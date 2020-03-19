@@ -22,7 +22,7 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
 
     @Override
     public int getEnergyUsage() {
-        return 100;
+        return 60;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
         if(victim == getPlayer() || !isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
 
-        StatusApplier.getOrNew(victim).applyStatus(Status.STRENGTH, 3, 0, false);
+        StatusApplier.getOrNew(victim).applyStatus(Status.STRENGTH, 7, 0, false);
     }
     @Override
     public String getName() {

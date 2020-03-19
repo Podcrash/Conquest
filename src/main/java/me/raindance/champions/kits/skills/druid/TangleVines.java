@@ -49,6 +49,11 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     //TODO: if it doesn't loop anymore, delete this.
     private List<Player> players;
 
+    private double radius = 2.5;
+    private double damage = 8;
+    private double speedFactor = 0.35;
+    private float rootDuration = 2F;
+
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
@@ -81,7 +86,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         //find initial direction to go to.
         Vector direction = VectorUtil.fromAtoB(currentPointer, crosshairView).normalize();
         //SLOOOOOWWWW DOWN
-        direction.multiply(0.25D);
+        direction.multiply(speedFactor);
 
         currentPointer.add(direction);
         Block eval = currentPointer.getBlock();
@@ -154,8 +159,8 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
             if(isAlly(player) || player == getPlayer()) continue;
             if(!canTrap(currentPointer, player.getLocation())) continue;
             //do effects
-            StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, 1.5F, 0);
-            DamageApplier.damage(player, getPlayer(), 4, this, false);
+            StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, rootDuration, 0);
+            DamageApplier.damage(player, getPlayer(), damage, this, false);
         }
     }
 
@@ -167,11 +172,11 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
      * @return
      */
     private boolean canTrap(Location currentPointer, Location victimLoc) {
-        double x1 = currentPointer.getX() - 1.5;
-        double x2 = currentPointer.getX() + 1.5;
+        double x1 = currentPointer.getX() - radius;
+        double x2 = currentPointer.getX() + radius;
 
-        double z1 = currentPointer.getZ() - 1.5;
-        double z2 = currentPointer.getZ() + 1.5;
+        double z1 = currentPointer.getZ() - radius;
+        double z2 = currentPointer.getZ() + radius;
 
         double y1 = currentPointer.getY();
         double y2 = y1 + 3;

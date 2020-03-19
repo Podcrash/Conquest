@@ -39,7 +39,7 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
 
     @Override
     public float getCooldown() {
-        return 9;
+        return 7;
     }
 
     @Override
@@ -86,11 +86,11 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
             Vector exp = VectorUtil.fromAtoB(event.getEntity().getLocation(), p.getLocation()).normalize();
             exp.multiply(1.25).setY(exp.getY() + 0.2);
             p.setVelocity(exp);
-            StatusApplier.getOrNew(p).applyStatus(Status.FIRE, duration, 5);
             if(isAlly(p)) continue;
+            StatusApplier.getOrNew(p).applyStatus(Status.FIRE, duration, 5);
             double dist = p.getLocation().distanceSquared(event.getEntity().getLocation());
             double multiplier = (37D - dist) /36D;
-            DamageApplier.damage(p, getPlayer(), 6 * multiplier, this, true);
+            DamageApplier.damage(p, getPlayer(), 8 * multiplier, this, true);
         }
         //TODO: this needs refactor
     }
