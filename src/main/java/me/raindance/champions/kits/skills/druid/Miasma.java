@@ -28,7 +28,7 @@ import java.util.Random;
 
 @SkillMetadata(id = 203, skillType = SkillType.Druid, invType = InvType.SHOVEL)
 public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
-    private final float duration = 10;
+    private final float duration = 5;
     private final double[][] pleaseLoad = new double[60][2];
 
     @Override
