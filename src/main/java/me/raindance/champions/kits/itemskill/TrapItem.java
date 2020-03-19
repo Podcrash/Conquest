@@ -3,6 +3,7 @@ package me.raindance.champions.kits.itemskill;
 import com.podcrash.api.mc.callback.helpers.TrapSetter;
 import com.podcrash.api.mc.events.TrapPrimeEvent;
 import com.podcrash.api.mc.events.TrapSnareEvent;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
@@ -48,6 +49,8 @@ public abstract class TrapItem implements IItem, Listener {
         Player owner = Bukkit.getPlayer(ownerName);
         Item item = e.getItem();
         Player snared = e.getPlayer();
-        snareTrap(owner, snared, item);
+        if(GameManager.getGame() != null && GameManager.getGame().isRespawning(snared)) {
+            e.setCancelled(true);
+        }else snareTrap(owner, snared, item);
     }
 }

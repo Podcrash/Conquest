@@ -61,10 +61,6 @@ public class ItemHelper extends ListenerBase {
 
             IItem item = (IItem) emptyConstructor(itemClass);
 
-            //TODO: remove this part
-            if(item instanceof ItemListener )
-                Bukkit.getPluginManager().registerEvents(((ItemListener) item).getHelperListener(), Main.getInstance());
-
             if(item instanceof TrapItem)
                 Bukkit.getPluginManager().registerEvents((Listener) item, Main.getInstance());
 
