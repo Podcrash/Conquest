@@ -64,7 +64,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
         if(victim == getPlayer() || isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
 
-        StatusApplier.getOrNew(victim).applyStatus(Status.POISON, 10, 1, false);
+        StatusApplier.getOrNew(victim).applyStatus(Status.POISON, duration, 1, false);
     }
 
     private void spiral(Location playerLocation) {

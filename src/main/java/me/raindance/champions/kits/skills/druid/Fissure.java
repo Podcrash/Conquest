@@ -75,7 +75,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
         dir = playerLocation.getDirection().setY(0).normalize();
         start = playerLocation.add(new Vector(dir.getX(), -0.4, dir.getZ()));
         current = start.clone();
-        run(3, 0);
+        run(2, 0);
         Location sstart = start.clone();
         end = sstart.clone().add(dir.clone().multiply(7));
         Vector startVector = start.toVector();

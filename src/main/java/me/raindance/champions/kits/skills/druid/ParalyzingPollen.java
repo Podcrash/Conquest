@@ -1,6 +1,8 @@
 package me.raindance.champions.kits.skills.druid;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
+import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.damage.DamageSource;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -24,6 +26,8 @@ import org.bukkit.util.Vector;
 @SkillMetadata(id = 207, skillType = SkillType.Druid, invType = InvType.SHOVEL)
 public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
     private Projectile projectile;
+    private double damage = 4;
+
     @Override
     public float getCooldown() {
         return 10;
@@ -87,6 +91,8 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
         if(isAlly((LivingEntity)victim)) return;
 
         StatusApplier.getOrNew((LivingEntity) victim).applyStatus(Status.ROOTED, 2, 0);
+        if(victim instanceof Player)
+        DamageApplier.damage((Player) victim, getPlayer(), damage, this, true);
         SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.8F, 20);
         event.setCancelled(true);
         this.projectile = null;
