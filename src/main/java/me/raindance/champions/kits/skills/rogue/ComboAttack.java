@@ -31,7 +31,7 @@ public class ComboAttack extends Passive {
         lastHit = System.currentTimeMillis();
         LivingEntity victim = event.getVictim();
         event.setModified(true);
-        event.setDamage(event.getDamage() + bonus * .5D);
+        event.setDamage(event.getDamage() + bonus);
         SoundPlayer.sendSound(victim.getLocation(), "note.hat", 0.9F, 110);
         if (bonus < 3) {
             if (bonus == 0 || affectedPlayer == null || affectedPlayer.equals(victim.getName())) {
