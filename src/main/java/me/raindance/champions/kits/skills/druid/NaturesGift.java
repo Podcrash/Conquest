@@ -28,13 +28,13 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.STRENGTH, 7, 0, false);
         getGame().consumeBukkitPlayer(this::buff);
         useEnergy(getEnergyUsage());
         setLastUsed(System.currentTimeMillis());
         getPlayer().sendMessage(getUsedMessage());
 
     }
-
     private void buff(Player victim) {
         if(victim == getPlayer() || !isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
