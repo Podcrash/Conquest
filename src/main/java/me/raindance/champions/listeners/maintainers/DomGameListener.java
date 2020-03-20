@@ -121,13 +121,14 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onGameDeath(GameDeathEvent e) {
-        if(e.getKiller() instanceof Player) return;
         Player victim = e.getWho();
         TeamEnum victimTeam = e.getGame().getTeamEnum(victim);
-        TeamEnum enemyTeam = e.getGame().getTeamEnum((Player) e.getKiller());
-        if(e.getWho() != e.getKiller())
-            e.getGame().increment(enemyTeam, 50);
 
+        if(e.getKiller() instanceof Player) {
+            TeamEnum enemyTeam = e.getGame().getTeamEnum((Player) e.getKiller());
+            if (e.getWho() != e.getKiller())
+                e.getGame().increment(enemyTeam, 50);
+        }
         List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;

@@ -56,9 +56,6 @@ public class StarBuff implements TimeResource {
     public void collectorDiedNotify(Player died) {
         if(!died.getName().equalsIgnoreCase(holder)) return;
         this.dead = true;
-        this.holder = null;
-        replaceLine(PREFIX + " " + "INACTIVE");
-        TimeHandler.unregister(this);
     }
 
     @Override
@@ -87,9 +84,11 @@ public class StarBuff implements TimeResource {
             this.dead = false;
         }else {
             game.broadcast(team.getChatColor() + holder + " lost the buff peacefully.");
-            replaceLine(PREFIX + " " + "INACTIVE");
             //alert the players that the collector lost the buff peacefully
         }
+        replaceLine(PREFIX + " " + "INACTIVE");
+
+        this.holder = null;
     }
 
     /**

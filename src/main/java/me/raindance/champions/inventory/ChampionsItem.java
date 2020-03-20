@@ -109,7 +109,7 @@ public class ChampionsItem {
         if(this.getName().equals(ChatColor.WHITE + "Elixir")) {
             Potion potion = new Potion(PotionType.INSTANT_HEAL, 2);
             potion.setSplash(true);
-            itemStack = potion.toItemStack(1);
+            itemStack = potion.toItemStack(getCount());
         }
         else {
             itemStack = new ItemStack(material, count, data);
