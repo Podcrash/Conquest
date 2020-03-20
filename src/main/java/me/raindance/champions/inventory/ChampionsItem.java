@@ -1,60 +1,25 @@
 package me.raindance.champions.inventory;
 
 import com.podcrash.api.mc.util.ChatUtil;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagInt;
-import net.minecraft.server.v1_8_R3.NBTTagList;
-import net.minecraft.server.v1_8_R3.NBTTagString;
+import com.podcrash.api.mc.util.Utility;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum ChampionsItem {
-    //god help me,
-    // this needs a rework
-    STANDARD_SWORD(9, ChatColor.WHITE + "Standard Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SWORD),
-    STANDARD_AXE(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_AXE),
-    STANDARD_SHOVEL(11, ChatColor.WHITE + "Standard Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SPADE),
-
-    BOOSTER_SWORD(12, ChatColor.WHITE + "Spell Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SWORD),
-    BOOSTER_AXE(13, ChatColor.WHITE + "Spell Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_AXE),
-    BOOSTER_SHOVEL(14, ChatColor.WHITE + "Spell Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SPADE),
-
-    WOOD_SWORD(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SWORD),
-    WOOD_AXE(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_AXE),
-    WOOD_SHOVEL(43, ChatColor.WHITE + "Life Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SPADE),
-
-    STONE_SWORD(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD),
-    STONE_AXE(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE),
-
-    POWER_SWORD(27, ChatColor.AQUA + "Power Sword", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_SWORD),
-    POWER_AXE(28, ChatColor.AQUA + "Power Axe", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_AXE),
-
-    STANDARD_BOW(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW),
-    MARKSMAN_ARROWS(20, ChatColor.WHITE + "Ranger Arrows", 40, Arrays.asList(""), Material.ARROW),
-    HUNTER_ARROWS(25, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW),
-    ASSASSIN_ARROWS(21, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW),
-
-    MUSHROOM_STEW(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP),
-    WATER_BOTTLE(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION),
-    COBWEB(24, ChatColor.WHITE + "Cobweb", 4, Arrays.asList(ChatColor.GOLD + "Left click to throw", ChatColor.GOLD + "a temporary cobweb will be placed upon collision!"), Material.WEB),
-
-    SMOKE_BOMB(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE),
-    STUN_CHARGE(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF),
-    MEAD(3, ChatColor.WHITE + "Bread", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD),
-    BEAR_TRAP(4, ChatColor.WHITE + "Bear Trap", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE),
-    ELIXIR(5, ChatColor.WHITE + "Elixir", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop Elixir, which splashes an aura of healing"), Material.POTION, (byte) 16421)
-    ;
+public class ChampionsItem {
 
     private int slotID;
     private String name;
@@ -64,12 +29,9 @@ public enum ChampionsItem {
     private Material material;
     private byte data = 0;
 
-    private static final ChampionsItem[] details = ChampionsItem.values();
+    public static List<ChampionsItem> details = new ArrayList<>();
 
-    public static ChampionsItem[] details() {
-        return details;
-    }
-    ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material, byte data) {
+    private ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material, byte data) {
         this.slotID = slotID;
         this.name = name;
         this.count = count;
@@ -77,12 +39,47 @@ public enum ChampionsItem {
         this.desc = desc;
         this.material = material;
         this.data = data;
+
+        details.add(this);
     }
 
-    ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material) {
+    public static final ChampionsItem STANDARD_SWORD = new ChampionsItem(9, ChatColor.WHITE + "Standard Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SWORD);
+    public static final ChampionsItem STANDARD_AXE = new ChampionsItem(10, ChatColor.WHITE + "Standard Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_AXE);
+    public static final ChampionsItem STANDARD_SHOVEL = new ChampionsItem(11, ChatColor.WHITE + "Standard Shovel", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 6 damage."), Material.IRON_SPADE);
+
+    public static final ChampionsItem BOOSTER_SWORD = new ChampionsItem(12, ChatColor.WHITE + "Spell Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SWORD);
+    public static final ChampionsItem BOOSTER_AXE = new ChampionsItem(13, ChatColor.WHITE + "Spell Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_AXE);
+    public static final ChampionsItem BOOSTER_SHOVEL = new ChampionsItem(14, ChatColor.WHITE + "Spell Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.GOLD_SPADE);
+
+    public static final ChampionsItem WOOD_SWORD = new ChampionsItem(41, ChatColor.WHITE + "Life Sword", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SWORD);
+    public static final ChampionsItem WOOD_AXE = new ChampionsItem(42, ChatColor.WHITE + "Life Axe", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_AXE);
+    public static final ChampionsItem WOOD_SHOVEL = new ChampionsItem(43, ChatColor.WHITE + "Life Shovel", 1, 5, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.WOOD_SPADE);
+
+    public static final ChampionsItem STONE_SWORD = new ChampionsItem(18, ChatColor.GOLD + "Stone Sword", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_SWORD);
+    public static final ChampionsItem STONE_AXE = new ChampionsItem(19, ChatColor.GOLD + "Stone Axe", 1, 6, Arrays.asList(ChatColor.GOLD + "Deals 5 damage."), Material.STONE_AXE);
+
+    public static final ChampionsItem POWER_SWORD = new ChampionsItem(27, ChatColor.AQUA + "Power Sword", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_SWORD);
+    public static final ChampionsItem POWER_AXE = new ChampionsItem(28, ChatColor.AQUA + "Power Axe", 1, 7, Arrays.asList(ChatColor.GOLD + "A power sword", ChatColor.GOLD + "Deals 7 damage."), Material.DIAMOND_AXE);
+
+    public static final ChampionsItem STANDARD_BOW = new ChampionsItem(29, ChatColor.WHITE + "Standard Bow", 1, Arrays.asList(ChatColor.GOLD + "A regular bow", ChatColor.GOLD + "Use it to shoot people from range!"), Material.BOW);
+    public static final ChampionsItem MARKSMAN_ARROWS = new ChampionsItem(20, ChatColor.WHITE + "Ranger Arrows", 40, Arrays.asList(""), Material.ARROW);
+    public static final ChampionsItem HUNTER_ARROWS = new ChampionsItem(25, ChatColor.WHITE + "Ranger Arrows", 32, Arrays.asList(""), Material.ARROW);
+    public static final ChampionsItem ASSASSIN_ARROWS = new ChampionsItem(21, ChatColor.WHITE + "Assassin Arrows", 16, Arrays.asList(""), Material.ARROW);
+
+    public static final ChampionsItem MUSHROOM_STEW = new ChampionsItem(22, ChatColor.WHITE + "Mushroom Stew", 1, Arrays.asList(ChatColor.GOLD + "When consumed grants Regeneration II for 4 seconds."), Material.MUSHROOM_SOUP);
+    public static final ChampionsItem WATER_BOTTLE = new ChampionsItem(31, ChatColor.WHITE + "Water Bottle", 1, Arrays.asList(ChatColor.GOLD + "A Swiggity Swooty", ChatColor.GOLD + "Cure all negative effects!"), Material.POTION);
+    public static final ChampionsItem COBWEB = new ChampionsItem(24, ChatColor.WHITE + "Cobweb", 4, Arrays.asList(ChatColor.GOLD + "Left click to throw", ChatColor.GOLD + "a temporary cobweb will be placed upon collision!"), Material.WEB);
+
+    public static final ChampionsItem SMOKE_BOMB = new ChampionsItem(1, ChatColor.WHITE + "Smoke Bomb", 1, 0, Arrays.asList(ChatColor.GOLD + "Right click to toss a Smoke Bomb in target direction,", ChatColor.GOLD + "becoming a puff of smoke after impact and inflicting Blindness and Slowness I", ChatColor.GOLD + "to all players within 4 blocks of the explosion for 3 seconds."), Material.FIREWORK_CHARGE);
+    public static final ChampionsItem STUN_CHARGE = new ChampionsItem(2, ChatColor.WHITE + "Stun Charge", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Stun Change on the ground.", ChatColor.GOLD + "Enemies that step on the Stun Charge will be Silenced and Shocked for 4 seconds.", ChatColor.GOLD + "Stun Charges disappear after 20 seconds or when you die or change kits."), Material.REDSTONE_LAMP_OFF);
+    public static final ChampionsItem MEAD = new ChampionsItem(3, ChatColor.WHITE + "Bread", 1, 0, Arrays.asList(ChatColor.GOLD + "When consumed, grants the user Strength I for 3 seconds. "), Material.BREAD);
+    public static final ChampionsItem BEAR_TRAP = new ChampionsItem(4, ChatColor.WHITE + "Bear Trap", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop a Bear Trap.", ChatColor.GOLD + "After dropping a Bear Trap,it will take about 1 second for it to ready itself.", ChatColor.GOLD + "If an enemy steps on it, they will take 3 damage and be Rooted for 2 seconds."), Material.STONE_PLATE);
+    public static final ChampionsItem ELIXIR = new ChampionsItem(5, ChatColor.WHITE + "Elixir", 2, 0, Arrays.asList(ChatColor.GOLD + "Right click to drop Elixir, which splashes an aura of healing"), Material.POTION, (byte) 16421);
+
+    private ChampionsItem(int slotID, String name, int count, int damage, List<String> desc, Material material) {
         this(slotID, name, count, damage, desc, material, (byte) 0);
     }
-    ChampionsItem(int slotID, String name, int count, List<String> desc, Material material) {
+    private ChampionsItem(int slotID, String name, int count, List<String> desc, Material material) {
         this(slotID, name, count, 0, desc, material);
     }
 
@@ -108,6 +105,16 @@ public enum ChampionsItem {
 
     public ItemStack toItemStack(){
         ItemStack itemStack;
+
+        if(this.getName().equals(ChatColor.WHITE + "Elixir")) {
+            Potion potion = new Potion(PotionType.INSTANT_HEAL, 2);
+            potion.setSplash(true);
+            itemStack = potion.toItemStack(1);
+        }
+        else {
+            itemStack = new ItemStack(material, count, data);
+        }
+        /*
         switch (this) {
             case ELIXIR:
                 Potion potion = new Potion(PotionType.INSTANT_HEAL, 2);
@@ -118,6 +125,7 @@ public enum ChampionsItem {
                 itemStack = new ItemStack(material, count, data);
                 break;
         }
+       */
         if(Enchantment.DURABILITY.canEnchantItem(itemStack)) {
             /*Not sure which one is correct
 
@@ -157,7 +165,7 @@ public enum ChampionsItem {
     }
 
     public static ChampionsItem getBySlotID(int slotID) {
-        for(ChampionsItem item : details()) {
+        for(ChampionsItem item : details) {
             if(item.getSlotID() == slotID) return item;
         }
         return null;
@@ -165,7 +173,7 @@ public enum ChampionsItem {
 
     public static ChampionsItem getByName(String name) {
         name = ChatUtil.purge(name);
-        for(ChampionsItem item : details()) {
+        for(ChampionsItem item : details) {
             String unfiltered = ChatUtil.purge(item.getName());
             if(unfiltered.equals(name)) return item;
         }
