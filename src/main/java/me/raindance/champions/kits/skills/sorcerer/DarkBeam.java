@@ -96,7 +96,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
             if(!isPassable(cur.getBlock())) break;
 
             //if a player is within the point within a sphere, then break
-            if(hasPlayersInArea(cur, 3, players))
+            if(hasPlayersInArea(cur, 1.5, players))
                 break;
             WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
             PacketUtil.asyncSend(packet, players);
@@ -108,6 +108,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
     private boolean hasPlayersInArea(Location location, double radius, List<Player> players) {
         double radiusSquared = radius * radius;
         for(Player player : players) {
+            if(player == getPlayer() && isAlly(player)) continue;
             Location loc = player.getLocation();
             double distanceSquared = loc.distanceSquared(location);
             if(distanceSquared <= radiusSquared)
