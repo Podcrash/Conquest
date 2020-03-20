@@ -51,12 +51,13 @@ public class Landmine extends TrapItem {
 
         List<LivingEntity> entities = location.getWorld().getLivingEntities();
 
+        final Vector up = new Vector(0, .75, 0);
         for(LivingEntity entity : entities) {
             double distanceSquared = location.distanceSquared(entity.getLocation());
             if(distanceSquared > 36) continue;
             double percentage = (36D - distanceSquared)/36D + 0.25D;
             if(percentage > 1D) percentage = 1D;
-            Vector vector = VectorUtil.fromAtoB(location, entity.getLocation());
+            Vector vector = VectorUtil.fromAtoB(location, entity.getLocation()).add(up).normalize();
             vector.multiply(3 * percentage);
             entity.setVelocity(vector);
             DamageApplier.damage(entity, owner, 8 * percentage, this, false);

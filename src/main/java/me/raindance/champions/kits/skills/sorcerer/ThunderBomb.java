@@ -88,14 +88,15 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         ParticleGenerator.generateEntity(item, particles, new SoundWrapper("random.fizz", 0.6F, 88));
         SoundPlayer.sendSound(item.getLocation(), "mob.silverfish.hit", 1F, 90);
 
-        TrapSetter.spawnTrap(item, 500);
         this.currentItemID = item.getEntityId();
+        TrapSetter.spawnTrap(item, 500);
         getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler
     public void trapPrime(TrapPrimeEvent event) {
         Item item = event.getItem();
+        if(item.getEntityId() != currentItemID) return;
         collide(item);
     }
 
