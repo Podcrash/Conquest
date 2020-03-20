@@ -100,9 +100,9 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
     public void task() {
         double energyUsage = getEnergyUsageTicks();
         if(hasEnergy(energyUsage)) {
+            useEnergy(energyUsage);
             if(i++ % 2 == 0) return;
             blizzard();
-            useEnergy(energyUsage);
         } else {
             cancel = true;
             getPlayer().sendMessage(getNoEnergyMessage());
@@ -122,6 +122,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
             double z = (0.2 - (random.nextInt(40)/100d)) * mult;
 
             snowball.setVelocity(vector.add(new Vector(x, y, z)).multiply(2));
+            remover.entities.add(snowball);
         }
     }
 
