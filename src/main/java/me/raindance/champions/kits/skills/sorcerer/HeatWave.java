@@ -14,6 +14,7 @@ import me.raindance.champions.kits.skilltypes.Continuous;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.world.BlockUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -107,14 +108,15 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
                 (item, entity) -> {
                     //makes sure that you hit a player and that it wasnt yourself
                     if(entity == null) return; //null check is required because... reasons?
-                    if(entity instanceof Player && !entity.equals(getPlayer())) {
+                    item.remove();
+                    if(!entity.equals(getPlayer())) {
                         //deals damage to enemy players and catches them on fire
-                        if(!isAlly(((Player)entity)) && !BlockUtil.isInWater(entity)) {
-                            StatusApplier.getOrNew((Player) entity).applyStatus(Status.FIRE, duration, 1);
+                        if(!isAlly((entity)) && !BlockUtil.isInWater(entity)) {
+                            StatusApplier applier = StatusApplier.getOrNew(entity);
+                            if(!applier.has(Status.FIRE))
+                                applier.applyStatus(Status.FIRE, duration, 1);
                             DamageApplier.damage(entity, getPlayer(), damage, this, false);
                         }
-                        //removes the blaze powder after hitting any player
-                        item.remove();
                     }
                 });
         blazePowder.setCustomName("RITB");
@@ -134,7 +136,11 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
             Iterator<Item> infernoIterator = infernoItems.iterator();
             while(infernoIterator.hasNext()) {
                 Item item = infernoIterator.next();
-                if(!EntityUtil.onGround(item) && item.getLocation().distanceSquared(getPlayer().getLocation()) <= 64) continue;
+                if(!item.isValid()) {
+                    infernoIterator.remove();
+                    continue;
+                }
+                if(!EntityUtil.onGround(item) && item.getLocation().distanceSquared(getPlayer().getLocation()) < 64) continue;
                 item.remove();
                 infernoIterator.remove();
             }
