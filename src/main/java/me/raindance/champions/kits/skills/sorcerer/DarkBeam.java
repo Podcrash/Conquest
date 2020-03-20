@@ -50,6 +50,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
                 .withColor(Color.BLACK)
                 .with(FireworkEffect.Type.BALL_LARGE)
                 .build();
+
     }
 
     @Override
@@ -93,12 +94,10 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         for(int i = 0; i < range; i += 1) {
             //if the block wasn't passible, stop
             if(!isPassable(cur.getBlock())) break;
-            List<Player> allPlayers = getAllPlayersHere(cur, players);
-            //if the only player was the shooter, keep going
 
-            if(allPlayers.size() > 0)
-                if(allPlayers.contains(getPlayer()) && allPlayers.size() == 1) continue;
-                else break;
+            //if a player is within the point within a sphere, then break
+            if(hasPlayersInArea(cur, 3, players))
+                break;
             WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
             PacketUtil.asyncSend(packet, players);
             cur.add(inc);
@@ -106,6 +105,16 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         burst(cur, players);
     }
 
+    private boolean hasPlayersInArea(Location location, double radius, List<Player> players) {
+        double radiusSquared = radius * radius;
+        for(Player player : players) {
+            Location loc = player.getLocation();
+            double distanceSquared = loc.distanceSquared(location);
+            if(distanceSquared <= radiusSquared)
+                return true;
+        }
+        return false;
+    }
     private void burst(Location endLoc, List<Player> players) {
         if (endLoc == null) return;
         CustomEntityFirework.spawn(endLoc, firework, players);
