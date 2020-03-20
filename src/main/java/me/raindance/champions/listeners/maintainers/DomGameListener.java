@@ -1,7 +1,10 @@
 package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
@@ -18,6 +21,7 @@ import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
+import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
@@ -76,12 +80,19 @@ public class DomGameListener extends ListenerBase {
     }
 
     @EventHandler
+    public void itemObjectiveSpawn(ItemObjectiveSpawnEvent e) {
+        if(e.getObjective() instanceof Star) {
+            DomGame game = (DomGame) GameManager.getGame();
+            game.getStarBuff().replaceLine(StarBuff.PREFIX + " ACTIVE");
+        }
+    }
+    @EventHandler
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
         game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
-            Main.instance.getLogger().info(String.format("Can't startContinuousAction game %d, not enough players!", game.getId()));
+            Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
@@ -110,11 +121,12 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onGameDeath(GameDeathEvent e) {
-        TeamEnum victimTeam = e.getGame().getTeamEnum(e.getWho());
-        TeamEnum enemyTeam = null;
+        if(e.getKiller() instanceof Player) return;
         Player victim = e.getWho();
+        TeamEnum victimTeam = e.getGame().getTeamEnum(victim);
+        TeamEnum enemyTeam = e.getGame().getTeamEnum((Player) e.getKiller());
         if(e.getWho() != e.getKiller())
-            e.getGame().increment(victimTeam, 50);
+            e.getGame().increment(enemyTeam, 50);
 
         List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
         for(Skill skill : skills) {
@@ -122,6 +134,10 @@ public class DomGameListener extends ListenerBase {
             if (((TogglePassive) skill).isToggled())
                 ((TogglePassive) skill).forceToggle();
         }
+
+        DomGame game = (DomGame) e.getGame();
+
+        game.getStarBuff().collectorDiedNotify(victim);
     }
 
     @EventHandler
@@ -161,7 +177,7 @@ public class DomGameListener extends ListenerBase {
     public void pickUp(GamePickUpEvent event) {
         ItemObjective itemObjective = event.getItem();
         Player player = event.getWho();
-        Game game = event.getGame();
+        DomGame game = (DomGame) event.getGame();
         TeamEnum team = game.getTeamEnum(player);
         if(itemObjective instanceof Diamond) {
             game.increment(team, 200);
@@ -184,7 +200,10 @@ public class DomGameListener extends ListenerBase {
         }else if(itemObjective instanceof Star) {
             player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
             game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
-
+            StatusApplier.getOrNew(player).applyStatus(Status.STRENGTH, 30, 0, false, true);
+            StatusApplier.getOrNew(player).applyStatus(Status.SPEED, 30, 0, false, true);
+            game.getStarBuff().setCollector(player);
+            game.increment(team, 300);
         }
         itemObjective.spawnFirework();
         game.getGameResources().forEach(resource -> {

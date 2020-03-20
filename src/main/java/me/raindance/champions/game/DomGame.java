@@ -24,6 +24,8 @@ public class DomGame extends Game {
 
     private DomScoreboard scoreboard;
     private String actualWorld;
+
+    private StarBuff starBuff;
     public DomGame(int id, String name) {
         super(id, name, GameType.DOM);
         this.capturePoints = new ArrayList<>();
@@ -31,6 +33,8 @@ public class DomGame extends Game {
         this.restocks = new ArrayList<>();
         this.stars = new ArrayList<>();
         this.mines = new ArrayList<>();
+
+        this.starBuff = new StarBuff(this);
     }
 
     @Override
@@ -47,6 +51,10 @@ public class DomGame extends Game {
     @Override
     public String getMode() {
         return "conquest";
+    }
+
+    public StarBuff getStarBuff() {
+        return starBuff;
     }
 
     public List<CapturePoint> getCapturePoints() {

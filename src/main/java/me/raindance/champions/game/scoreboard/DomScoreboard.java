@@ -39,12 +39,15 @@ public class DomScoreboard extends GameScoreboard {
             points.add(teamE.getChatColor() + teamE.getName());
             points.add("");
         }
+        points.add("");
         this.capturePoints = capturePoints;
 
         for(CapturePoint point : capturePoints) {
             points.add(point.getName());
         }
 
+        points.add("");
+        points.add(ChatColor.BOLD.toString() + ChatColor.WHITE + "Star: " + ChatColor.YELLOW + "" + ChatColor.BOLD + "ACTIVE");
         createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
     }
 
