@@ -59,7 +59,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     protected void doSkill(PlayerEvent event, Action action) {
         if(usage || !rightClickCheck(action) || onCooldown()) return;
         if(!EntityUtil.onGround(getPlayer())) {
-            getPlayer().sendMessage(getMustGroundMessage().replace("grounded", "airborne"));
+            getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
         usage = true;

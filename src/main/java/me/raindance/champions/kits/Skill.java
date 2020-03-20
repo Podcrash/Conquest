@@ -104,6 +104,11 @@ public abstract class Skill implements ISkill, DamageSource {
                 ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
 
+    public String getMustAirborneMessage() {
+        return String.format("%s%s> %sYou cannot use %s%s%s while airborne.",
+                ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+    }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(playerName);
     }

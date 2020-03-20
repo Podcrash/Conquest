@@ -64,7 +64,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
             return;
         }
         if(!(EntityUtil.onGround(getPlayer()))) {
-            getPlayer().sendMessage(getMustGroundMessage());
+            getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
 
