@@ -7,6 +7,7 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.events.skill.SkillInteractEvent;
+import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -26,10 +27,13 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
     }
 
     @EventHandler
-    public void enemyCheck(SkillInteractEvent e){
-        if(e.getSkill() == this && !isAlly(e.getInteractor())) {
-            getPlayer().sendMessage(String.format("%sSkill> %sOvergrowth %sdoes not affect your enemies.", ChatColor.BLUE, ChatColor.GREEN, ChatColor.GRAY));
-            e.setCancelled(true);
+    public void enemyCheck(SkillUseEvent e){
+        if(e instanceof SkillInteractEvent) {
+            SkillInteractEvent interact = (SkillInteractEvent) e;
+            if(interact.getSkill().equals(this) && !isAlly(interact.getInteractor())) {
+                getPlayer().sendMessage(String.format("%sSkill> %sOvergrowth %sdoes not affect your enemies.", ChatColor.BLUE, ChatColor.GREEN, ChatColor.GRAY));
+                interact.setCancelled(true);
+            }
         }
     }
 
@@ -39,9 +43,9 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
 
         StatusApplier.getOrNew(clickedEntity).applyStatus(Status.ABSORPTION, 5, 1);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(clickedEntity.getLocation().toVector(), EnumWrappers.Particle.HEART,
-                3, 0, 1.2f, 0);
+                3, 0, 0.9f, 0);
         getPlayer().getWorld().getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
-        SoundPlayer.sendSound(getPlayer(), "mob.enderdragon.wings", 0.8F, 1);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.wings", 0.8F, 1);
         setLastUsed(System.currentTimeMillis());
     }
 
