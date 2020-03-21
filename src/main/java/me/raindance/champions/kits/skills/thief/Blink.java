@@ -20,8 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-import static com.podcrash.api.mc.world.BlockUtil.isSafe;
-import static com.podcrash.api.mc.world.BlockUtil.playerIsHere;
+import static com.podcrash.api.mc.world.BlockUtil.*;
 
 @SkillMetadata(id = 703, skillType = SkillType.Thief, invType = InvType.AXE)
 public class Blink extends Instant implements ICooldown {
@@ -77,7 +76,7 @@ public class Blink extends Instant implements ICooldown {
         Vector increment = getPlayer().getLocation().getDirection();
         getPlayer().getWorld().playSound(location, Sound.GHAST_FIREBALL, 0.4f, 1.2f);
         for (int i = 0; i < distance; i++) {
-            if (!isSafe(location) && playerIsHere(location, getPlayers()) != getPlayer()) {
+            if (!isSafe(location) && playerIsHere(location, getPlayers()) != getPlayer() || hasPlayersInArea(location, 1.5, getPlayers(), getPlayer())) {
                 location.subtract(increment);
                 break;
             }
