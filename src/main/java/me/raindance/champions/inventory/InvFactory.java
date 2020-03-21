@@ -159,6 +159,7 @@ public final class InvFactory {
         cPlayer.restockInventory();
         SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
         setCurrent(player, skillType, buildID);
+        player.closeInventory();
     }
 
     /**

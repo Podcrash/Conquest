@@ -147,10 +147,6 @@ public class InventoryListener extends ListenerBase {
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
         event.setCancelled(cancel);
-        Bukkit.broadcastMessage("kitMenu: " + kitMenu);
-        Bukkit.broadcastMessage("build: " + build);
-        Bukkit.broadcastMessage("classMenu: " + classMenu);
-        Bukkit.broadcastMessage("ownInv: " + ownInv);
     }
 
 
