@@ -134,7 +134,7 @@ public class MenuCreator {
         int[] rowStarts = new int[] {20, 22, 24, 26};
 
         Material[] materials = new Material[] {Material.INK_SACK, Material.ANVIL, Material.FIREBALL};
-        String[] names = new String[] {"Apply Build ", "Edit Build ", "Delete Build"};
+        String[] names = new String[] {ChatColor.RESET + "Apply Build ", ChatColor.RESET + "Edit Build ", ChatColor.RESET + "Delete Build "};
         int[] slots = new int[] {0, 9, 27};
 
         UUID uuid = player.getUniqueId();

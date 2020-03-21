@@ -36,7 +36,7 @@ public class InventoryData {
         if(data.getInvType() == InvType.INNATE) defaultMat = Material.NETHER_STAR;
         ItemStack item = ItemStackUtil.createItem(
                 defaultMat,
-                ChatColor.BOLD + data.getName(),
+                String.format("%s%s%s", ChatColor.RESET, ChatColor.BOLD, data.getName()),
                 data.getDescription());
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
@@ -47,33 +47,33 @@ public class InventoryData {
     static ItemStack getInvItem(InvType invType) {
         switch (invType){
             case SWORD:
-                return ItemStackUtil.createItem(Material.IRON_SWORD, "Sword Skills", null);
+                return ItemStackUtil.createItem(Material.IRON_SWORD, ChatColor.RESET + "Sword Skills", null);
             case AXE:
-                return ItemStackUtil.createItem(Material.IRON_AXE, "Axe Skills", null);
+                return ItemStackUtil.createItem(Material.IRON_AXE, ChatColor.RESET + "Axe Skills", null);
             case BOW:
-                return ItemStackUtil.createItem(Material.BOW, "Bow Skills", null);
+                return ItemStackUtil.createItem(Material.BOW, ChatColor.RESET + "Bow Skills", null);
             case SHOVEL:
-                return ItemStackUtil.createItem(Material.IRON_SPADE, "Shovel Skills", null);
+                return ItemStackUtil.createItem(Material.IRON_SPADE, ChatColor.RESET + "Shovel Skills", null);
             case PASSIVEA:
                 Dye red = new Dye();
                 red.setColor(DyeColor.RED);
                 ItemStack itemStack = red.toItemStack(1);
-                setItemName(itemStack, "Primary Passive");
+                setItemName(itemStack, ChatColor.RESET + "Primary Passive");
                 return itemStack;
             case PASSIVEB:
                 Dye blue = new Dye();
                 blue.setColor(DyeColor.BLUE);
                 ItemStack itemStack1 = blue.toItemStack(1);
-                setItemName(itemStack1, "Secondary Passive");
+                setItemName(itemStack1, ChatColor.RESET + "Secondary Passive");
                 return itemStack1;
             case DROP:
                 Dye green = new Dye();
                 green.setColor(DyeColor.GREEN);
                 ItemStack itemStack2 = green.toItemStack(1);
-                setItemName(itemStack2, "Active Ability");
+                setItemName(itemStack2, ChatColor.RESET + "Active Ability");
                 return itemStack2;
             case INNATE:
-                return ItemStackUtil.createItem(Material.DIAMOND, "Innate Passive", null);
+                return ItemStackUtil.createItem(Material.DIAMOND, ChatColor.RESET + "Innate Passive", null);
             default:
                 throw new IllegalArgumentException("Not allowed");
         }

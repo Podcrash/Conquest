@@ -123,7 +123,7 @@ public class ChampionsPlayerManager {
             if(data == null) {
                 System.out.println(id);
                 SkillInfo.getSkills(SkillType.Druid).forEach(System.out::println);
-            }else skillWord.add(data.getName());
+            }else skillWord.add(String.format("%s%s%s", ChatColor.RESET, ChatColor.LIGHT_PURPLE, data.getName()));
         }
         return skillWord;
     }
