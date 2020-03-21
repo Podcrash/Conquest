@@ -16,6 +16,7 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PacketUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -127,7 +128,7 @@ public class InventoryListener extends ListenerBase {
         int slot = event.getSlot();
         ClickType clickType = event.getClick();
         boolean cancel = true;
-        if(inventory == null || selected == null || selected.getType() == Material.AIR)  {
+        if(inventory == null || selected == null)  {
             event.setCancelled(cancel);
             return;
         }
@@ -146,6 +147,10 @@ public class InventoryListener extends ListenerBase {
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
         event.setCancelled(cancel);
+        Bukkit.broadcastMessage("kitMenu: " + kitMenu);
+        Bukkit.broadcastMessage("build: " + build);
+        Bukkit.broadcastMessage("classMenu: " + classMenu);
+        Bukkit.broadcastMessage("ownInv: " + ownInv);
     }
 
 

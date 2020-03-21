@@ -73,7 +73,7 @@ public class Rest extends Continuous {
     public void damage(DamageApplyEvent event) {
         if(!active || event.getVictim() != getPlayer() || isAlly(event.getAttacker())) return;
         active = false;
-        getPlayer().sendMessage("Skill> " + event.getVictim() + " cancelled " + getName() + ".");
+        getPlayer().sendMessage("Skill> " + event.getVictim().getName() + " cancelled " + getName() + ".");
     }
 
 }
