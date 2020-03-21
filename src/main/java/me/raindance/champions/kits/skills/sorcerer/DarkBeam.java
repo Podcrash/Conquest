@@ -127,7 +127,8 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
             if (isAlly(p) && p == getPlayer()) continue;
             double distanceS = p.getLocation().distanceSquared(endLoc);
             double delta = 1D - distanceS / distS;
-            DamageApplier.damage(p, getPlayer(), damage * delta, this, true);
+            DamageApplier.damage(p, getPlayer(), damage, this, true);
+            return;
         }
     }
 }
