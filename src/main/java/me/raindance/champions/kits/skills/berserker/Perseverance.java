@@ -13,10 +13,10 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 106, skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
-public class Perserverance extends Passive implements ICooldown {
+public class Perseverance extends Passive implements ICooldown {
     @Override
     public String getName() {
-        return "Perserverance";
+        return "Perseverance";
     }
 
     @Override
