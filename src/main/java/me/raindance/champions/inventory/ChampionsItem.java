@@ -155,8 +155,6 @@ public class ChampionsItem {
         }
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(ChatColor.RESET + name);
-        if(material.equals(Material.GOLD_AXE) || material.equals(Material.GOLD_SWORD) || material.equals(Material.GOLD_SPADE))
-            meta.addEnchant(Enchantment.DURABILITY, 5, true);
         List<String> arrays = new ArrayList<>(desc);
         meta.setLore(arrays);
         itemStack.setItemMeta(meta);
