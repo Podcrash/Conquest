@@ -6,10 +6,12 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Continuous;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.EventHandler;
 
 import java.util.Random;
@@ -73,7 +75,11 @@ public class Rest extends Continuous {
     public void damage(DamageApplyEvent event) {
         if(!active || event.getVictim() != getPlayer() || isAlly(event.getAttacker())) return;
         active = false;
-        getPlayer().sendMessage("Skill> " + event.getVictim() + " cancelled " + getName() + ".");
+        String cancelMsg = String.format("%s%s> %s%s%s cancelled %sShadowmeld%s.",
+                ChatColor.BLUE,
+                ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(),
+                ChatColor.YELLOW, event.getAttacker().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY);
+        getPlayer().sendMessage(cancelMsg);
     }
 
 }

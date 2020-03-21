@@ -48,9 +48,8 @@ public class StarBuff implements TimeResource {
     public void setCollector(Player collector) {
         this.holder = collector.getName();
         this.endTime = System.currentTimeMillis() + 1000L * 30;
-        runAsync(1, 0);
-
         replaceLine(PREFIX + " " + holder);
+        runAsync(1, 0);
     }
 
     public void collectorDiedNotify(Player died) {
