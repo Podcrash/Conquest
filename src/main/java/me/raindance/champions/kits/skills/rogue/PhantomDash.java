@@ -22,11 +22,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 /**
  * Phantom Dash
@@ -42,6 +46,7 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 607, skillType = SkillType.Rogue, invType = InvType.AXE)
 public class PhantomDash extends Instant implements ICooldown {
+    private boolean lock;
     //We are using the instant base class to format this
 
     //we are going to be storing our own instance of the pearl here to reference it in another event.
@@ -65,8 +70,9 @@ public class PhantomDash extends Instant implements ICooldown {
         Vector mulitplied = direction.multiply(2.4F); //magic number
 
         //spawn the enderpearl, we may need custom of these classes but for now this is fine.
+        this.lock = false;
         this.pearl = getPlayer().launchProjectile(EnderPearl.class, mulitplied);
-
+        this.pearl.setShooter(getPlayer());
         SoundPlayer.sendSound(getPlayer().getLocation(), "random.bow", 0.85F, 30);
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.PORTAL, 1);
         ParticleGenerator.generateProjectile(pearl, particles);
@@ -74,7 +80,7 @@ public class PhantomDash extends Instant implements ICooldown {
         getPlayer().sendMessage(getUsedMessage());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void enderPearlHit(EntityDamageByEntityEvent event) {
         //checks
         Entity damager = event.getDamager();
@@ -93,11 +99,17 @@ public class PhantomDash extends Instant implements ICooldown {
         Pluginizer.getLogger().info("t3");
         //at this point, the pearl has hit some living damager,
         //so we need to do 5 damage and have the user teleport.
+        doEffect((LivingEntity) victim);
+    }
 
+    public void doEffect(LivingEntity victim) {
+        //to avoid doing the effect twice.
+        if(lock) return;
+        lock = true;
         //damage
-        if(!isAlly((LivingEntity) victim)) {
+        if(!isAlly(victim)) {
             Pluginizer.getLogger().info("t3.5");
-            DamageApplier.damage((LivingEntity) victim, getPlayer(), 6, this, false);
+            DamageApplier.damage(victim, getPlayer(), 6, this, false);
         }
 
 
@@ -106,11 +118,10 @@ public class PhantomDash extends Instant implements ICooldown {
         particles.setLocation(victim.getLocation());
         PacketUtil.asyncSend(particles, getPlayers());
         //teleport
-        getPlayer().teleport(evade((LivingEntity) victim, victim.getLocation()));
+        getPlayer().teleport(evade(victim, victim.getLocation()));
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.portal", 0.85F, 73);
         this.pearl = null;
     }
-
     /**
      * The forums r g0d: https://bukkit.org/threads/how-to-disable-enderpearl-teleport.128993/
      */
