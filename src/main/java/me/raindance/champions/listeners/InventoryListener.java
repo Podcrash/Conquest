@@ -1,8 +1,10 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.MathUtil;
@@ -45,6 +47,7 @@ public class InventoryListener extends ListenerBase {
     public InventoryListener(JavaPlugin plugin) {
         super(plugin);
     }
+    private boolean invincible = false;
 
     /**
      * Right clicking a beacon in your hand
@@ -87,6 +90,10 @@ public class InventoryListener extends ListenerBase {
             if(inventory.getItem(i) == null) return i;
         }
         return -1;
+    }
+
+    private boolean isCustomMenu (Inventory inv) {
+        return isKitSelectMenu(inv) || isBuildMenu(inv) || isClassMenu(inv);
     }
 
     private boolean isKitSelectMenu(Inventory inv) {
@@ -205,14 +212,20 @@ public class InventoryListener extends ListenerBase {
         }
     }
 
+    @EventHandler
+    public void onOpen(InventoryOpenEvent e) {
+        if (!isCustomMenu(e.getInventory())) return;
+        DamageApplier.addInvincibleEntity(e.getPlayer());
+    }
+
     @EventHandler(
             priority = EventPriority.HIGHEST
     )
     public void onClose(InventoryCloseEvent e) {
-        if (!isClassMenu(e.getInventory())) return;
+        if (!isCustomMenu(e.getInventory())) return;
         //assign build
         e.getPlayer().sendMessage("Build would be assigned");
-
+        DamageApplier.removeInvincibleEntity(e.getPlayer());
         Inventory inventory = e.getInventory();
         String name = inventory.getName().toLowerCase();
         ChampionsPlayer newPlayer = InvFactory.inventoryToChampion((Player) e.getPlayer(), e.getInventory(), SkillType.getByName(name));
