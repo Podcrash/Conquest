@@ -118,34 +118,34 @@ public class ChampionsInventory {
         switch (skillType) {
             //they won't be merged just in case for easy access
             case Warden:
-                itemArray = new ChampionsItem[]{ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[]{ChampionsItem.WARDEN_SWORD, ChampionsItem.WARDEN_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Vanguard:
-                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SHOVEL, ChampionsItem.STANDARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.VANGUARD_SHOVEL, ChampionsItem.VANGUARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Berserker:
-                itemArray = new ChampionsItem[] {ChampionsItem.POWER_AXE, ChampionsItem.MEAD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.BERSERKER_AXE, ChampionsItem.BREAD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Duelist:
-                itemArray = new ChampionsItem[] {ChampionsItem.POWER_SWORD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.DUELIST_SWORD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Marksman:
-                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MARKSMAN_ARROWS};
+                itemArray = new ChampionsItem[] {ChampionsItem.MARKSMAN_SWORD, ChampionsItem.MARKSMAN_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MARKSMAN_ARROWS};
                 break;
             case Hunter:
-                itemArray = new ChampionsItem[] {ChampionsItem.STANDARD_SWORD, ChampionsItem.STANDARD_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.HUNTER_ARROWS};
+                itemArray = new ChampionsItem[] {ChampionsItem.HUNTER_SWORD, ChampionsItem.HUNTER_AXE, ChampionsItem.HUNTER_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.HUNTER_ARROWS};
                 break;
             case Thief:
-                itemArray = new ChampionsItem[] {ChampionsItem.STONE_SWORD, ChampionsItem.STONE_AXE, ChampionsItem.STANDARD_BOW, ChampionsItem.ASSASSIN_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB, ChampionsItem.ELIXIR};
+                itemArray = new ChampionsItem[] {ChampionsItem.THIEF_SWORD, ChampionsItem.THIEF_AXE, ChampionsItem.THIEF_BOW, ChampionsItem.THIEF_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB, ChampionsItem.ELIXIR};
                 break;
             case Rogue:
-                itemArray = new ChampionsItem[] {ChampionsItem.POWER_SWORD, ChampionsItem.POWER_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.ROGUE_SWORD, ChampionsItem.ROGUE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Druid:
-                itemArray = new ChampionsItem[] {ChampionsItem.WOOD_SWORD, ChampionsItem.WOOD_SHOVEL, ChampionsItem.WOOD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.LIFE_SWORD, ChampionsItem.LIFE_SHOVEL, ChampionsItem.LIFE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             case Sorcerer:
-                itemArray = new ChampionsItem[] {ChampionsItem.BOOSTER_SWORD, ChampionsItem.BOOSTER_SHOVEL, ChampionsItem.BOOSTER_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
+                itemArray = new ChampionsItem[] {ChampionsItem.SPELL_SWORD, ChampionsItem.SPELL_SHOVEL, ChampionsItem.SPELL_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);
