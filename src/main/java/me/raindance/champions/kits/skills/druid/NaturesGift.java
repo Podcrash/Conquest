@@ -58,8 +58,8 @@ public class NaturesGift extends Instant implements ICooldown, IEnergy {
 
         generateParticles(5, victim);
 
-        AbstractPacket healBurst = ParticleGenerator.createBlockEffect(getPlayer().getEyeLocation(), Material.EMERALD_BLOCK.getId());
-        PacketUtil.asyncSend(healBurst, getPlayer().getWorld().getPlayers());
+        //AbstractPacket healBurst = ParticleGenerator.createBlockEffect(getPlayer().getEyeLocation(), Material.EMERALD_BLOCK.getId());
+        //PacketUtil.asyncSend(healBurst, getPlayer().getWorld().getPlayers());
 
         StatusApplier.getOrNew(victim).applyStatus(Status.STRENGTH, 7, 0, false);
     }
