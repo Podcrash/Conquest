@@ -222,10 +222,10 @@ public class InventoryListener extends ListenerBase {
             priority = EventPriority.HIGHEST
     )
     public void onClose(InventoryCloseEvent e) {
-        if (!isCustomMenu(e.getInventory())) return;
+        if (isCustomMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
+        if (!isClassMenu(e.getInventory())) return;
         //assign build
         e.getPlayer().sendMessage("Build would be assigned");
-        DamageApplier.removeInvincibleEntity(e.getPlayer());
         Inventory inventory = e.getInventory();
         String name = inventory.getName().toLowerCase();
         ChampionsPlayer newPlayer = InvFactory.inventoryToChampion((Player) e.getPlayer(), e.getInventory(), SkillType.getByName(name));
