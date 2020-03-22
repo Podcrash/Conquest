@@ -99,6 +99,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         Location vLocation = event.getVictim().getLocation();
         Location dLocation = getPlayer().getLocation();
         double distance = vLocation.distance(dLocation);
+        event.addSource(this);
         //double damage = event.getDamage() + ((3.8 * .0009667) * FastMath.pow(distance, 2));
         double damage = event.getDamage() + (0.25 * distance);
         event.setDamage(Math.min(damage, 22));
