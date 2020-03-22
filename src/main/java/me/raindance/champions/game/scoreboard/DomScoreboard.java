@@ -5,6 +5,7 @@ import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.game.DomGame;
+import me.raindance.champions.game.StarBuff;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Score;
@@ -21,7 +22,7 @@ public class DomScoreboard extends GameScoreboard {
     private List<CapturePoint> capturePoints;
 
     public DomScoreboard(int gameId) {
-        super(13, gameId, GameType.DOM);
+        super(17, gameId, GameType.DOM);
 
 
 
@@ -47,7 +48,7 @@ public class DomScoreboard extends GameScoreboard {
         }
 
         points.add("");
-        points.add(ChatColor.BOLD.toString() + ChatColor.WHITE + "Star: " + ChatColor.YELLOW + "" + ChatColor.BOLD + "ACTIVE");
+        points.add(StarBuff.PREFIX + " ACTIVE");
         createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
     }
 
