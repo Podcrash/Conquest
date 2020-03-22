@@ -20,8 +20,9 @@ public class ShockingStrike extends Interaction implements ICooldown {
     public void doSkill(LivingEntity victim) {
         if(isAlly(victim)) return;
 
-        StatusApplier.getOrNew(victim).applyStatus(Status.SHOCK, 8, 1);
-        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 8, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.SHOCK, 5, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.GROUND, 5, 1);
+        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, 5, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BAT_HURT, 1.0f, 1.5f);
     }
 
