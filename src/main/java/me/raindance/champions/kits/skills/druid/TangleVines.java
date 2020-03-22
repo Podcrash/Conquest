@@ -222,7 +222,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     @Override
     public float getCooldown() {
-        return 8;
+        return 7;
     }
 
     @Override

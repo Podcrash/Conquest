@@ -41,7 +41,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
     public DarkBeam() {
         this.damage = 10;
         this.range = 25;
-        this.energyUsage = 60;
+        this.energyUsage = 50;
     }
 
     @Override

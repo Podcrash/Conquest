@@ -32,7 +32,7 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
     private int duration;
 
     public Meteor() {
-        energyUsage = 70;
+        energyUsage = 60;
         radius = 6;
         duration = 5;
     }
@@ -84,7 +84,7 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
 
         for(Player p: playersAffected) {
             Vector exp = VectorUtil.fromAtoB(event.getEntity().getLocation(), p.getLocation()).normalize();
-            exp.multiply(1.25).setY(exp.getY() + 0.2);
+            exp.multiply(1.05).setY(exp.getY() + 0.2);
             p.setVelocity(exp);
             if(isAlly(p)) continue;
             StatusApplier.getOrNew(p).applyStatus(Status.FIRE, duration, 5);
