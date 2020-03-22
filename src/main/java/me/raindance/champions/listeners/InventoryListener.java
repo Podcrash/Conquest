@@ -167,6 +167,7 @@ public class InventoryListener extends ListenerBase {
     }
 
     private void buildMenu(Player clicker, Inventory inventory, ItemStack selected) {
+        if(selected.getItemMeta() == null) return;
         SkillType skillType = SkillType.getByName(inventory.getName());
 
         ItemMeta itemMeta = selected.getItemMeta();

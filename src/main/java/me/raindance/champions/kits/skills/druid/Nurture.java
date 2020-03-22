@@ -12,11 +12,14 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.Bukkit;
+import org.bukkit.GrassSpecies;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.LongGrass;
+import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -79,7 +82,9 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
         org.bukkit.util.Vector up = new Vector(0, 0.34, 0);
         up.setX(randomizer);
         up.setZ(randomizer);
-        Item item = ItemManipulationManager.regular(Material.LONG_GRASS, location, up);
+        LongGrass data = new LongGrass();
+        data.setSpecies(GrassSpecies.NORMAL);
+        Item item = ItemManipulationManager.regular(data, location, up);
         item.setCustomName("RITB");
         ItemMeta meta = item.getItemStack().getItemMeta();
         meta.setDisplayName(getName() + item.getEntityId());
