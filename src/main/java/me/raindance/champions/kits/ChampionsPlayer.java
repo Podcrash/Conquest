@@ -15,6 +15,7 @@ import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -22,6 +23,7 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import java.util.List;
 
@@ -206,15 +208,26 @@ public abstract class ChampionsPlayer {
         }
         return false;
     }
+
+    private ItemStack getTNTStack(){
+        int amount = 0;
+        for(ItemStack content : getInventory().getContents()){
+            if(content != null && content.getType().equals(Material.TNT)) amount ++;
+        }
+        return new ItemStack(Material.TNT, amount);
+    }
+
     public void restockInventory() {
         int size = this.defaultHotbar.length;
-        System.out.println(size);
+        ItemStack TNT = null;
+        if(getInventory().contains(Material.TNT)) TNT = getTNTStack();
         int i = 0;
         for (; i < size; i++) {
             ItemStack item = this.defaultHotbar[i];
             if(item != null) this.getInventory().setItem(i, item.clone());
             else this.getInventory().setItem(i, null);
         }
+        if(TNT != null) getInventory().addItem(TNT.clone());
     }
 
     public double getFallDamage() {
