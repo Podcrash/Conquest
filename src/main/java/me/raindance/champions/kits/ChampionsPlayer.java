@@ -212,15 +212,15 @@ public abstract class ChampionsPlayer {
     private ItemStack getTNTStack(){
         int amount = 0;
         for(ItemStack content : getInventory().getContents()){
-            if(content != null && content.getType().equals(Material.TNT)) amount ++;
+            if(content != null && content.getType().equals(Material.TNT)) amount += content.getAmount();
         }
+        if(amount == 0) return null;
         return new ItemStack(Material.TNT, amount);
     }
 
     public void restockInventory() {
         int size = this.defaultHotbar.length;
-        ItemStack TNT = null;
-        if(getInventory().contains(Material.TNT)) TNT = getTNTStack();
+        ItemStack TNT = getTNTStack();
         int i = 0;
         for (; i < size; i++) {
             ItemStack item = this.defaultHotbar[i];
