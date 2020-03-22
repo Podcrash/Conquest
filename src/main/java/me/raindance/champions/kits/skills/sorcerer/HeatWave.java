@@ -1,5 +1,5 @@
 package me.raindance.champions.kits.skills.sorcerer;
-
+/*
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -71,12 +71,6 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
         return energyUsage;
     }
 
-    /*
-    @Override
-    public void useEnergy(double energy) {
-
-    }
-    */
     @Override
     protected void doContinuousSkill() {
         startContinuousAction();
@@ -156,3 +150,4 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
         }
     }
 }
+*/
