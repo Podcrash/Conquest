@@ -116,6 +116,9 @@ public class DomGameListener extends ListenerBase {
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
+
+        for(Player player : Bukkit.getOnlinePlayers())
+            GameManager.addPlayer(player);
     }
 
 
