@@ -56,7 +56,7 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
 
     @Override
     public int getEnergyUsage() {
-        return 100;
+        return 90;
     }
 
     @Override

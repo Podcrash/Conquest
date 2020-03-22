@@ -41,7 +41,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     private byte a = 0;
     public MoltenCore() {
-        this.energy = 30;
+        this.energy = 20;
     }
 
     @Override

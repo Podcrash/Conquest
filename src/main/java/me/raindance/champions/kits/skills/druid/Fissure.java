@@ -37,7 +37,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
 
     @Override
     public float getCooldown() {
-        return 15;
+        return 11;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
 
     @Override
     public int getEnergyUsage() {
-        return 100;
+        return 90;
     }
 
     @Override

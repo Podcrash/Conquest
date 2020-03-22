@@ -38,7 +38,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     public Stampede() {
         charges = 0;
         this.toggle = false;
-        this.timing = 3;
+        this.timing = 5;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     @Override
     public void task() {
         if (getPlayer().isSprinting()) {
-            if(currentSpeed >= 0) StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 1, 0, false);
+            if(currentSpeed >= 0) StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 1, 1, false);
             if (currentSpeed != 0 && System.currentTimeMillis() - time >= 1000L * timing) {
                 time = System.currentTimeMillis();
                 incSpeed();

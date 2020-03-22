@@ -61,6 +61,7 @@ public class StunCharge extends TrapItem {
             if (entity.getLocation().distanceSquared(land) > 4D) continue;
             StatusApplier.getOrNew(entity).applyStatus(Status.SILENCE, 4, 0);
             StatusApplier.getOrNew(entity).applyStatus(Status.SHOCK, 4, 0);
+            StatusApplier.getOrNew(entity).applyStatus(Status.GROUND, 4, 0);
         }
     }
 

@@ -37,7 +37,7 @@ public class RoseArmor extends TogglePassive implements TimeResource, IEnergy {
 
     @Override
     public int getEnergyUsage() {
-        return 50;
+        return 40;
     }
 
     @Override

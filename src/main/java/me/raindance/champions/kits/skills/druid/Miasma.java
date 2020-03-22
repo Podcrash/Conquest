@@ -64,7 +64,9 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
         if(victim == getPlayer() || isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
 
-        StatusApplier.getOrNew(victim).applyStatus(Status.POISON, duration, 1, false);
+        StatusApplier.getOrNew(victim).applyStatus(Status.POISON, duration, 1, true);
+        StatusApplier.getOrNew(victim).applyStatus(Status.WEAKNESS, duration, 0, false);
+
     }
 
     private void spiral(Location playerLocation) {
@@ -110,7 +112,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 22;
+        return 10;
     }
 
     @Override
@@ -125,6 +127,6 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
 
     @Override
     public int getEnergyUsage() {
-        return 80;
+        return 70;
     }
 }

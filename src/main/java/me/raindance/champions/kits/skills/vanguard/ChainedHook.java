@@ -41,7 +41,7 @@ public class ChainedHook extends Instant implements ICooldown {
 
     public ChainedHook() {
         super();
-        this.vect = 1.1F + 0.3F * 4;
+        this.vect = 1.1F + 0.3F * 5;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ChainedHook extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 13;
+        return 10;
     }
 
 }

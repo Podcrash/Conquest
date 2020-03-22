@@ -34,7 +34,7 @@ import org.bukkit.util.Vector;
 public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstruct {
     private WrapperPlayServerWorldParticles particles;
     private String NAME;
-    private int energy = 80;
+    private int energy = 70;
     private float distance = 16;
     private int damage = 6;
 

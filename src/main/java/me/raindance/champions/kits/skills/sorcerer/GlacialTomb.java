@@ -36,7 +36,7 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
     private List<Vector> tempArrayList = new ArrayList<>();
 
     public GlacialTomb() {
-        this.energy = 80;
+        this.energy = 70;
         this.duration = 4;
         setCanUseWhileCooldown(true);
     }
