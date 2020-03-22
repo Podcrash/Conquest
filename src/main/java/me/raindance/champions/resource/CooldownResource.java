@@ -56,6 +56,7 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public void cleanup() {
+        if(!skill.hasCooldown()) return;
         player.sendMessage(skill.getCanUseMessage());
         TitleSender.sendTitle(player, TitleSender.emptyTitle());
         SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
