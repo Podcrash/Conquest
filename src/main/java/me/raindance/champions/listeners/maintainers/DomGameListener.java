@@ -188,7 +188,6 @@ public class DomGameListener extends ListenerBase {
             StringBuilder builder = new StringBuilder();
             builder.append(ChatColor.AQUA);
             builder.append(ChatColor.BOLD);
-            builder.append(team.getChatColor());
             builder.append(player.getName());
             //builder.append(ChatColor.GREEN);
             builder.append(" has collected 200 points!");
