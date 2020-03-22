@@ -186,10 +186,10 @@ public class DomGameListener extends ListenerBase {
         if(itemObjective instanceof Diamond) {
             game.increment(team, 200);
             StringBuilder builder = new StringBuilder();
-            builder.append(team.getChatColor());
-            builder.append(player.getName());
             builder.append(ChatColor.AQUA);
             builder.append(ChatColor.BOLD);
+            builder.append(team.getChatColor());
+            builder.append(player.getName());
             //builder.append(ChatColor.GREEN);
             builder.append(" has collected 200 points!");
             game.broadcast(builder.toString());
