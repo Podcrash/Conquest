@@ -62,8 +62,12 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
                     if (entity == null) {// not hit
 
                     }else {
-                        if(isAlly(entity)) return;
                         if(entity instanceof Player){
+                            if(isAlly(entity)) {
+                                location.getWorld().playSound(location, Sound.DIG_WOOL, 1f, 31.5f);
+                                item.remove();
+                                return;
+                            }
                             if(!isAlly((entity)) && !BlockUtil.isInWater(entity)) {
                                 StatusApplier applier = StatusApplier.getOrNew(entity);
                                 if(!applier.has(Status.FIRE))

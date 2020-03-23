@@ -63,6 +63,10 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
 
                     }else {
                         if(entity instanceof Player){
+                            if(isAlly(entity)) {
+                                location.getWorld().playSound(location, Sound.DIG_WOOL, 1f, 31.5f);
+                                item.remove();
+                            }
                             if(!isAlly((entity))) {
                                 StatusApplier applier = StatusApplier.getOrNew(entity);
                                 if(!applier.has(Status.FIRE))
