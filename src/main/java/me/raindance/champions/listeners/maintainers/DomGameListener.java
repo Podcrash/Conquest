@@ -204,7 +204,7 @@ public class DomGameListener extends ListenerBase {
             player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
             game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
             StatusApplier.getOrNew(player).applyStatus(Status.STRENGTH, 30, 0, false, true);
-            StatusApplier.getOrNew(player).applyStatus(Status.SPEED, 30, 0, false, true);
+            StatusApplier.getOrNew(player).applyStatus(Status.RESISTANCE, 30, 0, false, true);
             StatusApplier.getOrNew(player).applyStatus(Status.REGENERATION, 30, 0, false, true);
             game.getStarBuff().setCollector(player);
             game.increment(team, 300);

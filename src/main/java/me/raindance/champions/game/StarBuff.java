@@ -14,6 +14,7 @@ import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -52,6 +53,10 @@ public class StarBuff implements TimeResource {
         runAsync(1, 0);
     }
 
+    public LivingEntity getCollector() {
+        if(holder == null) return null;
+        return Bukkit.getPlayer(holder);
+    }
     public void collectorDiedNotify(Player died) {
         if(!died.getName().equalsIgnoreCase(holder)) return;
         this.dead = true;

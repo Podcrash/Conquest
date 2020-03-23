@@ -131,6 +131,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void pickUp(PlayerPickupItemEvent event) {
+        if(event.getItem().getItemStack().getType() != Material.BLAZE_POWDER) return;
         if(event.getItem().getItemStack().getItemMeta() == null ||
                 !event.getItem().getItemStack().getItemMeta().getDisplayName().contains(NAME)) return;
         Player victim = event.getPlayer();
