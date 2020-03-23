@@ -3,6 +3,7 @@ package me.raindance.champions.kits.skills.sorcerer;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -16,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
@@ -95,4 +97,12 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
         //TODO: this needs refactor
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void fireballHit(DamageApplyEvent event){
+        if(event.containsSource(this)) {
+            event.setVelocityModifierX(event.getVelocityModifierX() * 0.6);
+            event.setVelocityModifierY(event.getVelocityModifierY() * 0.6);
+            event.setVelocityModifierZ(event.getVelocityModifierZ() * 0.6);
+        }
+    }
 }
