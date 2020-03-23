@@ -75,7 +75,7 @@ public class Rest extends Continuous {
     public void damage(DamageApplyEvent event) {
         if(!active || event.getVictim() != getPlayer() || isAlly(event.getAttacker())) return;
         active = false;
-        String cancelMsg = String.format("%s%s> %s%s%s cancelled %sShadowmeld%s.",
+        String cancelMsg = String.format("%s%s> %s%s%s cancelled %sRest%s.",
                 ChatColor.BLUE,
                 ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(),
                 ChatColor.YELLOW, event.getAttacker().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY);

@@ -12,6 +12,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,7 +55,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
         isDisengaging = true;
         time = System.currentTimeMillis();
         TimeHandler.repeatedTimeAsync(1, 0, this);
-        getPlayer().sendMessage(String.format("Skill> You are trying to %s", getName()));
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -100,7 +101,7 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
     @Override
     public void cleanup() {
         if (isDisengaging) {
-            getPlayer().sendMessage("Skill> You failed Disengage");
+            getPlayer().sendMessage(getFailedMessage());
             setLastUsed(System.currentTimeMillis());
         }
         isDisengaging = false;

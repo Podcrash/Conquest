@@ -71,7 +71,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1f, 1.6f);
                 getPlayer().sendMessage("Skill> You riposted " + event.getVictim().getName());
                 event.setModified(true);
-            } else getPlayer().sendMessage("Skill> You failed to Riposte");
+            } else getPlayer().sendMessage(getFailedMessage());
             ripoSuccess = false;
         }
     }
@@ -98,7 +98,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
     @Override
     public void cleanup() {
         this.setLastUsed(System.currentTimeMillis());
-        getPlayer().sendMessage("You failed riposte");
+        getPlayer().sendMessage(getFailedMessage());
         TimeHandler.unregister(this);
         isRiposting = false;
     }

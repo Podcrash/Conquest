@@ -49,7 +49,6 @@ public class BlindingArrow extends BowShotSkill {
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(victim.getLocation().toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, 1, 0, 0, 0);
         event.addSource(this);
         PacketUtil.syncSend(packet, getPlayers());
-        shooter.sendMessage(String.format("You smoked %s for %d seconds.", victim.getName(), duration));
     }
 
     @Override

@@ -7,6 +7,7 @@ import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowChargeUp;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,8 @@ public class Overcharge extends BowChargeUp {
         double bonus = bonusDamage * charge;
         e.setModified(true);
         e.setDamage(e.getDamage() + bonus);
-        getPlayer().sendMessage(String.format("Skill> You shot %s for %.2f more damage with %s", e.getVictim().getName(), bonus, getName()));
+        getPlayer().sendMessage(String.format("%sSkill> %sYou shot %s%s %sfor %s%.2f more damage with %s%s%s.",
+                ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, e.getVictim().getName(), ChatColor.GRAY, bonus, ChatColor.GREEN, getName(), ChatColor.GRAY));
         e.addSource(this);
     }
 
