@@ -36,7 +36,7 @@ public class InventoryData {
         if(data.getInvType() == InvType.INNATE) defaultMat = Material.NETHER_STAR;
         ItemStack item = ItemStackUtil.createItem(
                 defaultMat,
-                String.format("%s%s%s", ChatColor.RESET, ChatColor.BOLD, data.getName()),
+                String.format("%s%s%s%s", ChatColor.RESET, ChatColor.AQUA, ChatColor.BOLD, data.getName()),
                 data.getDescription());
         ItemMeta meta = item.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
