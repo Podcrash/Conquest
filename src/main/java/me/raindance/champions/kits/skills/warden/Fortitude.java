@@ -14,6 +14,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -57,7 +58,7 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         return ItemType.NULL;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     protected void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         if (event.getVictim() == getPlayer()) {
@@ -66,7 +67,7 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
     }
 
     @EventHandler(
-            priority = EventPriority.MONITOR
+            priority = EventPriority.LOW
     )
     protected void hit(EntityDamageEvent event) {
         if(event.isCancelled()) return;
@@ -79,7 +80,9 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         TimeHandler.unregister(resource);
-        TimeHandler.delayTime(5, resource);
+        TimeHandler.delayTime(100, () -> {
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
+        });
     }
 
     @Override
