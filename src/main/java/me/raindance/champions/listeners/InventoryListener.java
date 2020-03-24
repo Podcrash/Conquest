@@ -1,13 +1,19 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.tables.ChampionsKitTable;
+import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.MathUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
@@ -40,8 +46,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class InventoryListener extends ListenerBase {
+    private static boolean lock = false;
     //TODO: o boi, looks like the day has come where I will be editing this
 
     public InventoryListener(JavaPlugin plugin) {
@@ -187,11 +196,16 @@ public class InventoryListener extends ListenerBase {
      * @param clickType
      */
     private void classClickItem(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
-        if(selected == null || selected.getType() != Material.BOOK) {
-            //I forgot the bad sound
-            SoundPlayer.sendSound(clicker, "note.pling", .9F, 50);
-            return;
-        }
+        if(selected.getType() == Material.BOOK) handleSkillTokens(clicker, inventory, slot, selected, clickType);
+        else if (selected.getType() == Material.PAPER) attemptBuy(clicker, inventory, slot, selected, clickType);
+        else SoundPlayer.sendSound(clicker, "note.pling", .9F, 50);
+    }
+
+    private void attemptBuy(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
+        EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
+        handler.buy(clicker, ChatUtil.strip(selected.getItemMeta().getDisplayName()));
+    }
+    private void handleSkillTokens(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         if(clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT) {
             //if the item doesn't have the enchantment, do nothing
             if(!selected.getEnchantments().containsKey(Enchantment.DAMAGE_ALL)) return;
@@ -216,8 +230,23 @@ public class InventoryListener extends ListenerBase {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent e) {
-        if (!isCustomMenu(e.getInventory())) return;
-        DamageApplier.addInvincibleEntity(e.getPlayer());
+        if (isCustomMenu(e.getInventory())) {
+            DamageApplier.addInvincibleEntity(e.getPlayer());
+            return;
+        }
+
+        if(lock) return;
+        if(!isClassMenu(e.getInventory())) return;
+        ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
+        CompletableFuture<Set<String>> future = table.getAllowedSkillsFuture(e.getPlayer().getUniqueId());
+        future.thenAcceptAsync(skillSet -> {
+            for(ItemStack item : e.getInventory()) {
+                if(item.getType() != Material.BOOK) continue;
+                String name = ChatUtil.strip(item.getItemMeta().getDisplayName());
+                if(skillSet.contains(name)) continue;
+                item.setType(Material.PAPER);
+            }
+        });
     }
 
     @EventHandler(

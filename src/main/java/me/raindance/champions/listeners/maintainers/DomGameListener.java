@@ -1,6 +1,8 @@
 package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.mc.economy.EconomyHandler;
+import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
@@ -19,6 +21,7 @@ import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.db.redis.Communicator;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
@@ -35,6 +38,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -114,6 +118,12 @@ public class DomGameListener extends ListenerBase {
     public void onEnd(GameEndEvent e) {
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
+        for(Player player : e.getGame().getBukkitPlayers()) {
+            handler.pay(player, 500);
+        }
+
+
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
 
@@ -222,6 +232,7 @@ public class DomGameListener extends ListenerBase {
         ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho());
         championsPlayer.getSkills().forEach(skill -> {
             if(skill instanceof ICharge) {
+                if(!((ICharge) skill).isMaxAtStart()) return;
                 for(int i = 0; i < ((ICharge) skill).getMaxCharges(); i++) {
                     ((ICharge) skill).addCharge();
                 }

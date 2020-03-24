@@ -1,6 +1,9 @@
 package me.raindance.champions.kits;
 
 import com.google.common.reflect.ClassPath;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.EconomyTable;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -46,6 +49,7 @@ public final class SkillInfo {
         Set<ClassPath.ClassInfo> classInfoSet = cp.getTopLevelClasses(path);
         StringBuilder skillsLoaded = new StringBuilder(skillTypeName + ": ");
 
+        Map<String, Double> costs = new HashMap<>();
         List<CompletableFuture<Void>> voids = new ArrayList<>();
         for(ClassPath.ClassInfo info : classInfoSet) {
             Class<?> skillClass = Class.forName(info.getName());
@@ -65,9 +69,13 @@ public final class SkillInfo {
             SkillData data = addSkill(skillID, skillType, invType, skill);
             voids.add(data.requestDescription());
             skillsLoaded.append(skill.getName()).append(" ");
+
+            costs.put(skill.getName(), annot.cost());
         }
         System.out.println(skillsLoaded.toString());
 
+        EconomyTable eco = TableOrganizer.getTable(DataTableType.ECONOMY);
+        eco.putItem(costs);
         try {
             CompletableFuture.allOf(voids.toArray(new CompletableFuture[voids.size()]))
                 .get(5000, TimeUnit.SECONDS);
