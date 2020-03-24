@@ -268,6 +268,7 @@ public class Main extends JavaPlugin {
             getCommand("hitreg").setExecutor(new HitRegCommand());
             getCommand("kill").setExecutor(new KillCommand());
             getCommand("tell").setExecutor(new TellCommand());
+            getCommand("addrole").setExecutor(new AddRoleCommand());
 
         }, executor);
     }

@@ -83,6 +83,8 @@ commands:
     usage: /kill
   tell:
     description: Currently unused messaging system.
+  addrole:
+    description: Add a role to the game.
 permissions:
     Champions.*:
       description: Permission to use all Champions commands.
