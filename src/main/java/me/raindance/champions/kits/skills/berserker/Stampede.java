@@ -80,6 +80,11 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
         return 1;
     }
 
+    @Override
+    public boolean isMaxAtStart() {
+        return false;
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void sprint(PlayerToggleSprintEvent event) {
         if (event.getPlayer() != getPlayer()) return;

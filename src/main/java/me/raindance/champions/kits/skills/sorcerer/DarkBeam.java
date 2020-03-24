@@ -4,6 +4,7 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -21,6 +22,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
@@ -131,6 +133,15 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
             double delta = 1D - distanceS / distS;
             DamageApplier.damage(p, getPlayer(), damage, this, true);
             return;
+        }
+    }
+
+    @EventHandler
+    public void damage(DamageApplyEvent event) {
+        if(!event.containsSource(this)) {
+            event.setVelocityModifierX(event.getVelocityModifierX() * 0.6);
+            event.setVelocityModifierY(event.getVelocityModifierY() * 0.6);
+            event.setVelocityModifierZ(event.getVelocityModifierZ() * 0.6);
         }
     }
 }

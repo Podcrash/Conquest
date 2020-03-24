@@ -144,6 +144,11 @@ public class Sharpshooter extends Passive implements ICharge {
     }
 
     @Override
+    public boolean isMaxAtStart() {
+        return false;
+    }
+
+    @Override
     public boolean cancel() {
         return System.currentTimeMillis() - time >= 5000L;
     }
