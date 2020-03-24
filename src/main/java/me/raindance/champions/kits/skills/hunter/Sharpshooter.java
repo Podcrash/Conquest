@@ -67,7 +67,7 @@ public class Sharpshooter extends Passive implements ICharge {
         justMissed = false;
         time = System.currentTimeMillis();
         e.setModified(true);
-        e.setDamage(e.getDamage() + getCurrentCharges() * 2);
+        e.setDamage(e.getDamage() + getCurrentCharges());
         int id = e.getArrow().getEntityId();
         //if(forceMap.get(id) >= 0.9F)
             addCharge();
