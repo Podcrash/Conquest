@@ -35,7 +35,7 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
 
     public Meteor() {
         energyUsage = 60;
-        radius = 6;
+        radius = 3;
         duration = 5;
     }
 

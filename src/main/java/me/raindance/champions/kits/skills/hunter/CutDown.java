@@ -55,7 +55,7 @@ public class CutDown extends Passive {
             if(!(e.getVictim() instanceof Player)) return;
             Player player = (Player) e.getVictim();
             e.addSource(this);
-            if(EntityUtil.isBelow(player, 0.5)) return;
+            if(EntityUtil.isBelow(player, 0.75)) return;
             e.setDamage(e.getDamage() + 3);
         }
     }

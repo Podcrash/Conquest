@@ -39,11 +39,16 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
     private int energyUsage;
     private FireworkEffect firework;
 
+    private double detectionRadius;
+    private int damageRadius;
 
     public DarkBeam() {
-        this.damage = 10;
+        this.damage = 7;
         this.range = 25;
         this.energyUsage = 50;
+
+        this.detectionRadius = 1.5;
+        this.damageRadius = 2;
     }
 
     @Override
@@ -98,7 +103,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
             if(!isPassable(cur.getBlock())) break;
 
             //if a player is within the point within a sphere, then break
-            if(hasPlayersInArea(cur, 1.5, players, getPlayer()))
+            if(hasPlayersInArea(cur, detectionRadius, players, getPlayer()))
                 break;
             WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
             PacketUtil.asyncSend(packet, players);
@@ -127,7 +132,7 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         SoundPlayer.sendSound(getPlayer().getLocation(), "fireworks.launch", 1F, 63);
         int dist = 4;
         int distS = dist * dist;
-        for (Player p : BlockUtil.getPlayersInArea(endLoc, 4, players)) {
+        for (Player p : BlockUtil.getPlayersInArea(endLoc, damageRadius, players)) {
             if (isAlly(p) && p == getPlayer()) continue;
             double distanceS = p.getLocation().distanceSquared(endLoc);
             double delta = 1D - distanceS / distS;
