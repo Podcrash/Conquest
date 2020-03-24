@@ -43,7 +43,7 @@ public class Disarm extends Interaction {
     public void doSkill(LivingEntity victim) {
         if (onCooldown()) return;
         if(isAlly(victim)) return;
-        getPlayer().sendMessage(getUsedMessage(victim));
+        //getPlayer().sendMessage(getUsedMessage(victim));
         StatusApplier.getOrNew(victim).applyStatus(Status.WEAKNESS, duration, 99);
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
