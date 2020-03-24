@@ -25,7 +25,7 @@ public class Titan extends Passive {
 
     @EventHandler
     public void damage(DamageApplyEvent e) {
-        if(e.getVictim() != getPlayer() && e.getCause() != Cause.PROJECTILE) return;
+        if(e.getVictim() != getPlayer() || e.getCause() != Cause.PROJECTILE) return;
         e.setDamage(e.getDamage() * 0.75D);
         e.setModified(true);
     }
