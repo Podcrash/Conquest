@@ -22,7 +22,7 @@ import java.util.List;
 public class EarthSmash extends Instant implements ICooldown {
     @Override
     public float getCooldown() {
-        return 16;
+        return 10;
     }
 
     @Override
