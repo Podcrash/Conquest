@@ -25,6 +25,7 @@ public class LivingMana extends Passive implements IEnergy {
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         if(event.getCause() == Cause.CUSTOM) return;
+        if(isAlly(event.getVictim())) return;
         if(event.getAttacker() == getPlayer()) {
             getEnergyBar().setEnergy(getEnergyBar().getEnergy() + 10);
         }

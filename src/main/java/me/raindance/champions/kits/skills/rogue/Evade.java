@@ -16,6 +16,7 @@ import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.mc.util.TitleSender;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.protocol.packet.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -236,8 +237,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
         @Override
         public void cleanup() {
             if(isEvading)
-            getPlayer().sendMessage(String.format("%sSkill> %sYou failed evade.",
-                    ChatColor.BLUE, ChatColor.GRAY));
+            getPlayer().sendMessage(getFailedMessage());
             SoundPlayer.sendSound(getPlayer(),"note.pling", 0.75F, 2);
             setLastUsed(System.currentTimeMillis());
             TitleSender.sendTitle(getPlayer(), TitleSender.emptyTitle());

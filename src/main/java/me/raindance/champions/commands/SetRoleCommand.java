@@ -17,7 +17,7 @@ public class SetRoleCommand extends CommandBase{
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(args.length == 0) {
-            sender.sendMessage("You must provide a player and a role!");
+            sender.sendMessage("Try using: /setrole [ROLE] [PLAYER]");
             return true;
         }
         OfflinePlayer arg2Player = getUUID(args[1]);
@@ -33,11 +33,11 @@ public class SetRoleCommand extends CommandBase{
             if(table.hasRoleSync(playerUUID, newRole)) {
                 table.removeRole(playerUUID, newRole);
 
-                sender.sendMessage("Successful removed " + args[1] + "'s role:" + newRole);
+                sender.sendMessage("Successful removed " + args[1] + "'s role: " + newRole);
             }else{
 
                 table.addRole(playerUUID, newRole);
-                sender.sendMessage("SuPccessfully added " + args[1] + "'s role:" + newRole);
+                sender.sendMessage("Successfully added " + args[1] + "'s role: " + newRole);
             }
             Player p;
             if((p = Bukkit.getPlayer(playerUUID)) != null) {

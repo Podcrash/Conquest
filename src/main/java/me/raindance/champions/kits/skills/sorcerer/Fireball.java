@@ -30,8 +30,8 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
 
     private double damage = 4;
     private float cooldown = 1;
-    private float burnDuration = 5;
-    private int energyCost = 10;
+    private float burnDuration = 3;
+    private int energyCost = 20;
     private String NAME;
     private WrapperPlayServerWorldParticles particles;
 

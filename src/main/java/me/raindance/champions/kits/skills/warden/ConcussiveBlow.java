@@ -48,7 +48,7 @@ public class ConcussiveBlow extends Instant implements ICooldown {
         if(onCooldown()) return;
 
         Location eyeLoc = getPlayer().getEyeLocation();
-        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(0.25d));
+        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(1.2d));
         AbstractPacket packet = ParticleGenerator.createParticle(center.toVector(), EnumWrappers.Particle.EXPLOSION_LARGE,
                 1, 0, 0 , 0);
         Vector vector = eyeLoc.getDirection().normalize().multiply(velocity);
