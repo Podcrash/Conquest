@@ -84,6 +84,10 @@ public class MarkedForDeath extends BowShotSkill {
                 event.setModified(true);
                 event.setDamage(event.getDamage() + 15);
                 victims.remove(entity.getName());
+
+                event.setVelocityModifierX(event.getVelocityModifierX() * (10D/17D));
+                event.setVelocityModifierY(event.getVelocityModifierY() * (10D/17D));
+                event.setVelocityModifierZ(event.getVelocityModifierZ() * (10D/17D));
             }
         }
     }
