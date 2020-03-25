@@ -82,6 +82,7 @@ public class Main extends JavaPlugin {
             new TickEventListener(this);
             new Disguiser().disguiserIntercepter();
             new ApplyKitListener(this);
+            new EconomyListener(this);
 
             Bukkit.getPluginManager().registerEvents(new Listener() {
                 @EventHandler
@@ -269,6 +270,10 @@ public class Main extends JavaPlugin {
             getCommand("kill").setExecutor(new KillCommand());
             getCommand("tell").setExecutor(new TellCommand());
             getCommand("addrole").setExecutor(new AddRoleCommand());
+            getCommand("buy").setExecutor(new BuyCommand());
+            getCommand("confirm").setExecutor(new ConfirmCommand());
+            getCommand("lock").setExecutor(new LockCommand());
+            getCommand("bal").setExecutor(new BalanceCommand());
 
         }, executor);
     }

@@ -1,6 +1,7 @@
 package me.raindance.champions.listeners;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
+import com.podcrash.api.db.DBUtils;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
@@ -50,7 +51,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class InventoryListener extends ListenerBase {
-    private static boolean lock = false;
+    public static boolean lock = true;
     //TODO: o boi, looks like the day has come where I will be editing this
 
     public InventoryListener(JavaPlugin plugin) {
@@ -203,7 +204,10 @@ public class InventoryListener extends ListenerBase {
 
     private void attemptBuy(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
-        handler.buy(clicker, ChatUtil.strip(selected.getItemMeta().getDisplayName()));
+        handler.buy(clicker, selected.getItemMeta().getDisplayName()).exceptionally(t -> {
+            DBUtils.handleThrowables(t);
+            return null;
+        });
     }
     private void handleSkillTokens(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         if(clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT) {
@@ -230,22 +234,22 @@ public class InventoryListener extends ListenerBase {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent e) {
-        if (isCustomMenu(e.getInventory())) {
-            DamageApplier.addInvincibleEntity(e.getPlayer());
-            return;
-        }
+        if (isCustomMenu(e.getInventory())) DamageApplier.addInvincibleEntity(e.getPlayer());
 
         if(lock) return;
         if(!isClassMenu(e.getInventory())) return;
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
         CompletableFuture<Set<String>> future = table.getAllowedSkillsFuture(e.getPlayer().getUniqueId());
-        future.thenAcceptAsync(skillSet -> {
+        future.thenAccept(skillSet -> {
             for(ItemStack item : e.getInventory()) {
-                if(item.getType() != Material.BOOK) continue;
+                if(item == null || item.getType() != Material.BOOK) continue;
                 String name = ChatUtil.strip(item.getItemMeta().getDisplayName());
                 if(skillSet.contains(name)) continue;
                 item.setType(Material.PAPER);
             }
+        }).exceptionally(throwable -> {
+            DBUtils.handleThrowables(throwable);
+            return null;
         });
     }
 
