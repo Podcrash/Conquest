@@ -288,20 +288,20 @@ public class Main extends JavaPlugin {
                     "bukkit.command.help",
                     "bukkit.command.ban-ip",
                     "bukkit.command.stop",
+                    "invicta.map.modify",
             };
             Main.getInstance().getLogger().info("Disabling bad permissions");
             for(String disallowed : disallowedPerms)
                 attachment.setPermission(disallowed, false);
 
             RanksTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
-            table.getRanksAsync(player.getUniqueId()).thenAcceptAsync(ranks -> {
+            Set<Rank> ranks =  table.getRanksSync(player.getUniqueId());
                 for(Rank r : ranks) {
-                    player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, r.getName()));
+                    player.sendMessage(String.format("%s%sYou have been assigned the %s role!", ChatColor.GREEN, ChatColor.BOLD, r.getName()));
                     for(String permission : r.getPermissions()) {
                         attachment.setPermission(permission, true);
                     }
                 }
-            }, executor);
         });
     }
 
