@@ -61,8 +61,8 @@ public abstract class Interaction extends Skill implements ICooldown {
         if (event.getPlayer() == getPlayer() && isHolding() && rightClickCheck(event.getAction())) {
             if (!onCooldown()) {
                 if (!hit && !isInWater()) {
-                    getPlayer().sendMessage(String.format("%sSkill> %sYou missed %s%s%s.",
-                            ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(),ChatColor.GRAY));
+                    getPlayer().sendMessage(String.format("%s%s> %sYou missed %s%s%s.",
+                            ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(),ChatColor.GRAY));
                     this.setLastUsed(System.currentTimeMillis());
                     missSkill();
                 }

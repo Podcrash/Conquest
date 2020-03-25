@@ -9,6 +9,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -69,7 +70,13 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
                 event.setDamage(event.getDamage() + 0.5);
                 event.addSource(this);
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1f, 1.6f);
-                getPlayer().sendMessage("Skill> You riposted " + event.getVictim().getName());
+                getPlayer().sendMessage(String.format("%s%s> %sYou riposted %s%s%s.",
+                        ChatColor.BLUE,
+                        getChampionsPlayer().getName(),
+                        ChatColor.GRAY,
+                        ChatColor.GREEN,
+                        event.getVictim().getName(),
+                        ChatColor.GRAY));
                 event.setModified(true);
             } else getPlayer().sendMessage(getFailedMessage());
             ripoSuccess = false;

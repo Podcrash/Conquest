@@ -44,7 +44,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
         if(onCooldown()) return;
         isPrepared = true;// sound goes here
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.blaze.breathe", 0.75f, 200);
-        this.getPlayer().sendMessage(String.format("%sSkill> %s%s %sprepared.", ChatColor.BLUE, ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
+        this.getPlayer().sendMessage(String.format("%s%s> %s%s %sprepared.", ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
 
         this.setLastUsed(System.currentTimeMillis());
         //arrowForceMap.keySet().removeIf(arr -> (arr.isDead() || !arr.isValid()));
