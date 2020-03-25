@@ -24,6 +24,6 @@ public class ElementalMana extends Passive {
     public void kill(DeathApplyEvent event) {
         if(event.getAttacker() != getPlayer()) return;
         EnergyBar eBar = getChampionsPlayer().getEnergyBar();
-        eBar.setEnergy(eBar.getEnergy() + 50);
+        eBar.incrementEnergy(50);
     }
 }

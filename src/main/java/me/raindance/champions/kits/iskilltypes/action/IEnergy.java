@@ -26,7 +26,7 @@ public interface IEnergy {
      */
     default void useEnergy(double energy){
         EnergyBar ebar = getChampionsPlayer().getEnergyBar();
-        ebar.setEnergy(ebar.getEnergy() - energy);
+        ebar.incrementEnergy(-energy);
     }
 
     /**
