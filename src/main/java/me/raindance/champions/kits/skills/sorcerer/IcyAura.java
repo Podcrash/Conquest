@@ -60,6 +60,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public void toggle() {
+        getEnergyBar().toggleRegen(false);
         run(1, 0);
     }
 
@@ -122,5 +123,6 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
         }
+        getEnergyBar().toggleRegen(true);
     }
 }
