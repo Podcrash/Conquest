@@ -5,6 +5,7 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.mc.world.BlockUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -58,9 +59,10 @@ public class Leap extends Instant implements ICooldown {
         if (!loc.getBlock().getType().equals(Material.AIR) || !headLoc.getBlock().getType().equals(Material.AIR))
             wallKick();
         else leap();
-        AbstractPacket leapEffect = ParticleGenerator.createBlockEffect(loc, Material.WEB.getId());
-        PacketUtil.asyncSend(leapEffect, loc.getWorld().getPlayers());
-
+        if(!getPlayer().isOnGround()) {
+            AbstractPacket leapEffect = ParticleGenerator.createBlockEffect(loc, Material.WEB.getId());
+            PacketUtil.asyncSend(leapEffect, loc.getWorld().getPlayers());
+        }
     }
 
     private void wallKick() {

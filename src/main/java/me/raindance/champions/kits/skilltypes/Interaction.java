@@ -34,7 +34,7 @@ public abstract class Interaction extends Skill implements ICooldown {
         if(!(entity instanceof LivingEntity)) return;
         if (event.getPlayer() != getPlayer() || !isHolding()) return;
         if (isInWater()) {
-            getPlayer().sendMessage(getWaterMessage());
+            //getPlayer().sendMessage(getWaterMessage());
             return;
         }
         if(onCooldown()) return;
@@ -57,8 +57,9 @@ public abstract class Interaction extends Skill implements ICooldown {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void miss(PlayerInteractEvent event) {
-        if(!canMiss) return;
         if (event.getPlayer() == getPlayer() && isHolding() && rightClickCheck(event.getAction())) {
+            if(isInWater()) getPlayer().sendMessage(getWaterMessage());
+            if(!canMiss) return;
             if (!onCooldown()) {
                 if (!hit && !isInWater()) {
                     getPlayer().sendMessage(String.format("%s%s> %sYou missed %s%s%s.",
