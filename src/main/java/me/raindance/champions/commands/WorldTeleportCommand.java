@@ -16,7 +16,7 @@ public class WorldTeleportCommand extends CommandBase {
             } else sender.sendMessage("Specify a world to teleport to");
             return true;
         } else {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }
         return true;
     }

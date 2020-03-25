@@ -33,7 +33,7 @@ public class SetMapCommand extends CommandBase {
                 }else player.sendMessage("You are currently not in a game");
             }
         } else {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }
         return true;
     }

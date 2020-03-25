@@ -20,28 +20,28 @@ public class TeamCommand extends CommandBase {
                     } else if(GameManager.getGame().isOngoing()) {
                         player.sendMessage(
                                 String.format(
-                                        "%sChampions> %sYou may not switch teams mid-game!",
+                                        "%sConquest> %sYou may not switch teams mid-game!",
                                         ChatColor.BLUE,
                                         ChatColor.GRAY));
                     }else player.sendMessage(
                             String.format(
-                                    "%sChampions> %sYou are not currently in a game.",
+                                    "%sConquest> %sYou are not currently in a game.",
                                     ChatColor.BLUE,
                                     ChatColor.GRAY));
 
                 } else player.sendMessage(
                         String.format(
-                                "%sChampions> %sValid arguments are 'red' and 'blue'.",
+                                "%sConquest> %sValid arguments are 'red' and 'blue'.",
                                 ChatColor.BLUE,
                                 ChatColor.GRAY));
 
                 return true;
             } else if(GameManager.isSpectating(player)) player.sendMessage(String.format(
-                    "%sChampions> %sYou are currently spectating this game.",
+                    "%sConquest> %sYou are currently spectating this game.",
                     ChatColor.BLUE,
                     ChatColor.GRAY));
             else player.sendMessage(String.format(
-                        "%sChampions> %sValid arguments are 'red' and 'blue'.",
+                        "%sConquest> %sValid arguments are 'red' and 'blue'.",
                         ChatColor.BLUE,
                         ChatColor.GRAY));
         }

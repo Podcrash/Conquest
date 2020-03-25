@@ -17,12 +17,12 @@ public class KillCommand extends CommandBase {
                 ChampionsPlayer cplayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
                 if(cplayer == null) return true;
                 if(!cplayer.isInGame()){
-                    sender.sendMessage(String.format("%sChampions> %sYou must be in a game to use this command!", ChatColor.BLUE, ChatColor.GRAY));
+                    sender.sendMessage(String.format("%sConquest> %sYou must be in a game to use this command!", ChatColor.BLUE, ChatColor.GRAY));
                     return true;
                 }
                 if(cplayer.getGame().isOngoing() && !cplayer.getGame().isSpectating(player)){
                     if(cplayer.getGame().isRespawning(player)) {
-                        sender.sendMessage(String.format("%sChampions> %sYou are already dead.", ChatColor.BLUE, ChatColor.GRAY));
+                        sender.sendMessage(String.format("%sConquest> %sYou are already dead.", ChatColor.BLUE, ChatColor.GRAY));
                         return true;
                     }
                     DamageQueue.artificialDie(player);

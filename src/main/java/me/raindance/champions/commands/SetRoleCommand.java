@@ -18,7 +18,7 @@ public class SetRoleCommand extends CommandBase{
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!sender.isOp()) {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
             return true;
         }
         if(args.length == 0) {

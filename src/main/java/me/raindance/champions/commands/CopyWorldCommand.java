@@ -21,7 +21,7 @@ public class CopyWorldCommand extends CommandBase {
                 }else player.sendMessage(String.format("Problem with creating world %s", args[0]));
             }else player.sendMessage("provide a name for the world");
         } else {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }
         return true;
     }

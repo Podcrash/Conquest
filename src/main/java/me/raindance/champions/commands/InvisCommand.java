@@ -36,7 +36,7 @@ public class InvisCommand extends CommandBase {
 
             PacketUtil.asyncSend(particle, playerLocation.getWorld().getPlayers());
         } else {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }
         return true;
     }

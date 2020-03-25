@@ -18,14 +18,14 @@ public class LeaveCommand extends CommandBase {
                 if(game.isOngoing()) {
                     player.sendMessage(
                             String.format(
-                                    "%sChampions> %sYou cannot leave mid-game!",
+                                    "%sConquest> %sYou cannot leave mid-game!",
                                     ChatColor.BLUE,
                                     ChatColor.GRAY));
                 }else {
                     GameManager.removePlayer(player);
                     player.sendMessage(
                             String.format(
-                                    "%sChampions> %sYou have left %sGame %s%s.",
+                                    "%sConquest> %sYou have left %sGame %s%s.",
                                     ChatColor.BLUE,
                                     ChatColor.GRAY,
                                     ChatColor.GREEN,
@@ -35,7 +35,7 @@ public class LeaveCommand extends CommandBase {
             } else {
                 player.sendMessage(
                         String.format(
-                                "%sChampions> %sYou are not currently in a game.",
+                                "%sConquest> %sYou are not currently in a game.",
                                 ChatColor.BLUE,
                                 ChatColor.GRAY));
             }

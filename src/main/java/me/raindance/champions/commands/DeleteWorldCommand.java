@@ -18,7 +18,7 @@ public class DeleteWorldCommand extends CommandBase {
                 return true;
             }else player.sendMessage("There has to be an argument");
         } else {
-            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }
         return true;
     }
