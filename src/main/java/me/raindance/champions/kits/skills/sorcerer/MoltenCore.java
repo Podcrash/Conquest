@@ -41,7 +41,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     private byte a = 0;
     public MoltenCore() {
-        this.energy = 20;
+        this.energy = 30;
     }
 
     @Override
@@ -66,7 +66,6 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     @Override
     public void toggle() {
-        getEnergyBar().toggleRegen(false);
         run(1, 0);
     }
 
@@ -117,7 +116,6 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
         }
-        getEnergyBar().toggleRegen(true);
     }
 
     @EventHandler(priority =  EventPriority.HIGH)
