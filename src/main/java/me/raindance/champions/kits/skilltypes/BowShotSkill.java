@@ -90,7 +90,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
     /*
                 Shooting a player
              */
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void arrowShotPlayer(DamageApplyEvent event){
         if(event.isCancelled() || event.getCause() != Cause.PROJECTILE) return;
         LivingEntity livingEntity = event.getAttacker();

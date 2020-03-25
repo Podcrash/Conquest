@@ -85,6 +85,14 @@ commands:
     description: Currently unused messaging system.
   addrole:
     description: Add a role to the game.
+  buy:
+    description: buy something.
+  confirm:
+    description: confirim your bought.
+  lock:
+    description: lock the inventory or not.
+  bal:
+    description: yes.
 permissions:
     Champions.*:
       description: Permission to use all Champions commands.
