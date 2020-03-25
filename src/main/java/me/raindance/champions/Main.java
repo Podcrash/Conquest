@@ -250,7 +250,7 @@ public class Main extends JavaPlugin {
             getCommand("team").setExecutor(new TeamCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
             getCommand("start").setExecutor(new StartCommand());
-            getCommand("end").setExecutor(new EndCommand());
+            getCommand("endgame").setExecutor(new EndCommand());
             getCommand("setmap").setExecutor(new SetMapCommand());
             getCommand("invis").setExecutor(new InvisCommand());
             getCommand("damage").setExecutor(new DamageCommand());
@@ -293,7 +293,8 @@ public class Main extends JavaPlugin {
                     "bukkit.command.help",
                     "bukkit.command.ban-ip",
                     "bukkit.command.stop",
-                    "invicta.map.modify",
+                    "invicta.map",
+                    "invicta.host"
             };
             Main.getInstance().getLogger().info("Disabling bad permissions");
             for(String disallowed : disallowedPerms)

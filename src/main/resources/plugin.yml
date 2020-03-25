@@ -17,9 +17,9 @@ commands:
   start:
       description: Start a game.
       usage: /startContinuousAction
-  end:
+  endgame:
     description: End a game.
-    usage: /end <GameID>
+    usage: /end
   setmap:
       description: Set a map for the game.
       usage: /setmap <MapName> [gameNumber]

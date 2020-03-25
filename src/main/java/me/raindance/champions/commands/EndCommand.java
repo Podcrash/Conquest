@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class EndCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender.hasPermission("Champions.host")){
+        if(sender.hasPermission("invicta.host")){
             if (!(sender instanceof Player)) return false;
             Game game = GameManager.getGame();
             GameManager.endGame(game);
