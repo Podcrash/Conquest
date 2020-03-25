@@ -29,7 +29,6 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
     private int a = 0;
     @Override
     public void toggle() {
-        getEnergyBar().toggleRegen(false);
         run(1, 0);
     }
 
@@ -45,7 +44,7 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public int getEnergyUsage() {
-        return 20;
+        return 40;
     }
 
     @Override
@@ -72,7 +71,6 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
         }
-        getEnergyBar().toggleRegen(true);
     }
 
     private void spawnGrass(Location location) {

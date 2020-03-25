@@ -21,7 +21,7 @@ public class Berserker extends ChampionsPlayer {
     @Override
     public void effects() {
         this.setUsesEnergy(true, 4);
-        getEnergyBar().stop(); //no natural gain of energy
+        getEnergyBar().toggleRegen(false); //no natural gain of energy
     }
 
     @Override
