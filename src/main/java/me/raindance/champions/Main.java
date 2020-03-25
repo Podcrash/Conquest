@@ -289,7 +289,10 @@ public class Main extends JavaPlugin {
                     "bukkit.command.ban-ip",
                     "bukkit.command.stop",
                     "invicta.map",
-                    "invicta.host"
+                    "invicta.host",
+                    "invicta.developer",
+                    "invicta.testing",
+                    "invicta.mute"
             };
             Main.getInstance().getLogger().info("Disabling bad permissions");
             for(String disallowed : disallowedPerms)

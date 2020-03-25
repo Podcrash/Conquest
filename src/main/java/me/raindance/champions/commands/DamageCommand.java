@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class DamageCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.developer")) {
             Player player = (Player) sender;
             if (args.length == 1) {
                 try {

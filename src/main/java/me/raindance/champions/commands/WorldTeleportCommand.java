@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class WorldTeleportCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.developer")) {
             if (args.length > 0) {
                 String worldName = args[0];
                 WorldManager.getInstance().teleport((Player) sender, worldName);

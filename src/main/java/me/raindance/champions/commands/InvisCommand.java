@@ -17,7 +17,7 @@ import java.awt.*;
 public class InvisCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.developer")) {
             Player player = (Player) sender;
             Location playerLocation = player.getLocation();
 

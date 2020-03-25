@@ -6,6 +6,7 @@ import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.RanksTable;
 import com.podcrash.api.db.TableOrganizer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,10 @@ import java.util.UUID;
 public class SetRoleCommand extends CommandBase{
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(!sender.isOp()) {
+            sender.sendMessage(String.format("%sChampions> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
+            return true;
+        }
         if(args.length == 0) {
             sender.sendMessage("Try using: /setrole [ROLE] [PLAYER]");
             return true;

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class CurrentLocationCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.developer")) {
             Location test = ((Player) sender).getLocation();
             sender.sendMessage(String.format("%f, %f, %f", test.getX(), test.getY(), test.getZ()));
         } else {

@@ -11,7 +11,7 @@ import java.util.UUID;
 public class DisguiseCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.developer")) {
             Player player = (Player) sender;
             if (args.length == 1) {
                 UUID uuid = Bukkit.getPlayer(args[0]).getUniqueId();

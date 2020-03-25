@@ -10,7 +10,7 @@ public class KnockbackCommand extends CommandBase {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player && sender.hasPermission("Champions.developer")) {
+        if(sender instanceof Player && sender.hasPermission("invicta.testing")) {
             if(args.length == 0) {
                 sender.sendMessage(getValues());
                 sender.sendMessage(ChatColor.BLUE + "[Knockback] To change KB values: /kb kbfriction kbhorizontal kbextrahorizontal kbvertical kbverticallimit kbextravertical");

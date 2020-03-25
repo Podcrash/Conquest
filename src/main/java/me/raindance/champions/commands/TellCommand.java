@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public class TellCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender.hasPermission("Champions.mute")) {
+        if(sender.hasPermission("invicta.mute")) {
             sender.sendMessage(String.format("%sChampions> %sNice try, you are still muted.", ChatColor.BLUE, ChatColor.GRAY));
             return true;
         } else {

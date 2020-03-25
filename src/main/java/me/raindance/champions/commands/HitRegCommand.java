@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class HitRegCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(!Perm.DEVELOPER.has(sender)) {
+        if(!sender.hasPermission("invicta.testing")) {
             sender.sendMessage("You do not have permissions!");
             return false;
         }

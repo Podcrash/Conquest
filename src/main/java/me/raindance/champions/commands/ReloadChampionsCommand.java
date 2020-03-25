@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class ReloadChampionsCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player && sender.hasPermission("Champions.developer")){
+        if(sender instanceof Player && sender.hasPermission("invicta.developer")){
             Bukkit.getServer().dispatchCommand(sender, "plugman reload Champions");
         }else if(sender instanceof ConsoleCommandSender) {
             Bukkit.getServer().dispatchCommand(sender, "plugman reload Champions");
