@@ -36,12 +36,9 @@ public class EnergyBar implements TimeResource {
     // getters and setters
     public void setEnergy(double energy) {
         if(energy > MAX_ENERGY) energy = MAX_ENERGY;
-
-        float xp = (float) (energy / MAX_ENERGY);
-        if(xp >= 1F) xp = .99999999F;
-        setExp(xp);
-        this.energy = energy;
-        lastTimeUsed = System.currentTimeMillis();
+        synchronized (lock) {
+            this.energy = energy;
+        }
     }
 
     public void incrementEnergy(double value) {

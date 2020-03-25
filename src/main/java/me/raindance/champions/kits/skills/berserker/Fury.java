@@ -10,6 +10,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 105, skillType = SkillType.Berserker, invType = InvType.INNATE)
@@ -36,7 +37,7 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
     public void task() {
         if(lastHit != 0 && System.currentTimeMillis() - lastHit >= 3000) {
             lastHit = 0;
-            getEnergyBar().setEnergy(-getEnergyBar().getMaxEnergy());
+            getEnergyBar().setEnergy(0);
         }
     }
 
@@ -64,7 +65,7 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @EventHandler
     public void die(DeathApplyEvent e) {
-        if(e.getAttacker() != getPlayer()) return;
+        if(e.getPlayer() != getPlayer()) return;
         getEnergyBar().incrementEnergy(-getEnergyBar().getMaxEnergy());
     }
 
