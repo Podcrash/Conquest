@@ -16,7 +16,7 @@ import java.util.Set;
 public class SetMapCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.host")) {
+        if (sender instanceof Player && sender.hasPermission("invicta.host")) {
             Player player = (Player) sender;
             MapTable table = TableOrganizer.getTable(DataTableType.MAPS);
             Set<String> validMaps = new HashSet<>(table.getWorlds("conquest"));

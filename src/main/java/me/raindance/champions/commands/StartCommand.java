@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class StartCommand extends CommandBase {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player && sender.hasPermission("Champions.host") && args.length == 0) {
+        if (sender instanceof Player && sender.hasPermission("invicta.host") && args.length == 0) {
             Player player = (Player) sender;
             if (GameManager.hasPlayer(player)) {
                 Game game = GameManager.getGame();
