@@ -130,7 +130,7 @@ public final class CapturePointDetector extends GameResource {
             if(capturePoint.getTeamColor() == TeamEnum.WHITE && capturePoint.isFull()) return;
             if(!playersCurrentlyIn[i]) {
                 scoreboard.updateCurrentlyInCPoint(null, capturePoint.getName());
-                capturePoint.neutralize();
+                capturePoint.restoreCapture();
             }
         }
         teamToColor.put(i, 0);
