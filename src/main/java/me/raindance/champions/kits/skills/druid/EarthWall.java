@@ -27,11 +27,11 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 201, skillType = SkillType.Druid, invType = InvType.AXE)
-public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown {
+public class EarthWall extends Instant implements IEnergy, TimeResource, ICooldown {
     private int energyUsage = 50;
     private final Vector up = new Vector(0, 1, 0);
     private float damage;
-    public Fissure() {
+    public EarthWall() {
         super();
         this.damage = 7F;
     }
