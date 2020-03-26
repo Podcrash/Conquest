@@ -30,14 +30,12 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
     private final Random random = new Random();
     private WrapperPlayServerWorldParticles particles;
     private String NAME;
-    private int energy;
-    private int duration;
+    private int energy = 60;
+    private int duration = 4;
 
     private List<Vector> tempArrayList = new ArrayList<>();
 
     public GlacialTomb() {
-        this.energy = 70;
-        this.duration = 4;
         setCanUseWhileCooldown(true);
     }
 

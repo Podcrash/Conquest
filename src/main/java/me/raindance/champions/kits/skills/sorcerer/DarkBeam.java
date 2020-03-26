@@ -34,22 +34,15 @@ import static com.podcrash.api.mc.world.BlockUtil.*;
 @SkillMetadata(id = 1001, skillType = SkillType.Sorcerer, invType = InvType.SHOVEL)
 public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct {
     private final int MAX_LEVEL = 5;
-    private double damage;
-    private double range;
-    private int energyUsage;
+    private double damage = 7;
+    private double range = 25;
+    private int energyUsage = 40;
     private FireworkEffect firework;
 
-    private double detectionRadius;
-    private int damageRadius;
+    private double detectionRadius = 1.5;
+    private int damageRadius = 2;
 
-    public DarkBeam() {
-        this.damage = 7;
-        this.range = 25;
-        this.energyUsage = 50;
-
-        this.detectionRadius = 1.5;
-        this.damageRadius = 2;
-    }
+    public DarkBeam() {}
 
     @Override
     public void afterConstruction() {

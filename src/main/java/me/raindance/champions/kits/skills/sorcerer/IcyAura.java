@@ -32,15 +32,11 @@ import java.util.Set;
 
 @SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.PASSIVEA)
 public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
-    private int energeUsage;
-    private int radius;
-    private double radiusSquared;
+    private int energeUsage = 15;
+    private int radius = 5;
+    private double radiusSquared = FastMath.pow(radius, 2);
     private final Random random = new Random();
-    public IcyAura() {
-        this.energeUsage = 30;
-        this.radius = 5;
-        this.radiusSquared = FastMath.pow(radius, 2);
-    }
+    public IcyAura() {}
 
     @Override
     public String getName() {
