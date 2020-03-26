@@ -21,7 +21,7 @@ import org.bukkit.event.player.PlayerEvent;
 
 import java.util.List;
 
-@SkillMetadata(id = 805, skillType = SkillType.Vanguard, invType = InvType.AXE)
+@SkillMetadata(id = 805, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class Intimidation extends Instant implements ICooldown {
     public Intimidation() {
         super();
@@ -55,7 +55,7 @@ public class Intimidation extends Instant implements ICooldown {
 
     @Override
     public ItemType getItemType() {
-        return ItemType.AXE;
+        return ItemType.SHOVEL;
     }
 
     @Override
