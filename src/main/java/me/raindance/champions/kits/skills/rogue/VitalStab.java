@@ -26,6 +26,7 @@ public class VitalStab extends Interaction {
     @Override
     public void doSkill(LivingEntity clickedEntity) {
         if(onCooldown()) return;
+        if(isAlly(clickedEntity)) {return;}
         setLastUsed(System.currentTimeMillis());
         DamageApplier.damage(clickedEntity, getPlayer(), 6, this, false);
         StatusApplier.getOrNew(clickedEntity).applyStatus(Status.BLEED, 5, 1);
