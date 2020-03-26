@@ -23,7 +23,7 @@ public class SpecCommand extends CommandBase{
             GameManager.getGame().toggleSpec(player);
             if(GameManager.getGame().isSpectating(player)) {
                 sender.sendMessage(String.format(
-                        "%sChampions> %sYou joined the %sSpectators %sin %sGame %s%s.",
+                        "%sConquest> %sYou joined the %sSpectators %sin %sGame %s%s.",
                         ChatColor.BLUE,
                         ChatColor.GRAY,
                         ChatColor.YELLOW,

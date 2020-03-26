@@ -26,6 +26,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -88,6 +89,13 @@ public class InventoryListener extends ListenerBase {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
         if(e.getClickedBlock().getType().equals(Material.ENCHANTMENT_TABLE)) {
             e.setCancelled(true);
+            if(GameManager.isSpectating(e.getPlayer())) {
+                e.getPlayer().sendMessage(String.format(
+                        "%sConquest> %sYou may not select a class while spectating.",
+                        ChatColor.BLUE,
+                        ChatColor.GRAY));
+                return;
+            }
             Inventory inv = MenuCreator.createGeneralMenu();
             e.getPlayer().openInventory(inv);
         }
