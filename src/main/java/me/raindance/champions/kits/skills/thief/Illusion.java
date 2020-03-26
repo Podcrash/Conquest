@@ -2,10 +2,12 @@ package me.raindance.champions.kits.skills.thief;
 
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.podcrash.api.db.pojos.Rank;
 import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.util.PrefixUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -105,6 +107,8 @@ public class Illusion extends Continuous implements ICooldown {
         for (int i=0 ; i<2 ; i++) location.getWorld().playSound(location, Sound.FIZZ, 2f, 0.4f);
         this.setLastUsed(System.currentTimeMillis());
         a = true;
+
+        getGame().refreshTabColor(getPlayer(), getTeam().getChatColor().toString());
 
         despawn(getSkeleton());
     }
