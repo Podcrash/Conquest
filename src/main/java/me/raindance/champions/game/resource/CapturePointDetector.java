@@ -94,14 +94,16 @@ public final class CapturePointDetector extends GameResource {
      * @param i the capture point index
      */
     private void findPlayerInCap(int i) {
+        boolean foundPlayer = false;
         for(int p = 0; p < players.length; p++){
             boolean a = isInBound(i, Bukkit.getPlayer(players[p]));
             if(a) {
                 TeamEnum team = getGame().getTeamEnum(Bukkit.getPlayer(players[p]));
                 teamToColor.put(i, teamToColor.get(i) + team.getIntData());
-                playersCurrentlyIn[i] = true;
-            }else playersCurrentlyIn[i] = false;
+                foundPlayer = true;
+            }
         }
+        playersCurrentlyIn[i] = foundPlayer;
     }
 
     /**
