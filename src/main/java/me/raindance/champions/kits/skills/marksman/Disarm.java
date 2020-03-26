@@ -51,6 +51,8 @@ public class Disarm extends Interaction {
 
         disarmed = victim;
         TimeHandler.delayTime(30, () -> disarmed = null);
+
+        landed();
     }
 
     @EventHandler

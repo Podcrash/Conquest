@@ -29,6 +29,8 @@ public class ShockingStrike extends Interaction implements ICooldown {
         victim.getWorld().playSound(victim.getLocation(), Sound.BAT_HURT, 1.0f, 1.5f);
 
         setLastUsed(System.currentTimeMillis());
+
+        landed();
     }
 
     @Override

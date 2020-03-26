@@ -47,6 +47,8 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
         getPlayer().getWorld().getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.wings", 0.8F, 1);
         setLastUsed(System.currentTimeMillis());
+
+        landed();
     }
 
     @Override
