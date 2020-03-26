@@ -22,6 +22,8 @@ import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 206, skillType = SkillType.Druid, invType = InvType.SWORD)
 public class Overgrowth extends Interaction implements ICooldown, IEnergy {
+    private int energyUsage = 70;
+
     public Overgrowth() {
         this.canMiss = false;
     }
@@ -58,7 +60,7 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
 
     @Override
     public int getEnergyUsage() {
-        return 90;
+        return energyUsage;
     }
 
     @Override

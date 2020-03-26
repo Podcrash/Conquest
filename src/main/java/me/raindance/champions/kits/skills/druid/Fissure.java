@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 201, skillType = SkillType.Druid, invType = InvType.AXE)
 public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown {
+    private int energyUsage = 50;
     private final Vector up = new Vector(0, 1, 0);
     private float damage;
     public Fissure() {
@@ -52,7 +53,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
 
     @Override
     public int getEnergyUsage() {
-        return 90;
+        return energyUsage;
     }
 
     @Override
