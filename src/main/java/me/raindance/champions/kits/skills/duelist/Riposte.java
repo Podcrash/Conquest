@@ -59,7 +59,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
             event.setCancelled(true);
             TimeHandler.unregister(this);
             LivingEntity victim = event.getAttacker();
-            getPlayer().sendMessage(getUsedMessage(victim).replace("used", "replaced"));
+            //getPlayer().sendMessage(getUsedMessage(victim).replace("used", "replaced"));
             player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 0.5f, 1.6f);
             ripoSuccess = true;
             ripoSuccessTime = System.currentTimeMillis();
@@ -74,7 +74,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
                         ChatColor.BLUE,
                         getChampionsPlayer().getName(),
                         ChatColor.GRAY,
-                        ChatColor.GREEN,
+                        ChatColor.YELLOW,
                         event.getVictim().getName(),
                         ChatColor.GRAY));
                 event.setModified(true);

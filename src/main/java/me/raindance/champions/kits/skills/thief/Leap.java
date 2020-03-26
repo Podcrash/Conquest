@@ -1,7 +1,11 @@
 package me.raindance.champions.kits.skills.thief;
 
+import com.abstractpackets.packetwrapper.AbstractPacket;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.mc.world.BlockUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -44,7 +48,7 @@ public class Leap extends Instant implements ICooldown {
     protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
         if(StatusApplier.getOrNew(getPlayer()).has(Status.SLOW)) {
-            getPlayer().sendMessage(String.format("%sLeap> %sYou cannot use %s%s%s due to %s", org.bukkit.ChatColor.BLUE, org.bukkit.ChatColor.GRAY, org.bukkit.ChatColor.YELLOW, getName(), org.bukkit.ChatColor.GRAY, Status.SLOW));
+            getPlayer().sendMessage(String.format("%s%s> %sYou cannot use %s%s%s due to %s", org.bukkit.ChatColor.BLUE, getChampionsPlayer().getName(), org.bukkit.ChatColor.GRAY, org.bukkit.ChatColor.YELLOW, getName(), org.bukkit.ChatColor.GRAY, Status.SLOW));
             return;
         }
         //idk the proper value
@@ -55,7 +59,6 @@ public class Leap extends Instant implements ICooldown {
         if (!loc.getBlock().getType().equals(Material.AIR) || !headLoc.getBlock().getType().equals(Material.AIR))
             wallKick();
         else leap();
-
     }
 
     private void wallKick() {
@@ -70,12 +73,16 @@ public class Leap extends Instant implements ICooldown {
         player.setVelocity(v);
         player.setFallDistance(-3);
         this.isLeap = false;
-        getPlayer().sendMessage(String.format("%sSkill> %sYou used %sWall Kick%s.",
-                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY));
+        getPlayer().sendMessage(String.format("%s%s> %sYou used %sWall Kick%s.",
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY));
     }
 
     private void leap() {
         if(onCooldown()) return;
+        if(!getPlayer().isOnGround()) {
+            AbstractPacket leapEffect = ParticleGenerator.createBlockEffect(getPlayer().getLocation(), Material.WEB.getId());
+            PacketUtil.asyncSend(leapEffect, getPlayer().getWorld().getPlayers());
+        }
         Player player = getPlayer();
         SoundPlayer.sendSound(player.getLocation(), "mob.bat.takeoff", 1, 70);
         Vector v = getPlayer().getLocation().getDirection().multiply(1.2);
