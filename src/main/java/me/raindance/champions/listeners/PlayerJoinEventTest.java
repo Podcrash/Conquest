@@ -50,6 +50,8 @@ public class PlayerJoinEventTest extends ListenerBase {
         Player player = e.getPlayer();
         if (player.getWorld().getName().equals("world")) {
 
+            player.setGameMode(GameMode.ADVENTURE);
+
             ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
             player.getInventory().setItem(35, beacon);
             //adds the PermissionAttachment so permissions work on the players
