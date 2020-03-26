@@ -122,6 +122,7 @@ public class DomGameListener extends ListenerBase {
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
+            if(GameManager.isSpectating(player)) break;
             handler.pay(player, payout);
             player.sendMessage(String.format("%s%sYou earned %s crystals!", ChatColor.LIGHT_PURPLE, ChatColor.BOLD, payout));
         }
