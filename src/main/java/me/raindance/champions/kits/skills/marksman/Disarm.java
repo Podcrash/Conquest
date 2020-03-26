@@ -11,6 +11,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Interaction;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,7 +49,12 @@ public class Disarm extends Interaction {
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);
-
+        victim.sendMessage(String.format("%sCondition> %sYou have been disarmed by %s%s%s.",
+                ChatColor.BLUE,
+                ChatColor.GRAY,
+                ChatColor.GREEN,
+                getPlayer().getName(),
+                ChatColor.GRAY));
         disarmed = victim;
         TimeHandler.delayTime(30, () -> disarmed = null);
 
