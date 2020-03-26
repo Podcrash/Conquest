@@ -22,7 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 //TODO: remove ICooldown dependency
 public abstract class Interaction extends Skill implements ICooldown {
     protected boolean canMiss = true;
-    private boolean hit = false;
+    private boolean landed = false;
 
     public Interaction() {
         super();
@@ -42,18 +42,23 @@ public abstract class Interaction extends Skill implements ICooldown {
         SkillUseEvent useEvent = new SkillInteractEvent(this, victim);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        getPlayer().sendMessage(getUsedMessage(victim));
         doSkill(victim);
-        hit = true;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                hit = false;
-            }
-        }.runTaskLater(Main.instance, 0L);
+        if (landed) {
+            getPlayer().sendMessage(getUsedMessage(victim));
+        }
     }
 
     public abstract void doSkill(LivingEntity clickedEntity);
+
+    public void landed() {
+        landed = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                landed = false;
+            }
+        }.runTaskLater(Main.instance, 0L);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void miss(PlayerInteractEvent event) {
@@ -61,7 +66,7 @@ public abstract class Interaction extends Skill implements ICooldown {
             if(isInWater()) getPlayer().sendMessage(getWaterMessage());
             if(!canMiss) return;
             if (!onCooldown()) {
-                if (!hit && !isInWater()) {
+                if (!landed && !isInWater()) {
                     getPlayer().sendMessage(String.format("%s%s> %sYou missed %s%s%s.",
                             ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(),ChatColor.GRAY));
                     this.setLastUsed(System.currentTimeMillis());

@@ -41,6 +41,8 @@ public class DeadlyCombination extends Interaction implements ICooldown {
             packet.sendPacket(player);
             packet2.sendPacket(player);
         }
+
+        landed();
     }
 
     @EventHandler
