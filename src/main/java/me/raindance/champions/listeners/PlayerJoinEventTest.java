@@ -47,11 +47,11 @@ public class PlayerJoinEventTest extends ListenerBase {
     }
     @EventHandler
     public void join(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        if (p.getWorld().getName().equals("world")) {
+        Player player = e.getPlayer();
+        if (player.getWorld().getName().equals("world")) {
 
-            ((CraftLivingEntity) e.getPlayer()).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
-            p.getInventory().setItem(35, beacon);
+            ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+            player.getInventory().setItem(35, beacon);
             //adds the PermissionAttachment so permissions work on the players
 
             //Spawn the Firework, get the FireworkMeta.
@@ -68,33 +68,33 @@ public class PlayerJoinEventTest extends ListenerBase {
                     .with(type).trail(r.nextBoolean())
                     .build();
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            CustomEntityFirework.spawn(p.getLocation(), effect, players.toArray(new Player[players.size()]));
+            CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
         }
         if(GameManager.getGame() != null) {
             if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
-                if(GameManager.getGame().contains(e.getPlayer()))
-                    e.getPlayer().teleport(GameManager.getGame().getTeam(e.getPlayer()).getSpawn(e.getPlayer()));
-                else GameManager.addSpectator(e.getPlayer());
+                if(GameManager.getGame().contains(player))
+                    player.teleport(GameManager.getGame().getTeam(player).getSpawn(player));
+                else GameManager.addSpectator(player);
             else {
-                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                GameManager.addPlayer(e.getPlayer());
+                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                GameManager.addPlayer(player);
             }
         }
-        putPlayerDB(p.getUniqueId());
-        InvFactory.applyLastBuild(p);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
-        Main.getInstance().setupPermissions(p);
+        putPlayerDB(player.getUniqueId());
+        InvFactory.applyLastBuild(player);
+        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null)
+            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
+        Main.getInstance().setupPermissions(player);
     }
 
     @EventHandler
     public void leave(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
+        Player player = e.getPlayer();
         ChampionsPlayerManager cm = ChampionsPlayerManager.getInstance();
-        ChampionsPlayer cplayer = cm.getChampionsPlayer(p);
+        ChampionsPlayer cplayer = cm.getChampionsPlayer(player);
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
-        StatusApplier.getOrNew(p).removeStatus(Status.values());
-        StatusApplier.remove(e.getPlayer());
+        StatusApplier.getOrNew(player).removeStatus(Status.values());
+        StatusApplier.remove(player);
 
         if (cplayer != null)
             cm.removeChampionsPlayer(cplayer);
@@ -102,7 +102,7 @@ public class PlayerJoinEventTest extends ListenerBase {
 
         if(GameManager.getGame() == null) return;
         if(!GameManager.getGame().isOngoing()) {
-            GameManager.removePlayer(e.getPlayer());
+            GameManager.removePlayer(player);
         }
     }
 
