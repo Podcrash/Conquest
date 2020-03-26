@@ -11,6 +11,7 @@ import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.TrapPrimeEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -112,6 +113,9 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
             DamageApplier.damage(player, getPlayer(), damage, this, false);
         }
 
+        WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(
+                location.clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 5, 0, 0, 0);
+        PacketUtil.syncSend(packet, getPlayers());
         TrapSetter.deleteTrap(item);
         item.remove();
     }

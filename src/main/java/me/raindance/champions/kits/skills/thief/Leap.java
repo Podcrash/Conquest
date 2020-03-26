@@ -59,10 +59,6 @@ public class Leap extends Instant implements ICooldown {
         if (!loc.getBlock().getType().equals(Material.AIR) || !headLoc.getBlock().getType().equals(Material.AIR))
             wallKick();
         else leap();
-        if(!getPlayer().isOnGround()) {
-            AbstractPacket leapEffect = ParticleGenerator.createBlockEffect(loc, Material.WEB.getId());
-            PacketUtil.asyncSend(leapEffect, loc.getWorld().getPlayers());
-        }
     }
 
     private void wallKick() {
@@ -83,6 +79,10 @@ public class Leap extends Instant implements ICooldown {
 
     private void leap() {
         if(onCooldown()) return;
+        if(!getPlayer().isOnGround()) {
+            AbstractPacket leapEffect = ParticleGenerator.createBlockEffect(getPlayer().getLocation(), Material.WEB.getId());
+            PacketUtil.asyncSend(leapEffect, getPlayer().getWorld().getPlayers());
+        }
         Player player = getPlayer();
         SoundPlayer.sendSound(player.getLocation(), "mob.bat.takeoff", 1, 70);
         Vector v = getPlayer().getLocation().getDirection().multiply(1.2);
