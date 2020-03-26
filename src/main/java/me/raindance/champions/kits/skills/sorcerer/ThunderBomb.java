@@ -80,7 +80,8 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         vector.normalize().multiply(1.15D);
         useEnergy(energy);
         Item item = ItemManipulationManager.intercept(getPlayer(), Material.DIAMOND_BLOCK, location, vector, (item1, entity) -> {
-            collide(item1);
+            if(entity == null) TrapSetter.spawnTrap(item1, 500);
+            else collide(item1);
         });
         item.setCustomName("RITB");
         ItemMeta meta = item.getItemStack().getItemMeta();
@@ -90,7 +91,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         SoundPlayer.sendSound(item.getLocation(), "mob.silverfish.hit", 1F, 90);
 
         this.currentItemID = item.getEntityId();
-        TrapSetter.spawnTrap(item, 500);
+
         getPlayer().sendMessage(getUsedMessage());
     }
 
