@@ -116,11 +116,14 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
+        double payout = 500;
+
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
-            handler.pay(player, 500);
+            handler.pay(player, payout);
+            player.sendMessage(String.format("%s%sYou earned %s crystals!", ChatColor.LIGHT_PURPLE, ChatColor.BOLD, payout));
         }
 
 

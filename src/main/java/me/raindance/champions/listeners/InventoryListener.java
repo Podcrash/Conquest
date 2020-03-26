@@ -208,6 +208,7 @@ public class InventoryListener extends ListenerBase {
             DBUtils.handleThrowables(t);
             return null;
         });
+        clicker.closeInventory();
     }
     private void handleSkillTokens(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         if(clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT) {
