@@ -24,7 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+@SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Whirlwind extends Instant implements ICooldown, IConstruct {
     private int distance;
     private int distanceSquared;
@@ -44,7 +44,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
 
     @Override
     public ItemType getItemType() {
-        return ItemType.SHOVEL;
+        return ItemType.AXE;
     }
 
     public Whirlwind() {

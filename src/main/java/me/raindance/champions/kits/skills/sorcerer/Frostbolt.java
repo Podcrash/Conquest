@@ -31,7 +31,7 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
     private double damage = 4;
     private float cooldown = 1;
     private float slowDuration = 2;
-    private int energyCost = 20;
+    private int energyCost = 15;
     private String NAME;
     private WrapperPlayServerWorldParticles particles;
 

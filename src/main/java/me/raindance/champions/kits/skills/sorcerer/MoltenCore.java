@@ -36,13 +36,11 @@ import java.util.Random;
 public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, IConstruct {
     private final int MAX_LEVEL = 1;
     private final Vector up = new Vector(0, 0.34, 0);
-    private int energy;
+    private int energy = 20;
     private String NAME;
 
     private byte a = 0;
-    public MoltenCore() {
-        this.energy = 30;
-    }
+    public MoltenCore(){}
 
     @Override
     public void afterConstruction() {

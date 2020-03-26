@@ -29,15 +29,11 @@ import static com.podcrash.api.mc.world.BlockUtil.getPlayersInArea;
 
 @SkillMetadata(id = 1007, skillType = SkillType.Sorcerer, invType = InvType.AXE)
 public class Meteor extends Instant implements IEnergy, ICooldown {
-    private int energyUsage;
-    private int radius;
-    private int duration;
+    private int energyUsage = 55;
+    private int radius = 3;
+    private int duration = 5;
 
-    public Meteor() {
-        energyUsage = 60;
-        radius = 3;
-        duration = 5;
-    }
+    public Meteor() {}
 
     @Override
     public float getCooldown() {

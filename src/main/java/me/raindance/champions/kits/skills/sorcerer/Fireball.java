@@ -31,16 +31,14 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
     private double damage = 4;
     private float cooldown = 1;
     private float burnDuration = 3;
-    private int energyCost = 20;
+    private int energyCost = 15;
     private String NAME;
     private WrapperPlayServerWorldParticles particles;
 
     private float speedMultiplier = 1.5f;
     private double arcAngle = 0.2;
 
-    public Fireball() {
-
-    }
+    public Fireball() {}
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
