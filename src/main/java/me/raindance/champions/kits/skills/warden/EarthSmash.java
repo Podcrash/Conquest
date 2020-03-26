@@ -29,7 +29,7 @@ public class EarthSmash extends Instant implements ICooldown {
     public void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
         if(!EntityUtil.onGround(getPlayer())) {
-            getPlayer().sendMessage(getMustGroundMessage());
+            getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
         setLastUsed(System.currentTimeMillis());
