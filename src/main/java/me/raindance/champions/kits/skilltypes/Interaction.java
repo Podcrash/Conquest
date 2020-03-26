@@ -42,8 +42,10 @@ public abstract class Interaction extends Skill implements ICooldown {
         SkillUseEvent useEvent = new SkillInteractEvent(this, victim);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        getPlayer().sendMessage(getUsedMessage(victim));
         doSkill(victim);
+        if (landed) {
+            getPlayer().sendMessage(getUsedMessage(victim));
+        }
     }
 
     public abstract void doSkill(LivingEntity clickedEntity);
