@@ -2,6 +2,7 @@ package me.raindance.champions.commands;
 
 import com.podcrash.api.mc.commands.CommandBase;
 import com.podcrash.api.mc.economy.EconomyHandler;
+import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.plugin.Pluginizer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,7 +15,12 @@ public class BalanceCommand extends CommandBase {
         if(!(sender instanceof Player)) return false;
         Player p = (Player) sender;
         EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
-        p.sendMessage(String.format("%sEconomy> %sYour crystals: %s%s%s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.LIGHT_PURPLE, ChatColor.BOLD, handler.getMoney(p)));
+        p.sendMessage(String.format("%sEconomy> %sYour %s: %s%s",
+                ChatColor.BLUE, //Header
+                ChatColor.GRAY, //Default color
+                Currency.COIN.getName(), //Currency name
+                Currency.COIN.getFormatting(),
+                handler.getMoney(p)));
         return true;
     }
 }

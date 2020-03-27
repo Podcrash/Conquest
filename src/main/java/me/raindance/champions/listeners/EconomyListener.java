@@ -4,6 +4,7 @@ import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.PlayerTable;
+import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.events.econ.*;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import org.bukkit.ChatColor;
@@ -22,17 +23,17 @@ public class EconomyListener extends ListenerBase {
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {
-        e.getBuyer().sendMessage(String.format("%sEconomy> %sYou are buying %s%s %sfor %s%s%s %scrystals.\n Use the command %s%s/confirm %s %sto complete your purchase.",
-                ChatColor.BLUE,
-                ChatColor.GRAY,
-                ChatColor.GREEN,
-                e.getItem(),
-                ChatColor.GRAY,
-                ChatColor.LIGHT_PURPLE,
-                ChatColor.BOLD,
-                e.getCost(),
-                ChatColor.GRAY,
-                ChatColor.YELLOW,
+        e.getBuyer().sendMessage(String.format("%sEconomy> %sYou are buying %s%s %sfor %s%s %s%s.\n Use the command %s%s/confirm %s %sto complete your purchase.",
+                ChatColor.BLUE, //Header
+                ChatColor.GRAY, //Default color
+                ChatColor.GREEN, //Item name
+                e.getItem(), //Item
+                ChatColor.GRAY, //Default color
+                Currency.COIN.getFormatting(),
+                e.getCost(), // cost
+                ChatColor.GRAY, //default color
+                Currency.COIN.getName(),
+                ChatColor.YELLOW, // Confirmation text
                 ChatColor.BOLD,
                 e.getItem(),
                 ChatColor.GRAY
@@ -54,16 +55,16 @@ public class EconomyListener extends ListenerBase {
     @EventHandler
     public void confirm(BuyConfirmEvent e) {
         e.getBuyer().sendMessage(String.format(
-                "%SEconomy> %sYou have purchased %s%s%s for %s%s%s%s crystals.",
+                "%SEconomy> %sYou have purchased %s%s%s for %s%s%s %s.",
                 ChatColor.BLUE,
                 ChatColor.GRAY,
                 ChatColor.GREEN,
                 e.getItem(),
                 ChatColor.GRAY,
-                ChatColor.LIGHT_PURPLE,
-                ChatColor.BOLD,
+                Currency.COIN.getFormatting(),
                 e.getCost(),
-                ChatColor.GRAY
+                ChatColor.GRAY,
+                Currency.COIN.getName()
                 ));
 
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
