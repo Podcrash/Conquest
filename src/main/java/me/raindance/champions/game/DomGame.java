@@ -1,9 +1,6 @@
 package me.raindance.champions.game;
 
-import com.podcrash.api.db.pojos.map.BaseMap;
-import com.podcrash.api.db.pojos.map.CapturePointPojo;
-import com.podcrash.api.db.pojos.map.ConquestMap;
-import com.podcrash.api.db.pojos.map.Point;
+import com.podcrash.api.db.pojos.map.*;
 import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
@@ -101,7 +98,7 @@ public class DomGame extends Game {
     }
 
     @Override
-    public Class<? extends BaseMap> getMapClass() {
+    public Class<? extends GameMap> getMapClass() {
         return ConquestMap.class;
     }
 

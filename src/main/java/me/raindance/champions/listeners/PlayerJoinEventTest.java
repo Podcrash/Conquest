@@ -76,7 +76,6 @@ public class PlayerJoinEventTest extends ListenerBase {
                     player.teleport(GameManager.getGame().getTeam(player).getSpawn(player));
                 else GameManager.addSpectator(player);
             else {
-                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
                 GameManager.addPlayer(player);
             }
         }

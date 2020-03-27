@@ -146,14 +146,6 @@ public class Main extends JavaPlugin {
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
         saveMapConfig();
 
-        List<String> domMaps = new ArrayList<>();
-        domMaps.add("Sakura");
-        domMaps.add("Delphic");
-        domMaps.add("Pinewood");
-        domMaps.add("Gulley");
-        getConfig().set("worlds", domMaps);
-        saveConfig();
-
         this.log.info(Bukkit.getWorlds().toString());
 
         CompletableFuture allFutures = CompletableFuture.allOf(
@@ -185,6 +177,7 @@ public class Main extends JavaPlugin {
             }
         }
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
+        spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
         executor.shutdown();
     }
     @Override
