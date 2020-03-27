@@ -20,6 +20,7 @@ public abstract class Skill implements ISkill, DamageSource {
     private String playerName;
     protected final Skill instance = this;
     private long lastUsed = 0L;
+    public double price = 1500;
 
     public Skill() {
 

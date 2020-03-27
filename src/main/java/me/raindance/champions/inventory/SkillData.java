@@ -23,16 +23,17 @@ public class SkillData {
     private final String name;
     private final InvType invType;
     private final SkillType skillType;
+    private final double price;
     private final Constructor<Skill> constructor;
 
     private List<String> description;
 
-    public SkillData(Skill skill, int id, String name, InvType invType, SkillType skillType) {
+    public SkillData(Skill skill, int id, String name, InvType invType, SkillType skillType, double price) {
         this.id = id;
         this.name = name;
         this.invType = invType;
         this.skillType = skillType;
-
+        this.price = 1500;
         this.constructor = initConstructor(skill);
     }
 
@@ -115,6 +116,8 @@ public class SkillData {
     public SkillType getSkillType() {
         return skillType;
     }
+
+    public double getPrice() {return price;}
 
     @Override
     public boolean equals(Object o) {

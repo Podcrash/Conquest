@@ -84,9 +84,18 @@ public final class SkillInfo {
             e.printStackTrace();
         }
     }
+    private static SkillData addSkill(int skillID, SkillType skillType, InvType invType, Skill skill, double price) {
+        //TODO: put more of this information in the annotations.
+        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType, price);
+        skillData.add(data);
+        idDataMap.put(skillID, data);
+
+        return data;
+    }
+
     private static SkillData addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
         //TODO: put more of this information in the annotations.
-        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType);
+        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType, 1500);
         skillData.add(data);
         idDataMap.put(skillID, data);
 

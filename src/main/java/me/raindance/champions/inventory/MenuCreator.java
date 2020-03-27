@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
 import java.util.*;
+
 
 public class MenuCreator {
 
@@ -107,11 +109,17 @@ public class MenuCreator {
 
     public static Inventory createConfirmationMenu(String item, double cost) {
         SkillData data = SkillInfo.getSkillFromStrippedName(item);
-        String title = String.format("%sPurchasing: %s for %f. Are you sure?",ChatColor.DARK_GRAY,data.getName(),cost);
+        String title = String.format("%sPurchasing: %s",ChatColor.DARK_GRAY, data.getName());
         Inventory inv = Bukkit.createInventory(null, 3 * 9, title);
+        ItemStack price = ItemStackUtil.createItem(Material.EMPTY_MAP, String.format("%S%sPrice: %s%d",
+                ChatColor.DARK_GRAY,
+                ChatColor.BOLD,
+                Currency.GOLD.getFormatting(),
+                (int)data.getPrice()), null);
         ItemStack confirmation = ItemStackUtil.createItem(Material.EMERALD_BLOCK, String.format("%s%sConfirm", ChatColor.GREEN, ChatColor.BOLD), null);
         ItemStack cancellation = ItemStackUtil.createItem(Material.REDSTONE_BLOCK, String.format("%s%sDeny", ChatColor.RED, ChatColor.BOLD), null);
         ItemStack info = InventoryData.skillToItemStack(data);
+        inv.setItem(4, price);
         inv.setItem(11, confirmation);
         inv.setItem(13, info);
         inv.setItem(15,cancellation);
