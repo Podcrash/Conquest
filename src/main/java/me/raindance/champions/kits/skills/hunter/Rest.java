@@ -62,9 +62,11 @@ public class Rest extends Continuous {
     @Override
     public void cleanup() {
         super.cleanup();
+        if(effectActive) {
+            SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.wings", 1, 63);
+        }
         active = false;
         StatusApplier.getOrNew(getPlayer()).removeStatus(Status.REGENERATION, Status.CLOAK);
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.wings", 1, 63);
         effectActive = false;
     }
 

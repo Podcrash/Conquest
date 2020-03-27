@@ -41,12 +41,15 @@ public abstract class ChargeUp extends Skill implements TimeResource, ICooldown 
     public void block(PlayerInteractEvent e){
         if(e.getPlayer() == this.getPlayer()){
             if(rightClickCheck(e.getAction()) && isHolding()){
+                if(isInWater()) {
+                    getPlayer().sendMessage(getWaterMessage());
+                    return;
+                }
                 if(!onCooldown()) {
                     SkillUseEvent useEvent = new SkillUseEvent(this);
                     Bukkit.getPluginManager().callEvent(useEvent);
                     if(useEvent.isCancelled()) return;
-                    if(!isInWater()) TimeHandler.repeatedTime(1, 0, this);
-                    else getPlayer().sendMessage(getWaterMessage());
+                    TimeHandler.repeatedTime(1, 0, this);
                 }
             }
         }
