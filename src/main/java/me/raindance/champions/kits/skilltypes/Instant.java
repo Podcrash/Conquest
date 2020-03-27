@@ -46,17 +46,36 @@ public abstract class Instant extends Skill {
 
     public boolean canUseSkill(PlayerEvent event) {
         if (getPlayer() != event.getPlayer() || !isHolding()) return false;
-        if(!canUseWhileCooldown && this instanceof ICooldown)
-            if((((ICooldown) this).onCooldown())) return false;
 
         if(!(this instanceof BowShotSkill) && event instanceof PlayerInteractEvent) {
             if(!rightClickCheck(((PlayerInteractEvent) event).getAction()))
                 return false;
         }
+
         if (isInWater()) {
-            getPlayer().sendMessage(getWaterMessage());
-            return false;
-        } else return true;
+            if(event instanceof PlayerInteractEvent) {
+                PlayerInteractEvent e = (PlayerInteractEvent) event;
+                if(this instanceof BowShotSkill) {
+                    if(!rightClickCheck(((PlayerInteractEvent) event).getAction())) {
+                        getPlayer().sendMessage(getWaterMessage());
+                        return false;
+                    } else {
+                        return false;
+                    }
+                }
+                if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                    return false;
+                } else {
+                    getPlayer().sendMessage(getWaterMessage());
+                    return false;
+                }
+            }
+        }
+
+        if(!canUseWhileCooldown && this instanceof ICooldown)
+            return (!((ICooldown) this).onCooldown());
+
+        return true;
     }
 
     protected void setCanUseWhileCooldown(boolean canUseWhileCooldown) {

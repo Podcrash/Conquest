@@ -17,7 +17,10 @@ public abstract class Drop extends Skill {
     public final void dropSkill(PlayerDropItemEvent e) {
         if(e.getPlayer() != getPlayer()) return;
         if(!isHolding(e.getItemDrop().getItemStack())) return;
-        if(isInWater()) return;
+        if(isInWater()) {
+            e.getPlayer().sendMessage(getWaterMessage());
+            return;
+        }
         //check for cooldown
         if(this instanceof ICooldown) {
             ICooldown cooldownSkill = (ICooldown) this;
