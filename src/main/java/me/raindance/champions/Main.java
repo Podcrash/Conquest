@@ -264,8 +264,6 @@ public class Main extends JavaPlugin {
             getCommand("buy").setExecutor(new BuyCommand());
             getCommand("confirm").setExecutor(new ConfirmCommand());
             getCommand("lock").setExecutor(new LockCommand());
-            getCommand("bal").setExecutor(new BalanceCommand());
-
         }, executor);
     }
 

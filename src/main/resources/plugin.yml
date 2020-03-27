@@ -86,8 +86,6 @@ commands:
     description: confirim your bought.
   lock:
     description: lock the inventory or not.
-  bal:
-    description: yes.
 permissions:
     Champions.*:
       description: Permission to use all Champions commands.
