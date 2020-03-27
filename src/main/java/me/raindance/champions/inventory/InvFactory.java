@@ -153,13 +153,13 @@ public final class InvFactory {
             player.sendMessage(ChatColor.BLUE + "Champions>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
             return;
         }
+        player.closeInventory();
 
         ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
         ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
         cPlayer.restockInventory();
         SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
         setCurrent(player, skillType, buildID);
-        player.closeInventory();
     }
 
     /**
