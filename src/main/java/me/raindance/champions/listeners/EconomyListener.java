@@ -8,6 +8,9 @@ import com.podcrash.api.mc.events.econ.*;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.MenuCreator;
+import me.raindance.champions.inventory.SkillData;
+import me.raindance.champions.kits.SkillInfo;
+import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -64,6 +67,7 @@ public class EconomyListener extends ListenerBase {
     public void fail(BuyFailureEvent e) {
         //e.getBuyer().sendMessage("You attempted to buy " + e.getItem() + " for " + e.getCost());
         //.getBuyer().sendMessage("but ur poor");
+        SkillData data = SkillInfo.getSkillFromStrippedName(e.getItem());
         e.getBuyer().sendMessage(String.format(
                 "%SEconomy> %sYou need %s%s %sto purchase %s.",
                 ChatColor.BLUE,
@@ -71,19 +75,20 @@ public class EconomyListener extends ListenerBase {
                 Currency.GOLD.getFormatting(),
                 e.getCost(),
                 ChatColor.GRAY,
-                e.getItem()
+                data.getName()
         ));
     }
 
 
     @EventHandler
     public void confirm(BuyConfirmEvent e) {
+        SkillData data = SkillInfo.getSkillFromStrippedName(e.getItem());
         e.getBuyer().sendMessage(String.format(
                 "%SEconomy> %sYou have purchased %s%s%s for %s%s%s %s.",
                 ChatColor.BLUE,
                 ChatColor.GRAY,
                 ChatColor.GREEN,
-                e.getItem(),
+                data.getName(),
                 ChatColor.GRAY,
                 Currency.GOLD.getFormatting(),
                 e.getCost(),
