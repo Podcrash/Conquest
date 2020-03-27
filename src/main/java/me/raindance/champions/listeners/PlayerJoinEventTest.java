@@ -6,6 +6,7 @@ import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameManager;
@@ -48,30 +49,29 @@ public class PlayerJoinEventTest extends ListenerBase {
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (player.getWorld().getName().equals("world")) {
 
-            player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(GameMode.ADVENTURE);
 
-            ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
-            player.getInventory().setItem(35, beacon);
-            //adds the PermissionAttachment so permissions work on the players
+        ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+        player.getInventory().setItem(35, beacon);
+        //adds the PermissionAttachment so permissions work on the players
 
-            //Spawn the Firework, get the FireworkMeta.
+        //Spawn the Firework, get the FireworkMeta.
 
-            //Our random generator
-            Random r = new Random();
+        //Our random generator
+        Random r = new Random();
 
-            FireworkEffect.Type type = FireworkEffect.Type.BALL;
+        FireworkEffect.Type type = FireworkEffect.Type.BALL;
 
-            //Create our effect with this
-            FireworkEffect effect = FireworkEffect.builder()
-                    .flicker(r.nextBoolean())
-                    .withColor(Color.WHITE)
-                    .with(type).trail(r.nextBoolean())
-                    .build();
-            Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
-        }
+        //Create our effect with this
+        FireworkEffect effect = FireworkEffect.builder()
+                .flicker(r.nextBoolean())
+                .withColor(Color.WHITE)
+                .with(type).trail(r.nextBoolean())
+                .build();
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
+
         if(GameManager.getGame() != null) {
             if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
                 if(GameManager.getGame().contains(player))
