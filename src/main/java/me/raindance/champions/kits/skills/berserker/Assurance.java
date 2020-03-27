@@ -28,6 +28,7 @@ public class Assurance extends Passive {
         if(victim.getMaxHealth() * 0.5D < victim.getHealth()) return;
 
         e.setDamage(e.getDamage() + 1);
+        e.addSource(this);
         e.setModified(true);
     }
 }
