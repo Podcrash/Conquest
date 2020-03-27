@@ -26,6 +26,7 @@ import java.util.Random;
 
 @SkillMetadata(id = 205, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Nurture extends TogglePassive implements IEnergy, TimeResource {
+    private int energyUsge = 30;
     private int a = 0;
     @Override
     public void toggle() {
@@ -44,7 +45,7 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public int getEnergyUsage() {
-        return 40;
+        return 30;
     }
 
     @Override
