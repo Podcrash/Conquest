@@ -80,10 +80,6 @@ commands:
     usage: /kill
   tell:
     description: Currently unused messaging system.
-  buy:
-    description: buy something.
-  confirm:
-    description: confirim your bought.
   lock:
     description: lock the inventory or not.
 permissions:
