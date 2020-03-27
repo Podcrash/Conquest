@@ -6,6 +6,7 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -63,6 +64,7 @@ public class Rest extends Continuous {
         super.cleanup();
         active = false;
         StatusApplier.getOrNew(getPlayer()).removeStatus(Status.REGENERATION, Status.CLOAK);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.wings", 1, 63);
         effectActive = false;
     }
 
@@ -75,6 +77,7 @@ public class Rest extends Continuous {
     public void damage(DamageApplyEvent event) {
         if(!active || event.getVictim() != getPlayer() || isAlly(event.getAttacker())) return;
         active = false;
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wolf.hurt", 1, 63);
         String cancelMsg = String.format("%s%s> %s%s%s cancelled %sRest%s.",
                 ChatColor.BLUE,
                 ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(),
