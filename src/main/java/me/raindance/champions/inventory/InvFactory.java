@@ -11,6 +11,7 @@ import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.plugin.Pluginizer;
+import javafx.util.Pair;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -33,6 +34,8 @@ public final class InvFactory {
     private static ChampionsKitTable table;
     private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static Map<String, Integer> buildMap = new HashMap<>();
+    private static Map<String, Integer> buildIDHistory = new HashMap<>();
+    private static Map<String, SkillType> skillTypeHistory = new HashMap<>();
     private static final Configurator kitConfigurator = Pluginizer.getSpigotPlugin().getConfigurator("kits");
     private InvFactory() {
 
@@ -170,9 +173,11 @@ public final class InvFactory {
      * @param skillType
      * @param buildID
      */
-    private static void edit(Player player, SkillType skillType, int buildID) {
+    public static void edit(Player player, SkillType skillType, int buildID) {
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         buildMap.put(player.getName(), buildID);
+        buildIDHistory.put(player.getName(), buildID);
+        skillTypeHistory.put(player.getName(), skillType);
         UUID uuid = player.getUniqueId();
         String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
         player.getInventory().clear();
@@ -226,6 +231,16 @@ public final class InvFactory {
 
     public static boolean currentlyEditing(Player player) {
         return buildMap.containsKey(player.getName());
+    }
+
+    public static SkillType getLastestSkillType(Player player) {
+        if (!skillTypeHistory.containsKey(player.getName())) {return null;}
+        return skillTypeHistory.get(player.getName());
+    }
+
+    public static int getLatestBuildID(Player player) {
+        if (!buildIDHistory.containsKey(player.getName())) {return 0;}
+        return buildIDHistory.get(player.getName());
     }
     /**
      * duh

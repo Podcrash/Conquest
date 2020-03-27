@@ -140,6 +140,16 @@ public class InventoryListener extends ListenerBase {
         }
         return false;
     }
+
+    /**
+     *
+     * @param inv
+     * @return whether the inventory is a confirmation menu for a skill purchase
+     */
+    private boolean isConfirmationMenu(Inventory inv) {
+        return !(inv instanceof PlayerInventory) && inv.getName().toLowerCase().contains("purchasing");
+    }
+
     private boolean ownInventory(Player player, Inventory clickedInventory) {
         return player.getInventory() == clickedInventory;
     }
@@ -163,12 +173,14 @@ public class InventoryListener extends ListenerBase {
         boolean kitMenu = isKitSelectMenu(inventory),
                 build = isBuildMenu(inventory),
                 classMenu = isClassMenu(inventory),
+                confirmationMenu = isConfirmationMenu(inventory),
                 ownInv = InvFactory.currentlyEditing(player) && ownInventory(player, inventory);
 
-        cancel = kitMenu || build || classMenu || ownInv;
+        cancel = kitMenu || build || classMenu || confirmationMenu || ownInv;
         if (kitMenu) clickHelmet(player, selected);
         else if(build) buildMenu(player, inventory, selected);
         else if(classMenu) classClickItem(player, inventory, slot, selected, clickType);
+        else if(confirmationMenu) confirm(player, inventory, slot);
         else if(ownInv)
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
@@ -212,12 +224,29 @@ public class InventoryListener extends ListenerBase {
 
     private void attemptBuy(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
+
         handler.buy(clicker, selected.getItemMeta().getDisplayName()).exceptionally(t -> {
             DBUtils.handleThrowables(t);
             return null;
         });
         clicker.closeInventory();
     }
+
+    /**
+     *
+     * @param clicker - The player
+     * @param inventory - The inventory
+     * @param slot - The slot (11 = confirm) (15 = cancel)
+     */
+    private void confirm(Player clicker, Inventory inventory, int slot) {
+        EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
+        if (slot == 11) {
+            handler.confirm(clicker, ChatUtil.strip(inventory.getItem(13).getItemMeta().getDisplayName()));
+        } else if (slot == 15) {
+            handler.cancel(clicker, ChatUtil.strip(inventory.getItem(13).getItemMeta().getDisplayName()));
+        }
+    }
+
     private void handleSkillTokens(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
         if(clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT) {
             //if the item doesn't have the enchantment, do nothing

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -102,6 +103,21 @@ public class MenuCreator {
         }
         return inventory;
     }
+
+
+    public static Inventory createConfirmationMenu(String item, double cost) {
+        SkillData data = SkillInfo.getSkillFromStrippedName(item);
+        String title = String.format("%sPurchasing: %s for %f. Are you sure?",ChatColor.DARK_GRAY,data.getName(),cost);
+        Inventory inv = Bukkit.createInventory(null, 3 * 9, title);
+        ItemStack confirmation = ItemStackUtil.createItem(Material.EMERALD_BLOCK, String.format("%s%sConfirm", ChatColor.GREEN, ChatColor.BOLD), null);
+        ItemStack cancellation = ItemStackUtil.createItem(Material.REDSTONE_BLOCK, String.format("%s%sDeny", ChatColor.GREEN, ChatColor.BOLD), null);
+        ItemStack info = InventoryData.skillToItemStack(data);
+        inv.setItem(11, confirmation);
+        inv.setItem(13, info);
+        inv.setItem(15,cancellation);
+        return inv;
+    }
+
     public static void giveHotbarInventory(Player player, SkillType skillType) {
         Inventory inventory = player.getInventory();
         ChampionsInventory.setHotBar(inventory, skillType);
