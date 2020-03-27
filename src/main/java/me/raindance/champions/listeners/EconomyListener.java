@@ -45,7 +45,7 @@ public class EconomyListener extends ListenerBase {
     }
 
     @EventHandler
-    public void fail(BuyFaliureEvent e) {
+    public void fail(BuyFailureEvent e) {
         //e.getBuyer().sendMessage("You attempted to buy " + e.getItem() + " for " + e.getCost());
         //.getBuyer().sendMessage("but ur poor");
     }
