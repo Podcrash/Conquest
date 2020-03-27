@@ -4,6 +4,7 @@ import com.google.common.reflect.ClassPath;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.EconomyTable;
+import com.podcrash.api.mc.util.ChatUtil;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -121,6 +122,15 @@ public final class SkillInfo {
             }
         }
         return data;
+    }
+
+    public static SkillData getSkillFromStrippedName(String strippedName) {
+        for (SkillData data : skillData) {
+            if (ChatUtil.strip(data.getName()).equals(strippedName)) {
+                return data;
+            }
+        }
+        return null;
     }
     /**
      * Used for lazy iteration
