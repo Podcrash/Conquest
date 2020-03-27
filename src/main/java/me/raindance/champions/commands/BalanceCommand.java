@@ -18,8 +18,8 @@ public class BalanceCommand extends CommandBase {
         p.sendMessage(String.format("%sEconomy> %sYour %s: %s%s",
                 ChatColor.BLUE, //Header
                 ChatColor.GRAY, //Default color
-                Currency.COIN.getName(), //Currency name
-                Currency.COIN.getFormatting(),
+                Currency.GOLD.getName(), //Currency name
+                Currency.GOLD.getFormatting(),
                 handler.getMoney(p)));
         return true;
     }

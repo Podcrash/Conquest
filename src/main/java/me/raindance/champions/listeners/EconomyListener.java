@@ -3,7 +3,6 @@ package me.raindance.champions.listeners;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.events.econ.*;
 import com.podcrash.api.mc.listeners.ListenerBase;
@@ -29,10 +28,10 @@ public class EconomyListener extends ListenerBase {
                 ChatColor.GREEN, //Item name
                 e.getItem(), //Item
                 ChatColor.GRAY, //Default color
-                Currency.COIN.getFormatting(),
+                Currency.GOLD.getFormatting(),
                 e.getCost(), // cost
                 ChatColor.GRAY, //default color
-                Currency.COIN.getName(),
+                Currency.GOLD.getName(),
                 ChatColor.YELLOW, // Confirmation text
                 ChatColor.BOLD,
                 e.getItem(),
@@ -61,10 +60,10 @@ public class EconomyListener extends ListenerBase {
                 ChatColor.GREEN,
                 e.getItem(),
                 ChatColor.GRAY,
-                Currency.COIN.getFormatting(),
+                Currency.GOLD.getFormatting(),
                 e.getCost(),
                 ChatColor.GRAY,
-                Currency.COIN.getName()
+                Currency.GOLD.getName()
                 ));
 
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
