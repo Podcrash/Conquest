@@ -240,11 +240,7 @@ public class Main extends JavaPlugin {
     private CompletableFuture<Void> registerCommands() {
         return CompletableFuture.runAsync(() -> {
             getCommand("leave").setExecutor(new LeaveCommand());
-            getCommand("team").setExecutor(new TeamCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
-            getCommand("start").setExecutor(new StartCommand());
-            getCommand("endgame").setExecutor(new EndCommand());
-            getCommand("setmap").setExecutor(new SetMapCommand());
             getCommand("invis").setExecutor(new InvisCommand());
             getCommand("damage").setExecutor(new DamageCommand());
             getCommand("velo").setExecutor(new VelocityCommand());
@@ -252,15 +248,10 @@ public class Main extends JavaPlugin {
             getCommand("currentlocation").setExecutor(new CurrentLocationCommand());
             getCommand("copyworld").setExecutor(new CopyWorldCommand());
             getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
-            getCommand("ping").setExecutor(new PingCommand());
             getCommand("rc").setExecutor(new ReloadChampionsCommand());
-            getCommand("spec").setExecutor(new SpecCommand());
-            getCommand("view").setExecutor(new ViewCommand());
             getCommand("skill").setExecutor(new SkillCommand());
             getCommand("kb").setExecutor(new KnockbackCommand());
             getCommand("hitreg").setExecutor(new HitRegCommand());
-            getCommand("kill").setExecutor(new KillCommand());
-            getCommand("tell").setExecutor(new TellCommand());
             getCommand("lock").setExecutor(new LockCommand());
         }, executor);
     }
