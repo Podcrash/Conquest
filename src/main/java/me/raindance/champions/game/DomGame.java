@@ -7,6 +7,7 @@ import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.*;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -32,6 +33,22 @@ public class DomGame extends Game {
         this.mines = new ArrayList<>();
 
         this.starBuff = new StarBuff(this);
+    }
+
+    @Override
+    public String getPresentableResult() {
+        StringBuilder builder = new StringBuilder("\n " + ChatColor.BOLD + "Scores: \n");
+        getTeams().forEach(team -> {
+            builder.append(team.getTeamEnum().getChatColor());
+            builder.append(ChatColor.BOLD);
+            builder.append(team.getName());
+            builder.append(ChatColor.RESET);
+            builder.append(": ");
+            builder.append(team.getScore());
+            builder.append("\n");
+        });
+        builder.append("\n ");
+        return builder.toString();
     }
 
     @Override
