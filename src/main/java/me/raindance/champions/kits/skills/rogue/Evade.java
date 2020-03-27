@@ -108,7 +108,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
             Location tp = d((Player) player, damager);
             player.sendMessage(getUsedMessage());
             damager.sendMessage(String.format("%sSkill> %s%s %sused %s%s%s.",
-                    ChatColor.BLUE, ChatColor.GREEN, player.getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
+                    ChatColor.BLUE, ChatColor.YELLOW, player.getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
             player.teleport(tp);
             SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.8F, 20);
 
