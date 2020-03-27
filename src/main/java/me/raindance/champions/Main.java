@@ -257,54 +257,16 @@ public class Main extends JavaPlugin {
             getCommand("spec").setExecutor(new SpecCommand());
             getCommand("view").setExecutor(new ViewCommand());
             getCommand("skill").setExecutor(new SkillCommand());
-            getCommand("setrole").setExecutor(new SetRoleCommand());
             getCommand("kb").setExecutor(new KnockbackCommand());
             getCommand("hitreg").setExecutor(new HitRegCommand());
             getCommand("kill").setExecutor(new KillCommand());
             getCommand("tell").setExecutor(new TellCommand());
-            getCommand("addrole").setExecutor(new AddRoleCommand());
             getCommand("buy").setExecutor(new BuyCommand());
             getCommand("confirm").setExecutor(new ConfirmCommand());
             getCommand("lock").setExecutor(new LockCommand());
             getCommand("bal").setExecutor(new BalanceCommand());
 
         }, executor);
-    }
-    public void setupPermissions(Player player) {
-        PermissionAttachment attachment = player.addAttachment(this);
-        this.playerPermissions.put(player.getUniqueId(), attachment);
-        permissionsSetter(player);
-    }
-    private void permissionsSetter(Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-
-            PermissionAttachment attachment = this.playerPermissions.get(player.getUniqueId());
-            String[] disallowedPerms = new String[] {
-                    "bukkit.command.reload",
-                    "bukkit.command.timings",
-                    "bukkit.command.plugins",
-                    "bukkit.command.help",
-                    "bukkit.command.ban-ip",
-                    "bukkit.command.stop",
-                    "invicta.map",
-                    "invicta.host",
-                    "invicta.developer",
-                    "invicta.testing",
-                    "invicta.mute"
-            };
-            Main.getInstance().getLogger().info("Disabling bad permissions");
-            for(String disallowed : disallowedPerms)
-                attachment.setPermission(disallowed, false);
-
-            RanksTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
-            Set<Rank> ranks =  table.getRanksSync(player.getUniqueId());
-                for(Rank r : ranks) {
-                    player.sendMessage(String.format("%s%sYou have been assigned the %s role!", ChatColor.GREEN, ChatColor.BOLD, r.getName()));
-                    for(String permission : r.getPermissions()) {
-                        attachment.setPermission(permission, true);
-                    }
-                }
-        });
     }
 
     public static Main getInstance() {

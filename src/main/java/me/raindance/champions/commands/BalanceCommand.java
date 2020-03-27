@@ -1,5 +1,6 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.mc.commands.CommandBase;
 import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.plugin.Pluginizer;
 import org.bukkit.ChatColor;

@@ -1,5 +1,6 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.mc.commands.CommandBase;
 import me.raindance.champions.listeners.InventoryListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

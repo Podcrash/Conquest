@@ -3,6 +3,7 @@ package me.raindance.champions.commands;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.MapTable;
+import com.podcrash.api.mc.commands.CommandBase;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.game.GameManager;
 import org.bukkit.ChatColor;

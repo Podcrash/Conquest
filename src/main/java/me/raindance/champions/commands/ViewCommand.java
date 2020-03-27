@@ -1,11 +1,12 @@
 package me.raindance.champions.commands;
 
+import com.podcrash.api.mc.commands.CommandBase;
 import com.podcrash.api.mc.game.GameManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class ViewCommand extends CommandBase{
+public class ViewCommand extends CommandBase {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

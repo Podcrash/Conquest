@@ -66,9 +66,6 @@ commands:
   skill:
     description: View your current loadout.
     usage: /skill
-  setrole:
-    description: Set a players role in the Champions plugin. Add the arguement "remove" to take away that player's role. Available roles are - Host, Developer.
-    usage: /setrole <Role> <PlayerName> (remove)
   newgame:
     description: Create a new Champions game. Valid gamemodes as of now include; DOM (case sensitive?)
     usage: /newgame <GameMode>
@@ -83,8 +80,6 @@ commands:
     usage: /kill
   tell:
     description: Currently unused messaging system.
-  addrole:
-    description: Add a role to the game.
   buy:
     description: buy something.
   confirm:
