@@ -229,7 +229,6 @@ public class InventoryListener extends ListenerBase {
             DBUtils.handleThrowables(t);
             return null;
         });
-        clicker.closeInventory();
     }
 
     /**

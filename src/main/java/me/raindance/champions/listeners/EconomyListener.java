@@ -55,8 +55,9 @@ public class EconomyListener extends ListenerBase {
     public void buy(BuySuccessEvent e) {
         //e.getBuyer().sendMessage("You attempted to buy " + e.getItem() + " for " + e.getCost());
         Inventory inv = MenuCreator.createConfirmationMenu(e.getItem(),e.getCost());
-
+        e.getBuyer().closeInventory();
         e.getBuyer().openInventory(inv);
+
     }
 
     @EventHandler
@@ -72,9 +73,6 @@ public class EconomyListener extends ListenerBase {
                 ChatColor.GRAY,
                 e.getItem()
         ));
-        InvFactory.edit(e.getBuyer(),
-                InvFactory.getLastestSkillType(e.getBuyer()),
-                InvFactory.getLatestBuildID(e.getBuyer()));
     }
 
 
