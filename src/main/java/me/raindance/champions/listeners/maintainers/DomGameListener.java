@@ -1,6 +1,7 @@
 package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
@@ -124,7 +125,7 @@ public class DomGameListener extends ListenerBase {
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
             handler.pay(player, payout);
-            player.sendMessage(String.format("%s%sYou earned %s crystals!", ChatColor.LIGHT_PURPLE, ChatColor.BOLD, payout));
+            player.sendMessage(String.format("%s%sYou earned %s %s!", Currency.GOLD.getFormatting(), ChatColor.BOLD, payout, Currency.GOLD.getName()));
         }
 
 
