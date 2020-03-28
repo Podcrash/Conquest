@@ -111,7 +111,7 @@ public class InventoryListener extends ListenerBase {
     }
 
     private boolean isCustomMenu (Inventory inv) {
-        return isKitSelectMenu(inv) || isBuildMenu(inv) || isClassMenu(inv);
+        return isKitSelectMenu(inv) || isBuildMenu(inv) || isClassMenu(inv) || isConfirmationMenu(inv);
     }
 
     private boolean isKitSelectMenu(Inventory inv) {
@@ -134,7 +134,7 @@ public class InventoryListener extends ListenerBase {
     private boolean isClassMenu(Inventory inv) {
         String lower = inv.getName().toLowerCase();
         for (SkillType skillType : SkillType.details()) {
-            if (lower.contains(skillType.getName().toLowerCase()) && !lower.contains("build")) {
+            if (lower.contains(skillType.getName().toLowerCase()) && !lower.contains("build") && !skillType.equals(SkillType.Global)) {
                 return true;
             }
         }
