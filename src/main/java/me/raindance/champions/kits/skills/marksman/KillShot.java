@@ -42,5 +42,6 @@ public class KillShot extends Passive {
         System.out.println("pass2");
         event.setModified(true);
         event.setDamage(event.getDamage() + 4);
+        event.addSource(this);
     }
 }
