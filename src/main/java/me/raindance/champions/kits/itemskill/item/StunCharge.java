@@ -34,8 +34,8 @@ public class StunCharge extends TrapItem {
     }
     @Override
     public Item throwItem(Player player, Action action) {
-        Location location = player.getLocation();
-        Vector direction = location.getDirection();
+        Location location = player.getEyeLocation();
+        Vector direction = player.getLocation().getDirection();
         Vector vector = new Vector(0, 0, 0);
         if(isLeft(action)) vector = throwVector(direction);
 
