@@ -36,7 +36,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 19;
+        return 11;
     }
 
     @Override

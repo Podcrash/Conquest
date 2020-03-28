@@ -36,8 +36,8 @@ public class Cripple extends Passive { // Crippling Blow is a Passive skill
         if (event.isCancelled() || (getPlayer() != event.getAttacker() || event.getCause() != Cause.MELEE)) return; // Something about non-players
         if (!(event.getVictim() instanceof Player)) return;
         Player victim = (Player) event.getVictim(); // The player who took the damage is the victim
-        event.setVelocityModifierX(0.1); // They take 0.1 of the knockback in the X direction
-        event.setVelocityModifierZ(0.1); // They take 0.1 of the knockback in the Z direction
+        event.setVelocityModifierX(0.3); // They take 0.1 of the knockback in the X direction
+        event.setVelocityModifierZ(0.3); // They take 0.1 of the knockback in the Z direction
         StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 2, 1); // The victim gets crippled
         event.addSource(this);
         event.setDoKnockback(false);

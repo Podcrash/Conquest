@@ -71,6 +71,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         StatusApplier playerApplier = StatusApplier.getOrNew(getPlayer());
         if(getPlayer().getFireTicks() > 0)
             playerApplier.removeStatus(Status.FIRE);
+        playerApplier.applyStatus(Status.SPEED, 0.5f, 0);
 
         List<Player> players = BlockUtil.getPlayersInArea(location, 6, getPlayers());
         for(Player p : players) {
@@ -123,7 +124,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         if(event.getCause() != Cause.MELEE) return;
         event.addSource(this);
         event.setModified(true);
-        event.setDamage(event.getDamage() + 2);
+        event.setDamage(event.getDamage() + 3);
         SoundPlayer.sendSound(getPlayer().getLocation(), "random.fizz", 0.8F, 63);
     }
 

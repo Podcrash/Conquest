@@ -34,7 +34,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 13;
+        return 10;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
     }
 
     public Whirlwind() {
-        this.distance = 5;
+        this.distance = 7;
         this.distanceSquared = distance * distance;
         this.maxDamage = 5;
         this.multiplier = 2.7F;

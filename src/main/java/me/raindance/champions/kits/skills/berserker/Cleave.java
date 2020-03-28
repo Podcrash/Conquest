@@ -22,7 +22,7 @@ public class Cleave extends Drop implements ICooldown {
     private float multiplier;
     public Cleave() {
         super();
-        this.multiplier = 0.3F;
+        this.multiplier = 1.0F;
     }
 
     @Override
