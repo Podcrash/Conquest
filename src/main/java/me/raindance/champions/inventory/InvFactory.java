@@ -10,6 +10,7 @@ import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.plugin.Pluginizer;
 import javafx.util.Pair;
 import me.raindance.champions.kits.ChampionsPlayer;
@@ -138,6 +139,10 @@ public final class InvFactory {
             SkillType skillType = SkillType.getByName(split[0]);
             int buildID = Integer.parseInt(split[1]);
             apply(player, skillType, buildID);
+
+            if(!GameManager.getGame().isOngoing()) {
+                GameManager.getGame().updateLobbyInventory(player);
+            }
         });
     }
 
@@ -153,7 +158,7 @@ public final class InvFactory {
     private static void apply(Player player, SkillType skillType, int buildID) {
         String deserializedPlayer = getKitTable().getJSONData(player.getUniqueId(), skillType.getName(), buildID);
         if(deserializedPlayer == null) {
-            player.sendMessage(ChatColor.BLUE + "Champions>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
+            player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
             return;
         }
         player.closeInventory();

@@ -221,6 +221,7 @@ public abstract class ChampionsPlayer {
     public void restockInventory() {
         int size = this.defaultHotbar.length;
         ItemStack TNT = getTNTStack();
+        getInventory().clear();
         int i = 0;
         for (; i < size; i++) {
             ItemStack item = this.defaultHotbar[i];

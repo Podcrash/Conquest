@@ -28,6 +28,7 @@ import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
+import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -132,6 +133,8 @@ public class DomGameListener extends ListenerBase {
                 new HealthBarResource(game.getId())
         );
         game.broadcast(e.getMessage());
+
+        game.getTeams().forEach(team -> team.getBukkitPlayers().forEach(InvFactory::applyLastBuild));
     }
 
 
