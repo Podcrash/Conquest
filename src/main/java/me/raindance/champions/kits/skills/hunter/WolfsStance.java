@@ -49,7 +49,7 @@ public class WolfsStance extends ChargeUp implements IConstruct {
                 if(location.distanceSquared(entity.getLocation()) > 15) continue;
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 0.5f, 1.0f);
                 DamageApplier.damage((LivingEntity) entity, getPlayer(), damage * getCharge(), true);
-                StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 0);
+                StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 1);
                 getPlayer().sendMessage(getUsedMessage((LivingEntity) entity));
             }
         });
