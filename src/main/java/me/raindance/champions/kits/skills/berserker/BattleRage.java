@@ -23,7 +23,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 19;
+        return 11;
     }
 
     @Override
