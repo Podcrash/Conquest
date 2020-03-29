@@ -40,7 +40,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -288,5 +291,12 @@ public class DomGameListener extends ListenerBase {
 
         // If the player is spectating / re-spawning, cancel the event.
         if(GameManager.getGame().isRespawning(e.getPlayer()) || !GameManager.getGame().isParticipating(e.getPlayer())) e.setCancelled(true);
+    }
+
+    @EventHandler()
+    public void maintainArmour(InventoryClickEvent event) {
+        Inventory clicked = event.getClickedInventory();
+        if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR))
+             event.setCancelled(true);
     }
 }
