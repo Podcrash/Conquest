@@ -1,10 +1,13 @@
 package me.raindance.champions.kits.skills.thief;
 
 
+import com.podcrash.api.mc.callback.CallbackAction;
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.game.GameStartEvent;
+import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -41,6 +44,13 @@ public class Lightweight extends Passive implements IConstruct {
             Pluginizer.getLogger().info(getPlayer().getName() + " lightweight cancelled " + e.getDamage());
             Pluginizer.getLogger().info(e.isCancelled() + "");
         }
+    }
+
+    @EventHandler (priority = EventPriority.LOW)
+    public void onStart(GameStartEvent e) {
+        TimeHandler.delayTime(30, () -> {
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+        });
     }
 
     @Override

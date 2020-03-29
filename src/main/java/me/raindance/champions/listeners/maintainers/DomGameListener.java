@@ -137,7 +137,11 @@ public class DomGameListener extends ListenerBase {
         );
         game.broadcast(e.getMessage());
 
-        game.getTeams().forEach(team -> team.getBukkitPlayers().forEach(InvFactory::applyLastBuild));
+        for(Player p: game.getBukkitPlayers()) {
+            ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+            player.restockInventory();
+            StatusApplier.getOrNew(p).removeStatus(Status.values());
+        }
     }
 
 
