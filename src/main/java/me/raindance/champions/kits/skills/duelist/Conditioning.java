@@ -11,7 +11,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 302, skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 302, skillType = SkillType.Duelist, invType = InvType.PRIMARY_PASSIVE)
 public class Conditioning extends Passive {
 
     @Override

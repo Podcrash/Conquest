@@ -9,11 +9,8 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowChargeUp;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-
-@SkillMetadata(id = 508, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 508, skillType = SkillType.Marksman, invType = InvType.PRIMARY_PASSIVE)
 public class Overcharge extends BowChargeUp {
     private final double bonusDamage;
     private final float rate;

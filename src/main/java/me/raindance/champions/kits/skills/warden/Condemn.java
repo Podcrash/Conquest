@@ -16,7 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 903, skillType = SkillType.Warden, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 903, skillType = SkillType.Warden, invType = InvType.PRIMARY_PASSIVE)
 public class Condemn extends Passive implements ICooldown {
     @Override
     public float getCooldown() {

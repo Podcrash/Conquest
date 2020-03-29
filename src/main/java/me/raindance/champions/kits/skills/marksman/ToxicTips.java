@@ -1,6 +1,5 @@
 package me.raindance.champions.kits.skills.marksman;
 
-import com.abstractpackets.packetwrapper.AbstractPacket;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.Cause;
@@ -8,7 +7,6 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -19,14 +17,8 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-@SkillMetadata(id = 510, skillType = SkillType.Marksman, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 510, skillType = SkillType.Marksman, invType = InvType.SECONDARY_PASSIVE)
 public class ToxicTips extends Passive {
     private final int duration = 4;
 

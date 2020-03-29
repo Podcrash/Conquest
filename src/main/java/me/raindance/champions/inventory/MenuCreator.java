@@ -99,7 +99,7 @@ public class MenuCreator {
             if(skillPresent) {
                 //if the yielded list has skills for it, then set the item tag and move the primary
                 //cursor over 1 row
-                inventory.setItem(cursor, InventoryData.getInvItem(invType));
+                inventory.setItem(cursor, invType.createItemStack());
                 cursor += 9;
             }
         }

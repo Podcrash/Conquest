@@ -4,16 +4,14 @@ import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.PRIMARY_PASSIVE)
 public class ComboAttack extends Passive {
     private int bonus = 0;
     private long lastHit = 0;

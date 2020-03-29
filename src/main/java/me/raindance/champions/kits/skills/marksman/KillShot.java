@@ -1,8 +1,6 @@
 package me.raindance.champions.kits.skills.marksman;
 
 import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -19,7 +17,7 @@ import org.bukkit.event.EventHandler;
  Cooldown: N/A
  Description: Your arrows deal 4 bonus damage to enemies under 40% health.
  */
-@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PRIMARY_PASSIVE)
 public class KillShot extends Passive {
     @Override
     public String getName() {

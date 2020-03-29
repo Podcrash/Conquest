@@ -25,12 +25,11 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.PRIMARY_PASSIVE)
 public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
     private int energeUsage = 15;
     private int radius = 5;
