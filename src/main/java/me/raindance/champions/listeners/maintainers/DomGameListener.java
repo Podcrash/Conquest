@@ -275,6 +275,14 @@ public class DomGameListener extends ListenerBase {
             }
         }
 
+        // If a player tries to extinguish a fire, cancel the event.
+        if(e.getClickedBlock() != null) {
+            Location loc = e.getClickedBlock().getLocation();
+            loc.setY(loc.getY() + 1);
+            Material target = loc.getBlock().getType();
+            if(target.equals(Material.FIRE)) e.setCancelled(true);
+        }
+
         // If the player is spectating / re-spawning, cancel the event.
         if(GameManager.getGame().isRespawning(e.getPlayer()) || !GameManager.getGame().isParticipating(e.getPlayer())) e.setCancelled(true);
     }
