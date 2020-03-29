@@ -108,7 +108,7 @@ public abstract class ChampionsPlayer {
         for(Player player : players){
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
-
+        player.setHealth(player.getMaxHealth());
 
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
