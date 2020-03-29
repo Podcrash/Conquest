@@ -1,6 +1,5 @@
 package me.raindance.champions.listeners;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerSetSlot;
 import com.podcrash.api.db.DBUtils;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.ChampionsKitTable;
@@ -9,27 +8,21 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.plugin.Pluginizer;
-import me.raindance.champions.Main;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.inventory.*;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.PacketUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,16 +31,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -102,7 +91,7 @@ public class InventoryListener extends ListenerBase {
         return -1;
     }
 
-    private boolean isCustomMenu (Inventory inv) {
+    private boolean isInvincibleMenu(Inventory inv) {
         return isKitSelectMenu(inv) || isBuildMenu(inv) || isClassMenu(inv) || isConfirmationMenu(inv);
     }
 
@@ -320,7 +309,7 @@ public class InventoryListener extends ListenerBase {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent e) {
-        if (isCustomMenu(e.getInventory())) DamageApplier.addInvincibleEntity(e.getPlayer());
+        if (isInvincibleMenu(e.getInventory())) DamageApplier.addInvincibleEntity(e.getPlayer());
 
         if(lock) return;
         if(!isClassMenu(e.getInventory())) return;
@@ -343,11 +332,11 @@ public class InventoryListener extends ListenerBase {
             priority = EventPriority.HIGHEST
     )
     public void onClose(InventoryCloseEvent e) {
-        if (isCustomMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
+        if (isInvincibleMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
         if (!isClassMenu(e.getInventory())) {
             if (!GameManager.getGame().isOngoing()
                     && (e.getPlayer() instanceof Player)
-                    && isLobbyMenu((Player) e.getPlayer(),e.getInventory())) {
+                    && !isInvincibleMenu(e.getInventory())) {
                 GameManager.getGame().updateLobbyInventory((Player) e.getPlayer());
             }
             return;
