@@ -89,15 +89,7 @@ public class InventoryListener extends ListenerBase {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
         if(e.getClickedBlock().getType().equals(Material.ENCHANTMENT_TABLE)) {
             e.setCancelled(true);
-            if(GameManager.isSpectating(e.getPlayer())) {
-                e.getPlayer().sendMessage(String.format(
-                        "%sConquest> %sYou may not select a class while spectating.",
-                        ChatColor.BLUE,
-                        ChatColor.GRAY));
-                return;
-            }
-            Inventory inv = MenuCreator.createGeneralMenu();
-            e.getPlayer().openInventory(inv);
+            openGeneralMenu(e.getPlayer());
         }
     }
 
@@ -150,6 +142,16 @@ public class InventoryListener extends ListenerBase {
         return !(inv instanceof PlayerInventory) && inv.getName().toLowerCase().contains("purchasing");
     }
 
+    /**
+     *
+     * @param player
+     * @param inventory
+     * @return whether the inventory is the player's inventory in a lobby
+     */
+    private boolean isLobbyMenu(Player player, Inventory inventory) {
+        return ownInventory(player, inventory) && !InvFactory.currentlyEditing(player);
+    }
+
     private boolean ownInventory(Player player, Inventory clickedInventory) {
         return player.getInventory() == clickedInventory;
     }
@@ -169,24 +171,71 @@ public class InventoryListener extends ListenerBase {
             return;
         }
 
-        if(ownInventory(player, inventory) && !InvFactory.currentlyEditing(player)) return;
-        boolean kitMenu = isKitSelectMenu(inventory),
+        boolean lobbyMenu = isLobbyMenu(player, inventory),
+                kitMenu = isKitSelectMenu(inventory),
                 build = isBuildMenu(inventory),
                 classMenu = isClassMenu(inventory),
                 confirmationMenu = isConfirmationMenu(inventory),
-                ownInv = InvFactory.currentlyEditing(player) && ownInventory(player, inventory);
+                ownMenuEditing = InvFactory.currentlyEditing(player) && ownInventory(player, inventory);
 
-        cancel = kitMenu || build || classMenu || confirmationMenu || ownInv;
-        if (kitMenu) clickHelmet(player, selected);
+        cancel = lobbyMenu || kitMenu || build || classMenu || confirmationMenu || ownMenuEditing;
+        if (lobbyMenu) lobbyMenuEdit(player, inventory, selected);
+        else if (kitMenu) clickHelmet(player, selected);
         else if(build) buildMenu(player, inventory, selected);
         else if(classMenu) classClickItem(player, inventory, slot, selected, clickType);
         else if(confirmationMenu) confirm(player, inventory, slot);
-        else if(ownInv)
+        else if(ownMenuEditing)
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
         event.setCancelled(cancel);
     }
 
+    private void openGeneralMenu(Player player) {
+        if(GameManager.isSpectating(player)) {
+            player.sendMessage(String.format(
+                    "%sConquest> %sYou may not select a class while spectating.",
+                    ChatColor.BLUE,
+                    ChatColor.GRAY));
+            return;
+        }
+        Inventory inv = MenuCreator.createGeneralMenu();
+        player.openInventory(inv);
+    }
+
+    private void lobbyMenuEdit(Player player, Inventory inventory, ItemStack selected) {
+        if (selected.getItemMeta() == null) return;
+        String name = selected.getItemMeta().getDisplayName().toLowerCase();
+        if (name.contains("select")) {
+            if (name.contains("kit")) {
+                openGeneralMenu(player);
+            } else if (name.contains("team")) {
+                if (GameManager.isSpectating(player)) {
+                    player.sendMessage(
+                            String.format(
+                                    "%sInvicta> %sYou are spectating %sGame %s%s.",
+                                    ChatColor.BLUE,
+                                    ChatColor.GRAY,
+                                    ChatColor.GREEN,
+                                    GameManager.getGame().getId(),
+                                    ChatColor.GRAY));
+                    return;
+                }
+                inventory.clear();
+                MenuCreator.openTeamSelectMenu(player);
+            }
+        } else if (name.contains("queue")) {
+            //TODO: this should leave the queue for a team, but currently, teams are forced on join i.e you can't not be in a queue
+
+        } else if (name.contains("spectator")) {
+            GameManager.getGame().toggleSpec(player);
+        } else if (name.contains("red team")) {
+            GameManager.joinTeam(player, TeamEnum.RED);
+            GameManager.getGame().updateLobbyInventory(player);
+        } else if (name.contains("blue team")) {
+            GameManager.joinTeam(player, TeamEnum.BLUE);
+            GameManager.getGame().updateLobbyInventory(player);
+        }
+    }
 
     private void clickHelmet(Player p, ItemStack item) {
         if(item.getType() == Material.AIR) return;
@@ -295,7 +344,14 @@ public class InventoryListener extends ListenerBase {
     )
     public void onClose(InventoryCloseEvent e) {
         if (isCustomMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
-        if (!isClassMenu(e.getInventory())) return;
+        if (!isClassMenu(e.getInventory())) {
+            if (!GameManager.getGame().isOngoing()
+                    && (e.getPlayer() instanceof Player)
+                    && isLobbyMenu((Player) e.getPlayer(),e.getInventory())) {
+                GameManager.getGame().updateLobbyInventory((Player) e.getPlayer());
+            }
+            return;
+        }
         //assign build
         Inventory inventory = e.getInventory();
         String name = inventory.getName().toLowerCase();
@@ -304,6 +360,9 @@ public class InventoryListener extends ListenerBase {
         ChampionsInventory.clearHotbarSelection(newPlayer.getPlayer());
         ChampionsPlayerManager.getInstance().addChampionsPlayer(newPlayer);
         InvFactory.editClose(newPlayer.getPlayer(), newPlayer);
+        if(!GameManager.getGame().isOngoing()) {
+            GameManager.getGame().updateLobbyInventory(newPlayer.getPlayer());
+        }
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
 }
