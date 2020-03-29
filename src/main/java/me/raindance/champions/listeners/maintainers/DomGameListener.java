@@ -1,8 +1,8 @@
 package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.db.redis.Communicator;
 import com.podcrash.api.mc.economy.Currency;
-import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -21,7 +21,6 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.db.redis.Communicator;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
@@ -35,16 +34,37 @@ import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 public class DomGameListener extends ListenerBase {
+    private static final Material[] nonInteractables = new Material[]{
+            Material.CHEST,
+            Material.TRAPPED_CHEST,
+            Material.HOPPER,
+            Material.BED,
+            Material.BED_BLOCK,
+            Material.FURNACE,
+            Material.BURNING_FURNACE,
+            Material.CAKE,
+            Material.CAKE_BLOCK,
+            Material.ENDER_CHEST,
+            Material.DISPENSER,
+            Material.BREWING_STAND,
+            Material.COMMAND,
+            Material.BEACON,
+            Material.ANVIL,
+            Material.DROPPER,
+            Material.WORKBENCH,
+    };
     public DomGameListener(JavaPlugin plugin) {
         super(plugin);
     }
@@ -243,5 +263,19 @@ public class DomGameListener extends ListenerBase {
                 }
             }
         });
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void interact(PlayerInteractEvent e) {
+        // If a player tries to right-click interact with a block we don't want them to, cancel the event.
+        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            Block block = e.getClickedBlock();
+            for(Material m : nonInteractables) {
+                if(block.getType().equals(m)) e.setCancelled(true);
+            }
+        }
+
+        // If the player is spectating / re-spawning, cancel the event.
+        if(GameManager.getGame().isRespawning(e.getPlayer()) || !GameManager.getGame().isParticipating(e.getPlayer())) e.setCancelled(true);
     }
 }

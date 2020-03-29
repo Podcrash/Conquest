@@ -37,7 +37,7 @@ public class DomGame extends Game {
 
     @Override
     public String getPresentableResult() {
-        StringBuilder builder = new StringBuilder("\n " + ChatColor.BOLD + "Scores: \n");
+        StringBuilder builder = new StringBuilder("\n" + ChatColor.BOLD + "Scores:\n");
         getTeams().forEach(team -> {
             builder.append(team.getTeamEnum().getChatColor());
             builder.append(ChatColor.BOLD);
