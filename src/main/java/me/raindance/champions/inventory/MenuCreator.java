@@ -106,6 +106,11 @@ public class MenuCreator {
         return inventory;
     }
 
+    public static void openTeamSelectMenu(Player player) {
+        Inventory inv = player.getInventory();
+        ItemStackUtil.createItem(inv, 35, 14,1, 21, "&c&lRed Team");
+        ItemStackUtil.createItem(inv, 35, 11,1, 25, "&9&lBlue Team");
+    }
 
     public static Inventory createConfirmationMenu(String item, double cost) {
         SkillData data = SkillInfo.getSkillFromStrippedName(item);
