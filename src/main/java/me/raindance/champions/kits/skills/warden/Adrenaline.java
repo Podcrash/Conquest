@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 
-@SkillMetadata(id = 901, skillType = SkillType.Warden, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 901, skillType = SkillType.Warden, invType = InvType.PRIMARY_PASSIVE)
 public class Adrenaline extends Passive {
     @Override
     public String getName() {

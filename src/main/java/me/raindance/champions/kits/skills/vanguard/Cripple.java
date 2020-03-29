@@ -13,9 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.Arrays;
-
-@SkillMetadata(id = 802, skillType = SkillType.Vanguard, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 802, skillType = SkillType.Vanguard, invType = InvType.PRIMARY_PASSIVE)
 public class Cripple extends Passive { // Crippling Blow is a Passive skill
     public Cripple() {
         super();

@@ -28,11 +28,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@SkillMetadata(id = 1008, skillType = SkillType.Sorcerer, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 1008, skillType = SkillType.Sorcerer, invType = InvType.PRIMARY_PASSIVE)
 public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, IConstruct {
     private final int MAX_LEVEL = 1;
     private final Vector up = new Vector(0, 0.34, 0);

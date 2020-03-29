@@ -8,7 +8,6 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.classes.Berserker;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -24,9 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
-import java.util.Arrays;
-
-@SkillMetadata(id = 108, skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 108, skillType = SkillType.Berserker, invType = InvType.PRIMARY_PASSIVE)
 public class Stampede extends Passive implements IPassiveTimer, ICharge {
     private int charges = 0;
     private long time;

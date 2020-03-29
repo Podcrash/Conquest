@@ -1,27 +1,72 @@
 package me.raindance.champions.kits.enums;
 
+import com.podcrash.api.mc.util.ItemStackUtil;
+import me.raindance.champions.inventory.InventoryData;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Dye;
+
+
 public enum InvType {
-    SWORD("Sword"), //sword
-    AXE("Axe"), //axe
-    SHOVEL("Shovel"), //shovel
-    BOW("Bow"), //bow
-    PASSIVEA("Passive A"), //primary
-    PASSIVEB("Passive B"), //secondary
-    INNATE("Innate"), //Innate
-    DROP("Active");
+    SWORD("Sword", "Sword Skills", Material.IRON_SWORD), //sword
+    AXE("Axe", "Axe Skills", Material.IRON_AXE), //axe
+    SHOVEL("Shovel", "Shovel Skills", Material.IRON_SPADE), //shovel
+    BOW("Bow", "Bow Skills", Material.BOW), //bow
+    PRIMARY_PASSIVE("Primary Passive", "Primary Passives", null), //primary
+    SECONDARY_PASSIVE("Secondary Passive", "Secondary Passives", null), //secondary
+    INNATE("Innate", "Innate Passive", Material.DIAMOND), //Innate
+    DROP("Active", "Active Abilities", null);
 
     //The reason why this is written out so that it stays in order.
-    private final static InvType[] details = new InvType[] {SWORD, SHOVEL, AXE, BOW, DROP, PASSIVEA, PASSIVEB, INNATE};
+    private final static InvType[] details = new InvType[] {SWORD, SHOVEL, AXE, BOW, DROP, PRIMARY_PASSIVE, SECONDARY_PASSIVE, INNATE};
 
     private String name;
-    InvType(String name) {
+    private String displayName;
+    public Material material;
+
+    InvType(String name, String displayName, Material material) {
         this.name = name;
+        this.displayName = displayName;
+        this.material = material;
     }
 
     public String getName() {
         return name;
     }
 
+
+    public ItemStack createItemStack() {
+        switch (this){
+            case SWORD:
+            case AXE:
+            case BOW:
+            case SHOVEL:
+            case INNATE:
+                return ItemStackUtil.createItem(material, String.format("%s%s%s", ChatColor.GOLD, ChatColor.BOLD, displayName), null);
+            case PRIMARY_PASSIVE:
+                Dye red = new Dye();
+                red.setColor(DyeColor.RED);
+                ItemStack itemStack = red.toItemStack(1);
+                InventoryData.setItemName(itemStack, String.format("%s%s%s", ChatColor.GOLD, ChatColor.BOLD, displayName));
+                return itemStack;
+            case SECONDARY_PASSIVE:
+                Dye blue = new Dye();
+                blue.setColor(DyeColor.BLUE);
+                ItemStack itemStack1 = blue.toItemStack(1);
+                InventoryData.setItemName(itemStack1, String.format("%s%s%s", ChatColor.GOLD, ChatColor.BOLD, displayName));
+                return itemStack1;
+            case DROP:
+                Dye green = new Dye();
+                green.setColor(DyeColor.GREEN);
+                ItemStack itemStack2 = green.toItemStack(1);
+                InventoryData.setItemName(itemStack2, String.format("%s%s%s", ChatColor.GOLD, ChatColor.BOLD, displayName));
+                return itemStack2;
+            default:
+                throw new IllegalArgumentException("Not allowed");
+        }
+    }
 
     public static InvType[] details() {
         return details;

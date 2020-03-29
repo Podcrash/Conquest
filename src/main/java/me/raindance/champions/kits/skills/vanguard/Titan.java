@@ -7,11 +7,10 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 
-@SkillMetadata(id = 808, skillType = SkillType.Vanguard, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 808, skillType = SkillType.Vanguard, invType = InvType.PRIMARY_PASSIVE)
 public class Titan extends Passive {
     @Override
     public String getName() {

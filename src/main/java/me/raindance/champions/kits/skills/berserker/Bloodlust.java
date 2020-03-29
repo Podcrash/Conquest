@@ -21,9 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Arrays;
-
-@SkillMetadata(id = 103, skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 103, skillType = SkillType.Berserker, invType = InvType.PRIMARY_PASSIVE)
 public class Bloodlust extends Passive {
     private int duration;
     private PotionEffect strength, speed;
