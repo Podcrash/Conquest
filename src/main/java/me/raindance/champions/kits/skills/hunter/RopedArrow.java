@@ -39,6 +39,8 @@ public class RopedArrow extends BowShotSkill {
     protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
         //getPlayer().sendMessage(String.format("You shot %s", victim.getName()));
         //boost(victim.getLocation(), force, arrow.getVelocity());
+        event.setVelocityModifierX(-1d);
+        event.setVelocityModifierZ(-1d);
     }
 
     @Override

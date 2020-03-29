@@ -27,7 +27,7 @@ public class Cleave extends Drop implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 12;
     }
 
     @Override
