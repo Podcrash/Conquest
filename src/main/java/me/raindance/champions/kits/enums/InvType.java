@@ -5,8 +5,8 @@ public enum InvType {
     AXE("Axe"), //axe
     SHOVEL("Shovel"), //shovel
     BOW("Bow"), //bow
-    PASSIVEA("Passive A"), //primary
-    PASSIVEB("Passive B"), //secondary
+    PASSIVEA("Primary"), //primary
+    PASSIVEB("Secondary"), //secondary
     INNATE("Innate"), //Innate
     DROP("Active");
 
