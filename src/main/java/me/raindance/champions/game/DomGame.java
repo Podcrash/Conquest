@@ -44,7 +44,7 @@ public class DomGame extends Game {
             builder.append(team.getName());
             builder.append(ChatColor.RESET);
             builder.append(": ");
-            builder.append(team.getScore());
+            builder.append(Math.min(team.getScore(), 15000));
             builder.append("\n");
         });
         builder.append("\n ");

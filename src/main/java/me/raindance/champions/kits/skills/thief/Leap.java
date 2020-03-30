@@ -56,7 +56,7 @@ public class Leap extends Instant implements ICooldown {
         Vector behind = getPlayer().getLocation().getDirection().normalize().multiply(-1);
         Location loc = getPlayer().getLocation().add(behind.setY(0));
         Location headLoc = getPlayer().getEyeLocation().add(behind.setY(0));
-        if (!loc.getBlock().getType().equals(Material.AIR) || !headLoc.getBlock().getType().equals(Material.AIR))
+        if (!BlockUtil.isPassable(loc.getBlock()) || !BlockUtil.isPassable(headLoc.getBlock()))
             wallKick();
         else leap();
     }
