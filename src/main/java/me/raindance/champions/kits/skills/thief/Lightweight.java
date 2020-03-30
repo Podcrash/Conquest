@@ -49,13 +49,13 @@ public class Lightweight extends Passive implements IConstruct {
     @EventHandler (priority = EventPriority.LOW)
     public void onStart(GameStartEvent e) {
         TimeHandler.delayTime(30, () -> {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true);
         });
     }
 
     @Override
     public void afterConstruction() {
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true);
         boolean hasSpeed = StatusApplier.getOrNew(getPlayer()).has(Status.SPEED);
 
         Pluginizer.getLogger().info("[Lightweight] Attempted to apply the speed a total of " + hasSpeed + " times!");
@@ -63,7 +63,7 @@ public class Lightweight extends Passive implements IConstruct {
 
     @Override
     public void afterRespawn() {
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true);
     }
 
     @Override
