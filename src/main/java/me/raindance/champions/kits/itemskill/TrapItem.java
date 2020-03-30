@@ -1,13 +1,16 @@
 package me.raindance.champions.kits.itemskill;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.callback.helpers.TrapSetter;
 import com.podcrash.api.mc.callback.sources.AwaitTime;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.events.TrapPrimeEvent;
 import com.podcrash.api.mc.events.TrapSnareEvent;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.events.ApplyKitEvent;
-import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -16,9 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class TrapItem implements IItem, Listener {
@@ -52,7 +53,12 @@ public abstract class TrapItem implements IItem, Listener {
         primeTrap(item);
         AwaitTime time = new AwaitTime(despawnDelay);
         time.then(() -> {
-            TrapSetter.destroyTrap(item);
+            if(TrapSetter.destroyTrap(item)) {
+                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(
+                    item.getLocation().clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 5, 0, 0, 0);
+                    PacketUtil.syncSend(packet, item.getWorld().getPlayers());
+            }
+            itemOwners.remove(item.getEntityId());
         }).runAsync(5, 0);
     }
 
@@ -65,7 +71,11 @@ public abstract class TrapItem implements IItem, Listener {
         Player snared = e.getPlayer();
         if(GameManager.getGame() != null && GameManager.getGame().isRespawning(snared)) {
             e.setCancelled(true);
-        }else snareTrap(owner, snared, item);
+        }else {
+            snareTrap(owner, snared, item);
+            TrapSetter.destroyTrap(item);
+            itemOwners.remove(item.getEntityId());
+        }
     }
 
     @EventHandler
@@ -82,6 +92,7 @@ public abstract class TrapItem implements IItem, Listener {
     public void consumeAllTrapItems(Player player, Consumer<Item> consumer) {
         World world = player.getWorld();
         Collection<Item> items = world.getEntitiesByClass(Item.class);
+        List<Item> toRemove = new ArrayList<>();
         for (Map.Entry<Integer, String> entry : itemOwners.entrySet()) {
             int id = entry.getKey();
             String ownerName = entry.getValue();
@@ -90,12 +101,19 @@ public abstract class TrapItem implements IItem, Listener {
             Item i = null;
             for (Item item : items) {
                 if (item.getEntityId() == id) {
+                    toRemove.add(item);
                     i = item;
                     break;
                 }
             }
             if(i == null) break;
             consumer.accept(i);
+            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(
+                    i.getLocation().clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 1, 0, 0, 0);
+            PacketUtil.syncSend(packet, i.getWorld().getPlayers());
+        }
+        for(Item i : toRemove) {
+            itemOwners.remove(i.getEntityId());
         }
     }
 }
