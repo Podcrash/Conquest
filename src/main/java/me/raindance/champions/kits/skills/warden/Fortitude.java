@@ -17,28 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 @SkillMetadata(id = 906, skillType = SkillType.Warden, invType = InvType.SECONDARY_PASSIVE)
-public class Fortitude extends Passive implements ICooldown, IConstruct {
-    private TimeResource resource;
-
-    @Override
-    public void afterConstruction() {
-        resource = new TimeResource() {
-            @Override
-            public void task() {
-                StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
-            }
-
-            @Override
-            public boolean cancel() {
-                return false;
-            }
-
-            @Override
-            public void cleanup() {
-
-            }
-        };
-    }
+public class Fortitude extends Passive implements ICooldown {
 
     @Override
     public String getName() {
@@ -63,9 +42,7 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
         }
     }
 
-    @EventHandler(
-            priority = EventPriority.LOW
-    )
+    @EventHandler(priority = EventPriority.LOW)
     protected void hit(EntityDamageEvent event) {
         if(event.isCancelled()) return;
         if (event.getEntity() == getPlayer() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -76,10 +53,7 @@ public class Fortitude extends Passive implements ICooldown, IConstruct {
     public void hit() {
         if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
-        TimeHandler.unregister(resource);
-        TimeHandler.delayTime(100, () -> {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
-        });
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
     }
 
     @Override
