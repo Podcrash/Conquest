@@ -10,14 +10,14 @@ import org.bukkit.material.Dye;
 
 
 public enum InvType {
-    SWORD("Sword", "Sword Skills", Material.IRON_SWORD), //sword
-    AXE("Axe", "Axe Skills", Material.IRON_AXE), //axe
-    SHOVEL("Shovel", "Shovel Skills", Material.IRON_SPADE), //shovel
-    BOW("Bow", "Bow Skills", Material.BOW), //bow
+    SWORD("Sword Ability", "Sword Skills", Material.IRON_SWORD), //sword
+    AXE("Axe Ability", "Axe Skills", Material.IRON_AXE), //axe
+    SHOVEL("Shovel Ability", "Shovel Skills", Material.IRON_SPADE), //shovel
+    BOW("Bow Ability", "Bow Skills", Material.BOW), //bow
     PRIMARY_PASSIVE("Primary Passive", "Primary Passives", null), //primary
     SECONDARY_PASSIVE("Secondary Passive", "Secondary Passives", null), //secondary
-    INNATE("Innate", "Innate Passive", Material.DIAMOND), //Innate
-    DROP("Active", "Active Abilities", null);
+    INNATE("Innate Ability", "Innate Ability", Material.DIAMOND), //Innate
+    DROP("Active Ability", "Active Abilities", null);
 
     //The reason why this is written out so that it stays in order.
     private final static InvType[] details = new InvType[] {SWORD, SHOVEL, AXE, BOW, DROP, PRIMARY_PASSIVE, SECONDARY_PASSIVE, INNATE};

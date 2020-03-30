@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.PRIMARY_PASSIVE)
+@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.DROP)
 public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
     private int energeUsage = 15;
     private int radius = 5;
