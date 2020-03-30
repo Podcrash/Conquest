@@ -42,7 +42,7 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 19;
+        return 20;
     }
 
     @Override

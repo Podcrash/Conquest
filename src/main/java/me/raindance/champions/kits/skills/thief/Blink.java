@@ -34,7 +34,7 @@ public class Blink extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 15;
+        return 10;
     }
 
     @Override

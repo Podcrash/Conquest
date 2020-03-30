@@ -31,7 +31,7 @@ public class Leap extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 4.5F;
+        return 3F;
     }
 
     @Override

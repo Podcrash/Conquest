@@ -23,7 +23,7 @@ public class BlindingArrow extends BowShotSkill {
 
     @Override
     public float getCooldown() {
-        return 16;
+        return 7;
     }
 
     @Override
