@@ -11,6 +11,7 @@ import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import javafx.util.Pair;
 import me.raindance.champions.kits.ChampionsPlayer;
@@ -191,6 +192,10 @@ public final class InvFactory {
         String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
         player.getInventory().clear();
         player.updateInventory();
+
+        //The editing tip: You can save your rearranged inventory in this menu only!
+        ItemStackUtil.createItem(player.getInventory(),395, 1, 23, "&e&lTip:", "Rearrange your hotbar in this menu to save it.");
+
         if(json == null) {
             Inventory inv = MenuCreator.createKitMenu(skillType);
             MenuCreator.giveHotbarInventory(player, skillType);
