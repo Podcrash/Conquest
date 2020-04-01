@@ -7,6 +7,7 @@ import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
@@ -22,6 +23,7 @@ import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.plugin.Pluginizer;
+import javafx.scene.layout.Priority;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
@@ -80,6 +82,11 @@ public class DomGameListener extends ListenerBase {
         ChampionsPlayer championsAttacker = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
 
         event.setArmorValue(championsVictim.getArmorValue());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void filterDeathCauses(DeathApplyEvent e) {
+
     }
 
     @EventHandler(priority = EventPriority.HIGH)
