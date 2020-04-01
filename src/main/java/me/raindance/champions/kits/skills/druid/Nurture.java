@@ -59,7 +59,7 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
         if(victim != getPlayer() && !isAlly(victim)) return;
         if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
 
-        StatusApplier.getOrNew(victim).applyStatus(Status.REGENERATION, 0, 1, false);
+        StatusApplier.getOrNew(victim).applyStatus(Status.REGENERATION, 1.25f, 1, false, true);
     }
 
     @Override

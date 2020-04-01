@@ -36,6 +36,6 @@ public class Perseverance extends Passive implements ICooldown {
 
         if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 2);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 2, true, true);
     }
 }
