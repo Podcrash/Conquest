@@ -26,8 +26,8 @@ import java.util.Random;
 
 @SkillMetadata(id = 205, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Nurture extends TogglePassive implements IEnergy, TimeResource {
-    private int energyUsge = 30;
-    private int a = 0;
+    private int energyUsage = 30;
+    private int counter = 0;
     @Override
     public void toggle() {
         run(1, 0);
@@ -45,14 +45,21 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public int getEnergyUsage() {
-        return 30;
+        return energyUsage;
     }
 
     @Override
     public void task() {
-        getGame().consumeBukkitPlayer(this::buff);
+
         useEnergy(getEnergyUsageTicks());
-        spawnGrass(getPlayer().getLocation());
+        counter++;
+        if (counter == 25) {
+            getGame().consumeBukkitPlayer(this::buff); //Apply regen every 25 ticks
+            counter = 0;
+        }
+        if (counter % 2 == 0) {
+            spawnGrass(getPlayer().getLocation());
+        }
     }
 
     private void buff(Player victim) {
@@ -75,9 +82,6 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
     }
 
     private void spawnGrass(Location location) {
-        a++;
-        if(a % 2 != 0) return;
-        a = 0;
         Random random = new Random();
         float randomizer = 0.1F * random.nextFloat();
         org.bukkit.util.Vector up = new Vector(0, 0.34, 0);
