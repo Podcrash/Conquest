@@ -63,7 +63,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
                     if (entities.size() == 0) return;
                     getPlayer().setVelocity(new Vector(0, 0, 0));
                     for (Entity entity : entities) {
-                        if (entity instanceof LivingEntity && entity != getPlayer()) {
+                        if (entity instanceof LivingEntity && entity != getPlayer() && !isAlly((LivingEntity) entity)) {
                             LivingEntity living = (LivingEntity) entity;
                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_WOOD, 2f, 0.2f);
                             DamageApplier.damage(living, getPlayer(), 5, this, false);
