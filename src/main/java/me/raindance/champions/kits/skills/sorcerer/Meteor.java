@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
@@ -62,12 +63,13 @@ public class Meteor extends Instant implements IEnergy, ICooldown {
             getPlayer().sendMessage(getNoEnergyMessage());
             return;
         }
-        Location loc = getPlayer().getEyeLocation().toVector().add(getPlayer().getLocation().getDirection().multiply(2))
-                .toLocation(getPlayer().getWorld(), getPlayer().getLocation().getYaw(), getPlayer().getLocation().getPitch());
-        Fireball fireball = getPlayer().getWorld().spawn(loc, Fireball.class);
+        //Location loc = getPlayer().getEyeLocation().toVector().add(getPlayer().getLocation().getDirection().multiply(2))
+        //        .toLocation(getPlayer().getWorld(), getPlayer().getLocation().getYaw(), getPlayer().getLocation().getPitch());
+        //Fireball fireball = getPlayer().getWorld().spawn(loc, Fireball.class);
+        Fireball fireball = getPlayer().launchProjectile(Fireball.class);
         fireball.setIsIncendiary(false);
         fireball.setYield(0);
-        fireball.setShooter(getPlayer());
+        fireball.setVelocity(fireball.getVelocity().multiply(2));
         useEnergy(energyUsage);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "item.fireCharge.use", 0.75F, 63, getPlayers());
