@@ -47,11 +47,13 @@ public abstract class Drop extends Skill {
     protected boolean isHolding(@Nonnull ItemStack dropped) {
         ItemType[] weapons = ItemType.details();
 
-        String name = dropped.getType().name().toUpperCase();;
+        String name = dropped.getType().name().toUpperCase();
+
         if(getItemType() != ItemType.NULL) {
             return name.contains(getItemType().getName());
         }
         for(ItemType w : weapons) {
+            if (w.getName() == null) continue;
             if(name.contains(w.getName())) return true;
         }
         return false;
