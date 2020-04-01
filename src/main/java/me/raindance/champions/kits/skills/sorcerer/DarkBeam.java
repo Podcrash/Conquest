@@ -123,12 +123,8 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         CustomEntityFirework.spawn(endLoc, firework, players);
         SoundPlayer.sendSound(endLoc, "fireworks.launch", 1F, 63);
         SoundPlayer.sendSound(getPlayer().getLocation(), "fireworks.launch", 1F, 63);
-        int dist = 4;
-        int distS = dist * dist;
         for (Player p : BlockUtil.getPlayersInArea(endLoc, damageRadius, players)) {
-            if (isAlly(p) && p == getPlayer()) continue;
-            double distanceS = p.getLocation().distanceSquared(endLoc);
-            double delta = 1D - distanceS / distS;
+            if (isAlly(p) || p == getPlayer()) continue;
             DamageApplier.damage(p, getPlayer(), damage, this, true);
             return;
         }
