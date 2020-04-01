@@ -141,6 +141,8 @@ public class Main extends JavaPlugin {
         CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
 
+        spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
+
         protocolManager = ProtocolLibrary.getProtocolManager();
         mapConfig = new File(getDataFolder(), "maps.yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
@@ -177,7 +179,6 @@ public class Main extends JavaPlugin {
             }
         }
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
-        spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
         executor.shutdown();
     }
     @Override

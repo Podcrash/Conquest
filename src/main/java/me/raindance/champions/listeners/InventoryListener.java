@@ -155,7 +155,7 @@ public class InventoryListener extends ListenerBase {
         ClickType clickType = event.getClick();
         boolean cancel = true;
 
-        if(event.getClick() == ClickType.RIGHT || event.getClick() == ClickType.SHIFT_RIGHT || inventory == null || selected == null)  {
+        if(inventory == null || selected == null)  {
             event.setCancelled(true);
             return;
         }
@@ -176,6 +176,8 @@ public class InventoryListener extends ListenerBase {
         else if(ownMenuEditing)
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
+            ClickType type = event.getClick();
+            if(type == ClickType.RIGHT || type == ClickType.SHIFT_RIGHT) cancel = true;
         event.setCancelled(cancel);
     }
 
