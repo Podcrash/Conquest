@@ -4,6 +4,8 @@ import com.abstractpackets.packetwrapper.ILocationPacket;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GTeam;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.TeamEnum;
@@ -67,6 +69,23 @@ public class StarBuff implements TimeResource {
         //give the buffed player some particle effects
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.VILLAGER_HAPPY, 3);
         Player owner = Bukkit.getPlayer(holder);
+
+        List<Status> effects = StatusApplier.getOrNew(owner).getEffects();
+        long timeLeft = endTime - System.currentTimeMillis();
+        timeLeft /= 1000L; //Convert to seconds
+
+        //Make sure the effects are there (incase other stuff gives stronger regen but ends)
+        if (!effects.contains(Status.STRENGTH) && timeLeft > 0.5) {
+            StatusApplier.getOrNew(owner).applyStatus(Status.STRENGTH, timeLeft, 0, false, true);
+        }
+        if (!effects.contains(Status.RESISTANCE) && timeLeft > 0.5) {
+            StatusApplier.getOrNew(owner).applyStatus(Status.RESISTANCE, timeLeft, 0, false, true);
+        }
+        if (!effects.contains(Status.REGENERATION) && timeLeft > 0.5) {
+            StatusApplier.getOrNew(owner).applyStatus(Status.REGENERATION, timeLeft, 0, false, true);
+        }
+
+
         Location location = owner.getLocation().add(0, 1.25, 0);
         packet.setLocation(location);
         PacketUtil.asyncSend(packet, location.getWorld().getPlayers());
