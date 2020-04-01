@@ -16,7 +16,7 @@ public enum InvType {
     BOW("Bow Ability", "Bow Skills", Material.BOW), //bow
     PRIMARY_PASSIVE("Primary Passive", "Primary Passives", null), //primary
     SECONDARY_PASSIVE("Secondary Passive", "Secondary Passives", null), //secondary
-    INNATE("Innate Ability", "Innate Ability", Material.DIAMOND), //Innate
+    INNATE("Innate Passive", "Innate Passive", Material.DIAMOND), //Innate
     DROP("Active Ability", "Active Abilities", null);
 
     //The reason why this is written out so that it stays in order.
