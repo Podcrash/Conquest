@@ -41,11 +41,13 @@ public class Rest extends Continuous {
 
         //if not enough time has passed, just wait until there is enough time
         if(System.currentTimeMillis() - start < duration) return;
-        if(effectActive) return;
-        applier.applyStatus(Status.REGENERATION, Integer.MAX_VALUE, 0);
-        applier.applyStatus(Status.CLOAK, 20000, 1);
-        getPlayer().sendMessage(getUsedMessage().replace("used", "activated"));
-        effectActive = true;
+        applier.applyStatus(Status.REGENERATION, 2.5f, 0, false, false);
+
+        if(!effectActive) {
+            getPlayer().sendMessage(getUsedMessage().replace("used", "activated"));
+            applier.applyStatus(Status.CLOAK, 20000, 1);
+            effectActive = true;
+        }
     }
 
     private void sendParticles() {
