@@ -4,6 +4,7 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.events.ItemCollideEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -18,6 +19,7 @@ import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.world.BlockUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,6 +29,8 @@ import java.util.*;
 
 @SkillMetadata(id = 1004, skillType = SkillType.Sorcerer, invType = InvType.AXE)
 public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstruct {
+    private int currentItemID;
+
     private final Random random = new Random();
     private WrapperPlayServerWorldParticles particles;
     private String NAME;
@@ -85,7 +89,9 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
         Vector vector = location.getDirection();
         vector.normalize().multiply(1.15D);
 
-        Item item = ItemManipulationManager.intercept(Material.ICE, location, vector, ((item1, entity) -> {
+        Item spawnItem = ItemManipulationManager.regular(Material.ICE, location, vector);
+        this.currentItemID = spawnItem.getEntityId();
+        Item item = ItemManipulationManager.intercept(spawnItem, 1.1, ((item1, entity) -> {
             Location location1 = item1.getLocation();
             if(entity == null) {
                 location1.add(new Vector(0,1,0));
@@ -127,6 +133,14 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
             i++;
         }
         tempArrayList.clear();
+    }
+
+    @EventHandler
+    public void collideItem(ItemCollideEvent e) {
+        if(e.isCancelled()) return;
+        //identity check + owner of item check = cancel collision
+        if(e.getCollisionVictim() == getPlayer() && e.getItem().getEntityId() == currentItemID)
+            e.setCancelled(true);
     }
 
     @Override

@@ -2,6 +2,7 @@ package me.raindance.champions.kits.itemskill.item;
 
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.ItemCollideEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
@@ -9,19 +10,26 @@ import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ItemMetaData(mat = Material.FIREWORK_CHARGE)
 public class SmokeBomb implements IItem {
+    private final Map<Integer, String> itemIDs = new HashMap<>();
+
     @Override
     public void useItem(Player player, Action action) {
         Location location = player.getLocation();
         Vector vector = location.getDirection();
         vector = throwVector(vector);
-        ItemManipulationManager.intercept(Material.FIREWORK_CHARGE, player.getEyeLocation(), vector, this::bomb);
+        Item spawnItem = ItemManipulationManager.regular(Material.FIREWORK_CHARGE, player.getEyeLocation(), vector);
+        itemIDs.put(spawnItem.getEntityId(), player.getName());
+        ItemManipulationManager.intercept(spawnItem, 1.1, this::bomb);
     }
 
     private void bomb(Item item, LivingEntity intercepted) {
@@ -40,5 +48,15 @@ public class SmokeBomb implements IItem {
     @Override
     public String getName() {
         return "Smoke Bomb";
+    }
+
+    @EventHandler
+    public void collideItem(ItemCollideEvent e) {
+        if(e.isCancelled()) return;
+        //identity check + owner of item check = cancel collision
+        String ownerName = itemIDs.get(e.getItem().getEntityId());
+        if(ownerName == null) return;
+        if(!ownerName.equalsIgnoreCase(e.getCollisionVictim().getName())) return;
+        e.setCancelled(true);
     }
 }

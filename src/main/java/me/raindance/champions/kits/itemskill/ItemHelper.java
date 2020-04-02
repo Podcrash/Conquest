@@ -1,19 +1,12 @@
 package me.raindance.champions.kits.itemskill;
 
 import com.google.common.reflect.ClassPath;
-import com.podcrash.api.mc.damage.Damage;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.annotation.ItemMetaData;
-import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.itemskill.item.Soup;
-import me.raindance.champions.kits.itemskill.item.WaterBottle;
-import me.raindance.champions.kits.itemskill.item.Web;
-import me.raindance.champions.kits.skills.warden.Adrenaline;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +15,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +22,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -61,7 +52,7 @@ public class ItemHelper extends ListenerBase {
 
             IItem item = (IItem) emptyConstructor(itemClass);
 
-            if(item instanceof TrapItem)
+            if(item instanceof Listener)
                 Bukkit.getPluginManager().registerEvents((Listener) item, Main.getInstance());
 
             if(item == null) throw new RuntimeException("item cannot be null! current at: " + info.getName());
