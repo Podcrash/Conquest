@@ -8,6 +8,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.ItemCollideEvent;
 import com.podcrash.api.mc.events.TrapPrimeEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
@@ -79,7 +80,8 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         Vector vector = location.getDirection();
         vector.normalize().multiply(1.15D);
         useEnergy(energy);
-        Item item = ItemManipulationManager.intercept(Material.DIAMOND_BLOCK, location, vector, (item1, entity) -> {
+        Item spawnItem = ItemManipulationManager.regular(Material.DIAMOND_BLOCK, location, vector);
+        Item item = ItemManipulationManager.intercept(spawnItem, 1.1,(item1, entity) -> {
             if(entity == null) TrapSetter.spawnTrap(item1, 500);
             else collide(item1);
         });
@@ -101,6 +103,15 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         if(item.getEntityId() != currentItemID) return;
         collide(item);
     }
+
+    @EventHandler
+    public void collideItem(ItemCollideEvent e) {
+        if(e.isCancelled()) return;
+        //identity check + owner of item check = cancel collision
+        if(e.getCollisionVictim() == getPlayer() && e.getItem().getEntityId() == currentItemID)
+            e.setCancelled(true);
+    }
+
 
     private void collide(Item item) {
         Location location = item.getLocation();
