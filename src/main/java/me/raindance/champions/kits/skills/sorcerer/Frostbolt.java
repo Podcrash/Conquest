@@ -57,7 +57,7 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
         location.getWorld().playSound(location, Sound.ORB_PICKUP, 0.3f, 2f);
         Vector vector = location.getDirection().normalize().multiply(speedMultiplier);
         vector.setY(vector.getY() + arcAngle);
-        org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(getPlayer(), Material.SNOW_BALL, location, vector,
+        org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(Material.SNOW_BALL, location, vector,
                 (item, entity) -> {
                     if (entity == null) {// not hit
 

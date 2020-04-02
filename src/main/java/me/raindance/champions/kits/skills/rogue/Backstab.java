@@ -39,9 +39,9 @@ public class Backstab extends Passive {
         Player damager = (Player) event.getAttacker();
         LivingEntity victim = event.getVictim();
         if (VectorUtil.angleIsAround(damager.getLocation().getDirection(), victim.getLocation().getDirection(), 60)) {
-            event.setModified(true);
             event.addSource(this);
             event.setDamage(event.getDamage() + bonus);
+            event.setModified(true);
             SoundPlayer.sendSound(victim.getLocation(), "game.neutral.hurt", 0.5F, 126);
             victim.getWorld().playEffect(event.getVictim().getLocation(), Effect.STEP_SOUND, 55);
         }

@@ -25,7 +25,7 @@ public class Web implements IItem {
     public void useItem(Player player, Action action) {
         Location location = player.getLocation();
         Vector vector = throwVector(location.getDirection());
-        Item item = ItemManipulationManager.intercept(player, Material.WEB, player.getEyeLocation(), vector, (itemm, entity) -> {
+        Item item = ItemManipulationManager.intercept(Material.WEB, player.getEyeLocation(), vector, (itemm, entity) -> {
             if(entity != null) {
                 SoundPlayer.sendSound(player, "random.successful_hit", 0.75F, 126);
             }

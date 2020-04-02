@@ -55,7 +55,7 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
         location.getWorld().playSound(location, Sound.GHAST_FIREBALL, 0.4f, 100.8f);
         Vector vector = location.getDirection().normalize().multiply(speedMultiplier);
         vector.setY(vector.getY() + arcAngle);
-        org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(getPlayer(), Material.MAGMA_CREAM, location, vector,
+        org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(Material.MAGMA_CREAM, location, vector,
                 (item, entity) -> {
                     if (entity == null) {// not hit
 

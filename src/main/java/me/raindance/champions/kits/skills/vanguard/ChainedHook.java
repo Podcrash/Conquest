@@ -58,7 +58,7 @@ public class ChainedHook extends Instant implements ICooldown {
         double charge = 0.275D;
         Vector itemVector = vector.clone().normalize().multiply(this.vect/1.25F);
         Location oldLocation = getPlayer().getLocation();
-        Item itemItem = ItemManipulationManager.intercept(getPlayer(), Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(),itemVector.setY(itemVector.getY() + 0.2).multiply(0.5F + 0.5F * charge),
+        Item itemItem = ItemManipulationManager.intercept(Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(),itemVector.setY(itemVector.getY() + 0.2).multiply(0.5F + 0.5F * charge),
                 ((item, entity) -> {
                     item.remove();
                     if(entity == null) return;

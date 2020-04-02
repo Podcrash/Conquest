@@ -79,7 +79,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         Vector vector = location.getDirection();
         vector.normalize().multiply(1.15D);
         useEnergy(energy);
-        Item item = ItemManipulationManager.intercept(getPlayer(), Material.DIAMOND_BLOCK, location, vector, (item1, entity) -> {
+        Item item = ItemManipulationManager.intercept(Material.DIAMOND_BLOCK, location, vector, (item1, entity) -> {
             if(entity == null) TrapSetter.spawnTrap(item1, 500);
             else collide(item1);
         });
