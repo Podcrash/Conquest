@@ -108,7 +108,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
     public void collideItem(ItemCollideEvent e) {
         if(e.isCancelled()) return;
         //identity check + owner of item check = cancel collision
-        if(e.getCollisionVictim() == getPlayer() && e.getItem().getEntityId() == currentItemID)
+        if((e.getCollisionVictim() == getPlayer() || isAlly(e.getCollisionVictim())) && e.getItem().getEntityId() == currentItemID)
             e.setCancelled(true);
     }
 

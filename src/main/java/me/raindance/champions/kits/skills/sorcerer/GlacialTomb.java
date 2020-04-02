@@ -91,10 +91,10 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
 
         Item spawnItem = ItemManipulationManager.regular(Material.ICE, location, vector);
         this.currentItemID = spawnItem.getEntityId();
-        Item item = ItemManipulationManager.intercept(spawnItem, 1.1, ((item1, entity) -> {
+        Item item = ItemManipulationManager.intercept(spawnItem, 0.5, ((item1, entity) -> {
             Location location1 = item1.getLocation();
             if(entity == null) {
-                location1.add(new Vector(0,1,0));
+                location1.add(new Vector(0,-1,0));
             } else {
                 location1 = entity.getLocation().add(0,1,0);
             }
