@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
@@ -60,6 +61,7 @@ public class ChainedHook extends Instant implements ICooldown {
         Location oldLocation = getPlayer().getLocation();
         Item itemItem = ItemManipulationManager.intercept(Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(),itemVector.setY(itemVector.getY() + 0.2).multiply(0.5F + 0.5F * charge),
                 ((item, entity) -> {
+                    if (entity == getPlayer()) { return; }
                     item.remove();
                     if(entity == null) return;
                     double amnt = 0.20F + 0.8F * charge;

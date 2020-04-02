@@ -7,6 +7,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -64,6 +65,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
                     getPlayer().setVelocity(new Vector(0, 0, 0));
                     for (Entity entity : entities) {
                         if (entity instanceof LivingEntity && entity != getPlayer() && !isAlly((LivingEntity) entity)) {
+                            if (entity instanceof Player && GameManager.isSpectating((Player) entity)) break;
                             LivingEntity living = (LivingEntity) entity;
                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_WOOD, 2f, 0.2f);
                             DamageApplier.damage(living, getPlayer(), 5, this, false);

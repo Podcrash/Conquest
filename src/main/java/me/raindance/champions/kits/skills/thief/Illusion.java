@@ -7,7 +7,11 @@ import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PrefixUtil;
+import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -15,13 +19,16 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Continuous;
 import com.podcrash.api.mc.mob.CustomSkeleton;
 import com.podcrash.api.mc.util.PacketUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -76,7 +83,7 @@ public class Illusion extends Continuous implements ICooldown {
 
     private void despawn(LivingEntity skeleton) {
         if(skeleton == null) return;
-        skeleton.teleport(skeleton.getLocation().subtract(0, skeleton.getLocation().getY(), 0));
+
         if(!skeleton.isDead()) skeleton.damage(skeleton.getMaxHealth());
     }
 
@@ -86,15 +93,16 @@ public class Illusion extends Continuous implements ICooldown {
 
     @Override
     public boolean cancel() {
-        return !getPlayer().isBlocking() || (getSkeleton() == null || getSkeleton().isDead() ||
+        return !getPlayer().isBlocking() || getPlayer().isDead() || (getSkeleton() == null || getSkeleton().isDead() ||
                 System.currentTimeMillis() - time >= duration * 1000L);
     }
 
     @Override
     public void cleanup() {
         super.cleanup();
-        StatusApplier.getOrNew((getPlayer())).removeCloak();
-
+        if (StatusApplier.getOrNew(getPlayer()).getEffects().contains(Status.CLOAK)) {
+            StatusApplier.getOrNew((getPlayer())).removeCloak();
+        }
         Location location = skeleton.getLocation();
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(location.toVector(), EnumWrappers.Particle.SMOKE_LARGE, 9, 0.3F,0.4F,0.3F);
         List<Player> players = getPlayers();
@@ -110,6 +118,9 @@ public class Illusion extends Continuous implements ICooldown {
 
         getGame().refreshTabColor(getPlayer(), getTeam().getChatColor().toString());
 
+        skeleton.getEquipment().setArmorContents(new ItemStack[]{null, null, null, null});
+        skeleton.teleport(skeleton.getLocation().subtract(0, skeleton.getLocation().getY(), 0));
         despawn(getSkeleton());
     }
+
 }

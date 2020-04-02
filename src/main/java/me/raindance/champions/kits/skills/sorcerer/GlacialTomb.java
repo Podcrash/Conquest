@@ -87,7 +87,11 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
 
         Item item = ItemManipulationManager.intercept(Material.ICE, location, vector, ((item1, entity) -> {
             Location location1 = item1.getLocation();
-            if(entity == null) location1.add(new Vector(0,1,0));
+            if(entity == null) {
+                location1.add(new Vector(0,1,0));
+            } else {
+                location1 = entity.getLocation().add(0,1,0);
+            }
             entomb(location1);
             item1.getWorld().playEffect(location1, Effect.STEP_SOUND, 79);
             item1.remove();
