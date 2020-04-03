@@ -169,8 +169,11 @@ public class DomGameListener extends ListenerBase {
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
 
-        for(Player player : Bukkit.getOnlinePlayers())
+        for(Player player : Bukkit.getOnlinePlayers()) {
             GameManager.addPlayer(player);
+            StatusApplier.getOrNew(player).removeStatus(Status.values());
+        }
+
     }
 
 

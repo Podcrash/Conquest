@@ -100,7 +100,7 @@ public abstract class ChampionsPlayer {
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         getInventory().clear();
         this.restockInventory();
-        this.equip();
+        //this.equip();
         this.resetCooldowns();
         player.setAllowFlight(false);
         player.setFlying(false);

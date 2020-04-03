@@ -106,6 +106,7 @@ public class PlayerJoinEventTest extends ListenerBase {
         }
     }
 
+    //TODO: isnt this method pointless now? (since we aren't depending on the hub world being "world"
     @EventHandler
     public void die(DeathApplyEvent event) {
         if (event.getPlayer().getWorld().getName().equals("world")) {
