@@ -35,7 +35,7 @@ public class Web implements IItem, Listener {
         Vector vector = throwVector(location.getDirection());
         Item spawnItem = ItemManipulationManager.regular(Material.WEB, player.getEyeLocation(), vector);
         itemIDs.put(spawnItem.getEntityId(), player.getName());
-        Item item = ItemManipulationManager.intercept(spawnItem, 1.1, (itemm, entity) -> {
+        Item item = ItemManipulationManager.intercept(spawnItem, 1.1, (itemm, entity, land) -> {
             if(entity != null) {
                 SoundPlayer.sendSound(player, "random.successful_hit", 0.75F, 126);
             }

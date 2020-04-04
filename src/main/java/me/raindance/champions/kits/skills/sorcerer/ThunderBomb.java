@@ -81,9 +81,9 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
         vector.normalize().multiply(1.15D);
         useEnergy(energy);
         Item spawnItem = ItemManipulationManager.regular(Material.DIAMOND_BLOCK, location, vector);
-        Item item = ItemManipulationManager.intercept(spawnItem, 1.1,(item1, entity) -> {
+        Item item = ItemManipulationManager.intercept(spawnItem, 1.1,(item1, entity, land) -> {
             if(entity == null) TrapSetter.spawnTrap(item1, 500);
-            else collide(item1);
+            else collide(item1, land);
         });
         item.setCustomName("RITB");
         ItemMeta meta = item.getItemStack().getItemMeta();
@@ -101,7 +101,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
     public void trapPrime(TrapPrimeEvent event) {
         Item item = event.getItem();
         if(item.getEntityId() != currentItemID) return;
-        collide(item);
+        collide(item, item.getLocation());
     }
 
     @EventHandler
@@ -113,8 +113,7 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
     }
 
 
-    private void collide(Item item) {
-        Location location = item.getLocation();
+    private void collide(Item item, Location location) {
         for(Player player : getPlayers()) {
             if(player == getPlayer() && isAlly(player)) continue;
             Location playerLocation = player.getLocation();

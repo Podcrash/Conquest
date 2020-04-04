@@ -64,13 +64,12 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
         Item spawnItem = ItemManipulationManager.regular(Material.SNOW_BALL, location, vector);
         this.currentItemID = spawnItem.getEntityId();
         org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(spawnItem, 1.1,
-                (item, entity) -> {
+                (item, entity, land) -> {
                     item.remove();
                     if (entity == null) return;
                     if(entity instanceof Player){
                         if(isAlly(entity)) {
                             location.getWorld().playSound(location, Sound.DIG_WOOL, 1f, 31.5f);
-                            item.remove();
                         }
                         if(!isAlly((entity))) {
                             StatusApplier applier = StatusApplier.getOrNew(entity);
@@ -79,7 +78,7 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
                             DamageApplier.damage(entity, getPlayer(), damage, this, false);
                         }
                     }else entity.damage(damage);
-                    entity.getWorld().playEffect(item.getLocation(), Effect.STEP_SOUND, 20);
+                    entity.getWorld().playEffect(land, Effect.STEP_SOUND, 20);
                 });
         ItemMeta meta = iitem.getItemStack().getItemMeta();
         iitem.setCustomName("RITB");

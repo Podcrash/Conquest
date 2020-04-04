@@ -66,7 +66,7 @@ public class ChainedHook extends Instant implements ICooldown {
         Item spawnItem = ItemManipulationManager.regular(Material.TRIPWIRE_HOOK, getPlayer().getEyeLocation(), itemVector);
         this.currentItemID = spawnItem.getEntityId();
         ItemManipulationManager.intercept(spawnItem, 2.25,
-                ((item, entity) -> {
+                ((item, entity, land) -> {
                     if (entity == getPlayer()) { return; }
                     item.remove();
                     if(entity == null) return;
