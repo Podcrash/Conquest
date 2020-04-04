@@ -64,7 +64,7 @@ public class DomGame extends Game {
 
     @Override
     public String getMode() {
-        return "conquest";
+        return "Conquest";
     }
 
     public StarBuff getStarBuff() {
