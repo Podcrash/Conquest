@@ -53,7 +53,7 @@ public class Fortitude extends Passive implements ICooldown {
     public void hit() {
         if(onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 0);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.REGENERATION, 3, 1);
     }
 
     @Override
