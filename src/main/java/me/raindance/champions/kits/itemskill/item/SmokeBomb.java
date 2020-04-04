@@ -32,8 +32,7 @@ public class SmokeBomb implements IItem {
         ItemManipulationManager.intercept(spawnItem, 1.1, this::bomb);
     }
 
-    private void bomb(Item item, LivingEntity intercepted) {
-        Location land = item.getLocation();
+    private void bomb(Item item, LivingEntity intercepted, Location land) {
         World world = item.getWorld();
         world.playEffect(land, Effect.EXPLOSION_HUGE, 1);
         world.playSound(land, Sound.FIZZ, 2f, 0.5f);

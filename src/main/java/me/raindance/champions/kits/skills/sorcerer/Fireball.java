@@ -62,7 +62,7 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
         Item spawnItem = ItemManipulationManager.regular(Material.MAGMA_CREAM, location, vector);
         this.currentItemID = spawnItem.getEntityId();
         org.bukkit.entity.Item iitem = ItemManipulationManager.intercept(spawnItem, 1.1,
-                (item, entity) -> {
+                (item, entity, land) -> {
                     item.remove();
                     if (entity == null) return;
                     if(entity instanceof Player){
@@ -78,7 +78,7 @@ public class Fireball extends Instant implements IEnergy, ICooldown, IConstruct 
                             DamageApplier.damage(entity, getPlayer(), damage, this, false);
                         }
                     }else entity.damage(damage);
-                    WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(item.getLocation().toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, new int[]{0,0,0}, 1, 0,0,0);
+                    WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(land.toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, new int[]{0,0,0}, 1, 0,0,0);
                     PacketUtil.asyncSend(packet, getPlayers());
                     location.getWorld().playSound(location, Sound.DIG_WOOL, 1f, 31.5f);
                     location.getWorld().playSound(location, Sound.EXPLODE, 0.3f, 100f);
