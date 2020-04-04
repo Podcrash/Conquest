@@ -38,9 +38,9 @@ public class ChainedHook extends Instant implements ICooldown {
     // changes much more easier (we don't have to dig through the code to change stuff; this is ideal).
     private float cooldown = 10;
 
-    private float itemSpeedMult = 1.9f;
-    private double itemVerticalBoost = 0.27;
-    private float victimSpeedMult = 1.6f;
+    private float itemSpeedMult = 2.4f;
+    private double itemVerticalBoost = 0.2;
+    private float victimSpeedMult = 2.4f;
     private double victimVerticalBoost = 0.65;
 
     private double victimVerticalBoostLimit = 1.35;
