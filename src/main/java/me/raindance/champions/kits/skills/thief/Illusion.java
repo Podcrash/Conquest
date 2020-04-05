@@ -11,6 +11,7 @@ import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PrefixUtil;
+import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -20,6 +21,7 @@ import me.raindance.champions.kits.skilltypes.Continuous;
 import com.podcrash.api.mc.mob.CustomSkeleton;
 import com.podcrash.api.mc.util.PacketUtil;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -83,8 +85,15 @@ public class Illusion extends Continuous implements ICooldown {
 
     private void despawn(LivingEntity skeleton) {
         if(skeleton == null) return;
+        //Bad way to prevent armor from showing after leaving illusion:
+        //Teleport the skeleton far down (out of the way and doesn't load another chunk)
+        skeleton.teleport(skeleton.getLocation().subtract(0, skeleton.getLocation().getY() + 10, 0));
 
-        if(!skeleton.isDead()) skeleton.damage(skeleton.getMaxHealth());
+        //Kill the skeleton down there, so armor will despawn from void
+        Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
+            if(!skeleton.isDead()) skeleton.damage(skeleton.getMaxHealth());
+                },4L);
+
     }
 
     @Override
@@ -118,8 +127,8 @@ public class Illusion extends Continuous implements ICooldown {
 
         getGame().refreshTabColor(getPlayer(), getTeam().getChatColor().toString());
 
-        skeleton.getEquipment().setArmorContents(new ItemStack[]{null, null, null, null});
-        skeleton.teleport(skeleton.getLocation().subtract(0, skeleton.getLocation().getY(), 0));
+        //skeleton.getEquipment().setArmorContents(new ItemStack[]{null, null, null, null});
+
         despawn(getSkeleton());
     }
 
