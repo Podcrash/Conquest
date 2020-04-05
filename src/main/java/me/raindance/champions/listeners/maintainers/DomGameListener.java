@@ -119,7 +119,7 @@ public class DomGameListener extends ListenerBase {
     public void itemObjectiveSpawn(ItemObjectiveSpawnEvent e) {
         if(e.getObjective() instanceof Star) {
             DomGame game = (DomGame) GameManager.getGame();
-            game.getStarBuff().replaceLine(StarBuff.PREFIX + " ACTIVE");
+            game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
         }
     }
     @EventHandler
@@ -304,10 +304,11 @@ public class DomGameListener extends ListenerBase {
         if(GameManager.getGame().isRespawning(e.getPlayer()) || !GameManager.getGame().isParticipating(e.getPlayer())) e.setCancelled(true);
     }
 
-    @EventHandler()
+    @EventHandler(priority = EventPriority.LOWEST)
     public void maintainArmour(InventoryClickEvent event) {
         Inventory clicked = event.getClickedInventory();
-        if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR))
-             event.setCancelled(true);
+        if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
+            event.setCancelled(true);
+        }
     }
 }

@@ -37,7 +37,7 @@ public class DomScoreboard extends GameScoreboard {
         List<String> points = new ArrayList<>();
         for(GTeam team : getGame().getTeams()) {
             TeamEnum teamE = team.getTeamEnum();
-            points.add(teamE.getChatColor() + teamE.getName());
+            points.add(teamE.getChatColor() + "" + ChatColor.BOLD + teamE.getName());
             points.add("");
         }
         points.add("");
@@ -70,7 +70,7 @@ public class DomScoreboard extends GameScoreboard {
     public void updateScore(TeamEnum team) {
         List<String> lines = getLines();
 
-        String lowerTeam = (team.getChatColor() + team.getName()).toLowerCase();
+        String lowerTeam = (team.getChatColor() + "" + ChatColor.BOLD + team.getName()).toLowerCase();
         for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             //Pluginizer.getLogger().info(line.toLowerCase()+ " vs " + lowerTeam);

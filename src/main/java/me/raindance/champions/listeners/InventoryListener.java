@@ -20,6 +20,7 @@ import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -143,7 +144,7 @@ public class InventoryListener extends ListenerBase {
      * @return whether the inventory is the player's inventory in a lobby
      */
     private boolean isLobbyMenu(Player player, Inventory inventory) {
-        return ownInventory(player, inventory) && !InvFactory.currentlyEditing(player);
+        return ownInventory(player, inventory) && !InvFactory.currentlyEditing(player) && !GameManager.getGame().isOngoing();
     }
 
     private boolean ownInventory(Player player, Inventory clickedInventory) {
@@ -152,6 +153,7 @@ public class InventoryListener extends ListenerBase {
 
     @EventHandler
     public void clickItem(InventoryClickEvent event) {
+        if(event.isCancelled()) return;
         if(!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
         Inventory inventory = event.getClickedInventory();
