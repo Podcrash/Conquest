@@ -77,7 +77,7 @@ public class InventoryListener extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEnchant(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
-        if(GameManager.getGame().isRespawning(e.getPlayer())) {
+        if(GameManager.getGame().isRespawning(e.getPlayer()) && e.getClickedBlock().getType().equals(Material.ENCHANTMENT_TABLE)) {
             e.getPlayer().sendMessage(String.format("%sConquest> %sYou may not change kits while respawning.", ChatColor.BLUE, ChatColor.GRAY));
             e.setCancelled(true);
             return;

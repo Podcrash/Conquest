@@ -51,7 +51,7 @@ public class StarBuff implements TimeResource {
     public void setCollector(Player collector) {
         this.holder = collector.getName();
         this.endTime = System.currentTimeMillis() + 1000L * 30;
-        replaceLine(PREFIX + " " + holder);
+        replaceLine(PREFIX + ChatColor.YELLOW + " " + ChatColor.BOLD + holder);
         runAsync(1, 0);
     }
 
@@ -109,7 +109,7 @@ public class StarBuff implements TimeResource {
             game.broadcast(team.getChatColor() + holder + " lost the buff peacefully.");
             //alert the players that the collector lost the buff peacefully
         }
-        replaceLine(PREFIX + " " + "INACTIVE");
+        replaceLine(PREFIX + ChatColor.GRAY + " Inactive");
 
         this.holder = null;
     }
