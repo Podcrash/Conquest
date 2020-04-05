@@ -90,7 +90,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
 
     private void check(boolean isSprinting) {
         toggle = isSprinting;
-        if (toggle) {
+        if (toggle && !getGame().isRespawning(getPlayer())) {
             start();
         } else {
             unregister();

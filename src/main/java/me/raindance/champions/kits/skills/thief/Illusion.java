@@ -58,7 +58,6 @@ public class Illusion extends Continuous implements ICooldown {
     protected void doContinuousSkill() {
         if(a && !onCooldown()) {
             a = false;
-            this.getPlayer().sendMessage(getUsedMessage());
             StatusApplier.getOrNew((getPlayer())).applyStatus(Status.CLOAK, duration, 1);
             time = System.currentTimeMillis();
             Skeleton skeleton = spawn();
