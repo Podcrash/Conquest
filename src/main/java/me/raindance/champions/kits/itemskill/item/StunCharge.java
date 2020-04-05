@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 //when there's a better item system, change this
-@ItemMetaData(mat = Material.REDSTONE_LAMP_OFF, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.REDSTONE_LAMP_OFF, actions = {Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class StunCharge extends TrapItem {
     public StunCharge() {
         super(2500);

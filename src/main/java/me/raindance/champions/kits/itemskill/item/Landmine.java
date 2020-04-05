@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 
-@ItemMetaData(mat = Material.TNT, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.TNT, actions = {Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class Landmine extends TrapItem {
     public Landmine() {
         super(5000);

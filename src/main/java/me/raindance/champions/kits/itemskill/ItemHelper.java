@@ -106,6 +106,7 @@ public class ItemHelper extends ListenerBase {
         if(itemHandler.actionContains(action)) {
             itemHandler.doItemAction(p, action);
             removeItemFromHand(p);
+
         }else e.setCancelled(true);
     }
 

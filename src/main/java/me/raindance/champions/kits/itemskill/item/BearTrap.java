@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 //when there's a better item system, change this
-@ItemMetaData(mat = Material.STONE_PLATE, actions = {Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
+@ItemMetaData(mat = Material.STONE_PLATE, actions = {Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})
 public class BearTrap extends TrapItem implements DamageSource {
     public BearTrap() {
         super(2500);
