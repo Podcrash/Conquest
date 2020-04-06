@@ -93,7 +93,7 @@ public class StarBuff implements TimeResource {
 
     @Override
     public boolean cancel() {
-        return dead || System.currentTimeMillis() > endTime;
+        return dead || System.currentTimeMillis() > endTime || !game.isOngoing();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class StarBuff implements TimeResource {
             game.broadcast(team.getChatColor() + holder + " lost the buff!");
             //alert the players that the collector lost the buff and gave the opposite team the points back
             this.dead = false;
-        }else {
+        } else if (game.isOngoing()) {
             game.broadcast(team.getChatColor() + holder + " lost the buff peacefully.");
             //alert the players that the collector lost the buff peacefully
         }
