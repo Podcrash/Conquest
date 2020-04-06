@@ -107,6 +107,9 @@ public abstract class ChampionsPlayer {
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
         player.setHealth(player.getMaxHealth());
+        if(ebar != null) {
+            ebar.setEnergy(ebar.getMaxEnergy());
+        }
 
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
