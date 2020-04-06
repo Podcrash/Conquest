@@ -45,12 +45,6 @@ commands:
   newgame:
     description: Create a new Champions game. Valid gamemodes as of now include; DOM (case sensitive?)
     usage: /newgame <GameMode>
-  hitreg:
-    description: Put a new hitreg
-    usage: /hitreg <integer>
-  kb:
-    description: Modify the KB values
-    usage: /kb ...
   lock:
     description: lock the inventory or not.
 permissions:
