@@ -11,6 +11,8 @@ import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.inventory.ChampionsInventory;
 import me.raindance.champions.inventory.ChampionsItem;
+import me.raindance.champions.kits.classes.Druid;
+import me.raindance.champions.kits.classes.Sorcerer;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
@@ -107,7 +109,7 @@ public abstract class ChampionsPlayer {
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
         player.setHealth(player.getMaxHealth());
-        if(ebar != null) {
+        if(this instanceof Druid || this instanceof Sorcerer) {
             ebar.setEnergy(ebar.getMaxEnergy());
         }
 
