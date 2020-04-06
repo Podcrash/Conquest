@@ -16,7 +16,7 @@ public class SkillCommand extends CommandBase {
             ChampionsPlayer p = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) sender);
             if(p == null)
                 player.sendMessage(ChatColor.BOLD + "You currently don't have any skills!");
-            else player.sendMessage(p.skillsRead());
+            else p.skillsRead();
         }
         return true;
     }

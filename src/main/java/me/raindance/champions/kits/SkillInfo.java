@@ -203,4 +203,12 @@ public final class SkillInfo {
     public static List<SkillData> getSkillData() {
         return skillData;
     }
+
+    public static SkillData getSkillData(Skill skill) {
+        for(SkillData data : skillData) {
+            if(data.getName().equalsIgnoreCase(skill.getName()))
+                return data;
+        }
+        return null;
+    }
 }

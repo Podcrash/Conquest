@@ -71,7 +71,8 @@ public class ChampionsPlayerManager {
 
         if(!apply.isKeepInventory())
             cp.restockInventory();
-        cp.getPlayer().sendMessage(cp.skillsRead());
+        //cp.getPlayer().sendMessage(cp.skillsRead());
+        cp.skillsRead();
     }
     public void removeChampionsPlayer(ChampionsPlayer cplayer) {
         Main.getInstance().log.info(cplayer + "");
