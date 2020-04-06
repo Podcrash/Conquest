@@ -23,14 +23,12 @@ import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.plugin.Pluginizer;
-import javafx.scene.layout.Priority;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
-import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -171,6 +169,7 @@ public class DomGameListener extends ListenerBase {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             GameManager.addPlayer(player);
+            player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
             StatusApplier.getOrNew(player).removeStatus(Status.values());
         }
 

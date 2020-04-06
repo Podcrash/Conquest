@@ -3,19 +3,19 @@ package me.raindance.champions.kits;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.mc.sound.SoundWrapper;
+import me.raindance.champions.inventory.ChampionsInventory;
 import me.raindance.champions.inventory.ChampionsItem;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -23,7 +23,6 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import java.util.List;
 
@@ -100,7 +99,6 @@ public abstract class ChampionsPlayer {
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         getInventory().clear();
         this.restockInventory();
-        //this.equip();
         this.resetCooldowns();
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -221,7 +219,7 @@ public abstract class ChampionsPlayer {
     public void restockInventory() {
         int size = this.defaultHotbar.length;
         ItemStack TNT = getTNTStack();
-        getInventory().clear();
+        ChampionsInventory.clearHotbarSelection(player);
         int i = 0;
         for (; i < size; i++) {
             ItemStack item = this.defaultHotbar[i];
@@ -229,6 +227,7 @@ public abstract class ChampionsPlayer {
             else this.getInventory().setItem(i, null);
         }
         if(TNT != null) getInventory().addItem(TNT.clone());
+        this.equip();
     }
 
     public double getFallDamage() {
