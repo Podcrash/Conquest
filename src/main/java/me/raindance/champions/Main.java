@@ -2,8 +2,6 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.mc.commands.HitRegCommand;
-import com.podcrash.api.mc.commands.KnockbackCommand;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -248,8 +246,6 @@ public class Main extends JavaPlugin {
             getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
             getCommand("rc").setExecutor(new ReloadChampionsCommand());
             getCommand("skill").setExecutor(new SkillCommand());
-            getCommand("kb").setExecutor(new KnockbackCommand());
-            getCommand("hitreg").setExecutor(new HitRegCommand());
             getCommand("lock").setExecutor(new LockCommand());
         }, executor);
     }

@@ -42,10 +42,6 @@ public class PlayerJoinEventTest extends ListenerBase {
         beacon.setItemMeta(meta1);
     }
 
-    private void putPlayerDB(UUID uuid) {
-        PlayerTable players = TableOrganizer.getTable(DataTableType.PLAYERS);
-        players.insert(uuid);
-    }
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player player = e.getPlayer();
@@ -81,7 +77,6 @@ public class PlayerJoinEventTest extends ListenerBase {
                 GameManager.addPlayer(player);
             }
         }
-        putPlayerDB(player.getUniqueId());
         InvFactory.applyLastBuild(player);
         if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null)
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
