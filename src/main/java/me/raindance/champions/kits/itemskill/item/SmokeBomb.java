@@ -11,6 +11,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 
@@ -18,8 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ItemMetaData(mat = Material.FIREWORK_CHARGE)
-public class SmokeBomb implements IItem {
+@ItemMetaData(mat = Material.FIREWORK_CHARGE, actions = {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK})
+public class SmokeBomb implements IItem, Listener {
     private final Map<Integer, String> itemIDs = new HashMap<>();
 
     @Override
@@ -34,11 +35,11 @@ public class SmokeBomb implements IItem {
 
     private void bomb(Item item, LivingEntity intercepted, Location land) {
         World world = item.getWorld();
-        world.playEffect(land, Effect.EXPLOSION_HUGE, 1);
-        world.playSound(land, Sound.FIZZ, 2f, 0.5f);
+        world.playEffect(item.getLocation(), Effect.EXPLOSION_HUGE, 1);
+        world.playSound(item.getLocation(), Sound.FIZZ, 2f, 0.5f);
         List<LivingEntity> entities = world.getLivingEntities();
         for(LivingEntity entity : entities) {
-            if(entity.getLocation().distanceSquared(land) > 16D) continue;
+            if(entity.getLocation().distanceSquared(item.getLocation()) > 16D) continue;
             StatusApplier.getOrNew(entity).applyStatus(Status.BLIND, 3, 0);
             StatusApplier.getOrNew(entity).applyStatus(Status.SLOW, 3, 0);
         }

@@ -108,6 +108,7 @@ public class ItemHelper extends ListenerBase {
             removeItemFromHand(p);
 
         }else e.setCancelled(true);
+        p.updateInventory();
     }
 
     private void removeItemFromHand(Player player) {
