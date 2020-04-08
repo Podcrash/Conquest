@@ -72,7 +72,9 @@ public class Gust extends ChargeUp implements IEnergy {
             DamageApplier.damage(p, getPlayer(), 0, this, false);
         }
 
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wither.shoot", 0.4F, 88);
+        // This was the old sound, pyro wanted the bat takeoff for a new one
+        //SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wither.shoot", 0.4F, 88);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.bat.takeoff", 1F, 57);
 
     }
 
