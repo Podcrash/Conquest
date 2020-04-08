@@ -24,6 +24,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -103,6 +104,13 @@ public class Stealth extends Drop implements ICooldown, IConstruct {
         if(event.isCancelled()) return;
         if(event.getVictim() == getPlayer() || event.getAttacker() == getPlayer())
             cancelInvis(getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDamaged(EntityDamageEvent event) {
+        if (event.getEntity() == getPlayer()) {
+            cancelInvis(getPlayer());
+        }
     }
 
     private class SmokeBombTrail implements TimeResource {
