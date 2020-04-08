@@ -178,20 +178,6 @@ public class DomGameListener extends ListenerBase {
             player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
             StatusApplier.getOrNew(player).removeStatus(Status.values());
         }
-
-        MapTable table = TableOrganizer.getTable(DataTableType.MAPS);
-        Set<String> validMaps = new HashSet<>(table.getWorlds(GameManager.getGame().getMode()));
-        int size = validMaps.size();
-        int item = new Random().nextInt(size);
-        int i = 0;
-        for(String map : validMaps) {
-            if (i == item) {
-                GameManager.setGameMap(map);
-                break;
-            }
-            i++;
-        }
-
     }
 
 

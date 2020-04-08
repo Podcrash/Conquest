@@ -179,23 +179,7 @@ public class Main extends JavaPlugin {
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
     }
-    @Override
-    public void onLoad() {
-        MapTable table = TableOrganizer.getTable(DataTableType.MAPS);
-        Set<String> validMaps = new HashSet<>(table.getWorlds(GameManager.getGame().getMode()));
-        int size = validMaps.size();
-        int item = new Random().nextInt(size);
-        int i = 0;
-        for(String map : validMaps) {
-            if (i == item) {
-                GameManager.setGameMap(map);
-                break;
-            }
-            i++;
-        }
 
-
-    }
     @Override
     public void onDisable() {
         DamageQueue.active = false;
