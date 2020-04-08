@@ -24,7 +24,7 @@ public class Gust extends ChargeUp implements IEnergy {
     private final float duration = 4;           //  duration of slow
 
     private final int freq = 5;                 // Frequency of particles
-    private final float rate = 0.075f;          // Rate of charge
+    private final float rate = 0.05f;          // Rate of charge
 
     private final float cooldown = 10;
     private final int energy = 40;
@@ -42,14 +42,20 @@ public class Gust extends ChargeUp implements IEnergy {
 
     @Override
     public void release() {
+        if(isInWater()) {
+            getPlayer().sendMessage(getWaterMessage());
+            return;
+        }
         useEnergy();
         Vector enemyPush = getPlayer().getEyeLocation().getDirection().normalize().multiply(enemyPushMult * getCharge());
         enemyPush.setY(getPlayer().getEyeLocation().getDirection().normalize().getY() + enemyVertBoost);
 
-        Vector userPush = getPlayer().getEyeLocation().getDirection().normalize().multiply(-(userPushMult * getCharge()));
-        userPush.setY(userPush.getY() + userVertBoost);
+        if(!getPlayer().isSneaking()) {
+            Vector userPush = getPlayer().getEyeLocation().getDirection().normalize().multiply(-(userPushMult * getCharge()));
+            userPush.setY(userPush.getY() + userVertBoost);
+            getPlayer().setVelocity(userPush);
+        }
 
-        getPlayer().setVelocity(userPush);
         WrapperPlayServerWorldParticles particlePlayer = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, 1, 0,0,0);
         PacketUtil.asyncSend(particlePlayer, getPlayers());
 
