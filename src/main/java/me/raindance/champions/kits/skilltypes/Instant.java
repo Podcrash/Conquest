@@ -83,7 +83,7 @@ public abstract class Instant extends Skill {
     }
     private boolean skill(PlayerEvent event, Action action) {
         if(this.use) return false;
-        SkillUseEvent useEvent = new SkillUseEvent(instance);
+        SkillUseEvent useEvent = new SkillUseEvent(instance, action);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return false;
         this.use = true;

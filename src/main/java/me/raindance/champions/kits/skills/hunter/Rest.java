@@ -14,6 +14,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Continuous;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.Random;
 
@@ -88,5 +89,13 @@ public class Rest extends Continuous {
                 ChatColor.YELLOW, event.getAttacker().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY);
         getPlayer().sendMessage(cancelMsg);
     }
+
+    @EventHandler
+    public void onDamaged(EntityDamageEvent event) {
+        if(!active || event.getEntity() != getPlayer()) return;
+        active = false;
+    }
+
+
 
 }

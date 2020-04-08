@@ -3,6 +3,7 @@ package me.raindance.champions.resource;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
+import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -11,6 +12,7 @@ import com.podcrash.api.mc.util.TitleSender;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import me.raindance.champions.util.SkillTitleSender;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -58,6 +60,10 @@ public class CooldownResource implements TimeResource {
     public void cleanup() {
         if(!skill.hasCooldown()) return;
         player.sendMessage(skill.getCanUseMessage());
+
+        SkillRechargeEvent recharge = new SkillRechargeEvent(skill);
+        Bukkit.getPluginManager().callEvent(recharge);
+
         TitleSender.sendTitle(player, TitleSender.emptyTitle());
         SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
 

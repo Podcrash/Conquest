@@ -6,6 +6,7 @@ import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.TitleSender;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
@@ -35,6 +36,23 @@ public abstract class ChargeUp extends Skill implements TimeResource, ICooldown 
     public ChargeUp() {
         super();
     }
+
+    @EventHandler
+    public void recharge(SkillRechargeEvent e) {
+        if(e.getSkillName().equalsIgnoreCase(this.getName()) && getPlayer().isBlocking()) {
+            if(isInWater()) {
+                getPlayer().sendMessage(getWaterMessage());
+                return;
+            }
+            if(!onCooldown()) {
+                SkillUseEvent useEvent = new SkillUseEvent(this);
+                Bukkit.getPluginManager().callEvent(useEvent);
+                if(useEvent.isCancelled()) return;
+                TimeHandler.repeatedTime(1, 0, this);
+            }
+        }
+    }
+
     @EventHandler(
             priority = EventPriority.HIGH
     )
