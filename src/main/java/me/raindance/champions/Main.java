@@ -2,6 +2,9 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -178,6 +181,20 @@ public class Main extends JavaPlugin {
     }
     @Override
     public void onLoad() {
+        MapTable table = TableOrganizer.getTable(DataTableType.MAPS);
+        Set<String> validMaps = new HashSet<>(table.getWorlds(GameManager.getGame().getMode()));
+        int size = validMaps.size();
+        int item = new Random().nextInt(size);
+        int i = 0;
+        for(String map : validMaps) {
+            if (i == item) {
+                GameManager.setGameMap(map);
+                break;
+            }
+            i++;
+        }
+
+
     }
     @Override
     public void onDisable() {
