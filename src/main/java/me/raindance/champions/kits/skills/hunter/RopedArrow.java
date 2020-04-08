@@ -41,6 +41,9 @@ public class RopedArrow extends BowShotSkill {
         //boost(victim.getLocation(), force, arrow.getVelocity());
         event.setVelocityModifierX(-1.5d);
         event.setVelocityModifierZ(-1.5d);
+
+        Vector curVelocity = victim.getVelocity();
+        victim.setVelocity(curVelocity.setY(0.5));
     }
 
     @Override
