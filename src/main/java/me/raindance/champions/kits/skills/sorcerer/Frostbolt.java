@@ -10,6 +10,7 @@ import com.podcrash.api.mc.events.ItemCollideEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.world.BlockUtil;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -22,13 +23,14 @@ import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 1011, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
-public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct {
+public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct, Listener {
     private int currentItemID;
 
     private double damage = 4;
@@ -119,6 +121,13 @@ public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct
         //identity check + owner of item check = cancel collision
         if(e.getCollisionVictim() == getPlayer() && e.getItem().getEntityId() == currentItemID)
             e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onUse(SkillUseEvent e) {
+        if(e.getSkill().equals(this) && (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+            e.setCancelled(true);
+        }
     }
 
     @Override
