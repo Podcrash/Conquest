@@ -172,8 +172,8 @@ public class DomGameListener extends ListenerBase {
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
             //handler.pay(player, payout);
-            player.sendMessage(String.format("%s%sYour current balance is %s %s!",
-                    Currency.GOLD.getFormatting(), ChatColor.BOLD, handler.getMoney(player), Currency.GOLD.getName()));
+            player.sendMessage(String.format("%s%sYou earned %s %s!",
+                    Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
 
 

@@ -5,6 +5,8 @@ import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.events.econ.*;
+import com.podcrash.api.mc.game.Game;
+import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.MenuCreator;
@@ -31,7 +33,11 @@ public class EconomyListener extends ListenerBase {
 
     @EventHandler
     public void earn(PayEvent e) {
-        e.getPlayer().sendMessage("You earned " + e.getMoneys() + " !");
+        Game game = GameManager.getGame();
+        if(game != null && game.isOngoing()) {
+            game.addReward(e.getPlayer(), e.getMoneys());
+        }
+        //e.getPlayer().sendMessage("You earned " + e.getMoneys() + " !");
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {

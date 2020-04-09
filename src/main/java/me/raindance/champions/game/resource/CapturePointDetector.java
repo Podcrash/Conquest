@@ -11,15 +11,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class CapturePointDetector extends GameResource {
     private final CapturePoint[] capturePoints;
     private final boolean[] playersCurrentlyIn;
     private final int[] currentlyCapturing;
+    private List<Player> firstPlayerToCapture;
     private DomScoreboard scoreboard;
 
     private TeamEnum red;
@@ -38,6 +36,7 @@ public final class CapturePointDetector extends GameResource {
 
     public CapturePointDetector(int gameID) {
         super(gameID, 5, 100);
+        this.firstPlayerToCapture = new ArrayList<>(Arrays.asList(null, null, null, null, null));
         this.capturePoints = ((DomGame) getGame()).getCapturePoints().toArray(new CapturePoint[((DomGame) getGame()).getCapturePoints().size()]);
         this.bounds = new double[5][3][2];
         this.playersCurrentlyIn = new boolean[5];
@@ -107,6 +106,7 @@ public final class CapturePointDetector extends GameResource {
             if(a) {
                 TeamEnum team = getGame().getTeamEnum(Bukkit.getPlayer(players[p]));
                 teamToColor.put(i, teamToColor.get(i) + team.getIntData());
+                firstPlayerToCapture.set(i, Bukkit.getPlayer(players[p]));
                 foundPlayer = true;
             }
         }
@@ -150,7 +150,7 @@ public final class CapturePointDetector extends GameResource {
             }
         }
         teamToColor.put(i, 0);
-        if(team != null) Bukkit.getPluginManager().callEvent(new GameCaptureEvent(getGame(), null, capturePoint));
+        if(team != null) Bukkit.getPluginManager().callEvent(new GameCaptureEvent(getGame(), firstPlayerToCapture.get(i), capturePoint));
     }
     @Override
     public void task() {
