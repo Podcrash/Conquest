@@ -62,6 +62,7 @@ public abstract class Interaction extends Skill implements ICooldown {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void miss(PlayerInteractEvent event) {
+        if(event.isCancelled()) return;
         if (event.getPlayer() == getPlayer() && isHolding() && rightClickCheck(event.getAction())) {
             if(isInWater()) getPlayer().sendMessage(getWaterMessage());
             if(!canMiss) return;

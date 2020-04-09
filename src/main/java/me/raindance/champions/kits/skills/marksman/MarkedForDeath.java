@@ -62,7 +62,6 @@ public class MarkedForDeath extends BowShotSkill {
         synchronized (victims) {
             victims.add(victim.getName());
         }
-        getPlayer().sendMessage(getUsedMessage(victim));
         event.setModified(true);
         event.setDamage(1);
         TimeHandler.delayTime(3 * 20L, () -> victims.remove(victim.getName()));

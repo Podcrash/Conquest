@@ -6,14 +6,15 @@ import org.bukkit.event.HandlerList;
 
 public class SkillInteractEvent extends SkillUseEvent {
     private static final HandlerList handlers = new HandlerList();
-    private LivingEntity interactor;
-    public SkillInteractEvent(Skill skill, LivingEntity interactor) {
+    private LivingEntity interacted;
+    public SkillInteractEvent(Skill skill, LivingEntity interacted) {
+
         super(skill);
-        this.interactor = interactor;
+        this.interacted = interacted;
     }
 
-    public LivingEntity getInteractor() {
-        return interactor;
+    public LivingEntity getInteracted() {
+        return interacted;
     }
 
     public static HandlerList getHandlerList() {

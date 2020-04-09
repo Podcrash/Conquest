@@ -15,7 +15,6 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Interaction;
-import net.md_5.bungee.protocol.packet.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -32,7 +31,7 @@ public class Overgrowth extends Interaction implements ICooldown, IEnergy {
     public void enemyCheck(SkillUseEvent e){
         if(e instanceof SkillInteractEvent) {
             SkillInteractEvent interact = (SkillInteractEvent) e;
-            if(interact.getSkill().equals(this) && !isAlly(interact.getInteractor())) {
+            if(interact.getSkill().equals(this) && !isAlly(interact.getInteracted())) {
                 getPlayer().sendMessage(String.format("%sSkill> %sOvergrowth %sdoes not affect your enemies.", ChatColor.BLUE, ChatColor.GREEN, ChatColor.GRAY));
                 interact.setCancelled(true);
             }

@@ -7,7 +7,6 @@ import me.raindance.champions.events.skill.SkillInteractEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.skilltypes.Passive;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -55,7 +54,7 @@ public class SkillMaintainListener extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void useInteractSkill(SkillInteractEvent e) {
         Player user = e.getPlayer();
-        LivingEntity interacto = e.getInteractor();
+        LivingEntity interacto = e.getInteracted();
         if(!(interacto instanceof Player)) return;
         Player interactor = (Player) interacto;
 
