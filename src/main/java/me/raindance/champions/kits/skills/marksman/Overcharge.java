@@ -40,8 +40,8 @@ public class Overcharge extends BowChargeUp {
         double bonus = bonusDamage * charge;
         e.setModified(true);
         e.setDamage(e.getDamage() + bonus);
-        getPlayer().sendMessage(String.format("%sSkill> %sYou shot %s%s %sfor %s%.2f more damage with %s%s%s.",
-                ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, e.getVictim().getName(), ChatColor.GRAY, bonus, ChatColor.GREEN, getName(), ChatColor.GRAY));
+        getPlayer().sendMessage(String.format("%s%s> %sYou shot %s%s %sfor %s more damage with %s%s%s.",
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.YELLOW, e.getVictim().getName(), ChatColor.GRAY, bonus, ChatColor.GREEN, getName(), ChatColor.GRAY));
         e.addSource(this);
     }
 
