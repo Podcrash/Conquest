@@ -44,7 +44,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class InventoryListener extends ListenerBase {
-    public static boolean lock = true;
+    public static boolean lock = false;
     //TODO: o boi, looks like the day has come where I will be editing this
 
     public InventoryListener(JavaPlugin plugin) {
