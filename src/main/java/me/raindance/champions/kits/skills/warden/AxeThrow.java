@@ -1,14 +1,17 @@
 package me.raindance.champions.kits.skills.warden;
 
+import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.ItemCollideEvent;
-import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -16,7 +19,6 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -67,18 +69,21 @@ public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener
                         int i = 0;
                         @Override
                         public void task() {
-                            i += 16;
+                            i += 1;
                         }
 
                         @Override
                         public boolean cancel() {
-                            return getPlayer().getInventory().contains(itemStack) || i >= 80;
+                            return getPlayer().getInventory().contains(itemStack) || i >= 16;
                         }
 
                         @Override
                         public void cleanup() {
-                            if(i >= 80 && !getPlayer().getInventory().contains(itemStack)) {
+                            if(i >= 16 && !getPlayer().getInventory().contains(itemStack)) {
                                 SoundPlayer.sendSound(getPlayer(), "random.pop", 1, 63);
+                                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(
+                                        item.getLocation().clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 1, 0, 0, 0);
+                                PacketUtil.syncSend(packet, getPlayers());
                                 getPlayer().getInventory().addItem(itemStack);
                             }
                             item.remove();
