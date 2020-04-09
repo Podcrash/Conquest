@@ -51,7 +51,7 @@ public class BearTrap extends TrapItem implements DamageSource {
         World world = land.getWorld();
         List<LivingEntity> entities = world.getLivingEntities();
         for (LivingEntity entity : entities) {
-            if (entity.getLocation().distanceSquared(land) > 4D) continue;
+            if (entity.getLocation().add(0, 1, 0).distanceSquared(land) > 5.5D) continue;
             DamageApplier.damage(entity, owner, 3, this, false);
             StatusApplier.getOrNew(entity).applyStatus(Status.ROOTED, 3, 0);
         }

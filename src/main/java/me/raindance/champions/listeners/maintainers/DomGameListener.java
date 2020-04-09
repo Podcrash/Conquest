@@ -22,6 +22,7 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
@@ -106,7 +107,12 @@ public class DomGameListener extends ListenerBase {
         for (ItemObjective itemObjective : game.getItemObjectives()) {
             itemObjective.setWorld(world);
         }
-
+        //face towards a star buff.
+        List<Star> star = game.getStars();
+        if(star.size() != 0) {//make sure there are some stars
+            Location randomBuffLoc = game.getStars().get(0).getLocation();
+            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc))));
+        }
 
         GameScoreboard gameScoreboard;
         if((gameScoreboard = game.getGameScoreboard()) instanceof DomScoreboard)
