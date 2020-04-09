@@ -27,8 +27,8 @@ public class Adrenaline extends Passive {
     public void damage(DamageApplyEvent e) {
         if(e.getAttacker() != getPlayer()) return;
         if(getPlayer().getHealth()/getPlayer().getMaxHealth() <= 0.4D && e.getCause().equals(Cause.MELEE)) {
-            e.setVelocityModifierX(e.getVelocityModifierX() * 1.05);
-            e.setVelocityModifierZ(e.getVelocityModifierZ() * 1.05);
+            e.setVelocityModifierX(e.getVelocityModifierX() * 1.33);
+            e.setVelocityModifierZ(e.getVelocityModifierZ() * 1.33);
             e.addSource(this);
             e.setModified(true);
         }

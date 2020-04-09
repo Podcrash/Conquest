@@ -34,10 +34,12 @@ public class EconomyListener extends ListenerBase {
     @EventHandler
     public void earn(PayEvent e) {
         Game game = GameManager.getGame();
+        double money = e.getMoneys();
+        if(money < 0) return;
         if(game != null && game.isOngoing()) {
             game.addReward(e.getPlayer(), e.getMoneys());
         }
-        //e.getPlayer().sendMessage("You earned " + e.getMoneys() + " !");
+        e.getPlayer().sendMessage(Currency.GOLD.getFormatting() + "+ " + e.getMoneys() + "!");
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {
