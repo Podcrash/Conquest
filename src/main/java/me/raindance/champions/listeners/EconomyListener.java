@@ -7,6 +7,7 @@ import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.events.econ.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.MenuCreator;
@@ -36,7 +37,7 @@ public class EconomyListener extends ListenerBase {
         Game game = GameManager.getGame();
         double money = e.getMoneys();
         if(money < 0) return;
-        if(game != null && game.isOngoing()) {
+        if(game != null && game.getGameState() == GameState.STARTED) {
             game.addReward(e.getPlayer(), e.getMoneys());
         }
         e.getPlayer().sendMessage(Currency.GOLD.getFormatting() + "+ " + e.getMoneys() + "!");

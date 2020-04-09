@@ -5,6 +5,7 @@ import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
@@ -69,7 +70,7 @@ public class PlayerJoinEventTest extends ListenerBase {
         CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
 
         if(GameManager.getGame() != null) {
-            if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
+            if (GameManager.getGame().getGameState() == GameState.STARTED || GameManager.getGame().isFull())
                 if(GameManager.getGame().contains(player))
                     player.teleport(GameManager.getGame().getTeam(player).getSpawn(player));
                 else GameManager.addSpectator(player);
@@ -96,7 +97,7 @@ public class PlayerJoinEventTest extends ListenerBase {
 
 
         if(GameManager.getGame() == null) return;
-        if(!GameManager.getGame().isOngoing()) {
+        if(GameManager.getGame().getGameState() == GameState.LOBBY) {
             GameManager.removePlayer(player);
         }
     }

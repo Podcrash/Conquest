@@ -8,6 +8,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.economy.EconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.ChatUtil;
@@ -146,7 +147,7 @@ public class InventoryListener extends ListenerBase {
      * @return whether the inventory is the player's inventory in a lobby
      */
     private boolean isLobbyMenu(Player player, Inventory inventory) {
-        return ownInventory(player, inventory) && !InvFactory.currentlyEditing(player) && !GameManager.getGame().isOngoing();
+        return ownInventory(player, inventory) && !InvFactory.currentlyEditing(player) && GameManager.getGame().getGameState() == GameState.LOBBY;
     }
 
     private boolean ownInventory(Player player, Inventory clickedInventory) {
@@ -347,7 +348,7 @@ public class InventoryListener extends ListenerBase {
     public void onClose(InventoryCloseEvent e) {
         if (isInvincibleMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
         if (!isClassMenu(e.getInventory())) {
-            if (!GameManager.getGame().isOngoing()
+            if (GameManager.getGame().getGameState() == GameState.LOBBY
                     && (e.getPlayer() instanceof Player)
                     && !isInvincibleMenu(e.getInventory())) {
                 GameManager.getGame().updateLobbyInventory((Player) e.getPlayer());
@@ -362,7 +363,7 @@ public class InventoryListener extends ListenerBase {
         ChampionsInventory.clearHotbarSelection(newPlayer.getPlayer());
         ChampionsPlayerManager.getInstance().addChampionsPlayer(newPlayer);
         InvFactory.editClose(newPlayer.getPlayer(), newPlayer);
-        if(!GameManager.getGame().isOngoing()) {
+        if(GameManager.getGame().getGameState() == GameState.LOBBY) {
             GameManager.getGame().updateLobbyInventory(newPlayer.getPlayer());
         }
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);

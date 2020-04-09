@@ -11,6 +11,7 @@ import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import javafx.util.Pair;
@@ -141,7 +142,7 @@ public final class InvFactory {
             int buildID = Integer.parseInt(split[1]);
             apply(player, skillType, buildID);
 
-            if(!GameManager.getGame().isOngoing()) {
+            if(GameManager.getGame().getGameState() == GameState.LOBBY) {
                 GameManager.getGame().updateLobbyInventory(player);
             }
         });
@@ -168,7 +169,7 @@ public final class InvFactory {
             ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
             ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
             cPlayer.restockInventory();
-            if(!GameManager.getGame().isOngoing()) {
+            if(GameManager.getGame().getGameState() == GameState.LOBBY) {
                 GameManager.getGame().updateLobbyInventory(player);
             }
             SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);

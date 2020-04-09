@@ -8,6 +8,7 @@ import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GTeam;
 import com.podcrash.api.mc.game.Game;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.time.TimeHandler;
@@ -93,7 +94,7 @@ public class StarBuff implements TimeResource {
 
     @Override
     public boolean cancel() {
-        return dead || System.currentTimeMillis() > endTime || !game.isOngoing();
+        return dead || System.currentTimeMillis() > endTime || game.getGameState() == GameState.LOBBY;
     }
 
     @Override
@@ -105,7 +106,7 @@ public class StarBuff implements TimeResource {
             game.broadcast(team.getChatColor() + holder + " lost the buff!");
             //alert the players that the collector lost the buff and gave the opposite team the points back
             this.dead = false;
-        } else if (game.isOngoing()) {
+        } else if (game.getGameState() == GameState.STARTED) {
             game.broadcast(team.getChatColor() + holder + " lost the buff peacefully.");
             //alert the players that the collector lost the buff peacefully
         }

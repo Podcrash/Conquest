@@ -255,7 +255,6 @@ public class Main extends JavaPlugin {
 
     private CompletableFuture<Void> registerCommands() {
         return CompletableFuture.runAsync(() -> {
-            getCommand("leave").setExecutor(new LeaveCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
             getCommand("invis").setExecutor(new InvisCommand());
             getCommand("damage").setExecutor(new DamageCommand());
