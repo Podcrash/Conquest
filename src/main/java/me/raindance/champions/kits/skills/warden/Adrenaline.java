@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.warden;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -26,7 +27,7 @@ public class Adrenaline extends Passive {
     public void damage(DamageApplyEvent e) {
         if(e.getAttacker() != getPlayer()) return;
         LivingEntity victim = e.getVictim();
-        if(victim.getHealth()/victim.getMaxHealth() >= 0.4D) return;
+        if(victim.getHealth()/victim.getMaxHealth() >= 0.4D || !e.getCause().equals(Cause.MELEE)) return;
         e.setVelocityModifierX(e.getVelocityModifierX() * 1.05);
         e.setVelocityModifierZ(e.getVelocityModifierZ() * 1.05);
         e.addSource(this);
