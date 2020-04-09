@@ -152,7 +152,7 @@ public class Hurl extends Interaction implements TimeResource, IInjector, Listen
 
     @Override
     public float getCooldown() {
-        return 5;
+        return 12;
     }
 
     @Override
