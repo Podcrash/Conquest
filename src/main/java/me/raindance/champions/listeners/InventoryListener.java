@@ -15,6 +15,7 @@ import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import me.raindance.champions.Main;
 import me.raindance.champions.inventory.*;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -324,11 +326,13 @@ public class InventoryListener extends ListenerBase {
         if(!isClassMenu(e.getInventory())) return;
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
         CompletableFuture<Set<String>> future = table.getAllowedSkillsFuture(e.getPlayer().getUniqueId());
+        Set<String> defaultAllowed = Main.getDefaultAllowedSkills();
+        Pluginizer.getLogger().info(defaultAllowed.toString());
         future.thenAccept(skillSet -> {
             for(ItemStack item : e.getInventory()) {
                 if(item == null || item.getType() != Material.BOOK) continue;
                 String name = ChatUtil.strip(item.getItemMeta().getDisplayName());
-                if(skillSet.contains(name)) continue;
+                if(skillSet.contains(name) || defaultAllowed.contains(name)) continue;
                 item.setType(Material.PAPER);
             }
         }).exceptionally(throwable -> {

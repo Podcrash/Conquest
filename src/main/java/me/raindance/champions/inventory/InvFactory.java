@@ -157,22 +157,23 @@ public final class InvFactory {
      * @param buildID
      */
     private static void apply(Player player, SkillType skillType, int buildID) {
-        String deserializedPlayer = getKitTable().getJSONData(player.getUniqueId(), skillType.getName(), buildID);
-        if(deserializedPlayer == null) {
-            player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
-            return;
-        }
-        player.getInventory().clear();
-        player.closeInventory();
+        getKitTable().getJSONDataAsync(player.getUniqueId(), skillType.getName(), buildID).thenAccept(deserializedPlayer -> {
+            if(deserializedPlayer == null) {
+                player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
+                return;
+            }
+            player.getInventory().clear();
+            player.closeInventory();
 
-        ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
-        cPlayer.restockInventory();
-        if(!GameManager.getGame().isOngoing()) {
-            GameManager.getGame().updateLobbyInventory(player);
-        }
-        SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
-        setCurrent(player, skillType, buildID);
+            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
+            ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
+            cPlayer.restockInventory();
+            if(!GameManager.getGame().isOngoing()) {
+                GameManager.getGame().updateLobbyInventory(player);
+            }
+            SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
+            setCurrent(player, skillType, buildID);
+        });
     }
 
     /**
