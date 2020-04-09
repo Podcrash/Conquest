@@ -1,7 +1,10 @@
 package me.raindance.champions.listeners.maintainers;
 
+import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.db.redis.Communicator;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
@@ -48,7 +51,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
     private static final Material[] nonInteractables = new Material[]{
@@ -178,7 +184,6 @@ public class DomGameListener extends ListenerBase {
             player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
             StatusApplier.getOrNew(player).removeStatus(Status.values());
         }
-
     }
 
 

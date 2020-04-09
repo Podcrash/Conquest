@@ -2,6 +2,9 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -176,9 +179,7 @@ public class Main extends JavaPlugin {
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
     }
-    @Override
-    public void onLoad() {
-    }
+
     @Override
     public void onDisable() {
         DamageQueue.active = false;
