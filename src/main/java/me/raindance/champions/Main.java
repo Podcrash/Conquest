@@ -11,6 +11,8 @@ import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleRunnable;
 import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.mc.util.ConfigUtil;
 import com.podcrash.api.mc.util.PlayerCache;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.plugin.PodcrashSpigot;
@@ -40,6 +42,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.SpigotConfig;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -49,6 +53,9 @@ import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
     public static volatile Main instance;
+    private static Set<String> defaultAllowedSkills;
+    private Properties properties;
+
     public static final String CHANNEL_NAME = "Champions";
     private ProtocolManager protocolManager;
     private BukkitTask tickTask;
@@ -112,6 +119,10 @@ public class Main extends JavaPlugin {
         }, executor);
     }
 
+    public static Set<String> getDefaultAllowedSkills() {
+        return defaultAllowedSkills;
+    }
+
     @Override
     public void onEnable() {
         /*
@@ -120,8 +131,18 @@ public class Main extends JavaPlugin {
         */
         instance = this;
 
-        log.info("[GameManager] Making a lot of games");
-
+        this.properties = ConfigUtil.readPropertiesFile(getClass().getClassLoader(), "allowed.properties");
+        //set allowed skills
+        String raw = (String) this.properties.get("allowed");
+        List<String> t = new ArrayList<>();
+        if(raw != null) {
+            for (String r : raw.split(",")) {
+                String p = ChatUtil.strip(r);
+                t.add(p);
+            }
+            defaultAllowedSkills = new HashSet<>(t);
+        }
+        //set config stuff
         PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
         spigot.registerConfigurator("kits");
         spigot.registerConfigurator("skilldescriptions");
