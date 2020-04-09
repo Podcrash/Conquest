@@ -5,6 +5,7 @@ import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.EconomyTable;
 import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -55,6 +56,10 @@ public final class SkillInfo {
         for(ClassPath.ClassInfo info : classInfoSet) {
             Class<?> skillClass = Class.forName(info.getName());
 
+            if(!skillClass.isAnnotationPresent(SkillMetadata.class)) {
+                Pluginizer.getLogger().info("Skipping " + info.getName());
+                continue;
+            }
             Skill skill = (Skill) emptyConstructor(skillClass);
             if(skill == null) throw new RuntimeException("skill cannot be null! current at: " + info.getName());
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
@@ -62,7 +67,7 @@ public final class SkillInfo {
             InvType invType = annot.invType();
             int skillID = annot.id();
             if(idDataMap.keySet().contains(skillID)) {
-                String errMessage = "two skill cannot have the same two ids!\n Skills in conflict: ";
+                String errMessage = "two skills cannot have the same two ids!\n Skills in conflict: ";
                 errMessage += skill + "\n" + SkillInfo.getSkill(skillID);
 
                 throw new IllegalStateException(errMessage);
