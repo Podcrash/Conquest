@@ -24,10 +24,7 @@ import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
-import me.raindance.champions.listeners.maintainers.ApplyKitListener;
-import me.raindance.champions.listeners.maintainers.DomGameListener;
-import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
-import me.raindance.champions.listeners.maintainers.SoundDamage;
+import me.raindance.champions.listeners.maintainers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -76,6 +73,7 @@ public class Main extends JavaPlugin {
     }
     private CompletableFuture<Void> registerListeners() {
         return CompletableFuture.runAsync(() -> {
+            new DomRewardsListener(this);
             new DomGameListener(this);
             new SoundDamage(this);
             new InventoryListener(this);

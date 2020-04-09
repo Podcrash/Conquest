@@ -31,7 +31,7 @@ public class EconomyListener extends ListenerBase {
 
     @EventHandler
     public void earn(PayEvent e) {
-        //e.getPlayer().sendMessage("You earned " + e.getMoneys() + " !");
+        e.getPlayer().sendMessage("You earned " + e.getMoneys() + " !");
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {

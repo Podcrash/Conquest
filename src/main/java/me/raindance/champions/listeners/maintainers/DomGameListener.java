@@ -171,8 +171,9 @@ public class DomGameListener extends ListenerBase {
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            handler.pay(player, payout);
-            player.sendMessage(String.format("%s%sYou earned %s %s!", Currency.GOLD.getFormatting(), ChatColor.BOLD, payout, Currency.GOLD.getName()));
+            //handler.pay(player, payout);
+            player.sendMessage(String.format("%s%sYour current balance is %s %s!",
+                    Currency.GOLD.getFormatting(), ChatColor.BOLD, handler.getMoney(player), Currency.GOLD.getName()));
         }
 
 
