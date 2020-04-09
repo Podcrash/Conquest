@@ -29,7 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 910, skillType = SkillType.Warden, invType = InvType.SWORD)
+//@SkillMetadata(id = 910, skillType = SkillType.Warden, invType = InvType.SWORD)
 public class Hurl extends Interaction implements TimeResource, IInjector, Listener {
 
     private float multiplier = 1f;

@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 909, skillType = SkillType.Warden, invType = InvType.AXE)
+//@SkillMetadata(id = 909, skillType = SkillType.Warden, invType = InvType.AXE)
 public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener {
 
     private float cooldown = 2f;

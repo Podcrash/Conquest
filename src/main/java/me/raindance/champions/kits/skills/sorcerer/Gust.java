@@ -19,7 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+//@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class Gust extends ChargeUp implements IEnergy {
     private final float duration = 4;           //  duration of slow
 
@@ -73,8 +73,8 @@ public class Gust extends ChargeUp implements IEnergy {
         }
 
         // This was the old sound, pyro wanted the bat takeoff for a new one
-        //SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wither.shoot", 0.4F, 88);
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.bat.takeoff", 1F, 57);
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wither.shoot", 0.4F, 88);
+        //SoundPlayer.sendSound(getPlayer().getLocation(), "mob.bat.takeoff", 1F, 57);
 
     }
 

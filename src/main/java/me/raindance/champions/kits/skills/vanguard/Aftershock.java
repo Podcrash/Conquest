@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 import java.util.Set;
 
-@SkillMetadata(id = 810, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+//@SkillMetadata(id = 810, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class Aftershock extends Instant implements ICooldown, TimeResource {
     private float cooldown = 13;
     private double chargeTime = 3;          // How long it takes to charge, in seconds.
