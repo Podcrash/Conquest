@@ -4,10 +4,12 @@ import com.abstractpackets.packetwrapper.WrapperPlayClientSteerVehicle;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketEvent;
 import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.StatusApplyEvent;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.world.BlockUtil;
+import me.raindance.champions.events.skill.SkillInteractEvent;
+import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -15,36 +17,41 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IInjector;
 import me.raindance.champions.kits.skilltypes.Interaction;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
+import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 910, skillType = SkillType.Warden, invType = InvType.SWORD)
-public class Hurl extends Interaction implements TimeResource, IInjector {
-    private float multiplier = 1.25f;
+public class Hurl extends Interaction implements TimeResource, IInjector, Listener {
+
+    private float multiplier = 1f;
+    private double victimYCap = 0.5;
+
     private boolean use = false;
     private long lastUsage;
     private Entity victim;
-    private boolean stop = false;
 
     private void ensurePassenger(Entity clickedEntity) {
         getPlayer().setPassenger(clickedEntity);
+        if(clickedEntity instanceof Player && ((Player) clickedEntity).isSneaking()) {
+            ((Player) clickedEntity).setSneaking(false);
+        }
         if(getPlayer().getPassenger() != clickedEntity) ensurePassenger(clickedEntity);
     }
 
-    @EventHandler
-    public void onStatusApply(StatusApplyEvent event) {
-        if (event.getEntity() == getPlayer()) {
-            Status status = event.getStatus();
-            if (status.isNegative()) {
-                stop = true;
-            }
+    public boolean stop() {
+        for(Status status : StatusApplier.getOrNew(getPlayer()).getEffects()) {
+            if(status.isNegative()) return true;
         }
+        return false;
     }
 
     @Override
@@ -54,22 +61,30 @@ public class Hurl extends Interaction implements TimeResource, IInjector {
 
     @Override
     public boolean cancel() {
-        return  stop || !getPlayer().isBlocking() || System.currentTimeMillis() - this.lastUsage >= 10000L ||
+        return  stop() || !getPlayer().isBlocking() || System.currentTimeMillis() - this.lastUsage >= 3000L ||
                 ((CraftPlayer) getPlayer()).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() >= 1.3;
     }
 
     @Override
     public void cleanup() {
         if(victim.leaveVehicle()) {
-            if(!BlockUtil.isSafe(victim.getLocation()))
-                victim.teleport(getPlayer().getLocation());
-            victim.playEffect(EntityEffect.HURT);
+            if(stop()) {
+                getPlayer().sendMessage(String.format("%s%s> %sYou cannot grab %s%s %swhile debuffed.", ChatColor.BLUE, getChampionsPlayer().getName(),
+                        ChatColor.GRAY,
+                        ChatColor.YELLOW,
+                        victim.getName(),
+                        ChatColor.GRAY));
+            } else {
+                if(!BlockUtil.isSafe(victim.getLocation()))
+                    victim.teleport(getPlayer().getLocation());
+                victim.playEffect(EntityEffect.HURT);
 
-            Vector vector = getPlayer().getLocation().getDirection();
-            vector.normalize().multiply(multiplier);
-            victim.setVelocity(vector);
+                Vector vector = getPlayer().getLocation().getDirection();
+                vector.normalize().multiply(multiplier);
+                vector.setY(Math.min(vector.getY(), victimYCap));
+                victim.setVelocity(vector);
+            }
         }
-
         victim = null;
         use = false;
         setLastUsed(System.currentTimeMillis());
@@ -105,19 +120,32 @@ public class Hurl extends Interaction implements TimeResource, IInjector {
             event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onGrab(SkillUseEvent event) {
+        if(event instanceof SkillInteractEvent) {
+            SkillInteractEvent interact = (SkillInteractEvent) event;
+            if(interact.getPlayer().equals(getPlayer()) && interact.getSkill().equals(this)) {
+                if (stop()) {
+                    getPlayer().sendMessage(String.format("%s%s> %sYou cannot grab %s%s %swhile debuffed.", ChatColor.BLUE, getChampionsPlayer().getName(),
+                            ChatColor.GRAY,
+                            ChatColor.YELLOW,
+                            ((SkillInteractEvent) event).getInteracted().getName(),
+                            ChatColor.GRAY));
+                    interact.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @Override
     public void doSkill(LivingEntity clickedEntity) {
         if(!onCooldown() && !use) {
-            if (stop) {
-                clickedEntity.sendMessage("you are debuffed! cannot grab");
-                return;
-            }
             victim = clickedEntity;
             victim.playEffect(EntityEffect.HURT);
             ensurePassenger(clickedEntity);
             this.lastUsage = System.currentTimeMillis();
             use = true;
-            getPlayer().sendMessage("Dwarf Toss> You held " + clickedEntity.getName());
+            getPlayer().sendMessage(getUsedMessage(clickedEntity));
             run(1, 10);
         }
     }
