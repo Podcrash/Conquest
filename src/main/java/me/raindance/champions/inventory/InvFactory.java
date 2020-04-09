@@ -190,12 +190,14 @@ public final class InvFactory {
         buildIDHistory.put(player.getName(), buildID);
         skillTypeHistory.put(player.getName(), skillType);
         UUID uuid = player.getUniqueId();
-        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
         player.getInventory().clear();
         player.updateInventory();
 
         //The editing tip: You can save your rearranged inventory in this menu only!
         ItemStackUtil.createItem(player.getInventory(),395, 1, 23, "&e&lTip:", "Rearrange your hotbar in this menu to save it.");
+
+        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
+
 
         if(json == null) {
             Inventory inv = MenuCreator.createKitMenu(skillType);
