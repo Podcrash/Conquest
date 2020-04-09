@@ -224,9 +224,6 @@ public class InventoryListener extends ListenerBase {
                 inventory.clear();
                 MenuCreator.openTeamSelectMenu(player);
             }
-        } else if (name.contains("queue")) {
-            //TODO: this should leave the queue for a team, but currently, teams are forced on join i.e you can't not be in a queue
-
         } else if (name.contains("spectator")) {
             GameManager.getGame().toggleSpec(player);
         } else if (name.contains("red team")) {
