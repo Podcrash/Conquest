@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DomGame extends Game {
@@ -19,6 +20,8 @@ public class DomGame extends Game {
     private List<Restock> restocks;
     private List<Star> stars;
     private List<Landmine> mines;
+
+    private ArrayList<String> validMaps = new ArrayList<>(Arrays.asList("Origins", "Frostbite", "Forgotten", "HiddenGrotto", "Clandestine", "Savanna", "Valley"));
 
     private DomScoreboard scoreboard;
     private String actualWorld;
@@ -85,6 +88,9 @@ public class DomGame extends Game {
     }
     public List<Landmine> getMines() {
         return mines;
+    }
+    public List<String> getValidMaps() {
+        return validMaps;
     }
 
     public List<WinObjective> getWinObjectives() {
