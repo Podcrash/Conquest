@@ -86,14 +86,6 @@ public class Main extends JavaPlugin {
             new Disguiser().disguiserIntercepter();
             new ApplyKitListener(this);
             new EconomyListener(this);
-
-            Bukkit.getPluginManager().registerEvents(new Listener() {
-                @EventHandler
-                public void overrideStop(PlayerCommandPreprocessEvent event) {
-                    if(event.getMessage().split(" ")[0].equalsIgnoreCase("/stop"))
-                        event.setCancelled(true);
-                }
-            }, this);
         }, executor);
     }
     private CompletableFuture<Void> setUpClasses() {
