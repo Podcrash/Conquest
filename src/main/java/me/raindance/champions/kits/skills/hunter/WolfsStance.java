@@ -33,13 +33,14 @@ import java.util.List;
 public class WolfsStance extends ChargeUp implements IConstruct {
     private final double damage = 4;
     private final int effectTime = 3;
+    private final int hitbox = 3;
     private CollideBeforeHitGround hitGround;
 
 
     @Override
     public void afterConstruction() {
-        this.hitGround = new CollideBeforeHitGround(getPlayer()).then(() -> {
-            List<Entity> entities = getPlayer().getNearbyEntities(5, 5, 5);
+        this.hitGround = new CollideBeforeHitGround(getPlayer(), 1, hitbox, hitbox, hitbox).then(() -> {
+            List<Entity> entities = CollideBeforeHitGround.getValidEntitiesInRange(getPlayer(), hitbox, hitbox, hitbox);
             if (entities.size() == 0) return;
             Location location = getPlayer().getLocation();
             for (Entity entity : entities) {

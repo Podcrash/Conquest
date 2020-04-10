@@ -32,7 +32,7 @@ import java.util.List;
 
 @SkillMetadata(id = 807, skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Takedown extends Instant implements ICooldown, IConstruct {
-    private final float hitbox = 0.55f;
+    private final float hitbox = 0.45f;
     private CollideBeforeHitGround hitGround;
 
     @Override
@@ -54,13 +54,12 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
     public void afterConstruction() {
 
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.CRIT, 2);
-        this.hitGround = new CollideBeforeHitGround(getPlayer())
-                .changeEvaluation(() -> (getPlayer().getNearbyEntities(hitbox, hitbox, hitbox).size() > 0) || EntityUtil.onGround(getPlayer()))
+        this.hitGround = new CollideBeforeHitGround(getPlayer(), 1, hitbox, hitbox, hitbox)
                 .then(() -> {
                     SkillUseEvent event = new SkillUseEvent(this);
                     Bukkit.getPluginManager().callEvent(event);
                     if(event.isCancelled()) return;
-                    List<Entity> entities = getPlayer().getNearbyEntities(hitbox, hitbox, hitbox);
+                    List<Entity> entities = CollideBeforeHitGround.getValidEntitiesInRange(getPlayer(), hitbox, hitbox, hitbox);
                     if (entities.size() == 0) return;
                     getPlayer().setVelocity(new Vector(0, 0, 0));
                     for (Entity entity : entities) {
@@ -110,4 +109,6 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
         }
         return !a;
     }
+
+
 }
