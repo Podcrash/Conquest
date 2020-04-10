@@ -9,6 +9,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
         time = System.currentTimeMillis();
         isRiposting = true;
         TimeHandler.repeatedTime(1, 0, this);
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -57,7 +59,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
             event.setCancelled(true);
             TimeHandler.unregister(this);
             LivingEntity victim = event.getAttacker();
-            player.sendMessage("Skill> You parried " + victim.getName());
+            //getPlayer().sendMessage(getUsedMessage(victim).replace("used", "replaced"));
             player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 0.5f, 1.6f);
             ripoSuccess = true;
             ripoSuccessTime = System.currentTimeMillis();
@@ -68,9 +70,15 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
                 event.setDamage(event.getDamage() + 0.5);
                 event.addSource(this);
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_METAL, 1f, 1.6f);
-                getPlayer().sendMessage("Skill> You riposted " + event.getVictim().getName());
+                getPlayer().sendMessage(String.format("%s%s> %sYou riposted %s%s%s.",
+                        ChatColor.BLUE,
+                        getChampionsPlayer().getName(),
+                        ChatColor.GRAY,
+                        ChatColor.YELLOW,
+                        event.getVictim().getName(),
+                        ChatColor.GRAY));
                 event.setModified(true);
-            } else getPlayer().sendMessage("Skill> You failed to Riposte");
+            } else getPlayer().sendMessage(getFailedMessage());
             ripoSuccess = false;
         }
     }
@@ -97,7 +105,7 @@ public class Riposte extends Instant implements TimeResource, ICooldown {
     @Override
     public void cleanup() {
         this.setLastUsed(System.currentTimeMillis());
-        getPlayer().sendMessage("You failed riposte");
+        getPlayer().sendMessage(getFailedMessage());
         TimeHandler.unregister(this);
         isRiposting = false;
     }

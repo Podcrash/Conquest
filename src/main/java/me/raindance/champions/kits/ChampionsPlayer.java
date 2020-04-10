@@ -3,18 +3,23 @@ package me.raindance.champions.kits;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.mc.sound.SoundWrapper;
+import me.raindance.champions.inventory.ChampionsInventory;
 import me.raindance.champions.inventory.ChampionsItem;
+import me.raindance.champions.kits.classes.Druid;
+import me.raindance.champions.kits.classes.Sorcerer;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundWrapper;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -98,7 +103,6 @@ public abstract class ChampionsPlayer {
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         getInventory().clear();
         this.restockInventory();
-        this.equip();
         this.resetCooldowns();
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -106,7 +110,10 @@ public abstract class ChampionsPlayer {
         for(Player player : players){
             if(player != getPlayer()) player.showPlayer(getPlayer());
         }
-
+        player.setHealth(player.getMaxHealth());
+        if(this instanceof Druid || this instanceof Sorcerer) {
+            ebar.setEnergy(ebar.getMaxEnergy());
+        }
 
         //StatusApplier.getOrNew(player).removeStatus(Status.INEPTITUDE);
     }
@@ -117,24 +124,33 @@ public abstract class ChampionsPlayer {
      */
     public void effects() {}
 
-    public String skillsRead() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ChatColor.YELLOW);
-        builder.append(this.getName());
-        builder.append('\n');
+    public void skillsRead() {
+        player.sendMessage(ChatColor.YELLOW + this.getName());
         for(Skill skill : skills) {
-            builder.append(ChatColor.GREEN);
-            //TODO: fix this
-            builder.append(SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName());
-            builder.append(": ");
-            builder.append(ChatColor.WHITE);
-            builder.append(skill.getName());
-            builder.append(' ');
-            builder.append("\n");
+            IChatBaseComponent message = IChatBaseComponent.ChatSerializer.a(
+                    "{\"text\":\"" + String.format("%s%s: ", ChatColor.GREEN, SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName() ) + "\"," +
+                        "\"extra\":[{\"text\":\"" + String.format("%s%s", ChatColor.WHITE, skill.getName()) + "\"," +
+                        "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + niceLookingDescription(skill) + "\"}}]}");
+            PacketPlayOutChat packet = new PacketPlayOutChat(message, (byte) 1);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         }
-
-        return builder.toString();
     }
+
+    private String niceLookingDescription(Skill skill) {
+        StringBuilder result = new StringBuilder();
+        List<String> description = SkillInfo.getSkillData(skill).getDescription();
+        for(int i = 0; i < description.size(); i++) {
+            String line = description.get(i);
+            if(line != null) {
+                result.append(line);
+            }
+            if(i != description.size() - 1) {
+                result.append("\n");
+            }
+        }
+        return result.toString();
+    }
+
     public void heal(double health){
         Player player = getPlayer();
         double current = player.getHealth();
@@ -206,15 +222,28 @@ public abstract class ChampionsPlayer {
         }
         return false;
     }
+
+    private ItemStack getTNTStack(){
+        int amount = 0;
+        for(ItemStack content : getInventory().getContents()){
+            if(content != null && content.getType().equals(Material.TNT)) amount += content.getAmount();
+        }
+        if(amount == 0) return null;
+        return new ItemStack(Material.TNT, amount);
+    }
+
     public void restockInventory() {
         int size = this.defaultHotbar.length;
-        System.out.println(size);
-        for (int i = 0; i < 9; i++) {
-            if(i >= size) this.getInventory().setItem(i, null);
+        ItemStack TNT = getTNTStack();
+        ChampionsInventory.clearHotbarSelection(player);
+        int i = 0;
+        for (; i < size; i++) {
             ItemStack item = this.defaultHotbar[i];
             if(item != null) this.getInventory().setItem(i, item.clone());
             else this.getInventory().setItem(i, null);
         }
+        if(TNT != null) getInventory().addItem(TNT.clone());
+        this.equip();
     }
 
     public double getFallDamage() {

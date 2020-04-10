@@ -24,6 +24,7 @@ public abstract class Continuous extends Instant implements TimeResource {
         if(rightClickCheck(action)){
             doContinuousSkill();
             useOnce = false;
+            getPlayer().sendMessage(getUsedMessage());
         }
     }
 
@@ -44,7 +45,6 @@ public abstract class Continuous extends Instant implements TimeResource {
     @Override
     public void cleanup() {
         TimeHandler.unregister(this);
-        Main.getInstance().getLogger().info("cleanup continuous called");
         useOnce = true;
     }
 }

@@ -3,7 +3,10 @@ package me.raindance.champions.game.scoreboard;
 import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.game.DomGame;
+import me.raindance.champions.game.StarBuff;
+import net.md_5.bungee.protocol.packet.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Score;
@@ -20,7 +23,7 @@ public class DomScoreboard extends GameScoreboard {
     private List<CapturePoint> capturePoints;
 
     public DomScoreboard(int gameId) {
-        super(12, gameId, GameType.DOM);
+        super(17, gameId, GameType.DOM);
 
 
 
@@ -35,15 +38,19 @@ public class DomScoreboard extends GameScoreboard {
         List<String> points = new ArrayList<>();
         for(GTeam team : getGame().getTeams()) {
             TeamEnum teamE = team.getTeamEnum();
-            points.add(teamE.getChatColor() + teamE.getName());
+            points.add(teamE.getScoreboardColor() + "" + ChatColor.BOLD + teamE.getName());
             points.add("");
         }
+        points.add("");
         this.capturePoints = capturePoints;
 
         for(CapturePoint point : capturePoints) {
             points.add(point.getName());
         }
 
+        points.add("");
+        // The line below doesn't really appear to do anything
+        points.add(StarBuff.PREFIX + " ACTIVE");
         createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
     }
 
@@ -64,9 +71,12 @@ public class DomScoreboard extends GameScoreboard {
 
     public void updateScore(TeamEnum team) {
         List<String> lines = getLines();
-        for(int i = 1; i < lines.size(); i++) {
+
+        String lowerTeam = (team.getScoreboardColor() + "" + ChatColor.BOLD + team.getName()).toLowerCase();
+        for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if(line.contains(team.getName())) continue;
+            //Pluginizer.getLogger().info(line.toLowerCase()+ " vs " + lowerTeam);
+            if(!line.toLowerCase().contains(lowerTeam)) continue;
             //prev is the exact same integer.
             setLine(i, String.valueOf(getGame().getTeam(team).getScore()));
             break;
@@ -82,7 +92,7 @@ public class DomScoreboard extends GameScoreboard {
         for(int i = 0; i < lines.size(); i++){
             String line = lines.get(i);
             if(!line.contains(capturePointName)) continue;
-            setLine(i + 1, team.getChatColor() + capturePointName);
+            setLine(i + 1, team.getScoreboardColor() + capturePointName);
             break;
         }
     }
@@ -91,24 +101,20 @@ public class DomScoreboard extends GameScoreboard {
      * Update if a player of a team color is standing on a point.
      * It is represented by a colored star character.
      * @param team the color in which the point was captured.
-     * @param capturePointName the name used to query to update
+     * @param capturePoint the capture point
+     * @param bold Whether or not we should bold
      */
-    public void updateCurrentlyInCPoint(TeamEnum team, String capturePointName) {
-        char star = '\u2605';
-        String add = (team == null) ? "" : team.getChatColor().toString() + ChatColor.BOLD + star;
+    public void updateCurrentlyInCPoint(TeamEnum team, CapturePoint capturePoint, boolean bold) {
         List<String> lines = getLines();
-
-        String newLine = ""; //never happens.
-        for(CapturePoint capturePoint : capturePoints) {
-            if(capturePoint.getName().contains(capturePointName)) {
-                newLine = capturePoint.getTeamColor().getChatColor() + capturePoint.getName() + add;
-                break;
-            }
+        String newLine;
+        if (bold) {
+            newLine = team.getScoreboardColor().toString() + ChatColor.BOLD + capturePoint.getName();
+        } else {
+            newLine = capturePoint.getTeamColor().getScoreboardColor() + capturePoint.getName();
         }
-        if(newLine.isEmpty()) return;
         for(int i = 0; i < lines.size(); i++){
             String line = lines.get(i);
-            if(!line.contains(capturePointName)) continue;
+            if(!line.contains(capturePoint.getName())) continue;
             setLine(i + 1, newLine);
             break;
         }

@@ -20,6 +20,7 @@ public abstract class Skill implements ISkill, DamageSource {
     private String playerName;
     protected final Skill instance = this;
     private long lastUsed = 0L;
+    public double price = 1500;
 
     public Skill() {
 
@@ -81,27 +82,38 @@ public abstract class Skill implements ISkill, DamageSource {
     //getters
     protected String getWaterMessage(){
 
-        return String.format("%sSkill> %sYou cannot use %s%s %sin water.", ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+        return String.format("%s%s> %sYou cannot use %s%s %sin water.",
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
 
     public String getUsedMessage() {
         return String.format("%s%s> %sYou used %s%s%s.",
-                ChatColor.BLUE, ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
     public String getUsedMessage(LivingEntity entity) {
-        return String.format("%sSkill> %sYou used %s%s %son %s%s.",
-                ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, entity.getName());
+        return String.format("%s%s> %sYou used %s%s %son %s%s%s.",
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY, ChatColor.YELLOW, entity.getName(), ChatColor.GRAY);
     }
 
     //TODO: change verb to something else
     public String getDurationMessage(LivingEntity entity, String verb, double duration) {
         return String.format("%s%s> %sYou %s %s%s %sfor %s%f.",
-                ChatColor.BLUE, getName(), ChatColor.GRAY, verb, ChatColor.YELLOW, entity.getName(), ChatColor.GRAY, ChatColor.GREEN, duration);
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, verb, ChatColor.GREEN, entity.getName(), ChatColor.GRAY, ChatColor.GREEN, duration);
     }
 
     public String getMustGroundMessage() {
         return String.format("%s%s> %sYou cannot use %s%s%s while grounded.",
                 ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+    }
+
+    public String getMustAirborneMessage() {
+        return String.format("%s%s> %sYou cannot use %s%s%s while airborne.",
+                ChatColor.BLUE, getChampionsPlayer().getName() , ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
+    }
+
+    public String getFailedMessage() {
+        return String.format("%s%s> %sYou failed %s%s%s.",
+                ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY);
     }
 
     public Player getPlayer() {

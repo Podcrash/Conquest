@@ -2,31 +2,37 @@ package me.raindance.champions.kits.skills.marksman;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Interaction;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
 import java.util.Arrays;
 
 @SkillMetadata(id = 509, skillType = SkillType.Marksman, invType = InvType.SWORD)
-public class SilencingStrike extends Interaction {
-    private final float duration = 2;
-    private final double damage = 2;
+public class Disarm extends Interaction {
+    private final float duration = 1.5F;
+    private final double damage = 4;
+    private LivingEntity disarmed = null;
 
     @Override
     public float getCooldown() {
-        return 17;
+        return 10;
     }
 
     @Override
     public String getName() {
-        return "Silencing Strike";
+        return "Disarm";
     }
 
     @Override
@@ -37,10 +43,27 @@ public class SilencingStrike extends Interaction {
     @Override
     public void doSkill(LivingEntity victim) {
         if (onCooldown()) return;
-        StatusApplier.getOrNew(victim).applyStatus(Status.SILENCE, duration, 1);
+        if(isAlly(victim)) return;
+        //getPlayer().sendMessage(getUsedMessage(victim));
+        StatusApplier.getOrNew(victim).applyStatus(Status.WEAKNESS, duration, 99);
         DamageApplier.damage(victim, getPlayer(), damage, this, false);
         this.setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.spider.death", 0.9F, 77);
-        getPlayer().sendMessage(getUsedMessage(victim));
+        victim.sendMessage(String.format("%sCondition> %sYou have been disarmed by %s%s%s.",
+                ChatColor.BLUE,
+                ChatColor.GRAY,
+                ChatColor.GREEN,
+                getPlayer().getName(),
+                ChatColor.GRAY));
+        disarmed = victim;
+        TimeHandler.delayTime(30, () -> disarmed = null);
+
+        landed();
+    }
+
+    @EventHandler
+    public void onHit(DamageApplyEvent e){
+        if(!e.getAttacker().equals(disarmed) || !e.getVictim().equals(getPlayer())) return;
+        e.setDoKnockback(false);
     }
 }

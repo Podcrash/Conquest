@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import java.util.*;
 
-@SkillMetadata(id = 504, skillType = SkillType.Marksman, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 504, skillType = SkillType.Marksman, invType = InvType.SECONDARY_PASSIVE)
 public class FrostArrows extends Passive implements TimeResource, IPassiveTimer {
     private Map<String, Long> affected;
     private int duration;
@@ -50,6 +50,7 @@ public class FrostArrows extends Passive implements TimeResource, IPassiveTimer 
             Player player = (Player) e.getVictim();
             e.addSource(this);
             StatusApplier.getOrNew(player).applyStatus(Status.SLOW, duration, 0);
+            StatusApplier.getOrNew(player).applyStatus(Status.WEAKNESS, duration, 0);
             player.setSprinting(false);
             affected.put(player.getName(), System.currentTimeMillis() + 2000L);
         }

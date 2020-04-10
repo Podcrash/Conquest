@@ -4,6 +4,7 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.events.ItemCollideEvent;
 import com.podcrash.api.mc.item.ItemManipulationManager;
 import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -18,6 +19,7 @@ import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.world.BlockUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,17 +29,17 @@ import java.util.*;
 
 @SkillMetadata(id = 1004, skillType = SkillType.Sorcerer, invType = InvType.AXE)
 public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstruct {
+    private int currentItemID;
+
     private final Random random = new Random();
     private WrapperPlayServerWorldParticles particles;
     private String NAME;
-    private int energy;
-    private int duration;
+    private int energy = 60;
+    private int duration = 4;
 
     private List<Vector> tempArrayList = new ArrayList<>();
 
     public GlacialTomb() {
-        this.energy = 80;
-        this.duration = 4;
         setCanUseWhileCooldown(true);
     }
 
@@ -73,6 +75,8 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
             this.setLastUsed(System.currentTimeMillis());
             useEnergy(energy);
             launch();
+
+            getPlayer().sendMessage(getUsedMessage());
         }else {
             //if the time elapsed is too long, cancel
             if(getCooldown() - cooldown() > duration) return;
@@ -85,11 +89,11 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
         Vector vector = location.getDirection();
         vector.normalize().multiply(1.15D);
 
-        Item item = ItemManipulationManager.intercept(getPlayer(), Material.ICE, location, vector, ((item1, entity) -> {
-            Location location1 = item1.getLocation();
-            if(entity == null) location1.add(new Vector(0,1,0));
-            entomb(location1);
-            item1.getWorld().playEffect(location1, Effect.STEP_SOUND, 79);
+        Item spawnItem = ItemManipulationManager.regular(Material.ICE, location, vector);
+        this.currentItemID = spawnItem.getEntityId();
+        Item item = ItemManipulationManager.intercept(spawnItem, 0.5, ((item1, entity, land) -> {
+            entomb(land);
+            item1.getWorld().playEffect(item1.getLocation(), Effect.STEP_SOUND, 79);
             item1.remove();
         }));
         ItemMeta meta = item.getItemStack().getItemMeta();
@@ -123,6 +127,14 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
             i++;
         }
         tempArrayList.clear();
+    }
+
+    @EventHandler
+    public void collideItem(ItemCollideEvent e) {
+        if(e.isCancelled()) return;
+        //identity check + owner of item check = cancel collision
+        if(e.getCollisionVictim() == getPlayer() && e.getItem().getEntityId() == currentItemID)
+            e.setCancelled(true);
     }
 
     @Override

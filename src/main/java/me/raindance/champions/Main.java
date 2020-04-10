@@ -2,21 +2,21 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.PlayerPermissionsTable;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.Configurator;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleRunnable;
 import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.mc.util.ConfigUtil;
 import com.podcrash.api.mc.util.PlayerCache;
-import com.podcrash.api.permissions.Perm;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.plugin.PodcrashSpigot;
-import com.podcrash.api.redis.Communicator;
+import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
@@ -24,12 +24,8 @@ import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
-import me.raindance.champions.listeners.maintainers.ApplyKitListener;
-import me.raindance.champions.listeners.maintainers.DomGameListener;
-import me.raindance.champions.listeners.maintainers.SkillMaintainListener;
-import me.raindance.champions.listeners.maintainers.SoundDamage;
+import me.raindance.champions.listeners.maintainers.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -43,6 +39,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.SpigotConfig;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -52,6 +50,9 @@ import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
     public static volatile Main instance;
+    private static Set<String> defaultAllowedSkills;
+    private Properties properties;
+
     public static final String CHANNEL_NAME = "Champions";
     private ProtocolManager protocolManager;
     private BukkitTask tickTask;
@@ -72,6 +73,7 @@ public class Main extends JavaPlugin {
     }
     private CompletableFuture<Void> registerListeners() {
         return CompletableFuture.runAsync(() -> {
+            new DomRewardsListener(this);
             new DomGameListener(this);
             new SoundDamage(this);
             new InventoryListener(this);
@@ -83,6 +85,7 @@ public class Main extends JavaPlugin {
             new TickEventListener(this);
             new Disguiser().disguiserIntercepter();
             new ApplyKitListener(this);
+            new EconomyListener(this);
 
             Bukkit.getPluginManager().registerEvents(new Listener() {
                 @EventHandler
@@ -114,6 +117,10 @@ public class Main extends JavaPlugin {
         }, executor);
     }
 
+    public static Set<String> getDefaultAllowedSkills() {
+        return defaultAllowedSkills;
+    }
+
     @Override
     public void onEnable() {
         /*
@@ -122,7 +129,22 @@ public class Main extends JavaPlugin {
         */
         instance = this;
 
-        log.info("[GameManager] Making a lot of games");
+        this.properties = ConfigUtil.readPropertiesFile(getClass().getClassLoader(), "allowed.properties");
+        //set allowed skills
+        String raw = (String) this.properties.get("allowed");
+        List<String> t = new ArrayList<>();
+        if(raw != null) {
+            for (String r : raw.split(",")) {
+                String p = ChatUtil.strip(r);
+                t.add(p);
+            }
+            defaultAllowedSkills = new HashSet<>(t);
+        }
+        //set config stuff
+        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
+        spigot.registerConfigurator("kits");
+        spigot.registerConfigurator("skilldescriptions");
+
         DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         GameManager.createGame(game);
         log.info("Created game " + game.getName());
@@ -136,21 +158,12 @@ public class Main extends JavaPlugin {
         CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
 
+        spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
+
         protocolManager = ProtocolLibrary.getProtocolManager();
         mapConfig = new File(getDataFolder(), "maps.yml");
         mapConfiguration = YamlConfiguration.loadConfiguration(mapConfig);
         saveMapConfig();
-
-        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
-        spigot.registerConfigurator("kits");
-        spigot.registerConfigurator("skilldescriptions");
-        List<String> domMaps = new ArrayList<>();
-        domMaps.add("Sakura");
-        domMaps.add("Delphic");
-        domMaps.add("Pinewood");
-        domMaps.add("Gulley");
-        getConfig().set("worlds", domMaps);
-        saveConfig();
 
         this.log.info(Bukkit.getWorlds().toString());
 
@@ -185,9 +198,7 @@ public class Main extends JavaPlugin {
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
     }
-    @Override
-    public void onLoad() {
-    }
+
     @Override
     public void onDisable() {
         DamageQueue.active = false;
@@ -244,12 +255,7 @@ public class Main extends JavaPlugin {
 
     private CompletableFuture<Void> registerCommands() {
         return CompletableFuture.runAsync(() -> {
-            getCommand("leave").setExecutor(new LeaveCommand());
-            getCommand("team").setExecutor(new TeamCommand());
             getCommand("wteleport").setExecutor(new WorldTeleportCommand());
-            getCommand("start").setExecutor(new StartCommand());
-            getCommand("end").setExecutor(new EndCommand());
-            getCommand("setmap").setExecutor(new SetMapCommand());
             getCommand("invis").setExecutor(new InvisCommand());
             getCommand("damage").setExecutor(new DamageCommand());
             getCommand("velo").setExecutor(new VelocityCommand());
@@ -257,54 +263,10 @@ public class Main extends JavaPlugin {
             getCommand("currentlocation").setExecutor(new CurrentLocationCommand());
             getCommand("copyworld").setExecutor(new CopyWorldCommand());
             getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
-            getCommand("ping").setExecutor(new PingCommand());
-            getCommand("mapinfo").setExecutor(new InfoMapCommand());
             getCommand("rc").setExecutor(new ReloadChampionsCommand());
-            getCommand("spec").setExecutor(new SpecCommand());
-            getCommand("view").setExecutor(new ViewCommand());
             getCommand("skill").setExecutor(new SkillCommand());
-            getCommand("setrole").setExecutor(new SetRoleCommand());
-            getCommand("kb").setExecutor(new KnockbackCommand());
-            getCommand("hitreg").setExecutor(new HitRegCommand());
-            getCommand("kill").setExecutor(new KillCommand());
-            getCommand("tell").setExecutor(new TellCommand());
-
+            getCommand("lock").setExecutor(new LockCommand());
         }, executor);
-    }
-    public void setupPermissions(Player player) {
-        PermissionAttachment attachment = player.addAttachment(this);
-        this.playerPermissions.put(player.getUniqueId(), attachment);
-        permissionsSetter(player);
-    }
-    private void permissionsSetter(Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-
-            PermissionAttachment attachment = this.playerPermissions.get(player.getUniqueId());
-            PlayerPermissionsTable table = TableOrganizer.getTable(DataTableType.PERMISSIONS);
-            List<Perm> perms = table.getRoles(player.getUniqueId());
-            boolean a = false;
-            for(Perm perm : Perm.values()) {
-                if(perms.contains(perm)) {
-                    player.sendMessage(String.format("%sYou have been assigned the %s role!", ChatColor.GREEN, perm.name()));
-                    a = true;
-                }
-                for(String permission : perm.getPermissions()) {
-                    attachment.setPermission(permission, a);
-                }
-                a = false;
-            }
-            String[] disallowedPerms = new String[] {
-                    "bukkit.command.reload",
-                    "bukkit.command.timings",
-                    "bukkit.command.plugins",
-                    "bukkit.command.help",
-                    "bukkit.command.ban-ip",
-                    "bukkit.command.stop",
-            };
-            Main.getInstance().getLogger().info("Disabling bad permissions");
-            for(String disallowed : disallowedPerms)
-                attachment.setPermission(disallowed, false);
-        });
     }
 
     public static Main getInstance() {

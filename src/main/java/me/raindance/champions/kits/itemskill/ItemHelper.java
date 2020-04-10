@@ -3,29 +3,26 @@ package me.raindance.champions.kits.itemskill;
 import com.google.common.reflect.ClassPath;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.annotation.ItemMetaData;
-import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.itemskill.item.Soup;
-import me.raindance.champions.kits.itemskill.item.WaterBottle;
-import me.raindance.champions.kits.itemskill.item.Web;
-import me.raindance.champions.kits.skills.warden.Adrenaline;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -33,10 +30,11 @@ import java.util.logging.Level;
     This dude manages items
  */
 public class ItemHelper extends ListenerBase {
-    private static final HashMap<Material, ItemActionData> map = new HashMap<>();
+    private final List<ItemActionData> map;
 
     public ItemHelper(JavaPlugin plugin) {
         super(plugin);
+        this.map = new ArrayList<>();
         try {
             setupItems();
         } catch (ClassNotFoundException e) {
@@ -54,15 +52,16 @@ public class ItemHelper extends ListenerBase {
 
             IItem item = (IItem) emptyConstructor(itemClass);
 
-            if(item instanceof ItemListener)
-                Bukkit.getPluginManager().registerEvents(((ItemListener) item).getHelperListener(), Main.getInstance());
+            if(item instanceof Listener)
+                Bukkit.getPluginManager().registerEvents((Listener) item, Main.getInstance());
+
             if(item == null) throw new RuntimeException("item cannot be null! current at: " + info.getName());
             ItemMetaData annot = itemClass.getAnnotation(ItemMetaData.class);
             Material mat = annot.mat();
             Action[] actions = annot.actions();
-
-            ItemActionData data = new ItemActionData(mat, actions, item);
-            map.put(mat, data);
+            int id = annot.data();
+            ItemActionData data = new ItemActionData(mat, actions, item, id);
+            map.add(data);
         }
     }
 
@@ -86,17 +85,30 @@ public class ItemHelper extends ListenerBase {
         }
     }
 
+    private ItemActionData getItemAction(ItemStack itemStack) {
+        Material mat = itemStack.getType();
+        MaterialData matData = itemStack.getData();
+        for(ItemActionData data : map) {
+            if(data.materialEquals(mat, matData))
+                return data;
+        }
+        return null;
+    }
+
+
     @EventHandler(priority = EventPriority.HIGH)
     public void click(PlayerInteractEvent e) {
         if(e.getItem() == null) return;
-        ItemActionData itemHandler = map.getOrDefault(e.getItem().getType(), null);
+        ItemActionData itemHandler = getItemAction(e.getItem());
         if (itemHandler == null) return;
         Player p = e.getPlayer();
         Action action = e.getAction();
         if(itemHandler.actionContains(action)) {
             itemHandler.doItemAction(p, action);
             removeItemFromHand(p);
+
         }else e.setCancelled(true);
+        p.updateInventory();
     }
 
     private void removeItemFromHand(Player player) {

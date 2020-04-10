@@ -40,8 +40,8 @@ public class Rally extends Drop implements ICooldown {
             if(!isAlly(other)) continue;
             Location otherLoc = other.getLocation();
             double distSquared = currentLoc.distanceSquared(otherLoc);
-            if(distSquared > 9D) continue;
-            StatusApplier.getOrNew(other).applyStatus(Status.SPEED, 3, 1, true, true);
+            if(distSquared > 16D) continue;
+            StatusApplier.getOrNew(other).applyStatus(Status.SPEED, 5, 1, true, true);
         }
         return true;
     }

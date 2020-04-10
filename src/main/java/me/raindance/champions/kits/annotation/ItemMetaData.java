@@ -13,4 +13,5 @@ import java.lang.annotation.Target;
 public @interface ItemMetaData {
     Material mat();
     Action[] actions() default { Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK };
+    int data() default -1;
 }

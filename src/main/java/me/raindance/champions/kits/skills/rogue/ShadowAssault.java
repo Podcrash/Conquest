@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.rogue;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -16,7 +17,7 @@ import org.bukkit.event.EventHandler;
  * Cooldown: 7 seconds
  * Description: Your next melee attack deals 3 bonus damage. Shadow Assault then goes on cooldown.
  */
-@SkillMetadata(id = 608, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 608, skillType = SkillType.Rogue, invType = InvType.SECONDARY_PASSIVE)
 public class ShadowAssault extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
@@ -35,7 +36,10 @@ public class ShadowAssault extends Passive implements ICooldown {
 
     @EventHandler
     public void damage(DamageApplyEvent event) {
-        if(onCooldown() || event.getAttacker() != getPlayer()) return;
+        if(onCooldown()) return;
+        if(event.getAttacker() != getPlayer() || isAlly(event.getVictim())) return;
+        if(event.getCause() != Cause.MELEE && event.getCause() != Cause.MELEESKILL) return;
+        getPlayer().sendMessage(getUsedMessage(event.getVictim()));
         setLastUsed(System.currentTimeMillis());
         event.addSource(this);
         event.setDamage(event.getDamage() + 3);

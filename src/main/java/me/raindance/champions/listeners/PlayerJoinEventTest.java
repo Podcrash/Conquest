@@ -1,10 +1,13 @@
 package me.raindance.champions.listeners;
 
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.PlayerTable;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameManager;
@@ -12,17 +15,16 @@ import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import com.podcrash.api.mc.mob.CustomEntityFirework;
+import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.Collection;
 import java.util.Random;
@@ -41,64 +43,66 @@ public class PlayerJoinEventTest extends ListenerBase {
         beacon.setItemMeta(meta1);
     }
 
-    private void putPlayerDB(UUID uuid) {
-        PlayerTable players = TableOrganizer.getTable(DataTableType.PLAYERS);
-        players.insert(uuid);
-    }
     @EventHandler
     public void join(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        if (p.getWorld().getName().equals("world")) {
-            p.getInventory().setItem(35, beacon);
-            //adds the PermissionAttachment so permissions work on the players
+        Player player = e.getPlayer();
 
-            //Spawn the Firework, get the FireworkMeta.
+        player.setGameMode(GameMode.ADVENTURE);
 
-            //Our random generator
-            Random r = new Random();
+        ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+        player.getInventory().setItem(35, beacon);
+        //adds the PermissionAttachment so permissions work on the players
 
-            FireworkEffect.Type type = FireworkEffect.Type.BALL;
+        //Spawn the Firework, get the FireworkMeta.
 
-            //Create our effect with this
-            FireworkEffect effect = FireworkEffect.builder()
-                    .flicker(r.nextBoolean())
-                    .withColor(Color.WHITE)
-                    .with(type).trail(r.nextBoolean())
-                    .build();
-            Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            CustomEntityFirework.spawn(p.getLocation(), effect, players.toArray(new Player[players.size()]));
-        }
+        //Our random generator
+        Random r = new Random();
+
+        FireworkEffect.Type type = FireworkEffect.Type.BALL;
+
+        //Create our effect with this
+        FireworkEffect effect = FireworkEffect.builder()
+                .flicker(r.nextBoolean())
+                .withColor(Color.WHITE)
+                .with(type).trail(r.nextBoolean())
+                .build();
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
+
         if(GameManager.getGame() != null) {
-            if (GameManager.getGame().isOngoing() || GameManager.getGame().isFull())
-                if(GameManager.getGame().contains(e.getPlayer()))
-                    e.getPlayer().teleport(GameManager.getGame().getTeam(e.getPlayer()).getSpawn(e.getPlayer()));
-                else GameManager.addSpectator(e.getPlayer());
+            if (GameManager.getGame().getGameState() == GameState.STARTED || GameManager.getGame().isFull())
+                if(GameManager.getGame().contains(player))
+                    player.teleport(GameManager.getGame().getTeam(player).getSpawn(player));
+                else GameManager.addSpectator(player);
             else {
-                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                GameManager.addPlayer(e.getPlayer());
+                GameManager.addPlayer(player);
             }
         }
-        putPlayerDB(p.getUniqueId());
-        InvFactory.applyLastBuild(p);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getPlayer()) == null)
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(e.getPlayer()));
-        Main.getInstance().setupPermissions(p);
+        InvFactory.applyLastBuild(player);
+        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null)
+            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
     }
 
     @EventHandler
     public void leave(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
+        Player player = e.getPlayer();
         ChampionsPlayerManager cm = ChampionsPlayerManager.getInstance();
-        ChampionsPlayer cplayer = cm.getChampionsPlayer(p);
+        ChampionsPlayer cplayer = cm.getChampionsPlayer(player);
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
-        StatusApplier.remove(e.getPlayer());
-        if(!GameManager.getGame().isOngoing()) {
-            GameManager.removePlayer(e.getPlayer());
-        }
+        StatusApplier.getOrNew(player).removeStatus(Status.values());
+        StatusApplier.remove(player);
+
         if (cplayer != null)
             cm.removeChampionsPlayer(cplayer);
+
+
+        if(GameManager.getGame() == null) return;
+        if(GameManager.getGame().getGameState() == GameState.LOBBY) {
+            GameManager.removePlayer(player);
+        }
     }
 
+    //TODO: isnt this method pointless now? (since we aren't depending on the hub world being "world"
     @EventHandler
     public void die(DeathApplyEvent event) {
         if (event.getPlayer().getWorld().getName().equals("world")) {

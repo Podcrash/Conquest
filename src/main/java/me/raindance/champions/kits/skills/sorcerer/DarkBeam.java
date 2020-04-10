@@ -4,6 +4,8 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -20,26 +22,27 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 import static com.podcrash.api.mc.world.BlockUtil.*;
 
 @SkillMetadata(id = 1001, skillType = SkillType.Sorcerer, invType = InvType.SHOVEL)
 public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct {
     private final int MAX_LEVEL = 5;
-    private double damage;
-    private double range;
-    private int energyUsage;
+    private double damage = 7;
+    private double range = 25;
+    private int energyUsage = 40;
     private FireworkEffect firework;
 
+    private double detectionRadius = 1.5;
+    private int damageRadius = 2;
 
-    public DarkBeam() {
-        this.damage = 8;
-        this.range = 25;
-        this.energyUsage = 60;
-    }
+    public DarkBeam() {}
 
     @Override
     public void afterConstruction() {
@@ -47,13 +50,21 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
                 .withColor(Color.BLACK)
                 .with(FireworkEffect.Type.BALL_LARGE)
                 .build();
+
     }
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(onCooldown() || !rightClickCheck(action)) return;
+        if(!hasEnergy()) {
+            getPlayer().sendMessage(getNoEnergyMessage());
+            return;
+        }
+        useEnergy();
         setLastUsed(System.currentTimeMillis());
         release();
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     @Override
@@ -79,34 +90,52 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
         Location cur = getPlayer().getEyeLocation();
         Vector inc = cur.getDirection().normalize();
         cur.add(inc);
-
-        Location endLoc = null;
-        World world = getPlayer().getWorld();
+        List<Player> players = getPlayers();
         for(int i = 0; i < range; i += 1) {
-            if(isPassable(cur.getBlock())  && playerIsHere(cur, getPlayers()) == null) {
-                WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
-                world.getPlayers().forEach(p -> ParticleGenerator.generate(p, packet));
-                cur.add(inc);
-            } else {
-                endLoc = cur;
+            //if the block wasn't passible, stop
+            if(!isPassable(cur.getBlock())) break;
+
+            //if a player is within the point within a sphere, then break
+            if(hasPlayersInArea(cur, detectionRadius, players, getPlayer()))
                 break;
-            }
+            WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(cur.toVector(), EnumWrappers.Particle.SPELL_MOB, new int[]{0,0,0}, 5, 0,0,0);
+            PacketUtil.asyncSend(packet, players);
+            cur.add(inc);
         }
-        burst(endLoc);
+        burst(cur, players);
+    }
+    /*
+    private boolean hasPlayersInArea(Location location, double radius, List<Player> players) {
+        double radiusSquared = radius * radius;
+        for(Player player : players) {
+            if(player == getPlayer() && isAlly(player)) continue;
+            Location loc = player.getLocation();
+            double distanceSquared = loc.distanceSquared(location);
+            if(distanceSquared <= radiusSquared)
+                return true;
+        }
+        return false;
     }
 
-    private void burst(Location endLoc) {
+     */
+    private void burst(Location endLoc, List<Player> players) {
         if (endLoc == null) return;
-        CustomEntityFirework.spawn(endLoc, firework, getPlayers());
+        CustomEntityFirework.spawn(endLoc, firework, players);
         SoundPlayer.sendSound(endLoc, "fireworks.launch", 1F, 63);
         SoundPlayer.sendSound(getPlayer().getLocation(), "fireworks.launch", 1F, 63);
-        int dist = 4;
-        int distS = dist * dist;
-        for (Player p : BlockUtil.getPlayersInArea(endLoc, 4, getPlayers())) {
-            if (isAlly(p) && p == getPlayer()) continue;
-            double distanceS = p.getLocation().distanceSquared(endLoc);
-            double delta = 1D - distanceS / distS;
-            DamageApplier.damage(p, getPlayer(), damage * delta, this, false);
+        for (Player p : BlockUtil.getPlayersInArea(endLoc, damageRadius, players)) {
+            if (isAlly(p) || p == getPlayer()) continue;
+            DamageApplier.damage(p, getPlayer(), damage, this, true);
+            return;
+        }
+    }
+
+    @EventHandler
+    public void damage(DamageApplyEvent event) {
+        if(!event.containsSource(this)) {
+            event.setVelocityModifierX(event.getVelocityModifierX() * 0.6);
+            event.setVelocityModifierY(event.getVelocityModifierY() * 0.6);
+            event.setVelocityModifierZ(event.getVelocityModifierZ() * 0.6);
         }
     }
 }

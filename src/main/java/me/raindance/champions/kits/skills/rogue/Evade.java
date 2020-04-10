@@ -16,6 +16,7 @@ import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.mc.util.TitleSender;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.protocol.packet.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -26,6 +27,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 @SkillMetadata(id = 604, skillType = SkillType.Rogue, invType = InvType.SWORD)
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
@@ -60,6 +63,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
         getPlayer().sendMessage(getCurrentChargeMessage());
     }
     private void removeCharge() {
+        if(charges == 0) return;
         charges--;
         getPlayer().sendMessage(getCurrentChargeMessage());
     }
@@ -81,10 +85,13 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
+        //if in roughly quarter of a second you right click again, then don't start it (which shouldn't be humanly possible)
+        if(System.currentTimeMillis() - time <= 225) return;
         if (hasCharges()) {
             time = System.currentTimeMillis();
             isEvading = true;
-            TimeHandler.repeatedTime(1, 0, new ActiveEvade());
+            getPlayer().sendMessage(getUsedMessage());
+            TimeHandler.repeatedTimeAsync(1, 0, new ActiveEvade());
         } else this.getPlayer().sendMessage(getNoChargeMessage());
     }
 
@@ -97,12 +104,11 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
             player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, 5);
             isEvading = false;
             event.setCancelled(true);
-            TimeHandler.unregister(this);
 
             Location tp = d((Player) player, damager);
             player.sendMessage(getUsedMessage());
-            damager.sendMessage(String.format("%sSkill> %s%s %sused %s%s %s.",
-                    ChatColor.BLUE, ChatColor.GREEN, player.getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
+            damager.sendMessage(String.format("%sSkill> %s%s %sused %s%s%s.",
+                    ChatColor.BLUE, ChatColor.YELLOW, player.getName(), ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
             player.teleport(tp);
             SoundPlayer.sendSound(getPlayer(), "random.successful_hit", 0.8F, 20);
 
@@ -204,10 +210,11 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     }
 
     private class ActiveEvade implements TimeResource {
+        private final double godmode = 600D;
         @Override
         public void task() {
-            long nextTime = time + 600L;
-            double timeLeft = (nextTime - System.currentTimeMillis())/1000D;
+            long nextTime = time + (long) godmode;
+            double timeLeft = (nextTime - System.currentTimeMillis())/godmode;
             TitleSender.sendTitle(getPlayer(), TitleSender.simpleTime("Evade: ",
                     MathUtil.round(timeLeft, 2) + " s",timeLeft, 1D));
         }
@@ -229,10 +236,11 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
         @Override
         public void cleanup() {
-            getPlayer().sendMessage(String.format("%sSkill> %sYou failed evade.",
-                    ChatColor.BLUE, ChatColor.GRAY));
+            if(isEvading)
+            getPlayer().sendMessage(getFailedMessage());
             SoundPlayer.sendSound(getPlayer(),"note.pling", 0.75F, 2);
             setLastUsed(System.currentTimeMillis());
+            TitleSender.sendTitle(getPlayer(), TitleSender.emptyTitle());
             isEvading = false;
             removeCharge();
         }

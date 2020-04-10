@@ -1,6 +1,11 @@
 package me.raindance.champions.kits;
 
 import com.google.common.reflect.ClassPath;
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.EconomyTable;
+import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -11,6 +16,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 /**
@@ -41,9 +50,16 @@ public final class SkillInfo {
         ClassPath cp = ClassPath.from(Adrenaline.class.getClassLoader());
         Set<ClassPath.ClassInfo> classInfoSet = cp.getTopLevelClasses(path);
         StringBuilder skillsLoaded = new StringBuilder(skillTypeName + ": ");
+
+        Map<String, Double> costs = new HashMap<>();
+        List<CompletableFuture<Void>> voids = new ArrayList<>();
         for(ClassPath.ClassInfo info : classInfoSet) {
             Class<?> skillClass = Class.forName(info.getName());
 
+            if(!skillClass.isAnnotationPresent(SkillMetadata.class)) {
+                Pluginizer.getLogger().info("Skipping " + info.getName());
+                continue;
+            }
             Skill skill = (Skill) emptyConstructor(skillClass);
             if(skill == null) throw new RuntimeException("skill cannot be null! current at: " + info.getName());
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
@@ -51,21 +67,44 @@ public final class SkillInfo {
             InvType invType = annot.invType();
             int skillID = annot.id();
             if(idDataMap.keySet().contains(skillID)) {
-                String errMessage = "two skill cannot have the same two ids!\n Skills in conflict: ";
+                String errMessage = "two skills cannot have the same two ids!\n Skills in conflict: ";
                 errMessage += skill + "\n" + SkillInfo.getSkill(skillID);
 
                 throw new IllegalStateException(errMessage);
             }
-            addSkill(skillID, skillType, invType, skill);
+            SkillData data = addSkill(skillID, skillType, invType, skill);
+            voids.add(data.requestDescription());
             skillsLoaded.append(skill.getName()).append(" ");
+
+            costs.put(skill.getName(), annot.cost());
         }
         System.out.println(skillsLoaded.toString());
+
+        EconomyTable eco = TableOrganizer.getTable(DataTableType.ECONOMY);
+        eco.putItem(costs);
+        try {
+            CompletableFuture.allOf(voids.toArray(new CompletableFuture[voids.size()]))
+                .get(5000, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+        }
     }
-    private static void addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
+    private static SkillData addSkill(int skillID, SkillType skillType, InvType invType, Skill skill, double price) {
         //TODO: put more of this information in the annotations.
-        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType);
+        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType, price);
         skillData.add(data);
         idDataMap.put(skillID, data);
+
+        return data;
+    }
+
+    private static SkillData addSkill(int skillID, SkillType skillType, InvType invType, Skill skill) {
+        //TODO: put more of this information in the annotations.
+        SkillData data = new SkillData(skill, skillID, skill.getName(), invType, skillType, 1500);
+        skillData.add(data);
+        idDataMap.put(skillID, data);
+
+        return data;
     }
 
     private static <T> T emptyConstructor(Class<T> clazz) {
@@ -97,6 +136,15 @@ public final class SkillInfo {
             }
         }
         return data;
+    }
+
+    public static SkillData getSkillFromStrippedName(String strippedName) {
+        for (SkillData data : skillData) {
+            if (ChatUtil.strip(data.getName()).equals(strippedName)) {
+                return data;
+            }
+        }
+        return null;
     }
     /**
      * Used for lazy iteration
@@ -159,5 +207,13 @@ public final class SkillInfo {
 
     public static List<SkillData> getSkillData() {
         return skillData;
+    }
+
+    public static SkillData getSkillData(Skill skill) {
+        for(SkillData data : skillData) {
+            if(data.getName().equalsIgnoreCase(skill.getName()))
+                return data;
+        }
+        return null;
     }
 }

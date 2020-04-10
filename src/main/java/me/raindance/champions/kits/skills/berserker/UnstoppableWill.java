@@ -21,7 +21,7 @@ public class UnstoppableWill extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 17;
+        return 12;
     }
 
     @Override
@@ -43,9 +43,10 @@ public class UnstoppableWill extends Instant implements ICooldown {
             if(status.isNegative())
                 applier.removeStatus(status);
         });
-        applier.applyStatus(Status.RESISTANCE, 4, 0);
+        applier.applyStatus(Status.RESISTANCE, 7, 0);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.hit", 0.8F, 70);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.VILLAGER_ANGRY, 4);
+        getPlayer().sendMessage(getUsedMessage());
         packet.setLocation(getPlayer().getEyeLocation());
         PacketUtil.asyncSend(packet, getPlayers());
     }

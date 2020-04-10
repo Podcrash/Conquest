@@ -22,14 +22,12 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SkillMetadata(id = 406, skillType = SkillType.Hunter, invType = InvType.AXE)
 public class Swiftness extends Instant implements TimeResource, ICooldown {
     private final int selfEffect = 4;
-    private final float selfReduction = 0.4F;
+    private final float selfReduction = 0.6F;
     private boolean _active;
     private final Random rand = new Random();
 
@@ -52,9 +50,7 @@ public class Swiftness extends Instant implements TimeResource, ICooldown {
         return ItemType.AXE;
     }
 
-    @EventHandler(
-            priority = EventPriority.MONITOR
-    )
+    @EventHandler(priority = EventPriority.MONITOR)
     public void leftclickBlock(PlayerInteractEvent e) {
         if (e.getPlayer() == getPlayer() && _active &&
                 (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)) {
@@ -76,11 +72,9 @@ public class Swiftness extends Instant implements TimeResource, ICooldown {
         }
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGHEST
-    )
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(DamageApplyEvent e) {
-        if (_active && getPlayer() == e.getVictim() && getPlayer().isSprinting()) {
+        if (_active && getPlayer() == e.getVictim()) {
             e.setModified(true);
             e.setDoKnockback(false);
             e.setDamage(e.getDamage() * (1D - selfReduction));
@@ -88,13 +82,11 @@ public class Swiftness extends Instant implements TimeResource, ICooldown {
         }
     }
 
-    @EventHandler(
-            priority = EventPriority.HIGH
-    )
+    @EventHandler(priority = EventPriority.HIGH)
     public void hit(EntityDamageEvent event) {
-        final List<EntityDamageEvent.DamageCause> causes = Arrays.asList(
-                EntityDamageEvent.DamageCause.FALL, EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK);
-        if (_active && event.getEntity() == getPlayer() && getPlayer().isSprinting() && causes.contains(event.getCause())) {
+        final Set<EntityDamageEvent.DamageCause> causes = new HashSet<>(Arrays.asList(
+                EntityDamageEvent.DamageCause.FALL, EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK));
+        if (_active && event.getEntity() == getPlayer() && causes.contains(event.getCause())) {
             event.setDamage(event.getDamage() * (1D - selfReduction));
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.BLAZE_BREATH, 0.5f, 2);
         }

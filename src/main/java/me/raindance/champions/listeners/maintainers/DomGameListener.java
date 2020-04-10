@@ -1,39 +1,81 @@
 package me.raindance.champions.listeners.maintainers;
 
+import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.db.pojos.map.ConquestMap;
+import com.podcrash.api.db.redis.Communicator;
+import com.podcrash.api.db.tables.DataTableType;
+import com.podcrash.api.db.tables.MapTable;
+import com.podcrash.api.mc.economy.Currency;
+import com.podcrash.api.mc.economy.IEconomyHandler;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.objects.objectives.Emerald;
-import com.podcrash.api.mc.game.objects.objectives.Restock;
+import com.podcrash.api.mc.game.objects.WinObjective;
+import com.podcrash.api.mc.game.objects.objectives.*;
+import com.podcrash.api.mc.game.resources.HealthBarResource;
 import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.redis.Communicator;
+import com.podcrash.api.mc.util.VectorUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
-import me.raindance.champions.game.map.DominateMap;
+import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
+import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
+    private static final Material[] nonInteractables = new Material[]{
+            Material.CHEST,
+            Material.TRAPPED_CHEST,
+            Material.HOPPER,
+            Material.BED,
+            Material.BED_BLOCK,
+            Material.FURNACE,
+            Material.BURNING_FURNACE,
+            Material.CAKE,
+            Material.CAKE_BLOCK,
+            Material.ENDER_CHEST,
+            Material.DISPENSER,
+            Material.BREWING_STAND,
+            Material.COMMAND,
+            Material.BEACON,
+            Material.ANVIL,
+            Material.DROPPER,
+            Material.WORKBENCH,
+    };
     public DomGameListener(JavaPlugin plugin) {
         super(plugin);
     }
@@ -48,15 +90,35 @@ public class DomGameListener extends ListenerBase {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
+    public void filterDeathCauses(DeathApplyEvent e) {
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void mapLoad(GameMapLoadEvent event) {
-        if(!(event.getMap() instanceof DominateMap) || !(event.getGame() instanceof DomGame)) return;
+        if(!(event.getMap() instanceof ConquestMap) || !(event.getGame() instanceof DomGame)) return;
         DomGame game = (DomGame) event.getGame();
-        DominateMap domMap = (DominateMap) event.getMap();
+        ConquestMap domMap = (ConquestMap) event.getMap();
         World world = event.getWorld();
-        domMap.setGameWorld(world);
-        game.setCapturePoints(domMap.getCapturePoints());
-        game.setEmeralds(domMap.getEmeralds());
+        game.setCapturePoints(domMap.getCapturePointPojos());
+        game.setDiamonds(domMap.getDiamonds());
         game.setRestocks(domMap.getRestocks());
+        game.setLandmines(domMap.getMines());
+        game.setStars(domMap.getStars());
+
+        for (WinObjective winObjective : game.getWinObjectives()) {
+            winObjective.setWorld(world);
+        }
+
+        for (ItemObjective itemObjective : game.getItemObjectives()) {
+            itemObjective.setWorld(world);
+        }
+        //face towards a star buff.
+        List<Star> star = game.getStars();
+        if(star.size() != 0) {//make sure there are some stars
+            Location randomBuffLoc = game.getStars().get(0).getLocation();
+            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc))));
+        }
 
         GameScoreboard gameScoreboard;
         if((gameScoreboard = game.getGameScoreboard()) instanceof DomScoreboard)
@@ -64,12 +126,19 @@ public class DomGameListener extends ListenerBase {
     }
 
     @EventHandler
+    public void itemObjectiveSpawn(ItemObjectiveSpawnEvent e) {
+        if(e.getObjective() instanceof Star) {
+            DomGame game = (DomGame) GameManager.getGame();
+            game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
+        }
+    }
+    @EventHandler
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
         game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
-            Main.instance.getLogger().info(String.format("Can't startContinuousAction game %d, not enough players!", game.getId()));
+            Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
         String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
         for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
@@ -80,33 +149,65 @@ public class DomGameListener extends ListenerBase {
                 new ScoreboardRepeater(game.getId()),
                 new ItemObjectiveSpawner(game.getId()),
                 capture,
-                new CapturePointScorer(capture)
+                new CapturePointScorer(capture),
+                new HealthBarResource(game.getId())
         );
         game.broadcast(e.getMessage());
+
+        for(Player p: game.getBukkitPlayers()) {
+            ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+            player.restockInventory();
+            StatusApplier.getOrNew(p).removeStatus(Status.values());
+        }
     }
 
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
+        double payout = 500;
+
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
+        for(Player player : e.getGame().getBukkitPlayers()) {
+            if(GameManager.isSpectating(player)) break;
+            //handler.pay(player, payout);
+            player.sendMessage(String.format("%s%sYou earned %s %s!",
+                    Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
+        }
+
+
+        GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            GameManager.addPlayer(player);
+            player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
+            StatusApplier.getOrNew(player).removeStatus(Status.values());
+        }
     }
 
 
     @EventHandler
     public void onGameDeath(GameDeathEvent e) {
-        TeamEnum victimTeam = e.getGame().getTeamEnum(e.getWho());
-        TeamEnum enemyTeam = null;
         Player victim = e.getWho();
-        e.getGame().increment(victimTeam, 50);
+        TeamEnum victimTeam = e.getGame().getTeamEnum(victim);
 
+        if(e.getKiller() instanceof Player) {
+            TeamEnum enemyTeam = e.getGame().getTeamEnum((Player) e.getKiller());
+            if (e.getWho() != e.getKiller())
+                e.getGame().increment(enemyTeam, 50);
+        }
         List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
-                ((TogglePassive) skill).toggle();
+                ((TogglePassive) skill).forceToggle();
         }
+
+        DomGame game = (DomGame) e.getGame();
+
+        game.getStarBuff().collectorDiedNotify(victim);
     }
 
     @EventHandler
@@ -122,17 +223,22 @@ public class DomGameListener extends ListenerBase {
             String teamColor = ((CapturePoint) objective).getColor();
             TeamEnum team = TeamEnum.getByColor(teamColor);
             StringBuilder builder = new StringBuilder();
-            builder.append(team.getChatColor());
-            builder.append(ChatColor.BOLD);
-            builder.append(team.getName());
-            builder.append(" has captured ");
-            builder.append(objective.getName());
-            builder.append("!");
-            e.getGame().broadcast(builder.toString());
-            DomScoreboard scoreboard = (DomScoreboard) e.getGame().getGameScoreboard();
+            if(team != TeamEnum.WHITE) {
+                builder.append(team.getChatColor());
+                builder.append(ChatColor.BOLD);
+                builder.append(team.getName());
+                builder.append(" has captured ");
+                builder.append(objective.getName());
+                builder.append("!");
+            }else {
+                builder.append(team.getChatColor()).append(ChatColor.BOLD);
+                builder.append(objective.getName()).append(" is now neutralized!");
+            }
+            game.broadcast(builder.toString());
+            DomScoreboard scoreboard = (DomScoreboard) game.getGameScoreboard();
             scoreboard.updateCapturePoint(team, objective.getName());
             objective.spawnFirework();
-        }else if(objective instanceof Emerald) {
+        }else if(objective instanceof Diamond) {
 
         }else e.getWho().sendMessage(e.getMessage());
     }
@@ -141,22 +247,30 @@ public class DomGameListener extends ListenerBase {
     public void pickUp(GamePickUpEvent event) {
         ItemObjective itemObjective = event.getItem();
         Player player = event.getWho();
-        Game game = event.getGame();
+        DomGame game = (DomGame) event.getGame();
         TeamEnum team = game.getTeamEnum(player);
-        if(itemObjective instanceof Emerald) {
-            game.increment(team, 300);
+        if(itemObjective instanceof Diamond) {
+            game.increment(team, 200);
             StringBuilder builder = new StringBuilder();
-            //builder.append(team.getChatColor());
-            builder.append(ChatColor.DARK_GREEN);
+            builder.append(ChatColor.AQUA);
             builder.append(ChatColor.BOLD);
-            builder.append(team.getName());
+            builder.append(player.getName());
             //builder.append(ChatColor.GREEN);
-            builder.append(" has gained 300 points!");
+            builder.append(" has collected 200 points!");
             game.broadcast(builder.toString());
         }else if(itemObjective instanceof Restock) {
             ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
             cPlayer.restockInventory();
             player.sendMessage(ChatColor.YELLOW + ChatColor.BOLD.toString() + "You recieved supplies!");
+        }else if(itemObjective instanceof Landmine) {
+            player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "You collected a landmine!");
+            player.getInventory().addItem(new ItemStack(Material.TNT));
+            game.increment(team, 50);
+        }else if(itemObjective instanceof Star) {
+            player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
+            game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            game.getStarBuff().setCollector(player);
+            game.increment(team, 300);
         }
         itemObjective.spawnFirework();
         game.getGameResources().forEach(resource -> {
@@ -164,5 +278,48 @@ public class DomGameListener extends ListenerBase {
                 ((ItemObjectiveSpawner) resource).setItemTime(itemObjective, System.currentTimeMillis());
             }
         });
+    }
+
+    @EventHandler
+    public void resurrect(GameResurrectEvent e) {
+        ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho());
+        championsPlayer.getSkills().forEach(skill -> {
+            if(skill instanceof ICharge) {
+                if(!((ICharge) skill).isMaxAtStart()) return;
+                for(int i = 0; i < ((ICharge) skill).getMaxCharges(); i++) {
+                    ((ICharge) skill).addCharge();
+                }
+            }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void interact(PlayerInteractEvent e) {
+        // If a player tries to right-click interact with a block we don't want them to, cancel the event.
+        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            Block block = e.getClickedBlock();
+            for(Material m : nonInteractables) {
+                if(block.getType().equals(m)) e.setCancelled(true);
+            }
+        }
+
+        // If a player tries to extinguish a fire, cancel the event.
+        if(e.getClickedBlock() != null) {
+            Location loc = e.getClickedBlock().getLocation();
+            loc.setY(loc.getY() + 1);
+            Material target = loc.getBlock().getType();
+            if(target.equals(Material.FIRE)) e.setCancelled(true);
+        }
+
+        // If the player is spectating / re-spawning, cancel the event.
+        if(GameManager.getGame().isRespawning(e.getPlayer()) || !GameManager.getGame().isParticipating(e.getPlayer())) e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void maintainArmour(InventoryClickEvent event) {
+        Inventory clicked = event.getClickedInventory();
+        if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
+            event.setCancelled(true);
+        }
     }
 }

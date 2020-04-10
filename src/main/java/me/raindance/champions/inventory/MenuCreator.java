@@ -2,9 +2,11 @@ package me.raindance.champions.inventory;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.podcrash.api.db.ChampionsKitTable;
-import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.tables.ChampionsKitTable;
+import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
+import com.podcrash.api.mc.economy.Currency;
+import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.mc.util.MathUtil;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
@@ -19,23 +21,36 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 public class MenuCreator {
 
     public static Inventory createGeneralMenu() {
         ItemStack[] items = ChampionsInventory.getClassItemList();
-        int size =  MathUtil.ceil(9, items.length);
-        Inventory inventory = Bukkit.createInventory(null, size, "Class Menu");
+        int size =  MathUtil.ceil(9, items.length * 2);
+        Inventory inventory = Bukkit.createInventory(null, 45, "Class Menu");
         //this is safer, just in case items have some null elements
+        /*
         for(ItemStack item : items)
-            if(item != null) inventory.addItem(item);
+            if(item != null)
+                inventory.addItem(item);
+        */
+
+        inventory.setItem(9, items[0]);
+        inventory.setItem(11, items[2]);
+        inventory.setItem(13, items[4]);
+        inventory.setItem(15, items[6]);
+        inventory.setItem(17, items[8]);
+        inventory.setItem(27, items[1]);
+        inventory.setItem(29, items[3]);
+        inventory.setItem(31, items[5]);
+        inventory.setItem(33, items[7]);
+        inventory.setItem(35, items[9]);
+
         return inventory;
     }
 
@@ -58,7 +73,7 @@ public class MenuCreator {
         Set<Integer> skillSet = new HashSet<>(Arrays.asList(skillIDs));
         final int rows = calculateRows(skillType);
         System.out.println("Creating inventory with " + rows + " rows!");
-        String title = ChatColor.GREEN + skillType.getName();
+        String title = ChatColor.DARK_GRAY + skillType.getName();
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
         Main.getInstance().getLogger().info("Inventory max size: " + inventory.getSize());
         int cursor = 0;
@@ -84,12 +99,38 @@ public class MenuCreator {
             if(skillPresent) {
                 //if the yielded list has skills for it, then set the item tag and move the primary
                 //cursor over 1 row
-                inventory.setItem(cursor, InventoryData.getInvItem(invType));
+                inventory.setItem(cursor, invType.createItemStack());
                 cursor += 9;
             }
         }
         return inventory;
     }
+
+    public static void openTeamSelectMenu(Player player) {
+        Inventory inv = player.getInventory();
+        ItemStackUtil.createItem(inv, 35, 14,1, 21, "&c&lRed Team");
+        ItemStackUtil.createItem(inv, 35, 11,1, 25, "&9&lBlue Team");
+    }
+
+    public static Inventory createConfirmationMenu(String item, double cost) {
+        SkillData data = SkillInfo.getSkillFromStrippedName(item);
+        String title = String.format("%sPurchasing: %s",ChatColor.DARK_GRAY, data.getName());
+        Inventory inv = Bukkit.createInventory(null, 3 * 9, title);
+        ItemStack price = ItemStackUtil.createItem(Material.EMPTY_MAP, String.format("%S%sPrice: %s%d",
+                ChatColor.DARK_GRAY,
+                ChatColor.BOLD,
+                Currency.GOLD.getFormatting(),
+                (int)data.getPrice()), null);
+        ItemStack confirmation = ItemStackUtil.createItem(Material.EMERALD_BLOCK, String.format("%s%sConfirm", ChatColor.GREEN, ChatColor.BOLD), null);
+        ItemStack cancellation = ItemStackUtil.createItem(Material.REDSTONE_BLOCK, String.format("%s%sDeny", ChatColor.RED, ChatColor.BOLD), null);
+        ItemStack info = InventoryData.skillToItemStack(data);
+        inv.setItem(4, price);
+        inv.setItem(11, confirmation);
+        inv.setItem(13, info);
+        inv.setItem(15,cancellation);
+        return inv;
+    }
+
     public static void giveHotbarInventory(Player player, SkillType skillType) {
         Inventory inventory = player.getInventory();
         ChampionsInventory.setHotBar(inventory, skillType);
@@ -112,17 +153,17 @@ public class MenuCreator {
         return Bukkit.createInventory(null, 54, String.format("%s%s", color, stype));
     }
     private static Inventory createCopyMenu(String stype) {
-        return createCopyMenu(ChatColor.GREEN.toString(), stype);
+        return createCopyMenu(ChatColor.DARK_GRAY.toString(), stype);
     }
 
     public static Inventory createKitTemplate(Player player, SkillType skillType) {
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
-        Inventory inventory = createCopyMenu(ChatColor.BLACK.toString(), skillType.getName() + " Build");
+        Inventory inventory = createCopyMenu(ChatColor.DARK_GRAY.toString(), skillType.getName() + " Build");
         DyeColor[] colors = new DyeColor[]{DyeColor.RED, DyeColor.BLUE, DyeColor.YELLOW, DyeColor.GREEN};
         int[] rowStarts = new int[] {20, 22, 24, 26};
 
         Material[] materials = new Material[] {Material.INK_SACK, Material.ANVIL, Material.FIREBALL};
-        String[] names = new String[] {"Apply Build ", "Edit Build ", "Delete Build"};
+        String[] names = new String[] {String.format("%s%s", ChatColor.RESET, "Apply Build "), String.format("%s%s", ChatColor.RESET, "Edit Build "), String.format("%s%s%s", ChatColor.RESET, ChatColor.RED, "Delete Build ")};
         int[] slots = new int[] {0, 9, 27};
 
         UUID uuid = player.getUniqueId();
@@ -133,22 +174,23 @@ public class MenuCreator {
             for(int k = 0; k < materials.length; k++) {
                 Material material = materials[k];
                 String name = names[k] + i;
-                int slot = rowStarts[index] + slots[k];
-                ItemStack item = (material == Material.INK_SACK) ?
-                        new ItemStack(material, 1, DyeColor.GRAY.getData()) :
-                        new ItemStack(material);
+                final int slot = rowStarts[index] + slots[k];
+                final ItemStack item = new ItemStack(material);
                 final ItemMeta meta = item.getItemMeta();
 
+
                 meta.setDisplayName(name);
-                String dataJSON = table.getJSONData(uuid, clasz, i);
-                if(name.contains("Apply Build") && dataJSON != null) {
-                    Dye data = ((Dye) item.getData());
-                    data.setColor(color);
-                    item = new ItemStack(Material.INK_SACK, 1, data.getData());
-                    meta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
-                }
                 item.setItemMeta(meta);
                 inventory.setItem(slot, item);
+                if(name.contains("Apply Build")) {
+                    table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
+                        ItemStack duplicate =  new ItemStack(Material.INK_SACK, 1, color.getData());
+                        ItemMeta futureMeta = item.getItemMeta();
+                        futureMeta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
+                        duplicate.setItemMeta(futureMeta);
+                        inventory.setItem(slot, duplicate);
+                    });
+                }
             }
         }
         return inventory;

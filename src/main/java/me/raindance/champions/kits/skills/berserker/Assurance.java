@@ -9,7 +9,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 101, skillType = SkillType.Berserker, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 101, skillType = SkillType.Berserker, invType = InvType.SECONDARY_PASSIVE)
 public class Assurance extends Passive {
     @Override
     public String getName() {
@@ -28,6 +28,7 @@ public class Assurance extends Passive {
         if(victim.getMaxHealth() * 0.5D < victim.getHealth()) return;
 
         e.setDamage(e.getDamage() + 1);
+        e.addSource(this);
         e.setModified(true);
     }
 }

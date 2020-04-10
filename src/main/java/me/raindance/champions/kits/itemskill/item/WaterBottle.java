@@ -11,8 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.material.MaterialData;
 
-@ItemMetaData(mat = Material.POTION)
+@ItemMetaData(mat = Material.POTION, data = 0)
 public class WaterBottle implements IItem {
     @Override
     public String getName() {

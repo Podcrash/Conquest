@@ -1,5 +1,6 @@
 package me.raindance.champions.events.skill;
 
+import me.raindance.champions.Main;
 import me.raindance.champions.kits.Skill;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,6 +14,7 @@ public class SkillEvent extends Event {
     public SkillEvent(Skill skill) {
         this.skill = skill;
         this.player = skill.getPlayer();
+        Main.getInstance().getLogger().info("[SKILLDEGBUG] " + player.getName() + " used " + skill.getName());
     }
 
     public Player getPlayer() {

@@ -5,27 +5,9 @@ author: RainDanceMC
 
 softdepend: [ProtocolLib, PodcrashAPI]
 commands:
-  ping:
-    description: Tells you your ping
-    usage: /ping
-  join:
-    description: Join a game.
-    usage: /join <GameID>
   leave:
       description: Leave a game.
       usage: /leave
-  start:
-      description: Start a game.
-      usage: /startContinuousAction
-  end:
-    description: End a game.
-    usage: /end <GameID>
-  setmap:
-      description: Set a map for the game.
-      usage: /setmap <MapName> [gameNumber]
-  team:
-    description: Join a team (red or blue).
-    usage: /team <color>
   wteleport:
     aliases: [wtp, wtele]
     description: Teleport to another world.
@@ -57,32 +39,14 @@ commands:
   rc:
     description: Reload the Champions plugin.
     usage: /rc
-  spec:
-    description: Spectate a game.
-    usage: /spec <GameID>
-  view:
-    description: View information about a game.
-    usage: /view <GameID>
   skill:
     description: View your current loadout.
     usage: /skill
-  setrole:
-    description: Set a players role in the Champions plugin. Add the arguement "remove" to take away that player's role. Available roles are - Host, Developer.
-    usage: /setrole <Role> <PlayerName> (remove)
   newgame:
     description: Create a new Champions game. Valid gamemodes as of now include; DOM (case sensitive?)
     usage: /newgame <GameMode>
-  hitreg:
-    description: Put a new hitreg
-    usage: /hitreg <integer>
-  kb:
-    description: Modify the KB values
-    usage: /kb ...
-  kill:
-    description: Kills your player if you are currently in a game.
-    usage: /kill
-  tell:
-    description: Currently unused messaging system.
+  lock:
+    description: lock the inventory or not.
 permissions:
     Champions.*:
       description: Permission to use all Champions commands.

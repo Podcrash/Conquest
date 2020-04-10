@@ -48,20 +48,23 @@ public class ConcussiveBlow extends Instant implements ICooldown {
         if(onCooldown()) return;
 
         Location eyeLoc = getPlayer().getEyeLocation();
-        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(0.25d));
+        Location center = eyeLoc.add(eyeLoc.getDirection().clone().normalize().multiply(1.2d));
         AbstractPacket packet = ParticleGenerator.createParticle(center.toVector(), EnumWrappers.Particle.EXPLOSION_LARGE,
                 1, 0, 0 , 0);
         Vector vector = eyeLoc.getDirection().normalize().multiply(velocity);
         if(vector.getY() > 0.75) vector.setY(0.75);
 
+        boolean makeSound = false;
         for(Player p : getPlayers()) {
             ParticleGenerator.generate(p, packet);
             if(p == getPlayer() || p.getLocation().distanceSquared(center) > 10D) continue;
-
+            makeSound = true;
             p.setVelocity(vector);
         }
 
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 1.1F, 57);
+        if(makeSound) SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 1.1F, 57);
         this.setLastUsed(System.currentTimeMillis());
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 }

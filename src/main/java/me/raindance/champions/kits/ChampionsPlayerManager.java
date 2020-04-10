@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -14,12 +15,14 @@ import me.raindance.champions.inventory.ChampionsItem;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.classes.Duelist;
 import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.iskilltypes.action.IInjector;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
@@ -42,6 +45,7 @@ public class ChampionsPlayerManager {
         if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).start();
         if (skill instanceof IConstruct) ((IConstruct) skill).doConstruct();
         if (skill instanceof IInjector) addPacketListener(getChampionsPlayer(skill.getPlayer()), ((IInjector) skill).inject());
+        if (skill instanceof ICharge) skill.getPlayer().sendMessage(String.format("%s%s> %sMaximum Charges: %d", ChatColor.BLUE, skill.getName(), ChatColor.GOLD, ((ICharge) skill).getMaxCharges()));
     }
 
     public void addChampionsPlayer(ChampionsPlayer cplayer) {
@@ -67,7 +71,8 @@ public class ChampionsPlayerManager {
 
         if(!apply.isKeepInventory())
             cp.restockInventory();
-        cp.getPlayer().sendMessage(cp.skillsRead());
+        //cp.getPlayer().sendMessage(cp.skillsRead());
+        cp.skillsRead();
     }
     public void removeChampionsPlayer(ChampionsPlayer cplayer) {
         Main.getInstance().log.info(cplayer + "");
@@ -120,7 +125,7 @@ public class ChampionsPlayerManager {
             if(data == null) {
                 System.out.println(id);
                 SkillInfo.getSkills(SkillType.Druid).forEach(System.out::println);
-            }else skillWord.add(data.getName());
+            }else skillWord.add(String.format("%s%s%s", ChatColor.RESET, ChatColor.LIGHT_PURPLE, data.getName()));
         }
         return skillWord;
     }

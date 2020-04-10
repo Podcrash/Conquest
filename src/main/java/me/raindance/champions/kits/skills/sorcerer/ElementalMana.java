@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 /**
  * This is a placeholder, this doesn't actually do anything
  */
-@SkillMetadata(id = 1002, skillType = SkillType.Druid, invType = InvType.INNATE)
+@SkillMetadata(id = 1002, skillType = SkillType.Sorcerer, invType = InvType.INNATE)
 public class ElementalMana extends Passive {
     @Override
     public String getName() {
@@ -24,6 +24,6 @@ public class ElementalMana extends Passive {
     public void kill(DeathApplyEvent event) {
         if(event.getAttacker() != getPlayer()) return;
         EnergyBar eBar = getChampionsPlayer().getEnergyBar();
-        eBar.setEnergy(eBar.getEnergy() + 50);
+        eBar.incrementEnergy(50);
     }
 }

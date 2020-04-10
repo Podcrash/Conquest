@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(id = 601, skillType = SkillType.Rogue, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 601, skillType = SkillType.Rogue, invType = InvType.PRIMARY_PASSIVE)
 public class Backstab extends Passive {
-    private final float bonus = 4;
+    private final float bonus = 3;
 
     @Override
     public String getName() {
@@ -39,9 +39,9 @@ public class Backstab extends Passive {
         Player damager = (Player) event.getAttacker();
         LivingEntity victim = event.getVictim();
         if (VectorUtil.angleIsAround(damager.getLocation().getDirection(), victim.getLocation().getDirection(), 60)) {
-            event.setModified(true);
             event.addSource(this);
             event.setDamage(event.getDamage() + bonus);
+            event.setModified(true);
             SoundPlayer.sendSound(victim.getLocation(), "game.neutral.hurt", 0.5F, 126);
             victim.getWorld().playEffect(event.getVictim().getLocation(), Effect.STEP_SOUND, 55);
         }

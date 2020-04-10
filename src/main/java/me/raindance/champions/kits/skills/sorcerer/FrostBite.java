@@ -1,5 +1,5 @@
 package me.raindance.champions.kits.skills.sorcerer;
-
+/*
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -23,6 +23,7 @@ import java.util.*;
 
 @SkillMetadata(id = 1003, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassiveTimer {
+    private int i = 0;
     private final Random random = new Random();
     private SnowballRemover remover;
     private String NAME;
@@ -31,7 +32,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
     private int energy;
     public FrostBite() {
         this.amnt = 4;
-        this.energy = 40;
+        this.energy = 50;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
 
     @Override
     public String getName() {
-        return "FrostBite";
+        return "Blizzard";
     }
 
     @Override
@@ -99,8 +100,9 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
     public void task() {
         double energyUsage = getEnergyUsageTicks();
         if(hasEnergy(energyUsage)) {
-            blizzard();
             useEnergy(energyUsage);
+            if(i++ % 2 == 0) return;
+            blizzard();
         } else {
             cancel = true;
             getPlayer().sendMessage(getNoEnergyMessage());
@@ -120,6 +122,7 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
             double z = (0.2 - (random.nextInt(40)/100d)) * mult;
 
             snowball.setVelocity(vector.add(new Vector(x, y, z)).multiply(2));
+            remover.entities.add(snowball);
         }
     }
 
@@ -146,10 +149,11 @@ public class FrostBite extends Continuous implements IEnergy, IConstruct, IPassi
             Snowball snowball = (Snowball) event.getDamager();
             if(NAME.equalsIgnoreCase(snowball.getCustomName())){
                 event.setCancelled(true);
-                DamageApplier.damage(victim, getPlayer(), 1, false);
-                victim.setVelocity(snowball.getVelocity().multiply(0.05).add(new Vector(0, 0.1, 0)));
+                DamageApplier.damage(victim, getPlayer(), 0.3, this, false);
                 StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 2, 1);
             }
         }
     }
 }
+
+ */

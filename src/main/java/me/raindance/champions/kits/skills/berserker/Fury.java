@@ -10,6 +10,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 105, skillType = SkillType.Berserker, invType = InvType.INNATE)
@@ -28,12 +29,13 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @Override
     public void start() {
-        run(10, 0);
+        lastHit = System.currentTimeMillis() - 3000;
+        run(1, 0);
     }
 
     @Override
     public void task() {
-        if(lastHit != 0 && System.currentTimeMillis() - lastHit > 3000) {
+        if(lastHit != 0 && System.currentTimeMillis() - lastHit >= 3000) {
             lastHit = 0;
             getEnergyBar().setEnergy(0);
         }
@@ -51,20 +53,20 @@ public class Fury extends Passive implements IPassiveTimer, TimeResource {
 
     @EventHandler
     public void hit(DamageApplyEvent e) {
-        if(e.getAttacker() != getPlayer()) return;
+        if(e.getAttacker() != getPlayer() || isAlly(e.getVictim())) return;
         EnergyBar energyBar = getEnergyBar();
 
         lastHit = System.currentTimeMillis();
 
         double currentEnergy = energyBar.getEnergy();
         if(currentEnergy >= 4) getChampionsPlayer().heal(1);
-        else energyBar.setEnergy(currentEnergy + 1);
+        else energyBar.incrementEnergy(1);
     }
 
     @EventHandler
     public void die(DeathApplyEvent e) {
-        if(e.getAttacker() != getPlayer()) return;
-        getEnergyBar().setEnergy(0);
+        if(e.getPlayer() != getPlayer()) return;
+        getEnergyBar().incrementEnergy(-getEnergyBar().getMaxEnergy());
     }
 
     protected EnergyBar getEnergyBar() {

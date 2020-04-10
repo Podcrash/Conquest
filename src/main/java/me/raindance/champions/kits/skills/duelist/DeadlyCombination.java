@@ -8,6 +8,7 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PacketUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -15,6 +16,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Interaction;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -28,6 +30,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
     @Override
     public void doSkill(LivingEntity clickedEntity) {
         if(onCooldown()) return;
+        if(isAlly(clickedEntity)) return;
         this.attacked = clickedEntity;
         this.i = 0;
         setLastUsed(System.currentTimeMillis());
@@ -40,6 +43,8 @@ public class DeadlyCombination extends Interaction implements ICooldown {
             packet.sendPacket(player);
             packet2.sendPacket(player);
         }
+
+        landed();
     }
 
     @EventHandler
@@ -53,6 +58,14 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         event.setModified(true);
         event.addSource(this);
         getPlayer().sendMessage(getUsedMessage(event.getVictim()).replace("used", "unleashed"));
+        event.getVictim().sendMessage(String.format("%sCondition> %s%s%s unleashed %sDeadly Combination %son you.",
+                ChatColor.BLUE,
+                ChatColor.YELLOW,
+                getPlayer().getName(),
+                ChatColor.GRAY,
+                ChatColor.GREEN,
+                ChatColor.GRAY));
+        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.enderdragon.hit", 1, 63);
 
         attacked = null;
     }

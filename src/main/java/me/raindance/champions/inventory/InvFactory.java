@@ -1,16 +1,20 @@
 package me.raindance.champions.inventory;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.podcrash.api.db.ChampionsKitTable;
-import com.podcrash.api.db.DataTableType;
+import com.podcrash.api.db.tables.ChampionsKitTable;
+import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.map.JsonHelper;
 import com.podcrash.api.mc.Configurator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
+import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.plugin.Pluginizer;
-import com.podcrash.api.plugin.PodcrashSpigot;
-import me.raindance.champions.Main;
+import javafx.util.Pair;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
@@ -33,6 +37,8 @@ public final class InvFactory {
     private static ChampionsKitTable table;
     private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static Map<String, Integer> buildMap = new HashMap<>();
+    private static Map<String, Integer> buildIDHistory = new HashMap<>();
+    private static Map<String, SkillType> skillTypeHistory = new HashMap<>();
     private static final Configurator kitConfigurator = Pluginizer.getSpigotPlugin().getConfigurator("kits");
     private InvFactory() {
 
@@ -135,6 +141,10 @@ public final class InvFactory {
             SkillType skillType = SkillType.getByName(split[0]);
             int buildID = Integer.parseInt(split[1]);
             apply(player, skillType, buildID);
+
+            if(GameManager.getGame().getGameState() == GameState.LOBBY) {
+                GameManager.getGame().updateLobbyInventory(player);
+            }
         });
     }
 
@@ -148,17 +158,23 @@ public final class InvFactory {
      * @param buildID
      */
     private static void apply(Player player, SkillType skillType, int buildID) {
-        String deserializedPlayer = getKitTable().getJSONData(player.getUniqueId(), skillType.getName(), buildID);
-        if(deserializedPlayer == null) {
-            player.sendMessage(ChatColor.BLUE + "Champions>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
-            return;
-        }
+        getKitTable().getJSONDataAsync(player.getUniqueId(), skillType.getName(), buildID).thenAccept(deserializedPlayer -> {
+            if(deserializedPlayer == null) {
+                player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
+                return;
+            }
+            player.getInventory().clear();
+            player.closeInventory();
 
-        ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
-        cPlayer.restockInventory();
-        SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
-        setCurrent(player, skillType, buildID);
+            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
+            ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
+            cPlayer.restockInventory();
+            if(GameManager.getGame().getGameState() == GameState.LOBBY) {
+                GameManager.getGame().updateLobbyInventory(player);
+            }
+            SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
+            setCurrent(player, skillType, buildID);
+        });
     }
 
     /**
@@ -169,12 +185,21 @@ public final class InvFactory {
      * @param skillType
      * @param buildID
      */
-    private static void edit(Player player, SkillType skillType, int buildID) {
+    public static void edit(Player player, SkillType skillType, int buildID) {
+        StatusApplier.getOrNew(player).removeStatus(Status.values());
         buildMap.put(player.getName(), buildID);
+        buildIDHistory.put(player.getName(), buildID);
+        skillTypeHistory.put(player.getName(), skillType);
         UUID uuid = player.getUniqueId();
-        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
         player.getInventory().clear();
         player.updateInventory();
+
+        //The editing tip: You can save your rearranged inventory in this menu only!
+        ItemStackUtil.createItem(player.getInventory(),395, 1, 23, "&e&lTip:", "Rearrange your hotbar in this menu to save it.");
+
+        String json = getKitTable().getJSONData(uuid, skillType.getName(), buildID);
+
+
         if(json == null) {
             Inventory inv = MenuCreator.createKitMenu(skillType);
             MenuCreator.giveHotbarInventory(player, skillType);
@@ -184,7 +209,7 @@ public final class InvFactory {
 
         JsonObject kitJson = new JsonParser().parse(json).getAsJsonObject();
 
-        Integer[] skillIDs = JsonHelper.wrapInteger(kitJson.getAsJsonArray("skills"));
+        Integer[] skillIDs = wrapInteger(kitJson.getAsJsonArray("skills"));
         Inventory inv = MenuCreator.createKitMenu(skillType, skillIDs);
 
         JsonObject itemsJson = kitJson.getAsJsonObject("items");
@@ -193,6 +218,14 @@ public final class InvFactory {
         player.openInventory(inv);
     }
 
+    private static Integer[] wrapInteger(JsonArray array) {
+        int size = array.size();
+        Integer[] ids = new Integer[size];
+        for(int i = 0; i < size; i++) {
+            ids[i] = array.get(i).getAsInt();
+        }
+        return ids;
+    }
     /**
      * When a player closes the inventory,
      * have it be applied as well as save it as the current build.
@@ -205,6 +238,8 @@ public final class InvFactory {
         int id = buildMap.get(player.getName());
         String data = championsPlayer.serialize().toString();
         String current = getKitTable().getJSONData(uuid, clasz, id);
+        Pluginizer.getLogger().info("save1: " + data);
+        Pluginizer.getLogger().info("current: " + current);
         if(current == null) getKitTable().set(uuid, clasz, id, data);
         else getKitTable().alter(uuid, clasz, id, data);
 
@@ -214,6 +249,16 @@ public final class InvFactory {
 
     public static boolean currentlyEditing(Player player) {
         return buildMap.containsKey(player.getName());
+    }
+
+    public static SkillType getLastestSkillType(Player player) {
+        if (!skillTypeHistory.containsKey(player.getName())) {return null;}
+        return skillTypeHistory.get(player.getName());
+    }
+
+    public static int getLatestBuildID(Player player) {
+        if (!buildIDHistory.containsKey(player.getName())) {return 0;}
+        return buildIDHistory.get(player.getName());
     }
     /**
      * duh

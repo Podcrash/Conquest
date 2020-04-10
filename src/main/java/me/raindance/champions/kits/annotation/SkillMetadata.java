@@ -11,4 +11,5 @@ public @interface SkillMetadata {
     int id();
     SkillType skillType() default SkillType.Global;
     InvType invType() default InvType.SWORD;
+    double cost() default 1000D;
 }

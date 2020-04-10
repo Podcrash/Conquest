@@ -4,6 +4,8 @@ import com.abstractpackets.packetwrapper.AbstractPacket;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -25,17 +27,18 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 201, skillType = SkillType.Druid, invType = InvType.AXE)
-public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown {
+public class EarthWall extends Instant implements IEnergy, TimeResource, ICooldown {
+    private int energyUsage = 50;
     private final Vector up = new Vector(0, 1, 0);
     private float damage;
-    public Fissure() {
+    public EarthWall() {
         super();
         this.damage = 7F;
     }
 
     @Override
     public float getCooldown() {
-        return 15;
+        return 11;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
 
     @Override
     public int getEnergyUsage() {
-        return 100;
+        return energyUsage;
     }
 
     @Override
@@ -62,17 +65,18 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
             return;
         }
         if(!(EntityUtil.onGround(getPlayer()))) {
-            getPlayer().sendMessage(getMustGroundMessage());
+            getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
 
+        getPlayer().sendMessage(getUsedMessage());
         useEnergy();
         setLastUsed(System.currentTimeMillis());
         Location playerLocation = getPlayer().getLocation();
         dir = playerLocation.getDirection().setY(0).normalize();
-        start = playerLocation.subtract(new Vector(0, 0.4, 0));
+        start = playerLocation.add(new Vector(dir.getX(), -0.4, dir.getZ()));
         current = start.clone();
-        run(3, 0);
+        run(2, 0);
         Location sstart = start.clone();
         end = sstart.clone().add(dir.clone().multiply(7));
         Vector startVector = start.toVector();
@@ -82,7 +86,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
                 if(BlockUtil.isPassable(sstart.getBlock())) break;
             }
             WrapperPlayServerWorldEvent packet = ParticleGenerator.createBlockEffect(sstart, sstart.getBlock().getType().getId());
-            PacketUtil.syncSend(packet, getPlayers());
+            PacketUtil.asyncSend(packet, getPlayers());
 
         }
     }
@@ -126,6 +130,7 @@ public class Fissure extends Instant implements IEnergy, TimeResource, ICooldown
         for(Player player : getPlayers()) {
             if (player != getPlayer() && !isAlly(player) && player.getLocation().distanceSquared(ref) <= 1.3225D) {
                 DamageApplier.damage(player, getPlayer(), (i/7D) * damage, this, true);
+                StatusApplier.getOrNew(player).applyStatus(Status.SLOW, 3, 0);
             }
         }
         current.add(dir);

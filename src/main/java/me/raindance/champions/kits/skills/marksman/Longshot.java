@@ -11,6 +11,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
 import net.jafama.FastMath;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
@@ -41,7 +42,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
 
     @Override
     public void start() {
-        run(1, 1);
+        run(1, 0);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         if (onCooldown()) return;
         if(getPlayer() != event.getEntity()) return;
         if(!(event.getProjectile() instanceof Arrow)) return;
-        if (getPlayer().isSneaking()) return;
+        if (!getPlayer().isSneaking()) return;
 
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.5f, 2.0f);
         arrows.add((Arrow) event.getProjectile());
@@ -93,11 +94,15 @@ public class Longshot extends Passive implements ICooldown, IPassiveTimer, TimeR
         if(event.getCause() != Cause.PROJECTILE || event.getAttacker() != getPlayer()) return;
         Arrow arr = event.getArrow();
         event.setModified(true);
-        event.setDamage(event.getDamage() - 1);
+        //event.setDamage(event.getDamage() - 1);
         if (!arrows.contains(arr)) return;
         Location vLocation = event.getVictim().getLocation();
         Location dLocation = getPlayer().getLocation();
         double distance = vLocation.distance(dLocation);
-        event.setDamage(event.getDamage() + ((3.8 * .0009) * FastMath.pow(distance, 2)));
+        event.addSource(this);
+        //double damage = event.getDamage() + ((3.8 * .0009667) * FastMath.pow(distance, 2));
+        double damage = event.getDamage() + (0.25 * distance);
+        event.setDamage(Math.min(damage, 22));
+        event.setChangeXP(damage);
     }
 }

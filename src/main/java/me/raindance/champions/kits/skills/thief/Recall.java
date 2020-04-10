@@ -26,7 +26,7 @@ public class Recall extends Drop implements ICooldown, IContinuousPassive, IPass
 
     @Override
     public float getCooldown() {
-        return 30;
+        return 20;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Recall extends Drop implements ICooldown, IContinuousPassive, IPass
     }
 
     public Recall() {
-        health = 4;
+        health = 7;
         time = 3;
     }
 

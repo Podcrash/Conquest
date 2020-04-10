@@ -44,7 +44,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
         if(onCooldown()) return;
         isPrepared = true;// sound goes here
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.blaze.breathe", 0.75f, 200);
-        this.getPlayer().sendMessage(String.format("%sSkill> %s%s %sprepared.", ChatColor.BLUE, ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
+        this.getPlayer().sendMessage(String.format("%s%s> %s%s %sprepared.", ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GREEN, this.getName(), ChatColor.GRAY ));
 
         this.setLastUsed(System.currentTimeMillis());
         //arrowForceMap.keySet().removeIf(arr -> (arr.isDead() || !arr.isValid()));
@@ -55,7 +55,8 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void shootBow(EntityShootBowEvent event){
-        if(event.isCancelled() || !isPrepared) return;
+        if(!isPrepared) return;
+        if(event.isCancelled()) return;
         if(event.getEntity() instanceof Player && event.getProjectile() instanceof Arrow){
             Player player = (Player) event.getEntity();
             if(player == getPlayer()){
@@ -89,7 +90,7 @@ public abstract class BowShotSkill extends Instant implements ICooldown {
     /*
                 Shooting a player
              */
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void arrowShotPlayer(DamageApplyEvent event){
         if(event.isCancelled() || event.getCause() != Cause.PROJECTILE) return;
         LivingEntity livingEntity = event.getAttacker();

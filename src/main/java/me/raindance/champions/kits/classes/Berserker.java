@@ -14,14 +14,15 @@ public class Berserker extends ChampionsPlayer {
     public Berserker(Player player, List<Skill> skills) {
         super(player);
         this.skills = skills;
-        setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 57));
+        setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 66));
         this.armor = new Material[]{Material.DIAMOND_BOOTS, Material.DIAMOND_LEGGINGS};
     }
 
     @Override
     public void effects() {
         this.setUsesEnergy(true, 4);
-        getEnergyBar().stop(); //no natural gain of energy
+        getEnergyBar().toggleRegen(false); //no natural gain of energy
+        getEnergyBar().setEnergy(0);
     }
 
     @Override

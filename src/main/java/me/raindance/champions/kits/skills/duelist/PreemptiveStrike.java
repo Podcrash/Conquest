@@ -10,10 +10,9 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 306, skillType = SkillType.Duelist, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 306, skillType = SkillType.Duelist, invType = InvType.SECONDARY_PASSIVE)
 public class PreemptiveStrike extends Passive implements ICooldown {
 
     @Override
@@ -34,6 +33,7 @@ public class PreemptiveStrike extends Passive implements ICooldown {
     @EventHandler
     public void hit(DamageApplyEvent e) {
         if(onCooldown() || e.getAttacker() != getPlayer()) return;
+        if(isAlly(e.getVictim())) return;
         setLastUsed(System.currentTimeMillis());
         StatusApplier.getOrNew(e.getVictim()).applyStatus(Status.WEAKNESS, 4, 0);
         getPlayer().sendMessage(getUsedMessage(e.getVictim()));

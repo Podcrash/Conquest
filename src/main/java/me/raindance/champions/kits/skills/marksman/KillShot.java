@@ -1,8 +1,6 @@
-package me.raindance.champions.kits.skills.hunter;
+package me.raindance.champions.kits.skills.marksman;
 
 import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -13,11 +11,17 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 403, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
+/**
+ *
+ Kill Shot
+ Cooldown: N/A
+ Description: Your arrows deal 4 bonus damage to enemies under 40% health.
+ */
+@SkillMetadata(id = 501, skillType = SkillType.Marksman, invType = InvType.PRIMARY_PASSIVE)
 public class KillShot extends Passive {
     @Override
     public String getName() {
-        return "KillShot";
+        return "Kill Shot";
     }
 
     @Override
@@ -30,9 +34,12 @@ public class KillShot extends Passive {
         if(event.getAttacker() != getPlayer() || event.getCause() != Cause.PROJECTILE || isAlly(event.getVictim())) return;
         LivingEntity entity = event.getVictim();
 
+        System.out.println("pass1");
         if(!EntityUtil.isBelow(entity, 0.4)) return;
 
+        System.out.println("pass2");
         event.setModified(true);
         event.setDamage(event.getDamage() + 4);
+        event.addSource(this);
     }
 }

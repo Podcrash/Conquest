@@ -8,7 +8,6 @@ import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.classes.Berserker;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -24,9 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
-import java.util.Arrays;
-
-@SkillMetadata(id = 108, skillType = SkillType.Berserker, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 108, skillType = SkillType.Berserker, invType = InvType.PRIMARY_PASSIVE)
 public class Stampede extends Passive implements IPassiveTimer, ICharge {
     private int charges = 0;
     private long time;
@@ -38,7 +35,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     public Stampede() {
         charges = 0;
         this.toggle = false;
-        this.timing = 3;
+        this.timing = 5;
     }
 
     @Override
@@ -80,6 +77,11 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
         return 1;
     }
 
+    @Override
+    public boolean isMaxAtStart() {
+        return false;
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void sprint(PlayerToggleSprintEvent event) {
         if (event.getPlayer() != getPlayer()) return;
@@ -88,7 +90,7 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
 
     private void check(boolean isSprinting) {
         toggle = isSprinting;
-        if (toggle) {
+        if (toggle && !getGame().isRespawning(getPlayer())) {
             start();
         } else {
             unregister();
@@ -112,8 +114,8 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     @Override
     public void task() {
         if (getPlayer().isSprinting()) {
-            if(currentSpeed >= 0) StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 1, currentSpeed, false);
-            if (currentSpeed != 1 && System.currentTimeMillis() - time >= 1000L * timing) {
+            if(currentSpeed >= 0) StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 1, 1, false);
+            if (currentSpeed != 0 && System.currentTimeMillis() - time >= 1000L * timing) {
                 time = System.currentTimeMillis();
                 incSpeed();
             }
@@ -145,8 +147,9 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
             if(charges == 0) return;
             event.setModified(true);
             event.addSource(this);
-            event.setVelocityModifierX(1 + charges * 0.5);
-            event.setVelocityModifierZ(1 + charges * 0.5);
+            event.setVelocityModifierX(event.getVelocityModifierX() * 2);
+            event.setVelocityModifierY(event.getVelocityModifierY() * 1.25D);
+            event.setVelocityModifierZ(event.getVelocityModifierZ() * 2);
             getPlayer().getWorld().playSound(event.getVictim().getLocation(), Sound.ZOMBIE_WOOD, 0.5f, 1);
             reset();
             check(getPlayer().isSprinting());

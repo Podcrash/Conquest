@@ -22,19 +22,18 @@ public class Cleave extends Drop implements ICooldown {
     private float multiplier;
     public Cleave() {
         super();
-        this.multiplier = 0.3F;
+        this.multiplier = 1.0F;
     }
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 12;
     }
 
     @Override
     public boolean drop(PlayerDropItemEvent e) {
         if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
-        SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.zombie.metal", 2F, 90);
         return true;
         //TODO: Cleave particle effects?
@@ -57,7 +56,7 @@ public class Cleave extends Drop implements ICooldown {
         Location victLoc = e.getVictim().getLocation();
         for(Player player : getPlayers()){
             //TODO change it so that it will affect players based on vector
-            if(isAlly(player) || e.getVictim() == player || getPlayer() == player || victLoc.distanceSquared(player.getLocation()) > 2.25D) continue;
+            if(isAlly(player) || e.getVictim() == player || getPlayer() == player || victLoc.distanceSquared(player.getLocation()) > 4D) continue;
             DamageApplier.damage(player, getPlayer(), e.getDamage() * (double) multiplier, this, true);
             DamageApplier.nativeApplyKnockback(player, getPlayer());
         }

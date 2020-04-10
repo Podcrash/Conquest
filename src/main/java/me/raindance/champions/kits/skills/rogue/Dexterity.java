@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
  * Cooldown: N/A
  * Description: Your melee attacks grant you Speed I for 3 seconds.
  */
-@SkillMetadata(id = 603, skillType = SkillType.Rogue, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 603, skillType = SkillType.Rogue, invType = InvType.INNATE)
 public class Dexterity extends Passive {
     @Override
     public String getName() {
@@ -31,7 +31,9 @@ public class Dexterity extends Passive {
 
     @EventHandler
     public void damage(DamageApplyEvent e) {
-        if(e.getAttacker() == getPlayer())
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 0);
+        if(e.getAttacker() == getPlayer() && !isAlly(e.getVictim())) {
+            e.setDoKnockback(false);
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 0, true, true);
+        }
     }
 }

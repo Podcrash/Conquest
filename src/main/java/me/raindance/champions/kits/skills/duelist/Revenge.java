@@ -9,16 +9,11 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 //How to make a class from scratch
-@SkillMetadata(id = 307, skillType = SkillType.Duelist, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 307, skillType = SkillType.Duelist, invType = InvType.PRIMARY_PASSIVE)
 public class Revenge extends Passive implements ICooldown {//it is a passive because the other skilltypes do not match what I am trying to do: control damage
     //It's going to implement charges, since it has the ability to stack (at least twice). Nevermind, it is only going to implement the part where
     //it will gain charges, the other stuff has stuff to do with time.
@@ -53,10 +48,11 @@ public class Revenge extends Passive implements ICooldown {//it is a passive bec
             e.addSource(this);
             final double bonus = 2;
             e.setDamage(e.getDamage() + bonus); //set it
+            getPlayer().sendMessage(getUsedMessage(e.getVictim()));
+            setLastUsed(System.currentTimeMillis());
             reset(); //reset the charges so that it's not infinite
         } else if (e.getVictim() == getPlayer()) {
             dealBonus = true;
-            setLastUsed(System.currentTimeMillis());
         }
 
     }

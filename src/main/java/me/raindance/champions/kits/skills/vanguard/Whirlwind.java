@@ -3,6 +3,7 @@ package me.raindance.champions.kits.skills.vanguard;
 import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.mc.util.VectorUtil;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.annotation.SkillMetadata;
@@ -17,12 +18,13 @@ import com.podcrash.api.mc.util.PacketUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+@SkillMetadata(id = 809, skillType = SkillType.Vanguard, invType = InvType.AXE)
 public class Whirlwind extends Instant implements ICooldown, IConstruct {
     private int distance;
     private int distanceSquared;
@@ -32,7 +34,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 13;
+        return 10;
     }
 
     @Override
@@ -42,14 +44,14 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
 
     @Override
     public ItemType getItemType() {
-        return ItemType.SHOVEL;
+        return ItemType.AXE;
     }
 
     public Whirlwind() {
-        this.distance = 5;
+        this.distance = 7;
         this.distanceSquared = distance * distance;
-        this.maxDamage = 4;
-        this.multiplier = 1.7F + 0.2F * 4;
+        this.maxDamage = 5;
+        this.multiplier = 2.7F;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
             final double add = pp/length;
             for(int i = 0; i < length; i++) {
                 double theta = (i * add);
-                theta = (theta/pp) * distance/1.5D;
+                theta = (theta/pp) * distance;
                 pleaseLoad[i][0] = theta * (float) Math.cos(i);
                 pleaseLoad[i][1] = theta * (float) Math.sin(i);
             }
@@ -109,29 +111,31 @@ public class Whirlwind extends Instant implements ICooldown, IConstruct {
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action)) return;
-        if(onCooldown()){
-            return;
-        }
-        Location center1 = getPlayer().getLocation();
+        if(onCooldown()) return;
+
+        Location center = getPlayer().getLocation();
         setLastUsed(System.currentTimeMillis());
 
-        spiral(center1);
+        spiral(center);
         for(Player player : getPlayers()) {
+            if (player == getPlayer() || isAlly(player)) continue;
 
-            if (player != getPlayer() && !isAlly(player)) {
-                Location center = center1.clone();
-                double diff = center.distanceSquared(player.getLocation());
+            double diff = center.distanceSquared(player.getLocation());
+            if (diff > distanceSquared) continue;
 
-                if (diff <= distanceSquared) {
-                    Vector toCenter = center.subtract(player.getLocation()).toVector().normalize().add(new Vector(0F, 0.1F, 0F));
-                    double percentage = diff / distanceSquared;
-                    toCenter.multiply(multiplier)
-                            .multiply(percentage);
-                    player.setVelocity(toCenter);
-                    DamageApplier.damage(player, getPlayer(), (double) maxDamage * (1D - percentage), this, false);
-                }
-            }
+            whirlwind(player, diff);
         }
 
+        getPlayer().sendMessage(getUsedMessage());
+    }
+
+    private void whirlwind(LivingEntity player, double dist) {
+        Vector toCenter = VectorUtil.fromAtoB(player.getLocation(), getPlayer().getLocation()).normalize();
+        double percentage = (dist / distanceSquared) + 0.5;
+        if(percentage > 1) percentage = 1D;
+        toCenter.multiply(percentage * 1.25).setY(0.24D);
+
+        player.setVelocity(toCenter);
+        DamageApplier.damage(player, getPlayer(), maxDamage, this, false);
     }
 }

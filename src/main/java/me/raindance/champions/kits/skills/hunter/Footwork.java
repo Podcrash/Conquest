@@ -11,7 +11,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-@SkillMetadata(id = 402, skillType = SkillType.Hunter, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 402, skillType = SkillType.Hunter, invType = InvType.PRIMARY_PASSIVE)
 public class Footwork extends Passive {
     @Override
     public String getName() {
@@ -26,6 +26,6 @@ public class Footwork extends Passive {
     @EventHandler
     public void bowHit(DamageApplyEvent event) {
         if(event.getAttacker() != getPlayer() || event.getCause() != Cause.PROJECTILE || isAlly(event.getVictim())) return;
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 0, true);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 1, true);
     }
 }

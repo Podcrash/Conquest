@@ -1,12 +1,8 @@
 package me.raindance.champions.inventory;
 
-import com.podcrash.api.db.DataTableType;
-import com.podcrash.api.db.DescriptorTable;
-import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.Configurator;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.plugin.Pluginizer;
-import com.podcrash.api.redis.Communicator;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -15,7 +11,6 @@ import org.bukkit.ChatColor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -28,25 +23,24 @@ public class SkillData {
     private final String name;
     private final InvType invType;
     private final SkillType skillType;
+    private final double price;
     private final Constructor<Skill> constructor;
 
     private List<String> description;
 
-    public SkillData(Skill skill, int id, String name, InvType invType, SkillType skillType) {
+    public SkillData(Skill skill, int id, String name, InvType invType, SkillType skillType, double price) {
         this.id = id;
         this.name = name;
         this.invType = invType;
         this.skillType = skillType;
-
+        this.price = 1500;
         this.constructor = initConstructor(skill);
-
-        requestDescription();
     }
 
     private String getCleanName() {
-        return getName().toLowerCase().replace(" ", "");
+        return getName().toLowerCase().replaceAll("[^A-Za-z0-9]", "").replace(" ", "");
     }
-    private void requestDescription() {
+    public CompletableFuture<Void> requestDescription() {
         /*
         String cache = Communicator.getCacheValue(getCleanName());
         if(cache == null) {
@@ -62,10 +56,11 @@ public class SkillData {
             else this.description = Arrays.asList(value.split("\n"));
         }else this.description = Arrays.asList(cache.split("\n"));
          */
-        if(description != null && description.size() != 0) return;
+        if(description != null && description.size() != 0) return CompletableFuture.completedFuture(null);
         Configurator configurator = Pluginizer.getSpigotPlugin().getConfigurator("skilldescriptions");
-        CompletableFuture future = new CompletableFuture();
+        CompletableFuture<Void> future = new CompletableFuture<>();
         configurator.readList(getCleanName(), list -> {
+            if(list == null) return;
             if(list.size() != 0) {
                 List<String> desc = new ArrayList<>();
                 for(Object objLine : list) {
@@ -81,16 +76,13 @@ public class SkillData {
             }
             future.complete(null);
         });
-        try {
-            future.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
-        }
+
+        return future;
     }
 
     private Constructor<Skill> initConstructor(Skill skill) {
         try {
-            return (Constructor<Skill>) skill.getClass().getConstructor(null);
+            return (Constructor<Skill>) skill.getClass().getConstructor((Class<?>[]) null);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
             return null;
@@ -124,6 +116,8 @@ public class SkillData {
     public SkillType getSkillType() {
         return skillType;
     }
+
+    public double getPrice() {return price;}
 
     @Override
     public boolean equals(Object o) {

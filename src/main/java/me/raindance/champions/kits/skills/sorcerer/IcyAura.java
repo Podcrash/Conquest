@@ -25,22 +25,17 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.DROP)
 public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
-    private int energeUsage;
-    private int radius;
-    private double radiusSquared;
+    private int energeUsage = 15;
+    private int radius = 5;
+    private double radiusSquared = FastMath.pow(radius, 2);
     private final Random random = new Random();
-    public IcyAura() {
-        this.energeUsage = 30;
-        this.radius = 5;
-        this.radiusSquared = FastMath.pow(radius, 2);
-    }
+    public IcyAura() {}
 
     @Override
     public String getName() {
@@ -91,7 +86,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
             if(current.getRelative(BlockFace.UP).getType() == Material.AIR && current.getRelative(BlockFace.DOWN).getType() != Material.AIR) {
                 if(minus < current.getY() && current.getY() <= currentY){
                     WrapperPlayServerWorldParticles snow = ParticleGenerator.createParticle(up.toVector(), EnumWrappers.Particle.SNOW_SHOVEL, 1,
-                            random.nextFloat() * 0.5F, 0.3F, random.nextFloat() * 0.5F);
+                            random.nextFloat() * 0.5F, 2.75F, random.nextFloat() * 0.5F);
                     PacketUtil.syncSend(snow, getPlayers());
                 }
             }
@@ -114,14 +109,13 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
 
     @Override
     public boolean cancel() {
-        return !isToggled() || !hasEnergy();
+        return !isToggled() || !hasEnergy(getEnergyUsageTicks());
     }
 
     @Override
     public void cleanup() {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
-            getPlayer().sendMessage(getToggleMessage() + '\n' + getNoEnergyMessage());
         }
     }
 }

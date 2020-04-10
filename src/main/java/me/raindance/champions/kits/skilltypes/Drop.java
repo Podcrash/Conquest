@@ -3,6 +3,7 @@ package me.raindance.champions.kits.skilltypes;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.ItemType;
+import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -16,11 +17,23 @@ public abstract class Drop extends Skill {
     public final void dropSkill(PlayerDropItemEvent e) {
         if(e.getPlayer() != getPlayer()) return;
         if(!isHolding(e.getItemDrop().getItemStack())) return;
-        if(isInWater()) return;
+        if(isInWater()) {
+            e.getPlayer().sendMessage(getWaterMessage());
+            return;
+        }
+        //check for cooldown
+        if(this instanceof ICooldown) {
+            ICooldown cooldownSkill = (ICooldown) this;
+            if(cooldownSkill.onCooldown()) {
+                getPlayer().sendMessage(cooldownSkill.getCooldownMessage());
+                return;
+            }
+        }
+
         SkillUseEvent useEvent = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(useEvent);
         if (useEvent.isCancelled()) return;
-        if(drop(e)) getPlayer().sendMessage(getUsedMessage());
+        drop(e);
         e.setCancelled(true);
     }
 
@@ -34,11 +47,13 @@ public abstract class Drop extends Skill {
     protected boolean isHolding(@Nonnull ItemStack dropped) {
         ItemType[] weapons = ItemType.details();
 
-        String name = dropped.getType().name().toUpperCase();;
+        String name = dropped.getType().name().toUpperCase();
+
         if(getItemType() != ItemType.NULL) {
             return name.contains(getItemType().getName());
         }
         for(ItemType w : weapons) {
+            if (w.getName() == null) continue;
             if(name.contains(w.getName())) return true;
         }
         return false;

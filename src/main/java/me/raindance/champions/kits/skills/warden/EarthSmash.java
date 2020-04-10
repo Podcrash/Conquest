@@ -22,30 +22,36 @@ import java.util.List;
 public class EarthSmash extends Instant implements ICooldown {
     @Override
     public float getCooldown() {
-        return 16;
+        return 10;
     }
 
     @Override
     public void doSkill(PlayerEvent event, Action action) {
         if(!rightClickCheck(action) || onCooldown()) return;
-        if(!EntityUtil.onGround(getPlayer())) return;
+        if(!EntityUtil.onGround(getPlayer())) {
+            getPlayer().sendMessage(getMustAirborneMessage());
+            return;
+        }
         setLastUsed(System.currentTimeMillis());
         Location location = getPlayer().getLocation();
         List<LivingEntity> players = location.getWorld().getLivingEntities();
         for(LivingEntity enemy : players) {
-            if(isAlly(enemy) || getPlayer() == enemy) continue;
+            if(getPlayer() == enemy) continue;
             double dist = location.distanceSquared(enemy.getLocation());
             if(dist > 16) continue;
-            pound(location, enemy, (16D - dist)/16D);
+            pound(location, enemy, 1.33333D - ((16D - dist)/16D));
         }
         ParticleGenerator.generateRangeParticles(location, 8, true);
+
+        getPlayer().sendMessage(getUsedMessage());
     }
 
     private void pound(Location currentLoc, LivingEntity entity, double multiplier) {
-        DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
-        Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation());
-        vector.multiply(multiplier).setY(vector.getY() + 0.3D);
-        if(vector.getY() > 0.35D) vector.setY(0.35D);
+        if(multiplier > 1) multiplier = 1;
+        if(!isAlly(entity)) DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
+        Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation()).normalize();
+        vector.multiply(multiplier * 1.25D).setY(vector.getY() + 1);
+        if(vector.getY() > 1D) vector.setY(1D);
         entity.setVelocity(vector);
     }
 

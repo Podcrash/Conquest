@@ -7,6 +7,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.game.GameManager;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -36,7 +37,7 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 19;
+        return 11;
     }
 
     @Override
@@ -63,19 +64,21 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
                     if (entities.size() == 0) return;
                     getPlayer().setVelocity(new Vector(0, 0, 0));
                     for (Entity entity : entities) {
-                        if (entity instanceof Player && entity != getPlayer()) {
+                        if (entity instanceof LivingEntity && entity != getPlayer() && !isAlly((LivingEntity) entity)) {
+                            if (entity instanceof Player && GameManager.isSpectating((Player) entity)) break;
+                            LivingEntity living = (LivingEntity) entity;
                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_WOOD, 2f, 0.2f);
-                            DamageApplier.damage((LivingEntity) entity, getPlayer(), 5, this, false);
+                            DamageApplier.damage(living, getPlayer(), 5, this, false);
                             /*
                             StatusApplier.getOrNew((Player) entity).applyStatus(Status.SLOW, effect, 3);
                             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SLOW, effect, 3);
 
                              */
 
-                            StatusApplier.getOrNew((Player) entity).applyStatus(Status.GROUND, 2, 3);
+                            StatusApplier.getOrNew(living).applyStatus(Status.GROUND, 2, 3);
                             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.GROUND, 2, 3);
 
-                            getPlayer().sendMessage(String.format("%s%s> You used %sTakedown%s on %s", ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GREEN, ChatColor.GRAY, entity.getName()));
+                            getPlayer().sendMessage(getUsedMessage(living));
 
                             break; //only attack one player
                         }
@@ -88,18 +91,23 @@ public class Takedown extends Instant implements ICooldown, IConstruct {
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
-        if (!rightClickCheck(action) || EntityUtil.onGround(getPlayer())) {
+        this.setLastUsed(System.currentTimeMillis());
+        Vector vector = getPlayer().getLocation().getDirection().normalize().multiply(1.1d).setY(0.1f);
+        getPlayer().setVelocity(vector);
+        getPlayer().setFallDistance(0);
+        hitGround.run();
+        getPlayer().sendMessage(getUsedMessage());
+    }
+
+    @Override
+    public boolean canUseSkill(PlayerEvent event) {
+        if(!super.canUseSkill(event)) return false;
+        boolean a = EntityUtil.onGround(event.getPlayer());
+        if(a) {
             if(!onCooldown()) {
                 getPlayer().sendMessage(getMustGroundMessage());
             }
-            return;
         }
-        if (!onCooldown()) {
-            this.setLastUsed(System.currentTimeMillis());
-            Vector vector = getPlayer().getLocation().getDirection().normalize().multiply(1.1d).setY(0f);
-            getPlayer().setVelocity(vector);
-            getPlayer().setFallDistance(0);
-            hitGround.run();
-        }
+        return !a;
     }
 }

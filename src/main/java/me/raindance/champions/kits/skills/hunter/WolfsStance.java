@@ -5,6 +5,10 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.location.BoundingBox;
+import com.podcrash.api.mc.location.Coordinate;
+import com.podcrash.api.mc.location.RayTracer;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -12,6 +16,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.util.EntityUtil;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,22 +39,48 @@ public class WolfsStance extends ChargeUp implements IConstruct {
     @Override
     public void afterConstruction() {
         this.hitGround = new CollideBeforeHitGround(getPlayer()).then(() -> {
-            List<Entity> entities = getPlayer().getNearbyEntities(1.15, 1.15, 1.15);
+            List<Entity> entities = getPlayer().getNearbyEntities(5, 5, 5);
             if (entities.size() == 0) return;
+            Location location = getPlayer().getLocation();
             for (Entity entity : entities) {
-                if (entity instanceof LivingEntity && entity != getPlayer()) {
-                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 0.5f, 1.0f);
-                    DamageApplier.damage((LivingEntity) entity, getPlayer(), damage * getCharge(), true);
-                    StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 0);
-                    getPlayer().sendMessage(getUsedMessage((LivingEntity) entity));
-                }
+                if(!(entity instanceof LivingEntity)) continue;
+                if(entity == getPlayer() || isAlly((LivingEntity) entity)) continue;
+
+                if(location.distanceSquared(entity.getLocation()) > 15) continue;
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 0.5f, 1.0f);
+                DamageApplier.damage((LivingEntity) entity, getPlayer(), damage * getCharge(), true);
+                StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 1);
+                getPlayer().sendMessage(getUsedMessage((LivingEntity) entity));
             }
         });
     }
 
+    private boolean checkBoxIntersection(BoundingBox box1, BoundingBox box2) {
+        Coordinate min1 = box1.getA();
+        Coordinate max1 = box1.getB();
+
+        Pluginizer.getLogger().info("min1: " + min1);
+        Pluginizer.getLogger().info("max1: " + max1);
+        for(Coordinate point : box2.getBox()) {
+            Pluginizer.getLogger().info("point: " + point);
+            double x = point.getX();
+            double y = point.getY();
+            double z = point.getZ();
+
+            if(min1.getX() <= x && x <= max1.getX()) {
+                if(min1.getY() <= y && y <= max1.getY()) {
+                    return (min1.getZ() <= z && z <= max1.getZ());
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public float getRate() {
-        return (0.24f + 0.08f * 4) / 20f;
+        //return (0.24f + 0.08f * 4) / 20f;
+        return 0.7f / 20f;
     }
 
     @Override
@@ -59,7 +90,7 @@ public class WolfsStance extends ChargeUp implements IConstruct {
 
     @Override
     public String getName() {
-        return "Wolf's Stance";
+        return "Wolf Stance";
     }
 
     /*

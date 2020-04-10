@@ -11,7 +11,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-@SkillMetadata(id = 907, skillType = SkillType.Warden, invType = InvType.PASSIVEB)
+@SkillMetadata(id = 907, skillType = SkillType.Warden, invType = InvType.SECONDARY_PASSIVE)
 public class IronSkin extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
@@ -36,12 +36,11 @@ public class IronSkin extends Passive implements ICooldown {
         if(event.isCancelled()) return;
         if (event.getCause() != Cause.MELEE) return;
         if (event.getVictim() == getPlayer()) {
-            event.setModified(true);
             setLastUsed(System.currentTimeMillis());
             getPlayer().sendMessage(getUsedMessage());
             double subtract = event.getDamage() - 3;
-            if (subtract < 0) subtract = 0;
-            event.setDamage(subtract);
+            event.setDamage(Math.max(subtract, 0));
+            event.setModified(true);
         }
     }
 }

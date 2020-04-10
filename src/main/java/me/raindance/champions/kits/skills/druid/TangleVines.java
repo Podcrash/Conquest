@@ -12,9 +12,11 @@ import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.mc.world.BlockUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -47,17 +49,23 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     //TODO: if it doesn't loop anymore, delete this.
     private List<Player> players;
 
+    private double radius = 2.5;
+    private double damage = 8;
+    private double speedFactor = 0.35;
+    private float rootDuration = 2F;
+
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(usage || !rightClickCheck(action) || onCooldown()) return;
         if(!EntityUtil.onGround(getPlayer())) {
-            getPlayer().sendMessage(getMustGroundMessage());
+            getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
         usage = true;
         currentPointer = BlockUtil.getHighestUnderneath(getPlayer().getLocation());
         players = getPlayers();
+        getPlayer().sendMessage(getUsedMessage());
         run(1, 0);
     }
 
@@ -71,13 +79,14 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     private void movePointer(Location currentPointer) {
         Location crosshairView = getPlayer().getTargetBlock((HashSet<Byte>) null, 25).getLocation();
         //pseudo correction, just in case the pointer tries to go in air.
-        if(crosshairView.getBlock().getType() == Material.AIR)
-            crosshairView = BlockUtil.getHighestUnderneath(crosshairView);
+        if(crosshairView.getBlock().getType() == Material.AIR) {
+            BlockUtil.getHighestUnderneath(crosshairView);
+        }
 
         //find initial direction to go to.
         Vector direction = VectorUtil.fromAtoB(currentPointer, crosshairView).normalize();
         //SLOOOOOWWWW DOWN
-        direction.multiply(0.25D);
+        direction.multiply(speedFactor);
 
         currentPointer.add(direction);
         Block eval = currentPointer.getBlock();
@@ -147,13 +156,43 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
             //if the player is less than 1.5 blocks away from the explosion
             //or is an enemy
             //or is the user
-            if(player.getLocation().distanceSquared(currentPointer) > 2.25 || isAlly(player) || player == getPlayer()) continue;
+            if(isAlly(player) || player == getPlayer()) continue;
+            if(!canTrap(currentPointer, player.getLocation())) continue;
             //do effects
-            StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, 1.5F, 0);
-            DamageApplier.damage(player, getPlayer(), 4, this, false);
+            StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, rootDuration, 0);
+            DamageApplier.damage(player, getPlayer(), damage, this, false);
         }
     }
 
+    /**
+     * TODO: MOVE TO LOCATION UTIL SOMEHOW
+     * Check to see if any player is above a certain point within a certain range
+     * @param currentPointer
+     * @param victimLoc
+     * @return
+     */
+    private boolean canTrap(Location currentPointer, Location victimLoc) {
+        double x1 = currentPointer.getX() - radius;
+        double x2 = currentPointer.getX() + radius;
+
+        double z1 = currentPointer.getZ() - radius;
+        double z2 = currentPointer.getZ() + radius;
+
+        double y1 = currentPointer.getY();
+        double y2 = y1 + 3;
+
+        double testX = victimLoc.getX();
+        double testY = victimLoc.getY();
+        double testZ = victimLoc.getZ();
+
+        //3 blocks is the safe grace.
+        if(y1 <= testY && testY <= y2) {
+            if(x1 <= testX && testX <= x2) {
+                return z1 <= testZ && testZ <= z2;
+            }
+        }
+        return false;
+    }
     @Override
     public void task() {
         useEnergy(getEnergyUsageTicks());
@@ -183,7 +222,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     @Override
     public float getCooldown() {
-        return 8;
+        return 7;
     }
 
     @Override
@@ -193,7 +232,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     @Override
     public String getName() {
-        return "Tangled Vines";
+        return "Tangle Vines";
     }
 
     @Override

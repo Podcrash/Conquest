@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.sorcerer;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.Main;
@@ -27,21 +28,18 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@SkillMetadata(id = 1008, skillType = SkillType.Sorcerer, invType = InvType.PASSIVEA)
+@SkillMetadata(id = 1008, skillType = SkillType.Sorcerer, invType = InvType.DROP)
 public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, IConstruct {
     private final int MAX_LEVEL = 1;
     private final Vector up = new Vector(0, 0.34, 0);
-    private int energy;
+    private int energy = 20;
     private String NAME;
 
     private byte a = 0;
-    public MoltenCore() {
-        this.energy = 40;
-    }
+    public MoltenCore(){}
 
     @Override
     public void afterConstruction() {
@@ -70,9 +68,9 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
 
     private void buff(Location location) {
         StatusApplier playerApplier = StatusApplier.getOrNew(getPlayer());
-        playerApplier.applyStatus(Status.SPEED, 1, 0);
         if(getPlayer().getFireTicks() > 0)
             playerApplier.removeStatus(Status.FIRE);
+        playerApplier.applyStatus(Status.SPEED, 0.5f, 0);
 
         List<Player> players = BlockUtil.getPlayersInArea(location, 6, getPlayers());
         for(Player p : players) {
@@ -115,7 +113,6 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
     public void cleanup() {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
-            getPlayer().sendMessage(getToggleMessage() + '\n' + getNoEnergyMessage());
         }
     }
 
@@ -123,14 +120,16 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
     public void damage(DamageApplyEvent event) {
         if(!isToggled() || event.getAttacker() != getPlayer()) return;
         if(event.getVictim().getFireTicks() <= 0) return;
+        if(event.getCause() != Cause.MELEE) return;
         event.addSource(this);
         event.setModified(true);
-        event.setDamage(event.getDamage() + 2);
+        event.setDamage(event.getDamage() + 3);
         SoundPlayer.sendSound(getPlayer().getLocation(), "random.fizz", 0.8F, 63);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void pickUp(PlayerPickupItemEvent event) {
+        if(event.getItem().getItemStack().getType() != Material.BLAZE_POWDER) return;
         if(event.getItem().getItemStack().getItemMeta() == null ||
                 !event.getItem().getItemStack().getItemMeta().getDisplayName().contains(NAME)) return;
         Player victim = event.getPlayer();

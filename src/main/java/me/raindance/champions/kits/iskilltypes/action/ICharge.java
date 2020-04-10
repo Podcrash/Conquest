@@ -21,4 +21,8 @@ public interface ICharge extends TimeResource {
         return String.format("%sSkill> %sNo %s Charges.",
                 ChatColor.BLUE, ChatColor.GRAY, getName());
     }
+
+    default boolean isMaxAtStart() {
+        return true;
+    }
 }

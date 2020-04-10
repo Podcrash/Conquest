@@ -23,7 +23,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 19;
+        return 11;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
         if(e.getPlayer() != getPlayer() || onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         EnergyBar energyBar = getChampionsPlayer().getEnergyBar();
-        getChampionsPlayer().heal(energyBar.getEnergy());
+        getChampionsPlayer().heal(2 * energyBar.getEnergy());
 
         Location loc = getPlayer().getLocation();
         SoundPlayer.sendSound(loc, "mob.enderdragon.growl", 0.9F, 80);

@@ -1,5 +1,5 @@
 package me.raindance.champions.kits.skills.sorcerer;
-
+/*
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -14,6 +14,7 @@ import me.raindance.champions.kits.skilltypes.Continuous;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.EntityUtil;
 import com.podcrash.api.mc.world.BlockUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,17 +29,18 @@ import java.util.List;
 
 @SkillMetadata(id = 1005, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiveTimer {
+    private int i = 0;
     private final List<Item> infernoItems = new ArrayList<>();
     private String NAME;
     private int energyUsage;
     private double fireSpeed;
     private float duration;
-    private final int damage = 1;
+    private final double damage = 0.3D;
 
     private ItemClearer clearer;
 
     public HeatWave() {
-        energyUsage = 30;
+        energyUsage = 40;
         fireSpeed = 1.05 + (0.15 * 4);
         duration = 5;
     }
@@ -69,12 +71,6 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
         return energyUsage;
     }
 
-    /*
-    @Override
-    public void useEnergy(double energy) {
-
-    }
-    */
     @Override
     protected void doContinuousSkill() {
         startContinuousAction();
@@ -83,15 +79,16 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
     @Override
     public void task() {
         if (hasEnergy(getEnergyUsageTicks())) {
+            useEnergy(getEnergyUsageTicks());
+            if(i++ % 2 == 0) return;
             shootFire();
             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.GHAST_FIREBALL, 0.1f, 1f);
-            useEnergy(getEnergyUsageTicks());
         } else this.getPlayer().sendMessage(getNoEnergyMessage());
     }
 
     @Override
     public boolean cancel() {
-        return !getPlayer().isBlocking();
+        return !getPlayer().isBlocking() || !hasEnergy(getEnergyUsageTicks());
     }
 
     private void shootFire() {
@@ -105,14 +102,15 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
                 (item, entity) -> {
                     //makes sure that you hit a player and that it wasnt yourself
                     if(entity == null) return; //null check is required because... reasons?
-                    if(entity instanceof Player && !entity.equals(getPlayer())) {
+                    item.remove();
+                    if(!entity.equals(getPlayer())) {
                         //deals damage to enemy players and catches them on fire
-                        if(!isAlly(((Player)entity)) && !BlockUtil.isInWater(entity)) {
-                            StatusApplier.getOrNew((Player) entity).applyStatus(Status.FIRE, duration, 1);
+                        if(!isAlly((entity)) && !BlockUtil.isInWater(entity)) {
+                            StatusApplier applier = StatusApplier.getOrNew(entity);
+                            if(!applier.has(Status.FIRE))
+                                applier.applyStatus(Status.FIRE, duration, 1);
                             DamageApplier.damage(entity, getPlayer(), damage, this, false);
                         }
-                        //removes the blaze powder after hitting any player
-                        item.remove();
                     }
                 });
         blazePowder.setCustomName("RITB");
@@ -132,7 +130,11 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
             Iterator<Item> infernoIterator = infernoItems.iterator();
             while(infernoIterator.hasNext()) {
                 Item item = infernoIterator.next();
-                if(!EntityUtil.onGround(item) || item.getLocation().distanceSquared(getPlayer().getLocation()) <= 64) continue;
+                if(!item.isValid()) {
+                    infernoIterator.remove();
+                    continue;
+                }
+                if(!EntityUtil.onGround(item) && item.getLocation().distanceSquared(getPlayer().getLocation()) < 64) continue;
                 item.remove();
                 infernoIterator.remove();
             }
@@ -145,7 +147,7 @@ public class HeatWave extends Continuous implements IEnergy, IConstruct, IPassiv
 
         @Override
         public void cleanup() {
-
         }
     }
 }
+*/
