@@ -94,12 +94,6 @@ public class PlayerJoinEventTest extends ListenerBase {
 
         if (cplayer != null)
             cm.removeChampionsPlayer(cplayer);
-
-
-        if(GameManager.getGame() == null) return;
-        if(GameManager.getGame().getGameState() == GameState.LOBBY) {
-            GameManager.removePlayer(player);
-        }
     }
 
     //TODO: isnt this method pointless now? (since we aren't depending on the hub world being "world"
