@@ -33,7 +33,8 @@ public class SkillData {
         this.name = name;
         this.invType = invType;
         this.skillType = skillType;
-        this.price = 1500;
+        //TODO make this not a constant 1000
+        this.price = 1000;
         this.constructor = initConstructor(skill);
     }
 
