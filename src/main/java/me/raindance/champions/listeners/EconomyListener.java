@@ -40,7 +40,7 @@ public class EconomyListener extends ListenerBase {
         if(game != null && game.getGameState() == GameState.STARTED) {
             game.addReward(e.getPlayer(), e.getMoneys());
         }
-        e.getPlayer().sendMessage(Currency.GOLD.getFormatting() + "+ " + e.getMoneys() + "!");
+        e.getPlayer().sendMessage(Currency.GOLD.getFormatting() + "+" + e.getMoneys() + " " + Currency.GOLD.getName() + "!");
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {
