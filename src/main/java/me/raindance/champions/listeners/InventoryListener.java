@@ -365,4 +365,19 @@ public class InventoryListener extends ListenerBase {
         }
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
+
+    @EventHandler
+    public void enableLobbyPVP(PlayerInteractEvent event) {
+        Game game = GameManager.getGame();
+        Player player = event.getPlayer();
+        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP")) {
+            game.addPlayerLobbyPVPing(player);
+            ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
+            champion.restockInventory();
+            game.updateLobbyInventory(player);
+
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
@@ -24,10 +25,12 @@ import com.podcrash.api.mc.game.resources.HealthBarResource;
 import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.mc.listeners.GameListener;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
@@ -40,6 +43,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -209,6 +213,31 @@ public class DomGameListener extends ListenerBase {
 
         game.getStarBuff().collectorDiedNotify(victim);
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLobbyDeath(DeathApplyEvent e) {
+        Game game = GameManager.getGame();
+        if (game.getGameState() != GameState.LOBBY) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+
+        LivingEntity killer = e.getAttacker();
+
+        p.teleport(p.getWorld().getSpawnLocation());
+        p.setHealth(p.getMaxHealth());
+        Bukkit.getScheduler().runTaskLater(Pluginizer.getSpigotPlugin(), () -> {
+            String finalMsg = GameListener.editMessage(e.getDeathMessage(), game, p, killer);
+            for (Player player : Bukkit.getOnlinePlayers()){
+                player.sendMessage(finalMsg);
+            }
+            p.sendMessage(e.getCausesMessage());
+
+            ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+            champion.resetCooldowns();
+
+        }, 1L);
+    }
+
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
