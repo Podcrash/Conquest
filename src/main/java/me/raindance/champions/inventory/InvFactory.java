@@ -159,14 +159,15 @@ public final class InvFactory {
      */
     private static void apply(Player player, SkillType skillType, int buildID) {
         getKitTable().getJSONDataAsync(player.getUniqueId(), skillType.getName(), buildID).thenAccept(deserializedPlayer -> {
+            String serializedInfo;
             if(deserializedPlayer == null) {
-                player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
-                return;
-            }
+                serializedInfo = "{\"skilltype\":\"duelist\",\"skills\":[308,305,307,304,309],\"items\":{\"0\":19,\"1\":26,\"2\":26,\"3\":26,\"4\":26}}";
+            } else serializedInfo = deserializedPlayer;
+
             player.getInventory().clear();
             player.closeInventory();
 
-            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, deserializedPlayer);
+            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, serializedInfo);
             ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
             cPlayer.restockInventory();
             if(GameManager.getGame().getGameState() == GameState.LOBBY) {
