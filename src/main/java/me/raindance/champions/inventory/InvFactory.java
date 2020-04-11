@@ -135,7 +135,9 @@ public final class InvFactory {
      */
     public static void applyLastBuild(Player player) {
         String path = player.getUniqueId() + ".current";
-        if(!kitConfigurator.hasPath(path)) return;
+        if(!kitConfigurator.hasPath(path)){
+            kitConfigurator.set(path, "duelist#1");
+        }
         kitConfigurator.readString(path, currentBuild -> {
             String[] split = currentBuild.split("#");
             SkillType skillType = SkillType.getByName(split[0]);
