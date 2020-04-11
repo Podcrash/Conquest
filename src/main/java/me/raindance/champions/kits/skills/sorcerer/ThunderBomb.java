@@ -156,7 +156,8 @@ public class ThunderBomb extends Instant implements IEnergy, ICooldown, IConstru
 
             @Override
             public boolean cancel() {
-                return avoid.contains(curBlock.getType()) || item.isDead() || avoid.contains(underBlock.getType());
+                return avoid.contains(curBlock.getType()) || item.isDead()
+                        || (underBlock.getType().equals(Material.LAVA) || underBlock.getType().equals(Material.STATIONARY_LAVA));
             }
 
             @Override
