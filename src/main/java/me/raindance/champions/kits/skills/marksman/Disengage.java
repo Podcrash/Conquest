@@ -4,6 +4,7 @@ import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -13,6 +14,7 @@ import me.raindance.champions.kits.skilltypes.Instant;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +26,6 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 502, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class Disengage extends Instant implements TimeResource, ICooldown {
-    private final int MAX_LEVEL = 4;
     private boolean isDisengaging;
     private boolean tempFallCancel;
     private long time;
@@ -67,8 +68,9 @@ public class Disengage extends Instant implements TimeResource, ICooldown {
             isDisengaging = false;
             tempFallCancel = true;
             StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, effectTime, 3);
+            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_METAL, 0.5f, 1.6f);
             Vector vector = victim.getLocation().getDirection().normalize();
-            vector.multiply(0.5d + 1.35d * 0.95).setY(0.9);
+            vector.multiply(1.7825).setY(0.9);
             getPlayer().setVelocity(vector);
             getPlayer().sendMessage(getUsedMessage());
             setLastUsed(System.currentTimeMillis());
