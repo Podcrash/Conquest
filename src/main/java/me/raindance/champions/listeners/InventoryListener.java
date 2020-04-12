@@ -370,18 +370,20 @@ public class InventoryListener extends ListenerBase {
     }
 
     @EventHandler
-    public void enableLobbyPVP(PlayerInteractEvent event) {
+    public void enableGameLobbyPVP(PlayerInteractEvent event) {
         Game game = GameManager.getGame();
         Player player = event.getPlayer();
         if(player.getItemInHand().getType().equals(Material.AIR)) { return;}
 
-        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK ||
+                event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
                 && (player.getItemInHand().getItemMeta().hasDisplayName() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP"))) {
             DamageApplier.removeInvincibleEntity(player);
             game.addPlayerLobbyPVPing(player);
             ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
             champion.restockInventory();
             game.updateLobbyInventory(player);
+            SoundPlayer.sendSound(player, "random.pop", 1F, 63);
 
         }
     }
