@@ -35,7 +35,7 @@ public class Lightweight extends Passive implements IConstruct {
     @EventHandler(priority = EventPriority.LOW)
     public void fall(EntityDamageEvent e) {
         if(getPlayer() == e.getEntity() && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            double totalDamage = e.getDamage() - 3;
+            double totalDamage = e.getDamage() - 2;
             if(totalDamage <= 0) {
                 e.setDamage(0);
                 e.setCancelled(true);
