@@ -343,7 +343,10 @@ public class InventoryListener extends ListenerBase {
             priority = EventPriority.HIGHEST
     )
     public void onClose(InventoryCloseEvent e) {
-        if (isInvincibleMenu(e.getInventory())) DamageApplier.removeInvincibleEntity(e.getPlayer());
+        if (isInvincibleMenu(e.getInventory()) &&
+                (GameManager.getGame().getPlayersLobbyPVPing().contains(e.getPlayer()) || GameManager.getGame().getGameState().equals(GameState.STARTED))) {
+            DamageApplier.removeInvincibleEntity(e.getPlayer());
+        }
         if (!isClassMenu(e.getInventory())) {
             if (GameManager.getGame().getGameState() == GameState.LOBBY
                     && (e.getPlayer() instanceof Player)
@@ -370,8 +373,11 @@ public class InventoryListener extends ListenerBase {
     public void enableLobbyPVP(PlayerInteractEvent event) {
         Game game = GameManager.getGame();
         Player player = event.getPlayer();
+        if(player.getItemInHand().getType().equals(Material.AIR)) { return;}
+
         if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP")) {
+                && (player.getItemInHand().getItemMeta().hasDisplayName() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP"))) {
+            DamageApplier.removeInvincibleEntity(player);
             game.addPlayerLobbyPVPing(player);
             ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
             champion.restockInventory();
