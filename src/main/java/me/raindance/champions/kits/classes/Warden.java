@@ -24,6 +24,6 @@ public class Warden extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 50;
+        return 60;
     }
 }

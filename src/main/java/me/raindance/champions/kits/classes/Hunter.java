@@ -32,6 +32,6 @@ public class Hunter extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 40;
+        return 50;
     }
 }
