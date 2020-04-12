@@ -20,6 +20,7 @@ import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +48,6 @@ public class PlayerJoinEventTest extends ListenerBase {
     public void join(PlayerJoinEvent e) {
         Player player = e.getPlayer();
 
-        player.setGameMode(GameMode.ADVENTURE);
 
         ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
         player.getInventory().setItem(35, beacon);
@@ -70,11 +70,15 @@ public class PlayerJoinEventTest extends ListenerBase {
         CustomEntityFirework.spawn(player.getLocation(), effect, players.toArray(new Player[players.size()]));
 
         if(GameManager.getGame() != null) {
-            if (GameManager.getGame().getGameState() == GameState.STARTED || GameManager.getGame().isFull())
-                if(GameManager.getGame().contains(player))
+            if (GameManager.getGame().getGameState() == GameState.STARTED || GameManager.getGame().isFull()) {
+                if(GameManager.getGame().isParticipating(player)) {
+                    player.setGameMode(GameMode.SURVIVAL);
                     player.teleport(GameManager.getGame().getTeam(player).getSpawn(player));
-                else GameManager.addSpectator(player);
-            else {
+                } else {
+                    GameManager.addSpectator(player);
+                }
+            } else {
+                player.setGameMode(GameMode.ADVENTURE);
                 GameManager.addPlayer(player);
             }
         }
