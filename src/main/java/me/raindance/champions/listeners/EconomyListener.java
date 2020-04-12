@@ -9,6 +9,7 @@ import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.MenuCreator;
 import me.raindance.champions.inventory.SkillData;
@@ -40,7 +41,8 @@ public class EconomyListener extends ListenerBase {
         if(game != null && game.getGameState() == GameState.STARTED) {
             game.addReward(e.getPlayer(), e.getMoneys());
         }
-        e.getPlayer().sendMessage(Currency.GOLD.getFormatting() + "+" + e.getMoneys() + " " + Currency.GOLD.getName() + "!");
+        e.getPlayer().sendMessage(Currency.GOLD.getColor() + "+" + e.getMoneys() + " " + Currency.GOLD.getName() + "!");
+        SoundPlayer.sendSound(e.getPlayer(), "random.orb", 0.25F, 63);
     }
     @EventHandler
     public void attempt(BuyAttemptEvent e) {
