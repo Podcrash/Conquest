@@ -1,10 +1,7 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.db.redis.Communicator;
-import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
@@ -25,12 +22,10 @@ import com.podcrash.api.mc.game.resources.HealthBarResource;
 import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import com.podcrash.api.mc.listeners.GameListener;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
-import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
@@ -55,10 +50,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
     private static final Material[] nonInteractables = new Material[]{
@@ -168,14 +160,11 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
-        double payout = 500;
-
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            //handler.pay(player, payout);
             player.sendMessage(String.format("%s%sYou earned %s %s!",
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
@@ -217,25 +206,13 @@ public class DomGameListener extends ListenerBase {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLobbyDeath(DeathApplyEvent e) {
         Game game = GameManager.getGame();
-        if (game.getGameState() != GameState.LOBBY) return;
-        e.setCancelled(true);
         Player p = e.getPlayer();
 
-        LivingEntity killer = e.getAttacker();
+        if (game.getGameState() != GameState.LOBBY) return;
 
-        p.teleport(p.getWorld().getSpawnLocation());
-        p.setHealth(p.getMaxHealth());
-        Bukkit.getScheduler().runTaskLater(Pluginizer.getSpigotPlugin(), () -> {
-            String finalMsg = GameListener.editMessage(e.getDeathMessage(), game, p, killer);
-            for (Player player : Bukkit.getOnlinePlayers()){
-                player.sendMessage(finalMsg);
-            }
-            p.sendMessage(e.getCausesMessage());
-
-            ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
-            champion.resetCooldowns();
-
-        }, 1L);
+        e.setCancelled(true);
+        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+        champion.resetCooldowns();
     }
 
 
