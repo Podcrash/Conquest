@@ -132,10 +132,9 @@ public class DarkBeam extends Instant implements IEnergy, ICooldown, IConstruct 
 
     @EventHandler
     public void damage(DamageApplyEvent event) {
-        if(!event.containsSource(this)) {
-            event.setVelocityModifierX(event.getVelocityModifierX() * 0.6);
-            event.setVelocityModifierY(event.getVelocityModifierY() * 0.6);
-            event.setVelocityModifierZ(event.getVelocityModifierZ() * 0.6);
-        }
+        if(!event.containsSource(this)) return; //this time only run when it contains it...
+        event.setVelocityModifierX(event.getVelocityModifierX() * 0.6);
+        event.setVelocityModifierY(event.getVelocityModifierY() * 0.6);
+        event.setVelocityModifierZ(event.getVelocityModifierZ() * 0.6);
     }
 }
