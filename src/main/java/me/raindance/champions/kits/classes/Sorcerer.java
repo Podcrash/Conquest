@@ -38,6 +38,6 @@ public class Sorcerer extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 35;
+        return 45;
     }
 }

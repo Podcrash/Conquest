@@ -50,7 +50,7 @@ public class Druid extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 30;
+        return 40;
     }
 
     //TODO: itemstackutil methods for this
