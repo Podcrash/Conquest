@@ -79,7 +79,7 @@ public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener
 
                         @Override
                         public void cleanup() {
-                            if(i >= 16 && !getPlayer().getInventory().contains(itemStack)) {
+                            if(i >= 16 && !getPlayer().getInventory().contains(itemStack) && !getGame().isRespawning(getPlayer())) {
                                 SoundPlayer.sendSound(getPlayer(), "random.pop", 1, 63);
                                 WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(
                                         item.getLocation().clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 1, 0, 0, 0);

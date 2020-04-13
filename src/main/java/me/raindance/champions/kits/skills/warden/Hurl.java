@@ -22,7 +22,6 @@ import org.bukkit.EntityEffect;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,9 +40,6 @@ public class Hurl extends Interaction implements TimeResource, IInjector, Listen
 
     private void ensurePassenger(Entity clickedEntity) {
         getPlayer().setPassenger(clickedEntity);
-        if(clickedEntity instanceof Player && ((Player) clickedEntity).isSneaking()) {
-            ((Player) clickedEntity).setSneaking(false);
-        }
         if(getPlayer().getPassenger() != clickedEntity) ensurePassenger(clickedEntity);
     }
 
@@ -157,7 +153,7 @@ public class Hurl extends Interaction implements TimeResource, IInjector, Listen
 
     @Override
     public String getName() {
-        return "Hurl";
+        return "Heave";
     }
 
     @Override
