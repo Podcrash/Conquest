@@ -29,6 +29,7 @@ import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
@@ -162,16 +163,14 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
-
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            player.sendMessage(String.format("%s%sYou earned %s %s!",
+            player.sendMessage(String.format("%s%sYou earned %s %s!\n ",
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
-
 
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
