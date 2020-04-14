@@ -124,6 +124,7 @@ public final class InvFactory {
                 break;
             case SLIME_BALL:
                 setAsDefault(player, skillType, buildID);
+                break;
             case FIREBALL:
                 if(delete(player, skillType, buildID)) {
                     player.closeInventory();
