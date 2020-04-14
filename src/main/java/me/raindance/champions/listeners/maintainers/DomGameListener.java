@@ -25,6 +25,7 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
@@ -132,16 +133,13 @@ public class DomGameListener extends ListenerBase {
             game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
-        game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
-        String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
-        for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
 
         game.sendColorTab(false);
         CapturePointDetector capture = new CapturePointDetector(game.getId());
@@ -152,11 +150,11 @@ public class DomGameListener extends ListenerBase {
                 new CapturePointScorer(capture),
                 new HealthBarResource(game.getId())
         );
-        game.broadcast(e.getMessage());
 
         for(Player p: game.getBukkitPlayers()) {
             ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
             player.restockInventory();
+            player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
         }
     }
@@ -164,14 +162,12 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
-        double payout = 500;
 
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            //handler.pay(player, payout);
             player.sendMessage(String.format("%s%sYou earned %s %s!",
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
