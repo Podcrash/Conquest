@@ -251,7 +251,8 @@ public class InventoryListener extends ListenerBase {
         ItemMeta itemMeta = selected.getItemMeta();
         String displayName = itemMeta.getDisplayName();
         String cleanseNumbers = displayName.replaceAll("[^0-9]", "");
-        int buildID = Integer.parseInt(cleanseNumbers);
+        int buildID = 0;
+        if (!cleanseNumbers.equals("")) buildID = Integer.parseInt(cleanseNumbers);
         InvFactory.clickAtBuildMenu(clicker, skillType, selected, buildID);
     }
 

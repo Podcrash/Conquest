@@ -69,15 +69,15 @@ public class DomRewardsListener extends ListenerBase {
 
         Set<GTeam> teams = new HashSet<>();
         GTeam highest = null;
+
         for(GTeam team : GameManager.getGame().getTeams()) {
             if(highest == null) { highest = team;
             } else if(highest.getScore() < team.getScore()) {highest = team;}
-
-            teams.add(team);
+            else {teams.add(team);}
         }
         for(Player p : highest.getBukkitPlayers()) {
-            handler.pay(p, 70);
-            game.addReward(p, 70);
+            handler.pay(p, 100);
+            game.addReward(p, 100);
         }
         for(GTeam team : teams) {
             for(Player p : team.getBukkitPlayers()) {

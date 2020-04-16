@@ -23,9 +23,11 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
@@ -49,6 +51,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -113,7 +116,11 @@ public class DomGameListener extends ListenerBase {
         List<Star> star = game.getStars();
         if(star.size() != 0) {//make sure there are some stars
             Location randomBuffLoc = game.getStars().get(0).getLocation();
-            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc))));
+            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> {
+                randomBuffLoc.setY(spawn.getY() + 1); //to make the y directions not seem weird, just add the y value
+                //+ 1 for head height
+                spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc));
+            }));
         }
 
         GameScoreboard gameScoreboard;
@@ -128,16 +135,13 @@ public class DomGameListener extends ListenerBase {
             game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
-        game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
-        String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
-        for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
 
         game.sendColorTab(false);
         CapturePointDetector capture = new CapturePointDetector(game.getId());
@@ -148,11 +152,11 @@ public class DomGameListener extends ListenerBase {
                 new CapturePointScorer(capture),
                 new HealthBarResource(game.getId())
         );
-        game.broadcast(e.getMessage());
 
         for(Player p: game.getBukkitPlayers()) {
             ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
             player.restockInventory();
+            player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
         }
     }
@@ -165,10 +169,9 @@ public class DomGameListener extends ListenerBase {
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            player.sendMessage(String.format("%s%sYou earned %s %s!",
+            player.sendMessage(String.format("%s%sYou earned %s %s!\n ",
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
-
 
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
