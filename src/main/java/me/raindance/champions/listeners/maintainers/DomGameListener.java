@@ -262,8 +262,9 @@ public class DomGameListener extends ListenerBase {
             player.getInventory().addItem(new ItemStack(Material.TNT));
             game.increment(team, 50);
         }else if(itemObjective instanceof Star) {
-            player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
-            game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            //player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
+            //game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            game.broadcast(String.format("%s%s%s has collected a star!", ChatColor.WHITE, ChatColor.BOLD, player.getName()));
             game.getStarBuff().setCollector(player);
             game.increment(team, 300);
         }
