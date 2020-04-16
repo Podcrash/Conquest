@@ -67,7 +67,7 @@ public abstract class ChampionsPlayer {
     }
     public void resetCooldowns() {
         for(Skill skill : skills) {
-            skill.setLastUsed(0);
+            skill.setLastUsedDirect(0);
             if(skill instanceof IConstruct)
                 ((IConstruct) skill).afterRespawn();
         }

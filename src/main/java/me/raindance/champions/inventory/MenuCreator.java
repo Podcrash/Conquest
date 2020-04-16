@@ -8,6 +8,7 @@ import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.util.ItemStackUtil;
 import com.podcrash.api.mc.util.MathUtil;
+import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
@@ -162,12 +163,16 @@ public class MenuCreator {
         DyeColor[] colors = new DyeColor[]{DyeColor.RED, DyeColor.BLUE, DyeColor.YELLOW, DyeColor.GREEN};
         int[] rowStarts = new int[] {20, 22, 24, 26};
 
-        Material[] materials = new Material[] {Material.INK_SACK, Material.ANVIL, Material.FIREBALL};
-        String[] names = new String[] {String.format("%s%s", ChatColor.RESET, "Apply Build "), String.format("%s%s", ChatColor.RESET, "Edit Build "), String.format("%s%s%s", ChatColor.RESET, ChatColor.RED, "Delete Build ")};
-        int[] slots = new int[] {0, 9, 27};
+        Material[] materials = new Material[] {Material.INK_SACK, Material.ANVIL, Material.SLIME_BALL, Material.FIREBALL};
+        String[] names = new String[] {String.format("%s%s", ChatColor.RESET, "Apply Build "),
+                String.format("%s%s", ChatColor.RESET, "Edit Build "),
+                String.format("%s%s", ChatColor.RESET, "Set as Default: Build "),
+                String.format("%s%s%s", ChatColor.RESET, ChatColor.RED, "Delete Build ")};
+        int[] slots = new int[] {0, 9, 18, 27};
 
         UUID uuid = player.getUniqueId();
         String clasz = skillType.getName();
+
         for(int i = 1; i < 5; i++) {
             final int index = i - 1;
             DyeColor color = colors[index];
@@ -182,6 +187,7 @@ public class MenuCreator {
                 meta.setDisplayName(name);
                 item.setItemMeta(meta);
                 inventory.setItem(slot, item);
+
                 if(name.contains("Apply Build")) {
                     table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
                         ItemStack duplicate =  new ItemStack(Material.INK_SACK, 1, color.getData());
@@ -193,6 +199,24 @@ public class MenuCreator {
                 }
             }
         }
+
+        //==========
+        //Creating the default kit applier
+        ItemStack defItemStack = new ItemStack(Material.EMERALD);
+        ItemMeta defMeta = defItemStack.getItemMeta();
+        defMeta.setDisplayName(ChatColor.RESET + "Apply Default Build");
+
+
+        String data = table.getJSONData(uuid, clasz, 0);
+        if(data == null) {
+            data = SkillType.getDefaultSerialized(skillType);
+            table.set(uuid, clasz, 0, data);
+        }
+        //System.out.println(data);
+        defMeta.setLore(ChampionsPlayerManager.getInstance().readSkills(data));
+        defItemStack.setItemMeta(defMeta);
+        inventory.setItem(18,defItemStack);
+
         return inventory;
     }
 }
