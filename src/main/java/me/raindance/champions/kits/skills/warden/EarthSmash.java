@@ -41,7 +41,7 @@ public class EarthSmash extends Instant implements ICooldown {
             if(dist > 16) continue;
             pound(location, enemy, 1.33333D - ((16D - dist)/16D));
         }
-        ParticleGenerator.generateRangeParticles(location, 8, true);
+        ParticleGenerator.generateRangeParticles(location, 8, true, 4);
 
         getPlayer().sendMessage(getUsedMessage());
     }
