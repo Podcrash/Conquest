@@ -20,11 +20,13 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -153,6 +155,13 @@ public abstract class ChampionsPlayer {
 
     public void heal(double health){
         Player player = getPlayer();
+
+        //call event
+        EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, health, EntityRegainHealthEvent.RegainReason.CUSTOM);
+        Bukkit.getPluginManager().callEvent(event);
+        if(event.isCancelled()) return;
+
+        //heal player
         double current = player.getHealth();
         double expected = current + health;
         if(expected >= player.getMaxHealth()){

@@ -41,12 +41,14 @@ import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -276,8 +278,9 @@ public class DomGameListener extends ListenerBase {
             player.getInventory().addItem(new ItemStack(Material.TNT));
             game.increment(team, 50);
         }else if(itemObjective instanceof Star) {
-            player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
-            game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            //player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
+            //game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            game.broadcast(String.format("%s%s%s has collected a star!", ChatColor.WHITE, ChatColor.BOLD, player.getName()));
             game.getStarBuff().setCollector(player);
             game.increment(team, 300);
         }
@@ -330,5 +333,10 @@ public class DomGameListener extends ListenerBase {
         if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void manageItemFrames(PlayerInteractEntityEvent e) {
+        if(e.getRightClicked() instanceof ItemFrame) e.setCancelled(true);
     }
 }

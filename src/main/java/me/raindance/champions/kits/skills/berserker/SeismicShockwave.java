@@ -85,7 +85,7 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
         SkillUseEvent event = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled()) return;
-        ParticleGenerator.generateRangeParticles(getPlayer().getLocation(), FastMath.sqrt(this.reach), true);
+        ParticleGenerator.generateRangeParticles(getPlayer().getLocation(), FastMath.sqrt(this.reach), true, (int) FastMath.sqrt(this.reach));
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_WOOD, 2f, 0.2f);
         List<Player> players = getPlayer().getWorld().getPlayers();
         for (Player possibleVictim : players) {
