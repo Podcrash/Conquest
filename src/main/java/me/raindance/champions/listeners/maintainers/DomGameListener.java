@@ -54,6 +54,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.List;
@@ -121,7 +122,11 @@ public class DomGameListener extends ListenerBase {
         List<Star> star = game.getStars();
         if(star.size() != 0) {//make sure there are some stars
             Location randomBuffLoc = game.getStars().get(0).getLocation();
-            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc))));
+            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> {
+                randomBuffLoc.setY(spawn.getY() + 1); //to make the y directions not seem weird, just add the y value
+                //+ 1 for head height
+                spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc));
+            }));
         }
 
         GameScoreboard gameScoreboard;
