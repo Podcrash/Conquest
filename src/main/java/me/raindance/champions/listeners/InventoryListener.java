@@ -370,12 +370,12 @@ public class InventoryListener extends ListenerBase {
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void enableGameLobbyPVP(PlayerInteractEvent event) {
         Game game = GameManager.getGame();
         Player player = event.getPlayer();
         if(player.getItemInHand().getType().equals(Material.AIR)) { return;}
-
+        if(game.getGameState() != GameState.LOBBY) return;
         if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK ||
                 event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
                 && (player.getItemInHand().getItemMeta().hasDisplayName() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP"))) {
@@ -385,7 +385,7 @@ public class InventoryListener extends ListenerBase {
             champion.restockInventory();
             game.updateLobbyInventory(player);
             SoundPlayer.sendSound(player, "random.pop", 1F, 63);
-
+            event.setCancelled(true);
         }
     }
 
