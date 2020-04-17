@@ -375,7 +375,7 @@ public class InventoryListener extends ListenerBase {
         Game game = GameManager.getGame();
         Player player = event.getPlayer();
         if(player.getItemInHand().getType().equals(Material.AIR)) { return;}
-        if(game.getGameState() != GameState.LOBBY) return;
+        if(game.getGameState() != GameState.LOBBY || game.getTimer().isRunning()) return;
         if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK ||
                 event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
                 && (player.getItemInHand().getItemMeta().hasDisplayName() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP"))) {
