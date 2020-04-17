@@ -198,6 +198,10 @@ public final class InvFactory {
         getKitTable().alter(player.getUniqueId(), skillType.getName(), 0, serializedInfo);
         SoundPlayer.sendSound(player, "random.levelup", 0.75F, 63);
 
+        Inventory inv = MenuCreator.createKitTemplate(player, skillType);
+        player.openInventory(inv);
+
+
     }
 
     /**

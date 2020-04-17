@@ -9,6 +9,7 @@ import com.podcrash.api.mc.events.game.GamePickUpEvent;
 import com.podcrash.api.mc.game.GTeam;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
 import com.podcrash.api.mc.game.objects.objectives.Diamond;
@@ -33,7 +34,8 @@ public class DomRewardsListener extends ListenerBase {
 
     @EventHandler
     public void onKill(DeathApplyEvent event) {
-        if(event.getAttacker() instanceof Player) {
+        if(event.getAttacker() instanceof Player &&
+                (GameManager.getGame() != null && !GameManager.getGame().getGameState().equals(GameState.LOBBY))) {
             handler.pay((Player) event.getAttacker(), 10);
         }
     }
@@ -44,7 +46,8 @@ public class DomRewardsListener extends ListenerBase {
         if(objective instanceof CapturePoint) {
             Player player = event.getWho();
 
-            if(!((CapturePoint) objective).getColor().equalsIgnoreCase("white")){
+            if(!((CapturePoint) objective).getColor().equalsIgnoreCase("white") &&
+                    (GameManager.getGame() != null && !GameManager.getGame().getGameState().equals(GameState.LOBBY))){
                 handler.pay(player, 10);
             }
         }
@@ -53,7 +56,8 @@ public class DomRewardsListener extends ListenerBase {
     @EventHandler
     public void onPickup(GamePickUpEvent event) {
         IObjective objective = event.getItem();
-        if(objective instanceof Diamond || objective instanceof Star) {
+        if((objective instanceof Diamond || objective instanceof Star) &&
+                (GameManager.getGame() != null && !GameManager.getGame().getGameState().equals(GameState.LOBBY))) {
             handler.pay(objective.acquiredByPlayer(), 10);
         }
     }

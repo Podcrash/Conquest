@@ -1,10 +1,7 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.db.redis.Communicator;
-import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
@@ -15,6 +12,7 @@ import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
@@ -42,6 +40,7 @@ import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,10 +55,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
     private static final Material[] nonInteractables = new Material[]{
@@ -211,6 +207,19 @@ public class DomGameListener extends ListenerBase {
 
         game.getStarBuff().collectorDiedNotify(victim);
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLobbyDeath(DeathApplyEvent e) {
+        Game game = GameManager.getGame();
+        Player p = e.getPlayer();
+
+        if (game.getGameState() != GameState.LOBBY) return;
+
+        e.setCancelled(true);
+        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+        champion.resetCooldowns();
+    }
+
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
