@@ -24,6 +24,6 @@ public class Vanguard extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 55;
+        return 65;
     }
 }

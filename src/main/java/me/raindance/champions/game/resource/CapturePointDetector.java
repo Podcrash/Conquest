@@ -35,7 +35,7 @@ public final class CapturePointDetector extends GameResource {
     private final String[] players;
 
     public CapturePointDetector(int gameID) {
-        super(gameID, 5, 100);
+        super(gameID, 8, 100);
         this.firstPlayerToCapture = new ArrayList<>(Arrays.asList(null, null, null, null, null));
         this.capturePoints = ((DomGame) getGame()).getCapturePoints().toArray(new CapturePoint[((DomGame) getGame()).getCapturePoints().size()]);
         this.bounds = new double[5][3][2];

@@ -40,7 +40,7 @@ public class Marksman extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 35;
+        return 45;
     }
 
     @Override

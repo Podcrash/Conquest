@@ -112,12 +112,18 @@ public final class InvFactory {
     public static void clickAtBuildMenu(Player player, SkillType skillType, ItemStack item, int buildID) {
         if(item == null || item.getType() == Material.AIR) return;
         switch (item.getType()) {
+            case EMERALD:
+                apply(player, skillType, buildID);
+                break;
             case INK_SACK:
                 if(item.getData() instanceof Dye && !((Dye) item.getData()).getColor().equals(DyeColor.GRAY))
                     apply(player, skillType, buildID);
                 break;
             case ANVIL:
                 edit(player, skillType, buildID);
+                break;
+            case SLIME_BALL:
+                setAsDefault(player, skillType, buildID);
                 break;
             case FIREBALL:
                 if(delete(player, skillType, buildID)) {
@@ -163,7 +169,8 @@ public final class InvFactory {
         getKitTable().getJSONDataAsync(player.getUniqueId(), skillType.getName(), buildID).thenAccept(deserializedPlayer -> {
             String serializedInfo;
             if(deserializedPlayer == null) {
-                serializedInfo = "{\"skilltype\":\"duelist\",\"skills\":[308,305,307,304,309],\"items\":{\"0\":19,\"1\":26,\"2\":26,\"3\":26,\"4\":26}}";
+                player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
+                return;
             } else serializedInfo = deserializedPlayer;
 
             player.getInventory().clear();
@@ -178,6 +185,23 @@ public final class InvFactory {
             SoundPlayer.sendSound(cPlayer.getPlayer(), "random.levelup", 0.75F, 63);
             setCurrent(player, skillType, buildID);
         });
+    }
+
+    private static void setAsDefault(Player player, SkillType skillType, int buildID) {
+        String deserializedPlayer = getKitTable().getJSONData(player.getUniqueId(), skillType.getName(), buildID);
+        String serializedInfo;
+        if(deserializedPlayer == null) {
+            player.sendMessage(ChatColor.BLUE + "Conquest>" + ChatColor.GRAY + " There is no build loaded here! Click the anvil to make a kit!");
+            return;
+        } else serializedInfo = deserializedPlayer;
+
+        getKitTable().alter(player.getUniqueId(), skillType.getName(), 0, serializedInfo);
+        SoundPlayer.sendSound(player, "random.levelup", 0.75F, 63);
+
+        Inventory inv = MenuCreator.createKitTemplate(player, skillType);
+        player.openInventory(inv);
+
+
     }
 
     /**
@@ -255,7 +279,7 @@ public final class InvFactory {
     }
 
     public static SkillType getLastestSkillType(Player player) {
-        if (!skillTypeHistory.containsKey(player.getName())) {return null;}
+        if (!skillTypeHistory.containsKey(player.getName())) {return SkillType.Duelist;}
         return skillTypeHistory.get(player.getName());
     }
 

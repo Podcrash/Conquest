@@ -1,10 +1,7 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.db.redis.Communicator;
-import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.economy.Currency;
 import com.podcrash.api.mc.economy.IEconomyHandler;
 import com.podcrash.api.mc.effect.status.Status;
@@ -15,6 +12,7 @@ import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
@@ -25,9 +23,11 @@ import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
 import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
+import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
@@ -40,21 +40,22 @@ import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
     private static final Material[] nonInteractables = new Material[]{
@@ -117,7 +118,11 @@ public class DomGameListener extends ListenerBase {
         List<Star> star = game.getStars();
         if(star.size() != 0) {//make sure there are some stars
             Location randomBuffLoc = game.getStars().get(0).getLocation();
-            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc))));
+            game.getTeams().forEach(team -> team.getSpawns().forEach(spawn -> {
+                randomBuffLoc.setY(spawn.getY() + 1); //to make the y directions not seem weird, just add the y value
+                //+ 1 for head height
+                spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc));
+            }));
         }
 
         GameScoreboard gameScoreboard;
@@ -132,16 +137,13 @@ public class DomGameListener extends ListenerBase {
             game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
-        game.broadcast(game.toString());
         Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().getPlayerCount() < 1) {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
-        String startingMsg = String.format("Game %d is starting up with map %s", e.getGame().getId(), e.getGame().getMapName());
-        for(Player p : e.getGame().getBukkitPlayers()) p.sendMessage(startingMsg);
 
         game.sendColorTab(false);
         CapturePointDetector capture = new CapturePointDetector(game.getId());
@@ -152,11 +154,11 @@ public class DomGameListener extends ListenerBase {
                 new CapturePointScorer(capture),
                 new HealthBarResource(game.getId())
         );
-        game.broadcast(e.getMessage());
 
         for(Player p: game.getBukkitPlayers()) {
             ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
             player.restockInventory();
+            player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
         }
     }
@@ -164,18 +166,14 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void onEnd(GameEndEvent e) {
-        double payout = 500;
-
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
         for(Player player : e.getGame().getBukkitPlayers()) {
             if(GameManager.isSpectating(player)) break;
-            //handler.pay(player, payout);
-            player.sendMessage(String.format("%s%sYou earned %s %s!",
+            player.sendMessage(String.format("%s%sYou earned %s %s!\n ",
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
-
 
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
@@ -209,6 +207,19 @@ public class DomGameListener extends ListenerBase {
 
         game.getStarBuff().collectorDiedNotify(victim);
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLobbyDeath(DeathApplyEvent e) {
+        Game game = GameManager.getGame();
+        Player p = e.getPlayer();
+
+        if (game.getGameState() != GameState.LOBBY) return;
+
+        e.setCancelled(true);
+        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+        champion.resetCooldowns();
+    }
+
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
@@ -267,8 +278,9 @@ public class DomGameListener extends ListenerBase {
             player.getInventory().addItem(new ItemStack(Material.TNT));
             game.increment(team, 50);
         }else if(itemObjective instanceof Star) {
-            player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
-            game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            //player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");
+            //game.broadcast(team.getChatColor() + player.getName() + " received the buff!");
+            game.broadcast(String.format("%s%s%s has collected a star!", ChatColor.WHITE, ChatColor.BOLD, player.getName()));
             game.getStarBuff().setCollector(player);
             game.increment(team, 300);
         }
@@ -321,5 +333,10 @@ public class DomGameListener extends ListenerBase {
         if(clicked != null && event.getSlotType().equals(InventoryType.SlotType.ARMOR)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void manageItemFrames(PlayerInteractEntityEvent e) {
+        if(e.getRightClicked() instanceof ItemFrame) e.setCancelled(true);
     }
 }

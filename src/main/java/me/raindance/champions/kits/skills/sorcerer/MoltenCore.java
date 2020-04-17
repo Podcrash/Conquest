@@ -92,7 +92,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         ItemMeta meta = item.getItemStack().getItemMeta();
         meta.setDisplayName(NAME + item.getEntityId());
         item.getItemStack().setItemMeta(meta);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, item::remove, 10);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, item::remove, 14);
     }
     @Override
     public void task() {
