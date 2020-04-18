@@ -4,6 +4,8 @@ import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.util.PacketUtil;
 import com.podcrash.api.mc.util.VectorUtil;
@@ -15,6 +17,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderPearl;
@@ -56,6 +59,11 @@ public class PhantomDash extends Instant implements ICooldown {
     protected void doSkill(PlayerEvent event, Action action) {
         //if the action isn't right click or if there is on cooldowm
         if(!rightClickCheck(action) || onCooldown()) return;
+
+        if(StatusApplier.getOrNew(event.getPlayer()).has(Status.SLOW)) {
+            getPlayer().sendMessage(String.format("%sPhantom Dash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
+            return;
+        }
 
         //Set the cooldown
         setLastUsed(System.currentTimeMillis());
