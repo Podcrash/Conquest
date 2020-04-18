@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 @SkillMetadata(id = 509, skillType = SkillType.Marksman, invType = InvType.SWORD)
 public class Disarm extends Interaction {
-    private final float duration = 1.5F;
+    private final float duration = 1F;
     private final double damage = 4;
     private LivingEntity disarmed = null;
 

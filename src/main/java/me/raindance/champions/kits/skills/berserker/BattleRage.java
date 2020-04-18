@@ -42,6 +42,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
         setLastUsed(System.currentTimeMillis());
         EnergyBar energyBar = getChampionsPlayer().getEnergyBar();
         getChampionsPlayer().heal(2 * energyBar.getEnergy());
+        energyBar.setEnergy(0);
 
         Location loc = getPlayer().getLocation();
         SoundPlayer.sendSound(loc, "mob.enderdragon.growl", 0.9F, 80);

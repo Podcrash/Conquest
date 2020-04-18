@@ -1,5 +1,6 @@
 package me.raindance.champions.kits.skills.rogue;
 
+import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
@@ -32,6 +33,7 @@ public class Dexterity extends Passive {
     @EventHandler
     public void damage(DamageApplyEvent e) {
         if(e.getAttacker() == getPlayer() && !isAlly(e.getVictim())) {
+            if(e.getCause() != Cause.MELEE) return;
             e.setDoKnockback(false);
             StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 0, true, true);
         }

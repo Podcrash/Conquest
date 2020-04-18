@@ -20,6 +20,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 @SkillMetadata(id = 301, skillType = SkillType.Duelist, invType = InvType.DROP)
 public class ChargeForward extends Drop implements ICooldown {
+    private int slowLevel = 3;
+    private int slowDuration = 2;
     private long selfTime;
     private boolean use;
 
@@ -70,7 +72,7 @@ public class ChargeForward extends Drop implements ICooldown {
             if(e.getVictim() instanceof  Player) {
                 if (1000 * 3 >= (System.currentTimeMillis() - selfTime)) {
                     Player victim = (Player) e.getVictim();
-                    StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, 1, 2);
+                    StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, slowDuration, slowLevel);
                     StatusApplier.getOrNew(getPlayer()).removeVanilla(Status.SPEED);
                     SoundPlayer.sendSound(getPlayer().getLocation(), "random.break", 0.75F, 250);
                     SoundPlayer.sendSound(getPlayer().getLocation(), "mob.endermen.scream", .75F, 20);

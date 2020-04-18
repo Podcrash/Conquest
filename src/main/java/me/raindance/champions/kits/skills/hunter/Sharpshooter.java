@@ -29,6 +29,8 @@ import java.util.HashMap;
 public class Sharpshooter extends Passive implements ICharge {
     private final HashMap<Integer, Float> forceMap = new HashMap<>();
     private final int MAX_CHARGES = 4;
+    private final int damageBonus = 2;
+
     private int charges = 0;
     private int miss = 0;
     private long time;
@@ -67,7 +69,7 @@ public class Sharpshooter extends Passive implements ICharge {
         justMissed = false;
         time = System.currentTimeMillis();
         e.setModified(true);
-        e.setDamage(e.getDamage() + getCurrentCharges());
+        e.setDamage(e.getDamage() + getCurrentCharges() * damageBonus);
         int id = e.getArrow().getEntityId();
         //if(forceMap.get(id) >= 0.9F)
             addCharge();

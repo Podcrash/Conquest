@@ -29,6 +29,7 @@ import java.util.Set;
 
 @SkillMetadata(id = 507, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class MarkedForDeath extends BowShotSkill {
+    private int bonus = 12;
     private final Set<String> victims;
     public MarkedForDeath() {
         victims = new HashSet<>();
@@ -81,7 +82,7 @@ public class MarkedForDeath extends BowShotSkill {
             if (victims.contains(entity.getName()) && StatusApplier.getOrNew(entity).has(Status.MARKED) && victims.contains(entity.getName())) {
                 event.addSource(this);
                 event.setModified(true);
-                event.setDamage(event.getDamage() + 15);
+                event.setDamage(event.getDamage() + bonus);
                 victims.remove(entity.getName());
 
                 event.setVelocityModifierX(event.getVelocityModifierX() * (10D/17D));
