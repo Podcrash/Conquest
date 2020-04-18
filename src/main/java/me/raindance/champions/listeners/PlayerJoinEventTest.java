@@ -84,8 +84,10 @@ public class PlayerJoinEventTest extends ListenerBase {
             }
         }
         InvFactory.applyLastBuild(player);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null)
+        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null) {
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
+            if(!GameManager.getGame().getGameState().equals(GameState.STARTED)) GameManager.getGame().updateLobbyInventory(player);
+        }
     }
 
     @EventHandler

@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.game.GameState;
 import me.raindance.champions.Main;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
@@ -21,6 +22,7 @@ import me.raindance.champions.kits.iskilltypes.action.IInjector;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TimeResource;
+import me.raindance.champions.kits.skills.duelist.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -199,6 +201,11 @@ public class ChampionsPlayerManager {
 
     public ChampionsPlayer defaultBuild(Player player) {
         List<Skill> skills = new ArrayList<>();
+        skills.add(new Riposte());
+        skills.add(new Lunge());
+        skills.add(new Revenge());
+        skills.add(new FatalStrike());
+        skills.add(new Challenger());
 
         Duelist knight = new Duelist(player, skills);
         return knight;

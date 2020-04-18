@@ -195,12 +195,11 @@ public abstract class ChampionsPlayer {
     public ItemStack[] getDefaultHotbar() {
         if(this.defaultHotbar == null) {
             this.defaultHotbar = new ItemStack[] {
-                    new ItemStack(Material.IRON_SWORD),
-                    new ItemStack(Material.IRON_AXE),
-                    new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP),
-                    new ItemStack(Material.MUSHROOM_SOUP),
+                    new ItemStack(ChampionsItem.DUELIST_SWORD.toItemStack()),
+                    new ItemStack(ChampionsItem.MUSHROOM_STEW.toItemStack()),
+                    new ItemStack(ChampionsItem.MUSHROOM_STEW.toItemStack()),
+                    new ItemStack(ChampionsItem.MUSHROOM_STEW.toItemStack()),
+                    new ItemStack(ChampionsItem.MUSHROOM_STEW.toItemStack()),
             };
         }
         return this.defaultHotbar;
