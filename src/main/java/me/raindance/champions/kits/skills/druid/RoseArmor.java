@@ -76,7 +76,7 @@ public class RoseArmor extends TogglePassive implements TimeResource, IEnergy {
     public void hit(DamageApplyEvent event) {
         if(event.isCancelled()) return;
         if(!isToggled() || event.getVictim() != getPlayer()) return;
-        if(event.getCause() != Cause.MELEE || event.getCause() != Cause.PROJECTILE) return;
+        if(event.getCause() != Cause.MELEE && event.getCause() != Cause.PROJECTILE) return;
         event.setDoKnockback(false);
         if(event.getCause() == Cause.MELEE) DamageApplier.damage(event.getAttacker(), getPlayer(), 2, this, false);
 
