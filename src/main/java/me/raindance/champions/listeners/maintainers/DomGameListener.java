@@ -241,11 +241,15 @@ public class DomGameListener extends ListenerBase {
                 builder.append(" has captured ");
                 builder.append(objective.getName());
                 builder.append("!");
+                game.broadcast(builder.toString());
             }else {
+                /*
                 builder.append(team.getChatColor()).append(ChatColor.BOLD);
                 builder.append(objective.getName()).append(" is now neutralized!");
+
+                 */
             }
-            game.broadcast(builder.toString());
+            //game.broadcast(builder.toString());
             DomScoreboard scoreboard = (DomScoreboard) game.getGameScoreboard();
             scoreboard.updateCapturePoint(team, objective.getName());
             objective.spawnFirework();
