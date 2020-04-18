@@ -5,6 +5,8 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.mc.damage.Cause;
 import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.mc.effect.status.Status;
+import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.time.resources.TimeResource;
@@ -21,6 +23,8 @@ import java.util.Random;
 
 @SkillMetadata(id = 804, skillType = SkillType.Vanguard, invType = InvType.DROP)
 public class Guardian extends Drop implements ICooldown {
+    private final double radiusSquared = 5 * 5;
+    private final float duration = 5;
     private boolean active;
     @Override
     public String getName() {
@@ -42,6 +46,7 @@ public class Guardian extends Drop implements ICooldown {
         if(onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         active = true;
+        StatusApplier.getOrNew(e.getPlayer()).applyStatus(Status.RESISTANCE, duration, 0);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.death", 0.85F, 92);
         new GuardianProtect().run(2, 0);
         return true;
@@ -52,11 +57,10 @@ public class Guardian extends Drop implements ICooldown {
         if(!active) return;
         if(e.getVictim() == getPlayer()) {
             e.setModified(true);
-            e.setDoKnockback(false);
             return;
         }
         if(!isAlly(e.getVictim()) || e.getCause() != Cause.MELEE) return;
-        if(e.getVictim().getLocation().distanceSquared(getPlayer().getLocation()) >= 16) return;
+        if(e.getVictim().getLocation().distanceSquared(getPlayer().getLocation()) >= radiusSquared) return;
         e.setDamage(.8D * e.getDamage());
         e.setModified(true);
 
@@ -79,7 +83,7 @@ public class Guardian extends Drop implements ICooldown {
 
         @Override
         public boolean cancel() {
-            return !active || System.currentTimeMillis() - getLastUsed() >= 5L * 1000L;
+            return !active || System.currentTimeMillis() - getLastUsed() >= (long) duration * 1000L;
         }
 
         @Override

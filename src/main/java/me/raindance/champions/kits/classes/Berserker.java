@@ -32,6 +32,6 @@ public class Berserker extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 45;
+        return 40;
     }
 }

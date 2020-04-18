@@ -21,7 +21,7 @@ import org.bukkit.event.EventHandler;
 public class ShadowAssault extends Passive implements ICooldown {
     @Override
     public float getCooldown() {
-        return 7;
+        return 10;
     }
 
     @Override

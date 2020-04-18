@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 904, skillType = SkillType.Warden, invType = InvType.SWORD)
 public class DefensiveStance extends Skill {
+    private double damageReduction = (1 - 0.8);
     @Override
     public String getName() {
         return "Defensive Stance";
@@ -43,7 +44,7 @@ public class DefensiveStance extends Skill {
                 if (!VectorUtil.angleIsAround(damagerYaw, victimYaw, 135)) {
                     SoundPlayer.sendSound(event.getVictim().getLocation(), "mob.zombie.metal", 0.75F, 126);
                     event.setModified(true);
-                    event.setDamage(event.getDamage() * (1D / 3D));
+                    event.setDamage(event.getDamage() * damageReduction);
                     event.setDoKnockback(false);
                     this.setLastUsed(System.currentTimeMillis());
                 }

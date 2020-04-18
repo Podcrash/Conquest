@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 305, skillType = SkillType.Duelist, invType = InvType.DROP)
 public class Lunge extends Drop implements ICooldown {
+    private float cooldown = 8F;
     @Override
     public String getName() {
         return "Lunge";
@@ -25,7 +26,7 @@ public class Lunge extends Drop implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 6;
+        return cooldown;
     }
 
     @Override
