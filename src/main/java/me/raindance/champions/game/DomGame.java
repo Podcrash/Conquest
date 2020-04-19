@@ -5,14 +5,14 @@ import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
 import com.podcrash.api.mc.game.objects.objectives.*;
+import com.podcrash.api.mc.time.TimeHandler;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import me.raindance.champions.util.ConquestTips;
+import me.raindance.champions.ongoing.ConquestTips;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DomGame extends Game {
@@ -36,6 +36,8 @@ public class DomGame extends Game {
         this.mines = new ArrayList<>();
 
         this.starBuff = new StarBuff(this);
+
+        TimeHandler.repeatedTimeSeconds(30, 1, new ConquestTips(this));
     }
 
     @Override
@@ -163,9 +165,5 @@ public class DomGame extends Game {
         this.restocks = points;
     }
 
-    @Override
-    public String getRandomTip() {
-        return ConquestTips.getRandomTip();
-    }
     //TODO
 }
