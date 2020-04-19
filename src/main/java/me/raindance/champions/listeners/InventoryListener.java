@@ -370,23 +370,41 @@ public class InventoryListener extends ListenerBase {
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void enableGameLobbyPVP(PlayerInteractEvent event) {
+    private void enableGameLobbyPVP(Player p) {
+        Game game = GameManager.getGame();
+
+        DamageApplier.removeInvincibleEntity(p);
+        game.addPlayerLobbyPVPing(p);
+        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+        champion.restockInventory();
+        game.updateLobbyInventory(p);
+        SoundPlayer.sendSound(p, "random.pop", 1F, 63);
+    }
+
+    private boolean shouldUse(PlayerInteractEvent event) {
         Game game = GameManager.getGame();
         Player player = event.getPlayer();
-        if(player.getItemInHand().getType().equals(Material.AIR)) { return;}
-        if(game.getGameState() != GameState.LOBBY || game.getTimer().isRunning()) return;
-        if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK ||
-                event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
-                && (player.getItemInHand().getItemMeta().hasDisplayName() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP"))) {
-            DamageApplier.removeInvincibleEntity(player);
-            game.addPlayerLobbyPVPing(player);
-            ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
-            champion.restockInventory();
-            game.updateLobbyInventory(player);
-            SoundPlayer.sendSound(player, "random.pop", 1F, 63);
-            event.setCancelled(true);
+        if((player.getItemInHand().getType().equals(Material.AIR) ||
+                game.getGameState().equals(GameState.STARTED) ||
+                (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK &&
+                event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK))) { return false;}
+        if(!(player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasDisplayName())) return false;
+        if(game.getGameState().equals(GameState.LOBBY) && game.getTimer().isRunning()) {
+            player.sendMessage(String.format("%sInvicta> %sThis function is disabled while the game is starting.", ChatColor.BLUE, ChatColor.GRAY));
+            return false;
         }
+        return true;
+    }
+
+    @EventHandler
+    public void lobbyItemUse(PlayerInteractEvent event) {
+        Player user = event.getPlayer();
+        if(!shouldUse(event)) {
+            return;
+        }
+        String itemName = event.getItem().getItemMeta().getDisplayName();
+
+        if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
     }
 
 }
