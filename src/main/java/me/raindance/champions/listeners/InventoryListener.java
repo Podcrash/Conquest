@@ -12,6 +12,7 @@ import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.ChatUtil;
+import com.podcrash.api.mc.util.InventoryUtil;
 import com.podcrash.api.mc.util.MathUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.mc.game.Game;
@@ -22,6 +23,7 @@ import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import net.minecraft.server.v1_8_R3.InventoryUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -221,7 +223,7 @@ public class InventoryListener extends ListenerBase {
                                     ChatColor.GRAY));
                     return;
                 }
-                inventory.clear();
+                InventoryUtil.clearSaveHotbar(inventory);
                 MenuCreator.openTeamSelectMenu(player);
             }
         } else if (name.contains("spectator")) {
