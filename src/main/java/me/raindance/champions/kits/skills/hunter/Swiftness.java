@@ -94,7 +94,7 @@ public class Swiftness extends Instant implements TimeResource, ICooldown {
 
     @Override
     public void task() {
-        if (System.currentTimeMillis() - getLastUsed() >= selfEffect * 1000L) _active = false;
+        if (System.currentTimeMillis() - getLastUsed() >= selfEffect * 1000L || getGame().isRespawning(getPlayer())) _active = false;
         if (!getPlayer().isSprinting()) return;
         WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
                 EnumWrappers.Particle.SPELL, new int[]{255, 255, 255, 0}, 9,
