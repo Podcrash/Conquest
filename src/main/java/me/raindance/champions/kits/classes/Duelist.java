@@ -24,6 +24,6 @@ public class Duelist extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 55;
+        return 50;
     }
 }
