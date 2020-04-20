@@ -99,7 +99,6 @@ public class PlayerJoinEventTest extends ListenerBase {
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         StatusApplier.remove(player);
-        if(game.isSpectating(player)) game.removePlayer(player);
 
         if (cplayer != null)
             cm.removeChampionsPlayer(cplayer);
