@@ -74,7 +74,7 @@ public class ConquestTips implements TimeResource {
 
     @Override
     public boolean cancel() {
-        return (game.getGameState() != GameState.LOBBY);
+        return (game.getGameState() != GameState.LOBBY || game != GameManager.getGame());
     }
 
     @Override
