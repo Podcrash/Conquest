@@ -374,47 +374,6 @@ public class InventoryListener extends ListenerBase {
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
 
-    private void enableGameLobbyPVP(Player p) {
-        Game game = GameManager.getGame();
-
-        DamageApplier.removeInvincibleEntity(p);
-        game.addPlayerLobbyPVPing(p);
-
-        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
-        ChampionsPlayerManager.getInstance().removeChampionsPlayer(champion);
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(champion);
-
-        game.updateLobbyInventory(p);
-        SoundPlayer.sendSound(p, "random.pop", 1F, 63);
-    }
-
-    private boolean shouldUse(PlayerInteractEvent event) {
-        Game game = GameManager.getGame();
-        Player player = event.getPlayer();
-        if((player.getItemInHand().getType().equals(Material.AIR) ||
-                game.getGameState().equals(GameState.STARTED) ||
-                (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK &&
-                event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK))) { return false;}
-        if(!(player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasDisplayName())) return false;
-        if(game.getGameState().equals(GameState.LOBBY) && game.getTimer().isRunning()) {
-            player.sendMessage(String.format("%sInvicta> %sThis function is disabled while the game is starting.", ChatColor.BLUE, ChatColor.GRAY));
-            return false;
-        }
-        return true;
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void lobbyItemUse(PlayerInteractEvent event) {
-        Player user = event.getPlayer();
-        if(!shouldUse(event)) {
-            return;
-        }
-        String itemName = event.getItem().getItemMeta().getDisplayName();
-
-        if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
-        event.setCancelled(true);
-    }
-
     /*
     //Handle the f6 + esc bug
     @EventHandler
