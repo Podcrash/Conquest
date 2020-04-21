@@ -403,7 +403,7 @@ public class InventoryListener extends ListenerBase {
         return true;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void lobbyItemUse(PlayerInteractEvent event) {
         Player user = event.getPlayer();
         if(!shouldUse(event)) {
@@ -412,6 +412,7 @@ public class InventoryListener extends ListenerBase {
         String itemName = event.getItem().getItemMeta().getDisplayName();
 
         if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
+        event.setCancelled(true);
     }
 
     /*
