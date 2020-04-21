@@ -14,6 +14,7 @@ import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.InventoryUtil;
 import com.podcrash.api.mc.util.MathUtil;
+import com.podcrash.api.mc.world.BlockUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameManager;
@@ -413,13 +414,16 @@ public class InventoryListener extends ListenerBase {
         if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
     }
 
+    /*
     //Handle the f6 + esc bug
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+
         Inventory inv = event.getPlayer().getOpenInventory().getTopInventory();
 
         //If they were made invincible when opening the inventory, remove their invincibility
-        if (isInvincibleMenu(inv)) {
+        if (isInvincibleMenu(inv)
+                && (GameManager.getGame().getPlayersLobbyPVPing().contains(event.getPlayer()) || GameManager.getGame().getGameState().equals(GameState.STARTED))) {
             DamageApplier.removeInvincibleEntity(event.getPlayer());
         }
 
@@ -429,4 +433,5 @@ public class InventoryListener extends ListenerBase {
                 event.getPlayer().closeInventory();
         }
     }
+    */
 }
