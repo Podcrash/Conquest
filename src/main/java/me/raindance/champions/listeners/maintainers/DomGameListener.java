@@ -178,7 +178,6 @@ public class DomGameListener extends ListenerBase {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             GameManager.addPlayer(player);
-            game1.refreshTabColor(player, ChatColor.YELLOW.toString());
             player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
             StatusApplier.getOrNew(player).removeStatus(Status.values());
         }

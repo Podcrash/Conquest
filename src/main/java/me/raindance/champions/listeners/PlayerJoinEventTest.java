@@ -81,7 +81,6 @@ public class PlayerJoinEventTest extends ListenerBase {
             } else {
                 player.setGameMode(GameMode.ADVENTURE);
                 GameManager.addPlayer(player);
-                GameManager.getGame().refreshTabColor(player, ChatColor.YELLOW.toString());
             }
         }
         InvFactory.applyLastBuild(player);
