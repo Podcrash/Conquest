@@ -35,6 +35,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -412,4 +413,20 @@ public class InventoryListener extends ListenerBase {
         if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
     }
 
+    //Handle the f6 + esc bug
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Inventory inv = event.getPlayer().getOpenInventory().getTopInventory();
+
+        //If they were made invincible when opening the inventory, remove their invincibility
+        if (isInvincibleMenu(inv)) {
+            DamageApplier.removeInvincibleEntity(event.getPlayer());
+        }
+
+        //If the inventory was in one of these, close their inv
+        //isKitSelectMenu is not included; it would harm QoL of playing normally (can only right click eTables when completely still)
+        if (isClassMenu(inv) || isConfirmationMenu(inv) || isBuildMenu(inv)) {
+                event.getPlayer().closeInventory();
+        }
+    }
 }
