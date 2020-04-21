@@ -135,11 +135,11 @@ public class DomGameListener extends ListenerBase {
             game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
         Main.getInstance().getLogger().info("game is " + game);
-        if (e.getGame().getPlayerCount() < 1) {
+        if (e.getGame().size() < 1) {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
 
@@ -178,6 +178,7 @@ public class DomGameListener extends ListenerBase {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             GameManager.addPlayer(player);
+            game1.refreshTabColor(player, ChatColor.YELLOW.toString());
             player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
             StatusApplier.getOrNew(player).removeStatus(Status.values());
         }

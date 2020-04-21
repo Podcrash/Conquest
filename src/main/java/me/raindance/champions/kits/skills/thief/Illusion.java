@@ -124,7 +124,12 @@ public class Illusion extends Continuous implements ICooldown {
         this.setLastUsed(System.currentTimeMillis());
         a = true;
 
-        getGame().refreshTabColor(getPlayer(), getTeam().getChatColor().toString());
+        if(getGame().isOnTeam(getPlayer())) {
+            getGame().refreshTabColor(getPlayer(), getTeam().getChatColor().toString());
+        } else {
+            getGame().refreshTabColor(getPlayer(), ChatColor.YELLOW.toString());
+        }
+
 
         //skeleton.getEquipment().setArmorContents(new ItemStack[]{null, null, null, null});
 

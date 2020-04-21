@@ -377,8 +377,11 @@ public class InventoryListener extends ListenerBase {
 
         DamageApplier.removeInvincibleEntity(p);
         game.addPlayerLobbyPVPing(p);
+
         ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
-        champion.restockInventory();
+        ChampionsPlayerManager.getInstance().removeChampionsPlayer(champion);
+        ChampionsPlayerManager.getInstance().addChampionsPlayer(champion);
+
         game.updateLobbyInventory(p);
         SoundPlayer.sendSound(p, "random.pop", 1F, 63);
     }
