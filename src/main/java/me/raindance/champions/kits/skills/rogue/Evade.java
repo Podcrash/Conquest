@@ -91,7 +91,8 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
         if (hasCharges()) {
             time = System.currentTimeMillis();
             isEvading = true;
-            getPlayer().sendMessage(getUsedMessage());
+            getPlayer().sendMessage(String.format("%sSkill> %sYou prepared to %s%s%s.",
+                    ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
             TimeHandler.repeatedTimeAsync(1, 0, new ActiveEvade());
         } else this.getPlayer().sendMessage(getNoChargeMessage());
     }
