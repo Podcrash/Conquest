@@ -11,6 +11,7 @@ import com.podcrash.api.mc.disguise.Disguiser;
 import com.podcrash.api.mc.effect.particle.ParticleRunnable;
 import com.podcrash.api.mc.events.TickEvent;
 import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.mc.time.resources.TipScheduler;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.ConfigUtil;
 import com.podcrash.api.mc.util.PlayerCache;
@@ -54,6 +55,7 @@ public class Main extends JavaPlugin {
     private Properties properties;
 
     public static final String CHANNEL_NAME = "Champions";
+    private TipScheduler tips;
     private ProtocolManager protocolManager;
     private BukkitTask tickTask;
     public Logger log = this.getLogger();
@@ -138,10 +140,6 @@ public class Main extends JavaPlugin {
         spigot.registerConfigurator("kits");
         spigot.registerConfigurator("skilldescriptions");
 
-        DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
-        GameManager.createGame(game);
-        log.info("Created game " + game.getName());
-
         CompletableFuture kb = setKnockback();
         CompletableFuture customEnchantment = registerCustomEnchant();
         CompletableFuture listeners = registerListeners();
@@ -150,6 +148,7 @@ public class Main extends JavaPlugin {
         CompletableFuture setups = setUp();
         CompletableFuture setupClasses = setUpClasses();
         CompletableFuture msgs = registerMessengers();
+        CompletableFuture tips = registerTips();
 
         spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
 
@@ -168,7 +167,8 @@ public class Main extends JavaPlugin {
             injectors,
             setups,
             setupClasses,
-            msgs
+            msgs,
+            tips
         );
 
         ParticleRunnable.start();
@@ -179,6 +179,12 @@ public class Main extends JavaPlugin {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
+        GameManager.createGame(game);
+        log.info("Created game " + game.getName());
+
+
         //This part is really only used for reloading
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         if(players.size() > 0) {
@@ -190,6 +196,8 @@ public class Main extends JavaPlugin {
         }
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
         executor.shutdown();
+
+
     }
 
     @Override
@@ -204,6 +212,16 @@ public class Main extends JavaPlugin {
 
     }
 
+    private CompletableFuture<Void> registerTips() {
+        String url = "https://docs.google.com/document/d/10LcHuVMY-qiNGcbFWvK7pNWSHEiohzV4T-XBx93YqZ4/export?format=txt";
+        return CompletableFuture.runAsync(() -> {
+            try {
+                tips = TipScheduler.fromURL(url);
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, executor);
+    }
     private CompletableFuture<Void> setKnockback() {
         return CompletableFuture.runAsync(() -> {
             log.info("Kb Numbers: ");
@@ -267,5 +285,9 @@ public class Main extends JavaPlugin {
     }
     public ProtocolManager getProtocolManager() {
         return (protocolManager != null) ? protocolManager : ProtocolLibrary.getProtocolManager();
+    }
+
+    public TipScheduler getTips() {
+        return tips;
     }
 }

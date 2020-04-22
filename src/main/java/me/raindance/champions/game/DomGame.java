@@ -8,7 +8,6 @@ import com.podcrash.api.mc.game.objects.objectives.*;
 import com.podcrash.api.mc.time.TimeHandler;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import me.raindance.champions.ongoing.ConquestTips;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
@@ -24,7 +23,6 @@ public class DomGame extends Game {
 
 
     private DomScoreboard scoreboard;
-    private String actualWorld;
 
     private StarBuff starBuff;
     public DomGame(int id, String name) {
@@ -36,8 +34,6 @@ public class DomGame extends Game {
         this.mines = new ArrayList<>();
 
         this.starBuff = new StarBuff(this);
-
-        TimeHandler.repeatedTimeSeconds(30, 1, new ConquestTips(this));
     }
 
     @Override

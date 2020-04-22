@@ -24,6 +24,7 @@ import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
 import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TipScheduler;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
 import me.raindance.champions.Main;
@@ -37,7 +38,6 @@ import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.TogglePassive;
-import me.raindance.champions.ongoing.ConquestTips;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemFrame;
@@ -88,9 +88,28 @@ public class DomGameListener extends ListenerBase {
         event.setArmorValue(championsVictim.getArmorValue());
     }
 
+
+    @EventHandler
+    public void stateListener(GameStateEvent e) {
+        TipScheduler scheduler = Main.getInstance().getTips();
+        Pluginizer.getLogger().info("state change");
+        if(scheduler == null)
+            return;
+
+        Pluginizer.getLogger().info("state change");
+        
+        switch (e.getState()) {
+            case LOBBY:
+                scheduler.run(30 * 20, 0);
+                break;
+            case STARTED:
+                scheduler.reset();
+                break;
+        }
+    }
     @EventHandler(priority = EventPriority.HIGH)
     public void filterDeathCauses(DeathApplyEvent e) {
-
+        //wat
     }
 
     @EventHandler(priority = EventPriority.HIGH)
