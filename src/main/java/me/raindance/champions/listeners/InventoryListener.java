@@ -11,6 +11,8 @@ import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.game.TeamEnum;
 import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.mc.time.resources.TimeResource;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.InventoryUtil;
 import com.podcrash.api.mc.util.MathUtil;
@@ -24,12 +26,9 @@ import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.enums.SkillType;
 import com.podcrash.api.mc.sound.SoundPlayer;
-import net.minecraft.server.v1_8_R3.InventoryUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,8 +42,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -321,9 +320,33 @@ public class InventoryListener extends ListenerBase {
         }
     }
 
+    private boolean isMoving(Entity p, Location previousLocation) {
+        Location currentLocation = p.getLocation();
+        //Vector currentDirection = currentLocation.getDirection().normalize();
+        //Vector previousDirection = previousLocation.getDirection().normalize();
+        return (BlockUtil.get2dDistanceSquared(currentLocation.toVector(), previousLocation.toVector()) > 4);
+    }
+
     @EventHandler
     public void onOpen(InventoryOpenEvent e) {
         if (isInvincibleMenu(e.getInventory())) DamageApplier.addInvincibleEntity(e.getPlayer());
+
+        TimeHandler.repeatedTime(5, 0, new TimeResource() {
+            Location previousLocation = e.getPlayer().getLocation();
+            @Override
+            public void task() { }
+
+            @Override
+            public boolean cancel() {
+                return isMoving(e.getPlayer(), previousLocation) ||
+                        e.getPlayer().getOpenInventory().getType().equals(InventoryType.CRAFTING);
+            }
+
+            @Override
+            public void cleanup() {
+                e.getPlayer().closeInventory();
+            }
+        });
 
         if(lock) return;
         if(!isClassMenu(e.getInventory())) return;
