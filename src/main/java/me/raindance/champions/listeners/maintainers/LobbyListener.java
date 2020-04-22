@@ -79,7 +79,7 @@ public class LobbyListener extends ListenerBase {
                 (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK &&
                         event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK))) { return false;}
         if(!(player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasDisplayName())) return false;
-        if(game.getGameState().equals(GameState.LOBBY) && game.getTimer().isRunning()) {
+        if(game.getGameState().equals(GameState.LOBBY) && game.getTimer().isRunning() && player.getItemInHand().getItemMeta().getDisplayName().contains("Enable Lobby PVP")) {
             player.sendMessage(String.format("%sInvicta> %sThis function is disabled while the game is starting.", ChatColor.BLUE, ChatColor.GRAY));
             return false;
         }
@@ -94,7 +94,9 @@ public class LobbyListener extends ListenerBase {
         }
         String itemName = event.getItem().getItemMeta().getDisplayName();
 
-        if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
-        event.setCancelled(true);
+        if(itemName.contains("Enable Lobby PVP")) {
+            enableGameLobbyPVP(user);
+            event.setCancelled(true);
+        }
     }
 }
