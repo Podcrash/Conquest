@@ -10,15 +10,15 @@ import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.inventory.MenuCreator;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.SkillInfo;
-import me.raindance.champions.kits.enums.SkillType;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,11 +33,14 @@ public class EconomyListener extends ListenerBase {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void earn(PayEvent e) {
+        if(e.isCancelled())
+            return;
         Game game = GameManager.getGame();
         double money = e.getMoneys();
-        if(money < 0) return;
+        if (money < 0)
+            return;
         if(game != null && game.getGameState() == GameState.STARTED) {
             game.addReward(e.getPlayer(), e.getMoneys());
         }
