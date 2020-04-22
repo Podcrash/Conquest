@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DomGame extends Game {
+
     private List<CapturePoint> capturePoints;
     private List<Diamond> diamonds;
     private List<Restock> restocks;
@@ -50,11 +51,6 @@ public class DomGame extends Game {
         });
         builder.append("\n ");
         return builder.toString();
-    }
-
-    @Override
-    public int getMaxPlayers() {
-        return 10;
     }
 
     @Override
@@ -123,11 +119,10 @@ public class DomGame extends Game {
     @Override
     public TeamSettings getTeamSettings() {
         TeamSettings.Builder builder = new TeamSettings.Builder();
-        return builder.setCapacity(5)
-            .setMax(5)
-            .setMin(1)
-            .setTeamColors(TeamEnum.RED, TeamEnum.BLUE)
-            .build();
+        return builder.setMax(1)
+                .setMin(1)
+                .setTeamColors(TeamEnum.RED, TeamEnum.BLUE)
+                .build();
     }
 
     public void setCapturePoints(List<CapturePointPojo> capturePoints) {

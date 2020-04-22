@@ -10,10 +10,7 @@ import com.podcrash.api.mc.events.DamageApplyEvent;
 import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
 import com.podcrash.api.mc.events.game.*;
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.game.GameState;
-import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.mc.game.*;
 import com.podcrash.api.mc.game.objects.IObjective;
 import com.podcrash.api.mc.game.objects.ItemObjective;
 import com.podcrash.api.mc.game.objects.WinObjective;
@@ -193,8 +190,10 @@ public class DomGameListener extends ListenerBase {
                     Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
         }
 
+        GameSettings oldSettings = e.getGame().getGameSettings();
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
+        game1.setGameSettings(oldSettings);
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             GameManager.addPlayer(player);
