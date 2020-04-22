@@ -97,9 +97,10 @@ public class DomGameListener extends ListenerBase {
             return;
 
         Pluginizer.getLogger().info("state change");
-        
+
         switch (e.getState()) {
             case LOBBY:
+                scheduler.reset();
                 scheduler.run(30 * 20, 0);
                 break;
             case STARTED:
