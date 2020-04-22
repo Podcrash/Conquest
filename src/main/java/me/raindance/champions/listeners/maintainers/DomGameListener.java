@@ -206,17 +206,7 @@ public class DomGameListener extends ListenerBase {
         game.getStarBuff().collectorDiedNotify(victim);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onLobbyDeath(DeathApplyEvent e) {
-        Game game = GameManager.getGame();
-        Player p = e.getPlayer();
 
-        if (game.getGameState() != GameState.LOBBY) return;
-
-        e.setCancelled(true);
-        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
-        champion.resetCooldowns();
-    }
 
 
     @EventHandler

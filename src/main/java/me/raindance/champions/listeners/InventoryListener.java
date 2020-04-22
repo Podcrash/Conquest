@@ -35,6 +35,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -396,44 +397,24 @@ public class InventoryListener extends ListenerBase {
         SoundPlayer.sendSound(newPlayer.getPlayer(), "random.levelup", 0.75F, 63);
     }
 
-    private void enableGameLobbyPVP(Player p) {
-        Game game = GameManager.getGame();
-
-        DamageApplier.removeInvincibleEntity(p);
-        game.addPlayerLobbyPVPing(p);
-
-        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
-        ChampionsPlayerManager.getInstance().removeChampionsPlayer(champion);
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(champion);
-
-        game.updateLobbyInventory(p);
-        SoundPlayer.sendSound(p, "random.pop", 1F, 63);
-    }
-
-    private boolean shouldUse(PlayerInteractEvent event) {
-        Game game = GameManager.getGame();
-        Player player = event.getPlayer();
-        if((player.getItemInHand().getType().equals(Material.AIR) ||
-                game.getGameState().equals(GameState.STARTED) ||
-                (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK &&
-                event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK))) { return false;}
-        if(!(player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasDisplayName())) return false;
-        if(game.getGameState().equals(GameState.LOBBY) && game.getTimer().isRunning()) {
-            player.sendMessage(String.format("%sInvicta> %sThis function is disabled while the game is starting.", ChatColor.BLUE, ChatColor.GRAY));
-            return false;
-        }
-        return true;
-    }
-
+    /*
+    //Handle the f6 + esc bug
     @EventHandler
-    public void lobbyItemUse(PlayerInteractEvent event) {
-        Player user = event.getPlayer();
-        if(!shouldUse(event)) {
-            return;
+    public void onPlayerMove(PlayerMoveEvent event) {
+
+        Inventory inv = event.getPlayer().getOpenInventory().getTopInventory();
+
+        //If they were made invincible when opening the inventory, remove their invincibility
+        if (isInvincibleMenu(inv)
+                && (GameManager.getGame().getPlayersLobbyPVPing().contains(event.getPlayer()) || GameManager.getGame().getGameState().equals(GameState.STARTED))) {
+            DamageApplier.removeInvincibleEntity(event.getPlayer());
         }
-        String itemName = event.getItem().getItemMeta().getDisplayName();
 
-        if(itemName.contains("Enable Lobby PVP")) enableGameLobbyPVP(user);
+        //If the inventory was in one of these, close their inv
+        //isKitSelectMenu is not included; it would harm QoL of playing normally (can only right click eTables when completely still)
+        if (isClassMenu(inv) || isConfirmationMenu(inv) || isBuildMenu(inv)) {
+                event.getPlayer().closeInventory();
+        }
     }
-
+    */
 }
