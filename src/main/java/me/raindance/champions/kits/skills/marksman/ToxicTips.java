@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 
 @SkillMetadata(id = 510, skillType = SkillType.Marksman, invType = InvType.SECONDARY_PASSIVE)
 public class ToxicTips extends Passive {
-    private final int duration = 4;
+    private final int duration = 3;
 
     public ToxicTips() {
         super();

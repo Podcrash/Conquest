@@ -75,7 +75,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         List<Player> players = BlockUtil.getPlayersInArea(location, 6, getPlayers());
         for(Player p : players) {
             if(!isAlly(p) || p != getPlayer()) continue;
-            StatusApplier.getOrNew(p).applyStatus(Status.FIRE_RESISTANCE, 1, 4);
+            StatusApplier.getOrNew(p).applyStatus(Status.FIRE_RESISTANCE, 1, 4, false, true);
         }
     }
 
@@ -92,7 +92,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
         ItemMeta meta = item.getItemStack().getItemMeta();
         meta.setDisplayName(NAME + item.getEntityId());
         item.getItemStack().setItemMeta(meta);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, item::remove, 10);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.instance, item::remove, 25);
     }
     @Override
     public void task() {
@@ -111,6 +111,7 @@ public class MoltenCore extends TogglePassive implements IEnergy, TimeResource, 
     }
     @Override
     public void cleanup() {
+
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
         }

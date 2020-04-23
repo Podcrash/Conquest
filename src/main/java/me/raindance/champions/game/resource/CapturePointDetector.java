@@ -16,7 +16,7 @@ import java.util.*;
 public final class CapturePointDetector extends GameResource {
     private final CapturePoint[] capturePoints;
     private final boolean[] playersCurrentlyIn;
-    private final int[] currentlyCapturing;
+    private boolean bold;
     private List<Player> firstPlayerToCapture;
     private DomScoreboard scoreboard;
 
@@ -58,10 +58,7 @@ public final class CapturePointDetector extends GameResource {
         red = getGame().getTeam(0).getTeamEnum();
         blue = getGame().getTeam(1).getTeamEnum();
 
-        currentlyCapturing = new int[capturePoints.length];
-        for (int i = 0; i < currentlyCapturing.length; i++) {
-            currentlyCapturing[i] = 0;
-        }
+        this.bold = false;
     }
 
     public CapturePoint[] getCapturePoints() {
@@ -128,23 +125,14 @@ public final class CapturePointDetector extends GameResource {
         int times = teamToColor.get(i);
         TeamEnum team = null;
         if(times > 0){
-            if (currentlyCapturing[i] <= 0) currentlyCapturing[i] = 1; //If the point is starting to be captured, BOLD the name
-            scoreboard.updateCurrentlyInCPoint(red, capturePoint, currentlyCapturing[i] == 1);
-            currentlyCapturing[i] %= 2; //Mod to wrap
-            currentlyCapturing[i]++; //Increment the bold counter
-
+            scoreboard.updateCurrentlyInCPoint(red, capturePoint, bold);
             team = capturePoint.capture(red.getName(), times);
         }else if(times < 0){
-            if (currentlyCapturing[i] >= 0) currentlyCapturing[i] = -1;
-            scoreboard.updateCurrentlyInCPoint(blue, capturePoint, currentlyCapturing[i] == -1);
-            if (currentlyCapturing[i] == -2) currentlyCapturing[i] = 0;
-            currentlyCapturing[i]--; //decrement the bold counter
-
+            scoreboard.updateCurrentlyInCPoint(blue, capturePoint, bold);
             team = capturePoint.capture(blue.getName(), times * -1);
         }else {
             if(capturePoint.getTeamColor() == TeamEnum.WHITE && capturePoint.isFull()) return;
             if(!playersCurrentlyIn[i]) {
-                currentlyCapturing[i] = 0;
                 scoreboard.updateCurrentlyInCPoint(null, capturePoint, false);
                 capturePoint.restoreCapture();
             }
@@ -154,6 +142,7 @@ public final class CapturePointDetector extends GameResource {
     }
     @Override
     public void task() {
+        bold = !bold;
         for(int i = 0; i < capturePoints.length; i++) {
             findPlayerInCap(i);
             capture(i);

@@ -28,7 +28,7 @@ public class Rogue extends ChampionsPlayer {
 
     @Override
     public int getHP() {
-        return 40;
+        return 35;
     }
 
     @Override

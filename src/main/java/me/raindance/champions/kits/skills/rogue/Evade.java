@@ -34,7 +34,8 @@ import java.util.List;
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
     private boolean isEvading = false;
     private long time;
-    private int charges = 3;
+    private int charges = 2;
+    private int chargeCooldown = 5;
 
     @Override
     public void task() {
@@ -53,7 +54,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
     @Override
     public void start() {
-        runAsync(75, 0);
+        runAsync(chargeCooldown * 20, 0);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
 
     @Override
     public int getMaxCharges() {
-        return 3;
+        return 2;
     }
 
     private boolean hasCharges() {
@@ -90,7 +91,8 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
         if (hasCharges()) {
             time = System.currentTimeMillis();
             isEvading = true;
-            getPlayer().sendMessage(getUsedMessage());
+            getPlayer().sendMessage(String.format("%sSkill> %sYou prepared to %s%s%s.",
+                    ChatColor.BLUE, ChatColor.GRAY, ChatColor.GREEN, getName(), ChatColor.GRAY));
             TimeHandler.repeatedTimeAsync(1, 0, new ActiveEvade());
         } else this.getPlayer().sendMessage(getNoChargeMessage());
     }

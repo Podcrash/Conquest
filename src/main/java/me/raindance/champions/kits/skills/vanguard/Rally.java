@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 @SkillMetadata(id = 806, skillType = SkillType.Vanguard, invType = InvType.DROP)
 public class Rally extends Drop implements ICooldown {
+    private final double radiusSquared = 5 * 5;
     @Override
     public float getCooldown() {
         return 12;
@@ -40,7 +41,7 @@ public class Rally extends Drop implements ICooldown {
             if(!isAlly(other)) continue;
             Location otherLoc = other.getLocation();
             double distSquared = currentLoc.distanceSquared(otherLoc);
-            if(distSquared > 16D) continue;
+            if(distSquared > radiusSquared) continue;
             StatusApplier.getOrNew(other).applyStatus(Status.SPEED, 5, 1, true, true);
         }
         return true;

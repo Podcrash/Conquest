@@ -122,44 +122,45 @@ public class ChampionsInventory {
         return classItemList;
     }
 
-    static void setHotBar(Inventory inventory, SkillType skillType) {
-        ChampionsItem[] itemArray;
+    public static ChampionsItem[] getDefaultHotbar(SkillType skillType) {
         switch (skillType) {
             //they won't be merged just in case for easy access
             case Warden:
-                itemArray = new ChampionsItem[]{ChampionsItem.WARDEN_SWORD, ChampionsItem.WARDEN_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[]{ChampionsItem.WARDEN_SWORD, ChampionsItem.WARDEN_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Vanguard:
-                itemArray = new ChampionsItem[] {ChampionsItem.VANGUARD_SHOVEL, ChampionsItem.VANGUARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.VANGUARD_SHOVEL, ChampionsItem.VANGUARD_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Berserker:
-                itemArray = new ChampionsItem[] {ChampionsItem.BERSERKER_AXE, ChampionsItem.BREAD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.BERSERKER_AXE, ChampionsItem.BREAD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Duelist:
-                itemArray = new ChampionsItem[] {ChampionsItem.DUELIST_SWORD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.DUELIST_SWORD, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Marksman:
-                itemArray = new ChampionsItem[] {ChampionsItem.MARKSMAN_SWORD, ChampionsItem.MARKSMAN_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MARKSMAN_ARROWS};
-                break;
+                return new ChampionsItem[] {ChampionsItem.MARKSMAN_SWORD, ChampionsItem.MARKSMAN_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MARKSMAN_ARROWS};
             case Hunter:
-                itemArray = new ChampionsItem[] {ChampionsItem.HUNTER_SWORD, ChampionsItem.HUNTER_AXE, ChampionsItem.HUNTER_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.HUNTER_ARROWS};
-                break;
+                return new ChampionsItem[] {ChampionsItem.HUNTER_SWORD, ChampionsItem.HUNTER_AXE, ChampionsItem.HUNTER_BOW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.BEAR_TRAP, ChampionsItem.HUNTER_ARROWS};
             case Thief:
-                itemArray = new ChampionsItem[] {ChampionsItem.THIEF_SWORD, ChampionsItem.THIEF_AXE, ChampionsItem.THIEF_BOW, ChampionsItem.THIEF_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB, ChampionsItem.ELIXIR};
-                break;
+                return new ChampionsItem[] {ChampionsItem.THIEF_SWORD, ChampionsItem.THIEF_AXE, ChampionsItem.THIEF_BOW, ChampionsItem.THIEF_ARROWS, ChampionsItem.STUN_CHARGE, ChampionsItem.COBWEB, ChampionsItem.SMOKE_BOMB, ChampionsItem.ELIXIR};
             case Rogue:
-                itemArray = new ChampionsItem[] {ChampionsItem.ROGUE_SWORD, ChampionsItem.ROGUE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.ROGUE_SWORD, ChampionsItem.ROGUE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Druid:
-                itemArray = new ChampionsItem[] {ChampionsItem.LIFE_SWORD, ChampionsItem.LIFE_SHOVEL, ChampionsItem.LIFE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.LIFE_SWORD, ChampionsItem.LIFE_SHOVEL, ChampionsItem.LIFE_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             case Sorcerer:
-                itemArray = new ChampionsItem[] {ChampionsItem.SPELL_SWORD, ChampionsItem.SPELL_SHOVEL, ChampionsItem.SPELL_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
-                break;
+                return new ChampionsItem[] {ChampionsItem.SPELL_SWORD, ChampionsItem.SPELL_SHOVEL, ChampionsItem.SPELL_AXE, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW, ChampionsItem.MUSHROOM_STEW};
             default:
                 throw new IllegalStateException("Unexpected value: " + skillType);
         }
+    }
 
+    public static int[] getDefaultHotbarIDs(SkillType skillType) {
+        ChampionsItem[] items = getDefaultHotbar(skillType);
+        int[] ids = new int[items.length];
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = items[i].getSlotID();
+        }
+        return ids;
+    }
+
+    static void setHotBar(Inventory inventory, SkillType skillType) {
+        ChampionsItem[] itemArray = getDefaultHotbar(skillType);
         for(int i = 0; i < itemArray.length; i++) {
             ChampionsItem id = itemArray[i];
             inventory.setItem(i, id.toItemStack());

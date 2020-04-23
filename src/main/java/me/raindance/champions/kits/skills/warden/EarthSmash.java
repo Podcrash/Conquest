@@ -20,6 +20,7 @@ import java.util.List;
 
 @SkillMetadata(id = 905, skillType = SkillType.Warden, invType = InvType.SWORD)
 public class EarthSmash extends Instant implements ICooldown {
+    private double radiusSquared = 4.5 * 4.5;
     @Override
     public float getCooldown() {
         return 10;
@@ -38,10 +39,10 @@ public class EarthSmash extends Instant implements ICooldown {
         for(LivingEntity enemy : players) {
             if(getPlayer() == enemy) continue;
             double dist = location.distanceSquared(enemy.getLocation());
-            if(dist > 16) continue;
+            if(dist > radiusSquared) continue;
             pound(location, enemy, 1.33333D - ((16D - dist)/16D));
         }
-        ParticleGenerator.generateRangeParticles(location, 8, true);
+        ParticleGenerator.generateRangeParticles(location, 8, true, 4);
 
         getPlayer().sendMessage(getUsedMessage());
     }

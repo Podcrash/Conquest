@@ -1,6 +1,7 @@
 package me.raindance.champions.resource;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.podcrash.api.mc.game.GameManager;
 import com.podcrash.api.mc.time.resources.TimeResource;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.events.skill.SkillRechargeEvent;
@@ -59,14 +60,15 @@ public class CooldownResource implements TimeResource {
     @Override
     public void cleanup() {
         if(!skill.hasCooldown()) return;
-        player.sendMessage(skill.getCanUseMessage());
-
-        SkillRechargeEvent recharge = new SkillRechargeEvent(skill);
+        SkillRechargeEvent recharge = new SkillRechargeEvent(skill, player);
         Bukkit.getPluginManager().callEvent(recharge);
 
-        TitleSender.sendTitle(player, TitleSender.emptyTitle());
-        SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
+        if(!recharge.isCancelled()) {
+            player.sendMessage(skill.getCanUseMessage());
+            SoundPlayer.sendSound(player, "note.harp", 0.2f, 160);
+        }
 
+        TitleSender.sendTitle(player, TitleSender.emptyTitle());
     }
 
     @Override

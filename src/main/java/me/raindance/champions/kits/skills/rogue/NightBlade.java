@@ -27,7 +27,7 @@ public class NightBlade extends Passive implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 13;
+        return 5;
     }
 
     @Override

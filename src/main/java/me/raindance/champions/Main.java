@@ -86,6 +86,7 @@ public class Main extends JavaPlugin {
             new Disguiser().disguiserIntercepter();
             new ApplyKitListener(this);
             new EconomyListener(this);
+            new LobbyListener(this);
         }, executor);
     }
     private CompletableFuture<Void> setUpClasses() {

@@ -5,6 +5,7 @@ import com.podcrash.api.db.tables.PlayerTable;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.mc.game.Game;
 import com.podcrash.api.mc.game.GameState;
 import com.podcrash.api.mc.listeners.ListenerBase;
 import com.podcrash.api.plugin.Pluginizer;
@@ -83,13 +84,16 @@ public class PlayerJoinEventTest extends ListenerBase {
             }
         }
         InvFactory.applyLastBuild(player);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null)
+        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null) {
             ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
+            if(!GameManager.getGame().getGameState().equals(GameState.STARTED)) GameManager.getGame().updateLobbyInventory(player);
+        }
     }
 
     @EventHandler
     public void leave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
+        Game game = GameManager.getGame();
         ChampionsPlayerManager cm = ChampionsPlayerManager.getInstance();
         ChampionsPlayer cplayer = cm.getChampionsPlayer(player);
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();

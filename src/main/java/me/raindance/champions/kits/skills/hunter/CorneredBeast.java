@@ -81,7 +81,7 @@ public class CorneredBeast extends Instant implements TimeResource, ICooldown {
 
     @Override
     public void task() {
-        if (System.currentTimeMillis() - getLastUsed() >= selfEffect1000) _active = false;
+        if (System.currentTimeMillis() - getLastUsed() >= selfEffect1000 || getGame().isRespawning(getPlayer())) _active = false;
         WrapperPlayServerWorldParticles particle = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(),
                 EnumWrappers.Particle.REDSTONE, new int[]{255, 255, 255, 0}, 9,
                 rand.nextFloat() / 2f, 0.25f + (rand.nextFloat() - 0.15f), rand.nextFloat() / 2f);

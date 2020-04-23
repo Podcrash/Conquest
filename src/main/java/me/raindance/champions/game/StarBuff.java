@@ -103,11 +103,13 @@ public class StarBuff implements TimeResource {
         TeamEnum oppoTeam = getOppositeTeam(team);
         if(dead) {
             game.increment(oppoTeam, 300);
-            game.broadcast(team.getChatColor() + holder + " lost the buff!");
+            //game.broadcast(team.getChatColor() + holder + " lost the buff!");
+            game.broadcast(String.format("%s%s%s has lost the star!", ChatColor.WHITE, ChatColor.BOLD, holder));
             //alert the players that the collector lost the buff and gave the opposite team the points back
             this.dead = false;
         } else if (game.getGameState() == GameState.STARTED) {
-            game.broadcast(team.getChatColor() + holder + " lost the buff peacefully.");
+            //game.broadcast(team.getChatColor() + holder + " lost the star peacefully.");
+            game.broadcast(String.format("%s%s%s lost the star peacefully.", ChatColor.WHITE, ChatColor.BOLD, holder));
             //alert the players that the collector lost the buff peacefully
         }
         replaceLine(PREFIX + ChatColor.GRAY + " Inactive");

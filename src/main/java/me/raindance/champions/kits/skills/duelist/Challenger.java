@@ -29,7 +29,7 @@ public class Challenger extends Passive implements IPassiveTimer, TimeResource {
         int i = 0;
         Location location = getPlayer().getLocation();
         for(Player player : getGame().getBukkitPlayers()) {
-            if(player == getPlayer()) continue;
+            if(player == getPlayer() || getGame().isRespawning(player) || getGame().isSpectating(player)) continue;
             if(location.distanceSquared(player.getLocation()) > 25) continue;
             i++;
             if(i > 1) {

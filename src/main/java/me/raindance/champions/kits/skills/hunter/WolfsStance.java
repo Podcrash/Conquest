@@ -9,6 +9,7 @@ import com.podcrash.api.mc.location.BoundingBox;
 import com.podcrash.api.mc.location.Coordinate;
 import com.podcrash.api.mc.location.RayTracer;
 import com.podcrash.api.plugin.Pluginizer;
+import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -16,6 +17,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
 import com.podcrash.api.mc.util.EntityUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -33,7 +35,7 @@ import java.util.List;
 public class WolfsStance extends ChargeUp implements IConstruct {
     private final double damage = 4;
     private final int effectTime = 3;
-    private final int hitbox = 3;
+    private final double hitbox = 1.5;
     private CollideBeforeHitGround hitGround;
 
 
@@ -47,7 +49,6 @@ public class WolfsStance extends ChargeUp implements IConstruct {
                 if(!(entity instanceof LivingEntity)) continue;
                 if(entity == getPlayer() || isAlly((LivingEntity) entity)) continue;
 
-                if(location.distanceSquared(entity.getLocation()) > 15) continue;
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.WOLF_BARK, 0.5f, 1.0f);
                 DamageApplier.damage((LivingEntity) entity, getPlayer(), damage * getCharge(), true);
                 StatusApplier.getOrNew((LivingEntity) entity).applyStatus(Status.SLOW, effectTime, 1);
@@ -135,7 +136,9 @@ public class WolfsStance extends ChargeUp implements IConstruct {
         if (vector.getY() > yMax) vector.setY(yMax);
         if (EntityUtil.onGround(getPlayer())) vector.setY(vector.getY() + 0.2);
         getPlayer().setVelocity(vector);
-        this.hitGround.run();
+        Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
+            this.hitGround.run();
+        }, 3L);
     }
 
     @Override
