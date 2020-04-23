@@ -344,12 +344,15 @@ public class InventoryListener extends ListenerBase {
             @Override
             public boolean cancel() {
                 return isMoving(e.getPlayer(), previousLocation) ||
-                        e.getPlayer().getOpenInventory().getType().equals(InventoryType.CRAFTING);
+                        e.getPlayer().getOpenInventory().getType().equals(InventoryType.CRAFTING) ||
+                        !e.getInventory().getTitle().equalsIgnoreCase(e.getPlayer().getOpenInventory().getTitle());
             }
 
             @Override
             public void cleanup() {
-                e.getPlayer().closeInventory();
+                if (e.getInventory().getTitle().equalsIgnoreCase(e.getPlayer().getOpenInventory().getTitle())) {
+                    e.getPlayer().closeInventory();
+                }
             }
         });
 
