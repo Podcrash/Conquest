@@ -6,6 +6,7 @@ import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.particle.ParticleGenerator;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.mc.events.DeathApplyEvent;
 import com.podcrash.api.mc.sound.SoundPlayer;
 import com.podcrash.api.mc.sound.SoundWrapper;
 import com.podcrash.api.mc.time.TimeHandler;
@@ -21,12 +22,13 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 
 import java.util.Random;
 
-//@SkillMetadata(id = 810, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
+@SkillMetadata(id = 810, skillType = SkillType.Vanguard, invType = InvType.SHOVEL)
 public class Aftershock extends Instant implements ICooldown, TimeResource {
     private float cooldown = 13;
     private double chargeTime = 3;          // How long it takes to charge, in seconds.
@@ -105,5 +107,10 @@ public class Aftershock extends Instant implements ICooldown, TimeResource {
         public boolean cancel() {
             return (!isCharging);
         }
+    }
+
+    @Override
+    public void destroy() {
+        isCharging = false;
     }
 }

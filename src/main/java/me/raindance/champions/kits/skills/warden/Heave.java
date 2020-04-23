@@ -3,6 +3,7 @@ package me.raindance.champions.kits.skills.warden;
 import com.abstractpackets.packetwrapper.WrapperPlayClientSteerVehicle;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketEvent;
+import com.podcrash.api.mc.damage.DamageApplier;
 import com.podcrash.api.mc.effect.status.Status;
 import com.podcrash.api.mc.effect.status.StatusApplier;
 import com.podcrash.api.mc.events.DamageApplyEvent;
@@ -28,10 +29,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
-//@SkillMetadata(id = 910, skillType = SkillType.Warden, invType = InvType.SWORD)
-public class Hurl extends Interaction implements TimeResource, IInjector, Listener {
+@SkillMetadata(id = 910, skillType = SkillType.Warden, invType = InvType.SWORD)
+public class Heave extends Interaction implements TimeResource, IInjector, Listener {
 
-    private float multiplier = 1f;
+    private float multiplier = 1.2f;
     private double victimYCap = 0.5;
 
     private boolean use = false;
@@ -65,7 +66,7 @@ public class Hurl extends Interaction implements TimeResource, IInjector, Listen
     public void cleanup() {
         if(victim.leaveVehicle()) {
             if(stop()) {
-                getPlayer().sendMessage(String.format("%s%s> %sYou cannot grab %s%s %swhile debuffed.", ChatColor.BLUE, getChampionsPlayer().getName(),
+                getPlayer().sendMessage(String.format("%s%s> %sYou let go of %s%s %sbecause you were debuffed.", ChatColor.BLUE, getChampionsPlayer().getName(),
                         ChatColor.GRAY,
                         ChatColor.YELLOW,
                         victim.getName(),
@@ -137,6 +138,7 @@ public class Hurl extends Interaction implements TimeResource, IInjector, Listen
     public void doSkill(LivingEntity clickedEntity) {
         if(!onCooldown() && !use) {
             victim = clickedEntity;
+            if (DamageApplier.getInvincibleEntities().contains(victim)) return;
             victim.playEffect(EntityEffect.HURT);
             ensurePassenger(clickedEntity);
             this.lastUsage = System.currentTimeMillis();

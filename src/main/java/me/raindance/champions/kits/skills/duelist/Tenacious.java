@@ -8,7 +8,7 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
-//@SkillMetadata(id = 310, skillType = SkillType.Duelist, invType = InvType.PRIMARY_PASSIVE)
+@SkillMetadata(id = 310, skillType = SkillType.Duelist, invType = InvType.PRIMARY_PASSIVE)
 public class Tenacious extends Passive {
     @Override
     public String getName() {

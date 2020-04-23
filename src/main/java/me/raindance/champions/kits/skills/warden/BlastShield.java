@@ -10,7 +10,7 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 
-//@SkillMetadata(id = 912, skillType = SkillType.Warden, invType = InvType.SECONDARY_PASSIVE)
+@SkillMetadata(id = 912, skillType = SkillType.Warden, invType = InvType.SECONDARY_PASSIVE)
 public class BlastShield extends Passive {
     private double damageReductionPercent = 0.25;
 

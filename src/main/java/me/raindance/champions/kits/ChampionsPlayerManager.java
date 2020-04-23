@@ -85,10 +85,12 @@ public class ChampionsPlayerManager {
         Main.getInstance().getLogger().info(String.format("%s Unregistering.", cplayer.getPlayer().getName()));
         while (skillIterator.hasNext()) {
             final Skill skill = skillIterator.next();
-            HandlerList.unregisterAll(skill);
-            Main.getInstance().getLogger().info(String.format("%s unregistered from %s", skill.getName(), skill.getPlayer()));
             if (skill instanceof TimeResource) TimeHandler.unregister((TimeResource) skill);
             if (skill instanceof IPassiveTimer) ((IPassiveTimer) skill).stop();
+            skill.destroy();
+            HandlerList.unregisterAll(skill);
+            Main.getInstance().getLogger().info(String.format("%s unregistered from %s", skill.getName(), skill.getPlayer()));
+
         }
         clearPacketListeners(cplayer);
         cplayer.setUsesEnergy(false);

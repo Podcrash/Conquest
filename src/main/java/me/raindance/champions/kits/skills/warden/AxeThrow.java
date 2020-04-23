@@ -30,11 +30,11 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-//@SkillMetadata(id = 909, skillType = SkillType.Warden, invType = InvType.AXE)
+@SkillMetadata(id = 909, skillType = SkillType.Warden, invType = InvType.AXE)
 public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener {
 
     private float cooldown = 2f;
-    private float veloScale = 1f;
+    private float veloScale = 1.1f;
     private float damage = 8;
     private float duration = 2;
     private String identifier;
@@ -85,13 +85,14 @@ public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener
                                         item.getLocation().clone().add(0, 1, 0).toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 1, 0, 0, 0);
                                 PacketUtil.syncSend(packet, getPlayers());
                                 getPlayer().getInventory().addItem(itemStack);
+                                setLastUsed(System.currentTimeMillis());
                             }
                             item.remove();
                         }
                     });
                 });
         axe.setCustomName(identifier);
-        this.setLastUsed(System.currentTimeMillis());
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -106,6 +107,7 @@ public class AxeThrow extends Instant implements IConstruct, ICooldown, Listener
             SoundPlayer.sendSound(getPlayer(), "random.pop", 1, 63);
             event.setCancelled(true);
             event.getItem().remove();
+            setLastUsed(System.currentTimeMillis());
         }
     }
 

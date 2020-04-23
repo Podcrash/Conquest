@@ -21,7 +21,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-//@SkillMetadata(id = 812, skillType = SkillType.Vanguard, invType = InvType.PRIMARY_PASSIVE)
+@SkillMetadata(id = 812, skillType = SkillType.Vanguard, invType = InvType.PRIMARY_PASSIVE)
 public class Plating extends Passive implements TimeResource, IConstruct {
 
     private Long lastHit;

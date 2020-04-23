@@ -19,7 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-//@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class Gust extends ChargeUp implements IEnergy {
     private final float duration = 4;           //  duration of slow
 

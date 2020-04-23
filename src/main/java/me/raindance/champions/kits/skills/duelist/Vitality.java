@@ -14,6 +14,7 @@ import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ public class Vitality extends Passive implements IPassiveTimer{
     private long timeOfLastCancel;
     private boolean tierTwoEnabled = false;
     private final int tierTwoTime = 60; //SECONDS till tier 2 health boost
+    private boolean shouldEnableTier2 = false;
 
     @Override
     public String getName() {
@@ -33,7 +35,6 @@ public class Vitality extends Passive implements IPassiveTimer{
 
     @Override
     public void init() {
-        start();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -44,20 +45,26 @@ public class Vitality extends Passive implements IPassiveTimer{
 
     @Override
     public void start() {
+        getPlayer().setMaxHealth(20);
         timeOfLastCancel = System.currentTimeMillis();
-        TimeHandler.delayTime(2, () -> {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.HEALTH_BOOST, 10000, 0);
-            getPlayer().setHealth(getPlayer().getMaxHealth());
-        });
+        double health = getPlayer().getHealth();
+        getPlayer().setMaxHealth(22);
+        getPlayer().setHealth(health + 2);
+        shouldEnableTier2 = true;
+
         TimeHandler.delayTime(20 * tierTwoTime, () -> {
             if (System.currentTimeMillis() - timeOfLastCancel < 20 * tierTwoTime) return;
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.HEALTH_BOOST, 10000, 1, true, true);
-            getPlayer().setHealth(getPlayer().getMaxHealth());
+            if (!shouldEnableTier2) return;
+            double health1 = getPlayer().getHealth();
+            getPlayer().setMaxHealth(24);
+            getPlayer().setHealth(health1 + 2);
         });
     }
 
     @Override
     public void stop() {
+        shouldEnableTier2 = false;
+        getPlayer().setMaxHealth(20);
     }
 
     @EventHandler

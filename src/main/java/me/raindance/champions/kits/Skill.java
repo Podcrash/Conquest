@@ -33,6 +33,10 @@ public abstract class Skill implements ISkill, DamageSource {
 
     }
 
+    public void destroy() {
+
+    }
+
     public int getID() {
         return Objects.hash(getName());
     }

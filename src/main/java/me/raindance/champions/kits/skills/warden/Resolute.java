@@ -10,7 +10,7 @@ import me.raindance.champions.kits.skilltypes.Passive;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-//@SkillMetadata(id = 911, skillType = SkillType.Warden, invType = InvType.PRIMARY_PASSIVE)
+@SkillMetadata(id = 911, skillType = SkillType.Warden, invType = InvType.PRIMARY_PASSIVE)
 public class Resolute extends Passive{
 
     private int radius = 6;
