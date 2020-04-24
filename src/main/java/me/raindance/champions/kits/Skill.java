@@ -22,8 +22,9 @@ public abstract class Skill implements ISkill, DamageSource {
     private long lastUsed = 0L;
     public double price = 1500;
 
+    private final Object playerLock;
     public Skill() {
-
+        this.playerLock = new Object();
     }
 
     /**
@@ -117,13 +118,17 @@ public abstract class Skill implements ISkill, DamageSource {
     }
 
     public Player getPlayer() {
-        return Bukkit.getPlayer(playerName);
+        synchronized (playerLock) {
+            return Bukkit.getPlayer(playerName);
+        }
     }
     public ChampionsPlayer getChampionsPlayer() {
         return ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer());
     }
     public void setPlayer(Player player) {
-        this.playerName = player.getName();
+        synchronized (playerLock) {
+            this.playerName = player.getName();
+        }
     }
 
     public long getLastUsed() {

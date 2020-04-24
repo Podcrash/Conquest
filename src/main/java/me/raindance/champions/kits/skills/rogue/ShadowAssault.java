@@ -122,8 +122,6 @@ public class ShadowAssault extends Passive implements IPassiveTimer, TimeResourc
     private void reset() {
         started = -1;
         isReady = false;
-        if (!getGame().isRespawning(getPlayer())) {
-            StatusApplier.getOrNew(getPlayer()).removeStatus(Status.CLOAK);
-        }
+        StatusApplier.getOrNew(getPlayer()).removeStatus(Status.CLOAK);
     }
 }
