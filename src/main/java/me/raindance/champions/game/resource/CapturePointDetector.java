@@ -16,7 +16,7 @@ import java.util.*;
 public final class CapturePointDetector extends GameResource {
     private final CapturePoint[] capturePoints;
     private final boolean[] playersCurrentlyIn;
-    private boolean bold;
+    private final int[] currentlyCapturing;
     private List<Player> firstPlayerToCapture;
     private DomScoreboard scoreboard;
 
@@ -32,7 +32,7 @@ public final class CapturePointDetector extends GameResource {
      * [capturePoint index][x,y,z coordinate][first or second bound]
      */
     private final double[][][] bounds;
-    private final String[] players;
+    //private final String[] players;
 
     public CapturePointDetector(int gameID) {
         super(gameID, 8, 100);
@@ -50,15 +50,18 @@ public final class CapturePointDetector extends GameResource {
                 this.bounds[i][2][b] = cbounds[b].getZ();
             }
         }
-        List<String> names = new ArrayList<>();
+        /*List<String> names = new ArrayList<>();
         for(Player player : getGame().getBukkitPlayers()) names.add(player.getName());
         names.removeIf((name) -> getGame().isSpectating(name));
-        this.players = names.toArray(new String[names.size()]);
+        this.players = names.toArray(new String[names.size()]);*/
         this.scoreboard = ((DomScoreboard) getGame().getGameScoreboard());
         red = getGame().getTeam(0).getTeamEnum();
         blue = getGame().getTeam(1).getTeamEnum();
 
-        this.bold = false;
+        currentlyCapturing = new int[capturePoints.length];
+        for (int i = 0; i < currentlyCapturing.length; i++) {
+            currentlyCapturing[i] = 0;
+        }
     }
 
     public CapturePoint[] getCapturePoints() {
@@ -98,12 +101,13 @@ public final class CapturePointDetector extends GameResource {
      */
     private void findPlayerInCap(int i) {
         boolean foundPlayer = false;
-        for(int p = 0; p < players.length; p++){
-            boolean a = isInBound(i, Bukkit.getPlayer(players[p]));
+        List<Player> players = getGame().getBukkitPlayers();
+        for(int p = 0; p < players.size(); p++){
+            boolean a = isInBound(i, players.get(p));
             if(a) {
-                TeamEnum team = getGame().getTeamEnum(Bukkit.getPlayer(players[p]));
+                TeamEnum team = getGame().getTeamEnum(players.get(p));
                 teamToColor.put(i, teamToColor.get(i) + team.getIntData());
-                firstPlayerToCapture.set(i, Bukkit.getPlayer(players[p]));
+                firstPlayerToCapture.set(i, players.get(p));
                 foundPlayer = true;
             }
         }
@@ -125,14 +129,23 @@ public final class CapturePointDetector extends GameResource {
         int times = teamToColor.get(i);
         TeamEnum team = null;
         if(times > 0){
-            scoreboard.updateCurrentlyInCPoint(red, capturePoint, bold);
+            if (currentlyCapturing[i] <= 0) currentlyCapturing[i] = 1; //If the point is starting to be captured, BOLD the name
+            scoreboard.updateCurrentlyInCPoint(red, capturePoint, currentlyCapturing[i] == 1);
+            currentlyCapturing[i] %= 2; //Mod to wrap
+            currentlyCapturing[i]++; //Increment the bold counter
+
             team = capturePoint.capture(red.getName(), times);
         }else if(times < 0){
-            scoreboard.updateCurrentlyInCPoint(blue, capturePoint, bold);
+            if (currentlyCapturing[i] >= 0) currentlyCapturing[i] = -1;
+            scoreboard.updateCurrentlyInCPoint(blue, capturePoint, currentlyCapturing[i] == -1);
+            if (currentlyCapturing[i] == -2) currentlyCapturing[i] = 0;
+            currentlyCapturing[i]--; //decrement the bold counter
+
             team = capturePoint.capture(blue.getName(), times * -1);
         }else {
             if(capturePoint.getTeamColor() == TeamEnum.WHITE && capturePoint.isFull()) return;
             if(!playersCurrentlyIn[i]) {
+                currentlyCapturing[i] = 0;
                 scoreboard.updateCurrentlyInCPoint(null, capturePoint, false);
                 capturePoint.restoreCapture();
             }
@@ -142,7 +155,6 @@ public final class CapturePointDetector extends GameResource {
     }
     @Override
     public void task() {
-        bold = !bold;
         for(int i = 0; i < capturePoints.length; i++) {
             findPlayerInCap(i);
             capture(i);
