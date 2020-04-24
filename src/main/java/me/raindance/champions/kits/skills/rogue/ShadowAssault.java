@@ -88,7 +88,7 @@ public class ShadowAssault extends Passive implements IPassiveTimer, TimeResourc
 
     @Override
     public void task() {
-        if (getPlayer().isSneaking() && !isReady && !getGame().isRespawning(getPlayer())) {
+        if (getPlayer().isSneaking() && !isReady && !getGame().isRespawning(getPlayer()) && !getGame().isSpectating(getPlayer())) {
             if (started == -1) {
                 started = System.currentTimeMillis();
             }
