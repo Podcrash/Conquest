@@ -31,6 +31,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
     private final float duration = 5;
     private int energyUsage = 55;
     private final double[][] pleaseLoad = new double[60][2];
+    private double radius = 7;
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
@@ -53,7 +54,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
             final double add = pp/length;
             for(int i = 0; i < length; i++) {
                 double theta = (i * add);
-                theta = (theta/pp) * 5;
+                theta = (theta/pp) * radius;
                 pleaseLoad[i][0] = theta * (float) Math.cos(i);
                 pleaseLoad[i][1] = theta * (float) Math.sin(i);
             }
@@ -63,7 +64,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
 
     private void use(Player victim) {
         if(victim == getPlayer() || isAlly(victim)) return;
-        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
+        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > Math.pow(duration, 2)) return;
 
         StatusApplier.getOrNew(victim).applyStatus(Status.POISON, duration, 1, true);
         StatusApplier.getOrNew(victim).applyStatus(Status.WEAKNESS, duration, 0, false);
@@ -75,7 +76,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
             private int a = 0;
             @Override
             public void task() {
-                for(int i = a; i < 5; i++) {
+                for(int i = a; i < radius; i++) {
                     playerLocation.getWorld().playSound(playerLocation, Sound.FIZZ, 1.5f, 1f + (float) ((i/10D % (Math.PI / 2d)) / (Math.PI / 2)));
                 }
                 a++;

@@ -49,10 +49,10 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     //TODO: if it doesn't loop anymore, delete this.
     private List<Player> players;
 
-    private double radius = 2.5;
-    private double damage = 8;
+    private int radius = 4;
+    private double damage = 10;
     private double speedFactor = 0.35;
-    private float rootDuration = 2F;
+    private float rootDuration = 2.5F;
 
 
     @Override
@@ -152,47 +152,17 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     private void explode() {
         spawnVines(currentPointer);
         sendSpecialEffects(currentPointer);
-        for(Player player : players) {
-            //if the player is less than 1.5 blocks away from the explosion
-            //or is an enemy
-            //or is the user
+
+        for (Player player : BlockUtil.getPlayersInArea(currentPointer, radius, getPlayers())) {
             if(isAlly(player) || player == getPlayer()) continue;
-            if(!canTrap(currentPointer, player.getLocation())) continue;
-            //do effects
             StatusApplier.getOrNew(player).applyStatus(Status.ROOTED, rootDuration, 0);
             DamageApplier.damage(player, getPlayer(), damage, this, false);
         }
+
+        ParticleGenerator.generateRangeParticles(currentPointer, radius, true, radius);
     }
 
-    /**
-     * TODO: MOVE TO LOCATION UTIL SOMEHOW
-     * Check to see if any player is above a certain point within a certain range
-     * @param currentPointer
-     * @param victimLoc
-     * @return
-     */
-    private boolean canTrap(Location currentPointer, Location victimLoc) {
-        double x1 = currentPointer.getX() - radius;
-        double x2 = currentPointer.getX() + radius;
 
-        double z1 = currentPointer.getZ() - radius;
-        double z2 = currentPointer.getZ() + radius;
-
-        double y1 = currentPointer.getY();
-        double y2 = y1 + 3;
-
-        double testX = victimLoc.getX();
-        double testY = victimLoc.getY();
-        double testZ = victimLoc.getZ();
-
-        //3 blocks is the safe grace.
-        if(y1 <= testY && testY <= y2) {
-            if(x1 <= testX && testX <= x2) {
-                return z1 <= testZ && testZ <= z2;
-            }
-        }
-        return false;
-    }
     @Override
     public void task() {
         useEnergy(getEnergyUsageTicks());

@@ -190,8 +190,13 @@ public class InventoryListener extends ListenerBase {
             //if the player is editing his hotbar, don't cancel it.
             if(0 <= slot && slot < 9) cancel = false;
             ClickType type = event.getClick();
-            if(type == ClickType.RIGHT || type == ClickType.SHIFT_RIGHT || type == ClickType.SHIFT_LEFT) cancel = true;
+            if(type != ClickType.LEFT) cancel = true;
         event.setCancelled(cancel);
+    }
+
+    @EventHandler
+    public void onDrag(InventoryDragEvent event) {
+        event.setCancelled(true);
     }
 
     private void openGeneralMenu(Player player) {
@@ -339,12 +344,15 @@ public class InventoryListener extends ListenerBase {
             @Override
             public boolean cancel() {
                 return isMoving(e.getPlayer(), previousLocation) ||
-                        e.getPlayer().getOpenInventory().getType().equals(InventoryType.CRAFTING);
+                        e.getPlayer().getOpenInventory().getType().equals(InventoryType.CRAFTING) ||
+                        !e.getInventory().getTitle().equalsIgnoreCase(e.getPlayer().getOpenInventory().getTitle());
             }
 
             @Override
             public void cleanup() {
-                e.getPlayer().closeInventory();
+                if (e.getInventory().getTitle().equalsIgnoreCase(e.getPlayer().getOpenInventory().getTitle())) {
+                    e.getPlayer().closeInventory();
+                }
             }
         });
 
