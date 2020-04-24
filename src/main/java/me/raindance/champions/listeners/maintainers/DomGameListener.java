@@ -24,6 +24,7 @@ import com.podcrash.api.mc.time.TimeHandler;
 import com.podcrash.api.mc.time.resources.TipScheduler;
 import com.podcrash.api.mc.util.VectorUtil;
 import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.game.StarBuff;
@@ -184,12 +185,13 @@ public class DomGameListener extends ListenerBase {
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
         IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
-        for(Player player : e.getGame().getBukkitPlayers()) {
-            if(GameManager.isSpectating(player)) break;
-            player.sendMessage(String.format("%s%sYou earned %s %s!\n ",
-                    Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
+        if (!PodcrashSpigot.getInstance().hasPPLOwner()) {
+            for(Player player : e.getGame().getBukkitPlayers()) {
+                if(GameManager.isSpectating(player)) break;
+                player.sendMessage(String.format("%s%sYou earned %s %s!\n ",
+                        Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
+            }
         }
-
         GameSettings oldSettings = e.getGame().getGameSettings();
         GameManager.destroyCurrentGame();
         GameManager.createGame(game1);
