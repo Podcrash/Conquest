@@ -120,7 +120,7 @@ public class DomGame extends Game {
     public TeamSettings getTeamSettings() {
         TeamSettings.Builder builder = new TeamSettings.Builder();
         return builder.setMax(5)
-                .setMin(4)
+                .setMin(3)
                 .setTeamColors(TeamEnum.RED, TeamEnum.BLUE)
                 .build();
     }
