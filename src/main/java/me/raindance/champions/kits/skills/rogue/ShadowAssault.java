@@ -66,9 +66,11 @@ public class ShadowAssault extends Passive implements IPassiveTimer, TimeResourc
             Bukkit.getScheduler().runTask(Main.instance, this::reset);
         }
         if(event.getVictim().equals(getPlayer())) {
-            WrapperPlayServerWorldParticles startEffect = ParticleGenerator.createParticle(
-                    getPlayer().getEyeLocation().toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 5, 0, 0, 0);
-            PacketUtil.syncSend(startEffect, GameManager.getGame().getBukkitPlayers());
+            if (getPlayer().isSneaking()) {
+                WrapperPlayServerWorldParticles startEffect = ParticleGenerator.createParticle(
+                        getPlayer().getEyeLocation().toVector(), EnumWrappers.Particle.EXPLOSION_NORMAL, 5, 0, 0, 0);
+                PacketUtil.syncSend(startEffect, GameManager.getGame().getBukkitPlayers());
+            }
             Bukkit.getScheduler().runTask(Main.instance, this::reset);
         }
 
@@ -120,6 +122,8 @@ public class ShadowAssault extends Passive implements IPassiveTimer, TimeResourc
     private void reset() {
         started = -1;
         isReady = false;
-        StatusApplier.getOrNew(getPlayer()).removeStatus(Status.CLOAK);
+        if (!getGame().isRespawning(getPlayer())) {
+            StatusApplier.getOrNew(getPlayer()).removeStatus(Status.CLOAK);
+        }
     }
 }
