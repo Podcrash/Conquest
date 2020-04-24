@@ -2,9 +2,6 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.MapTable;
 import com.podcrash.api.mc.damage.DamageQueue;
 import com.podcrash.api.mc.damage.HitDetectionInjector;
 import com.podcrash.api.mc.disguise.Disguiser;
@@ -15,6 +12,7 @@ import com.podcrash.api.mc.time.resources.TipScheduler;
 import com.podcrash.api.mc.util.ChatUtil;
 import com.podcrash.api.mc.util.ConfigUtil;
 import com.podcrash.api.mc.util.PlayerCache;
+import com.podcrash.api.plugin.MessageListener;
 import com.podcrash.api.plugin.Pluginizer;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.db.redis.Communicator;
@@ -30,18 +28,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.SpigotConfig;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -67,12 +61,6 @@ public class Main extends JavaPlugin {
     //configurators
     private ExecutorService executor = Executors.newFixedThreadPool(8);
 
-    private CompletableFuture<Void> registerMessengers() {
-        return CompletableFuture.runAsync(() -> {
-            getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL_NAME);
-            getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_NAME, new MessageListener(CHANNEL_NAME));
-        }, executor);
-    }
     private CompletableFuture<Void> registerListeners() {
         return CompletableFuture.runAsync(() -> {
             new DomRewardsListener(this);
@@ -137,8 +125,17 @@ public class Main extends JavaPlugin {
         }
         //set config stuff
         PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
+        String url = "https://docs.google.com/document/d/1QVL8m7C5IH-Hk36IXE8j2bKR6loJr7eb-yhtB8Vv2OI/export?format=txt";
+        try {
+            InputStreamReader stream = new InputStreamReader(new URL(url).openConnection().getInputStream());
+            try (BufferedReader reader = new BufferedReader(stream)) {
+                spigot.registerConfigurator("skilldescriptions", reader);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         spigot.registerConfigurator("kits");
-        spigot.registerConfigurator("skilldescriptions");
 
         CompletableFuture kb = setKnockback();
         CompletableFuture customEnchantment = registerCustomEnchant();
@@ -147,7 +144,6 @@ public class Main extends JavaPlugin {
         CompletableFuture injectors = registerInjectors();
         CompletableFuture setups = setUp();
         CompletableFuture setupClasses = setUpClasses();
-        CompletableFuture msgs = registerMessengers();
         CompletableFuture tips = registerTips();
 
         spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
@@ -167,7 +163,6 @@ public class Main extends JavaPlugin {
             injectors,
             setups,
             setupClasses,
-            msgs,
             tips
         );
 

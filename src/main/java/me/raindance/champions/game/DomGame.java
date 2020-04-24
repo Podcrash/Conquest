@@ -119,8 +119,8 @@ public class DomGame extends Game {
     @Override
     public TeamSettings getTeamSettings() {
         TeamSettings.Builder builder = new TeamSettings.Builder();
-        return builder.setMax(1)
-                .setMin(1)
+        return builder.setMax(5)
+                .setMin(4)
                 .setTeamColors(TeamEnum.RED, TeamEnum.BLUE)
                 .build();
     }
