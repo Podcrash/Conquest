@@ -31,7 +31,7 @@ import java.util.List;
  * Cooldown: 5 seconds.
  */
 @SkillMetadata(id = 606, skillType = SkillType.Rogue, invType = InvType.SECONDARY_PASSIVE)
-public class NightBlade extends Passive implements ICooldown {
+public class Predator extends Passive implements ICooldown {
     private float duration = 3;
     private int radius = 5;
 
