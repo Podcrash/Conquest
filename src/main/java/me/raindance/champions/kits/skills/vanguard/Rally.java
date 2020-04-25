@@ -38,7 +38,8 @@ public class Rally extends Drop implements ICooldown {
         Location currentLoc = getPlayer().getLocation();
         SoundPlayer.sendSound(currentLoc, "mob.horse.gallop", 0.75F, 1);
         for(Player other : getPlayers()) {
-            if(!isAlly(other)) continue;
+            if(other != getPlayer() //In lobby, isAlly may not work properly
+                    && !isAlly(other)) continue;
             Location otherLoc = other.getLocation();
             double distSquared = currentLoc.distanceSquared(otherLoc);
             if(distSquared > radiusSquared) continue;
