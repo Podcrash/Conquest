@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.warden;
 
-import com.abstractpackets.packetwrapper.AbstractPacket;
+import com.packetwrapper.abstractpackets.AbstractPacket;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.annotation.SkillInit;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -10,7 +10,7 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;

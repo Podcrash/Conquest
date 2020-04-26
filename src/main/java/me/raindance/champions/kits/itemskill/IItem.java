@@ -1,8 +1,7 @@
 package me.raindance.champions.kits.itemskill;
 
-import com.podcrash.api.mc.damage.DamageSource;
+import com.podcrash.api.damage.DamageSource;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.util.Vector;
 

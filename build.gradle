@@ -37,6 +37,7 @@ dependencies {
 
     implementation project(path: ":Engine:DBEngine")
     implementation project(path: ":Engine:MCEngine")
+    implementation project(path: ":Engine:PacketWrapper")
 
     //implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
     testImplementation 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'

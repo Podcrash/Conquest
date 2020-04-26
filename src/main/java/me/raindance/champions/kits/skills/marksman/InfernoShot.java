@@ -1,23 +1,20 @@
 package me.raindance.champions.kits.skills.marksman;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 @SkillMetadata(id = 505, skillType = SkillType.Marksman, invType = InvType.BOW)
 public class InfernoShot extends BowShotSkill implements IConstruct {

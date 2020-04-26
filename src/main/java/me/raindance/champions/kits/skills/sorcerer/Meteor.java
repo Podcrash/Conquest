@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.sorcerer;
 
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -11,22 +11,20 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IEnergy;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.VectorUtil;
-import org.bukkit.Location;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.VectorUtil;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 
-import static com.podcrash.api.mc.world.BlockUtil.getPlayersInArea;
+import static com.podcrash.api.world.BlockUtil.getPlayersInArea;
 
 @SkillMetadata(id = 1007, skillType = SkillType.Sorcerer, invType = InvType.AXE)
 public class Meteor extends Instant implements IEnergy, ICooldown {

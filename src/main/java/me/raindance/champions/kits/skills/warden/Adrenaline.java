@@ -1,14 +1,12 @@
 package me.raindance.champions.kits.skills.warden;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.util.EntityUtil;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 

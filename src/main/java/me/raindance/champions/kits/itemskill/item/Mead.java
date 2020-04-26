@@ -1,11 +1,11 @@
 package me.raindance.champions.kits.itemskill.item;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerEntityStatus;
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldEvent;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.packetwrapper.abstractpackets.WrapperPlayServerEntityStatus;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldEvent;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Location;

@@ -1,27 +1,21 @@
 package me.raindance.champions.listeners;
 
-import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.db.tables.PlayerTable;
-import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameState;
-import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.plugin.Pluginizer;
-import me.raindance.champions.Main;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.events.DeathApplyEvent;
+import com.podcrash.api.game.Game;
+import com.podcrash.api.game.GameState;
+import com.podcrash.api.listeners.ListenerBase;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.game.GameManager;
 import me.raindance.champions.inventory.InvFactory;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import com.podcrash.api.mc.mob.CustomEntityFirework;
+import com.podcrash.api.mob.CustomEntityFirework;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +24,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.Random;
-import java.util.UUID;
 
 public class PlayerJoinEventTest extends ListenerBase {
     public PlayerJoinEventTest(JavaPlugin plugin) {

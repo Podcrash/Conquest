@@ -2,18 +2,16 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.mc.damage.DamageQueue;
-import com.podcrash.api.mc.damage.HitDetectionInjector;
-import com.podcrash.api.mc.disguise.Disguiser;
-import com.podcrash.api.mc.effect.particle.ParticleRunnable;
-import com.podcrash.api.mc.events.TickEvent;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.time.resources.TipScheduler;
-import com.podcrash.api.mc.util.ChatUtil;
-import com.podcrash.api.mc.util.ConfigUtil;
-import com.podcrash.api.mc.util.PlayerCache;
-import com.podcrash.api.plugin.MessageListener;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.damage.DamageQueue;
+import com.podcrash.api.damage.HitDetectionInjector;
+import com.podcrash.api.disguise.Disguiser;
+import com.podcrash.api.effect.particle.ParticleRunnable;
+import com.podcrash.api.events.TickEvent;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.time.resources.TipScheduler;
+import com.podcrash.api.util.ChatUtil;
+import com.podcrash.api.util.ConfigUtil;
+import com.podcrash.api.util.PlayerCache;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.commands.*;
@@ -124,7 +122,7 @@ public class Main extends JavaPlugin {
             defaultAllowedSkills = new HashSet<>(t);
         }
         //set config stuff
-        PodcrashSpigot spigot = Pluginizer.getSpigotPlugin();
+        PodcrashSpigot spigot = PodcrashSpigot.getInstance();
         String url = "https://docs.google.com/document/d/1QVL8m7C5IH-Hk36IXE8j2bKR6loJr7eb-yhtB8Vv2OI/export?format=txt";
         try {
             InputStreamReader stream = new InputStreamReader(new URL(url).openConnection().getInputStream());

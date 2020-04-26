@@ -1,10 +1,10 @@
 package me.raindance.champions.kits.skills.thief;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -20,7 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
 
-import static com.podcrash.api.mc.world.BlockUtil.*;
+import static com.podcrash.api.world.BlockUtil.*;
 
 @SkillMetadata(id = 703, skillType = SkillType.Thief, invType = InvType.AXE)
 public class Blink extends Instant implements ICooldown {

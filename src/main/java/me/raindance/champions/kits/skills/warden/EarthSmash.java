@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.warden;
 
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.util.EntityUtil;
-import com.podcrash.api.mc.util.VectorUtil;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.util.EntityUtil;
+import com.podcrash.api.util.VectorUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;

@@ -1,14 +1,14 @@
 package me.raindance.champions.kits.skills.duelist;
 
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;

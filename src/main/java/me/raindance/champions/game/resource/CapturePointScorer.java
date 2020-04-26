@@ -1,10 +1,10 @@
 package me.raindance.champions.game.resource;
 
-import com.podcrash.api.mc.game.GTeam;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.game.TeamEnum;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.resources.GameResource;
+import com.podcrash.api.game.GTeam;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.game.TeamEnum;
+import com.podcrash.api.game.objects.objectives.CapturePoint;
+import com.podcrash.api.game.resources.GameResource;
 
 public class CapturePointScorer extends GameResource {
     private CapturePoint[] capturePoints;

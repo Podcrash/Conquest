@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.druid;
 
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.item.ItemManipulationManager;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.item.ItemManipulationManager;
+import com.podcrash.api.time.resources.TimeResource;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -14,12 +14,10 @@ import me.raindance.champions.kits.skilltypes.TogglePassive;
 import org.bukkit.Bukkit;
 import org.bukkit.GrassSpecies;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.LongGrass;
-import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import java.util.Random;

@@ -1,22 +1,20 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.mc.economy.Currency;
-import com.podcrash.api.mc.economy.IEconomyHandler;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.events.game.GameCaptureEvent;
-import com.podcrash.api.mc.events.game.GameEndEvent;
-import com.podcrash.api.mc.events.game.GamePickUpEvent;
-import com.podcrash.api.mc.game.GTeam;
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.game.GameState;
-import com.podcrash.api.mc.game.objects.IObjective;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.objects.objectives.Diamond;
-import com.podcrash.api.mc.game.objects.objectives.Star;
-import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.plugin.Pluginizer;
-import org.bukkit.ChatColor;
+import com.podcrash.api.economy.EconomyHandler;
+import com.podcrash.api.events.DeathApplyEvent;
+import com.podcrash.api.events.game.GameCaptureEvent;
+import com.podcrash.api.events.game.GameEndEvent;
+import com.podcrash.api.events.game.GamePickUpEvent;
+import com.podcrash.api.game.GTeam;
+import com.podcrash.api.game.Game;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.game.GameState;
+import com.podcrash.api.game.objects.IObjective;
+import com.podcrash.api.game.objects.objectives.CapturePoint;
+import com.podcrash.api.game.objects.objectives.Diamond;
+import com.podcrash.api.game.objects.objectives.Star;
+import com.podcrash.api.listeners.ListenerBase;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +28,7 @@ public class DomRewardsListener extends ListenerBase {
         super(plugin);
     }
 
-    private IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
+    private EconomyHandler handler = PodcrashSpigot.getInstance().getEconomyHandler();
 
     @EventHandler
     public void onKill(DeathApplyEvent event) {

@@ -1,13 +1,13 @@
 package me.raindance.champions.kits.itemskill.item;
 
-import com.abstractpackets.packetwrapper.AbstractPacket;
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.damage.DamageSource;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.item.ItemManipulationManager;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.packetwrapper.abstractpackets.AbstractPacket;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.damage.DamageSource;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.item.ItemManipulationManager;
+import com.podcrash.api.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.TrapItem;
 import org.bukkit.Location;

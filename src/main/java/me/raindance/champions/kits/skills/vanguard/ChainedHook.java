@@ -1,19 +1,19 @@
 package me.raindance.champions.kits.skills.vanguard;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.events.ItemCollideEvent;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.item.ItemManipulationManager;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.events.ItemCollideEvent;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.item.ItemManipulationManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.sound.SoundWrapper;
-import com.podcrash.api.mc.util.VectorUtil;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundWrapper;
+import com.podcrash.api.util.VectorUtil;
 import me.raindance.champions.kits.skilltypes.Instant;
 import org.bukkit.Location;
 import org.bukkit.Material;

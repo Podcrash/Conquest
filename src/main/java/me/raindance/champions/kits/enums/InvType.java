@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.enums;
 
-import com.podcrash.api.mc.util.ItemStackUtil;
+import com.podcrash.api.util.ItemStackUtil;
 import me.raindance.champions.inventory.InventoryData;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;

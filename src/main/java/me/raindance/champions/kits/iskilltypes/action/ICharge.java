@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.iskilltypes.action;
 
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.time.resources.TimeResource;
 import net.md_5.bungee.api.ChatColor;
 
 public interface ICharge extends TimeResource {

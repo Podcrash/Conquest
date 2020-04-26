@@ -1,9 +1,8 @@
 package me.raindance.champions.kits.skilltypes;
 
-import me.raindance.champions.Main;
 import me.raindance.champions.kits.enums.ItemType;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 

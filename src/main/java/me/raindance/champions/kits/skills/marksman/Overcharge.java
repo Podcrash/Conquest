@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.marksman;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;

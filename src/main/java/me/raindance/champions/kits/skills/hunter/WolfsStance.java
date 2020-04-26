@@ -1,34 +1,29 @@
 package me.raindance.champions.kits.skills.hunter;
 
-import com.podcrash.api.mc.callback.sources.CollideBeforeHitGround;
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.location.BoundingBox;
-import com.podcrash.api.mc.location.Coordinate;
-import com.podcrash.api.mc.location.RayTracer;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.callback.sources.CollideBeforeHitGround;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.location.BoundingBox;
+import com.podcrash.api.location.Coordinate;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.ChargeUp;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.util.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(id = 408, skillType = SkillType.Hunter, invType = InvType.SWORD)
@@ -61,10 +56,7 @@ public class WolfsStance extends ChargeUp implements IConstruct {
         Coordinate min1 = box1.getA();
         Coordinate max1 = box1.getB();
 
-        Pluginizer.getLogger().info("min1: " + min1);
-        Pluginizer.getLogger().info("max1: " + max1);
         for(Coordinate point : box2.getBox()) {
-            Pluginizer.getLogger().info("point: " + point);
             double x = point.getX();
             double y = point.getY();
             double z = point.getZ();

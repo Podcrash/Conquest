@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.duelist;
 
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;

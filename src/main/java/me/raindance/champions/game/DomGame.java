@@ -1,13 +1,12 @@
 package me.raindance.champions.game;
 
 import com.podcrash.api.db.pojos.map.*;
-import com.podcrash.api.mc.game.*;
-import com.podcrash.api.mc.game.objects.ItemObjective;
-import com.podcrash.api.mc.game.objects.WinObjective;
-import com.podcrash.api.mc.game.objects.objectives.*;
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.game.*;
+import com.podcrash.api.game.objects.ItemObjective;
+import com.podcrash.api.game.objects.WinObjective;
+import com.podcrash.api.game.objects.objectives.*;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
-import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
+import com.podcrash.api.game.scoreboard.GameScoreboard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 

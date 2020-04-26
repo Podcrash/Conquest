@@ -1,19 +1,12 @@
 package me.raindance.champions.game.scoreboard;
 
-import com.podcrash.api.mc.game.*;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import com.podcrash.api.plugin.Pluginizer;
-import me.raindance.champions.game.DomGame;
+import com.podcrash.api.game.*;
+import com.podcrash.api.game.objects.objectives.CapturePoint;
+import com.podcrash.api.game.scoreboard.GameScoreboard;
 import me.raindance.champions.game.StarBuff;
-import net.md_5.bungee.protocol.packet.Chat;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

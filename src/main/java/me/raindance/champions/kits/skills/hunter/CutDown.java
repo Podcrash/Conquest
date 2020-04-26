@@ -1,11 +1,11 @@
 package me.raindance.champions.kits.skills.hunter;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;

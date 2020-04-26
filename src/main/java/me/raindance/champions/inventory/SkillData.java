@@ -1,8 +1,8 @@
 package me.raindance.champions.inventory;
 
-import com.podcrash.api.mc.Configurator;
-import com.podcrash.api.mc.util.ChatUtil;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.plugin.Configurator;
+import com.podcrash.api.plugin.PodcrashSpigot;
+import com.podcrash.api.util.ChatUtil;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class SkillData {
     private final int id;
@@ -58,7 +55,7 @@ public class SkillData {
         }else this.description = Arrays.asList(cache.split("\n"));
          */
         if(description != null && description.size() != 0) return CompletableFuture.completedFuture(null);
-        Configurator configurator = Pluginizer.getSpigotPlugin().getConfigurator("skilldescriptions");
+        Configurator configurator = PodcrashSpigot.getInstance().getConfigurator("skilldescriptions");
         CompletableFuture<Void> future = new CompletableFuture<>();
         configurator.readList(getCleanName(), list -> {
             if(list == null) return;

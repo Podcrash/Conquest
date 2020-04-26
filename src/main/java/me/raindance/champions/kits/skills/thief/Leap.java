@@ -1,19 +1,19 @@
 package me.raindance.champions.kits.skills.thief;
 
-import com.abstractpackets.packetwrapper.AbstractPacket;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.util.PacketUtil;
-import com.podcrash.api.mc.world.BlockUtil;
+import com.packetwrapper.abstractpackets.AbstractPacket;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.util.PacketUtil;
+import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.EntityUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -1,10 +1,9 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.mc.events.SoundApplyEvent;
-import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.events.SoundApplyEvent;
+import com.podcrash.api.listeners.ListenerBase;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

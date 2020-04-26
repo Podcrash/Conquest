@@ -1,16 +1,16 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.game.Game;
+import com.podcrash.api.game.GameManager;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.events.skill.SkillInteractEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.listeners.ListenerBase;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.time.TimeHandler;
 import me.raindance.champions.resource.CooldownResource;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;

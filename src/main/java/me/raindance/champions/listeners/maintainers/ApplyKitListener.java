@@ -1,6 +1,6 @@
 package me.raindance.champions.listeners.maintainers;
 
-import com.podcrash.api.mc.listeners.ListenerBase;
+import com.podcrash.api.listeners.ListenerBase;
 import me.raindance.champions.events.ApplyKitEvent;
 import me.raindance.champions.listeners.PlayerJoinEventTest;
 import org.bukkit.event.EventHandler;

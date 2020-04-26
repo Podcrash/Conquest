@@ -1,17 +1,15 @@
 package me.raindance.champions.kits.skills.marksman;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.time.TimeHandler;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.BowShotSkill;
 import org.bukkit.Location;
@@ -22,9 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @SkillMetadata(id = 507, skillType = SkillType.Marksman, invType = InvType.BOW)

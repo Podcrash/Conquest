@@ -1,6 +1,6 @@
 package me.raindance.champions.commands;
 
-import com.podcrash.api.mc.commands.CommandBase;
+import com.podcrash.api.commands.CommandBase;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import org.bukkit.ChatColor;

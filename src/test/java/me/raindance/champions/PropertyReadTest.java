@@ -1,15 +1,12 @@
 package me.raindance.champions;
 
-import com.podcrash.api.mc.util.MathUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
-import static com.podcrash.api.mc.util.ConfigUtil.readPropertiesFile;
+import static com.podcrash.api.util.ConfigUtil.readPropertiesFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

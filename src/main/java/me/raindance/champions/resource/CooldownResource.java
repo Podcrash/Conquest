@@ -1,15 +1,14 @@
 package me.raindance.champions.resource;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.time.resources.TimeResource;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
 import me.raindance.champions.events.skill.SkillRechargeEvent;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.TitleSender;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.TitleSender;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Passive;
 import me.raindance.champions.util.SkillTitleSender;

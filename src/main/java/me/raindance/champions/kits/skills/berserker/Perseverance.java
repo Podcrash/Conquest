@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skills.berserker;
 
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.util.EntityUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;

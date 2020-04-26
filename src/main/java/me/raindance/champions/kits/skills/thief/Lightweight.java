@@ -1,22 +1,18 @@
 package me.raindance.champions.kits.skills.thief;
 
 
-import com.podcrash.api.mc.callback.CallbackAction;
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.game.GameStartEvent;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.plugin.Pluginizer;
-import me.raindance.champions.Main;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.events.game.GameStartEvent;
+import com.podcrash.api.time.TimeHandler;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IConstruct;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -41,8 +37,6 @@ public class Lightweight extends Passive implements IConstruct {
                 e.setCancelled(true);
             }
             e.setDamage(totalDamage);
-            Pluginizer.getLogger().info(getPlayer().getName() + " lightweight cancelled " + e.getDamage());
-            Pluginizer.getLogger().info(e.isCancelled() + "");
         }
     }
 
@@ -56,9 +50,6 @@ public class Lightweight extends Passive implements IConstruct {
     @Override
     public void afterConstruction() {
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, Integer.MAX_VALUE, 1, true);
-        boolean hasSpeed = StatusApplier.getOrNew(getPlayer()).has(Status.SPEED);
-
-        Pluginizer.getLogger().info("[Lightweight] Attempted to apply the speed a total of " + hasSpeed + " times!");
     }
 
     @Override

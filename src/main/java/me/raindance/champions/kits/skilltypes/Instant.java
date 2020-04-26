@@ -1,6 +1,6 @@
 package me.raindance.champions.kits.skilltypes;
 
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.time.TimeHandler;
 import me.raindance.champions.Main;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.Skill;
@@ -12,7 +12,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 public abstract class Instant extends Skill {

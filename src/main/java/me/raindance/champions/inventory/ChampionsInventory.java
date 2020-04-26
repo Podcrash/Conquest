@@ -1,6 +1,6 @@
 package me.raindance.champions.inventory;
 
-import com.podcrash.api.mc.util.ItemStackUtil;
+import com.podcrash.api.util.ItemStackUtil;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Bukkit;

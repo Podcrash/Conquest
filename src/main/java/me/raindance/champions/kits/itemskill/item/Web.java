@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.itemskill.item;
 
-import com.podcrash.api.mc.events.ItemCollideEvent;
-import com.podcrash.api.mc.item.ItemManipulationManager;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.world.BlockUtil;
+import com.podcrash.api.events.ItemCollideEvent;
+import com.podcrash.api.item.ItemManipulationManager;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Location;

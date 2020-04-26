@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.marksman;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.time.resources.TimeResource;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -10,18 +10,14 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import net.jafama.FastMath;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SkillMetadata(id = 506, skillType = SkillType.Marksman, invType = InvType.INNATE)

@@ -5,10 +5,9 @@ import com.google.gson.JsonObject;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.economy.Currency;
-import com.podcrash.api.mc.util.ItemStackUtil;
-import com.podcrash.api.mc.util.MathUtil;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.economy.Currency;
+import com.podcrash.api.util.ItemStackUtil;
+import com.podcrash.api.util.MathUtil;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
@@ -23,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Dye;
 
 import java.util.*;
 

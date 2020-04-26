@@ -1,12 +1,10 @@
 package me.raindance.champions.commands;
 
-import com.podcrash.api.mc.commands.CommandBase;
-import org.bukkit.Bukkit;
+import com.podcrash.api.commands.CommandBase;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 public class VelocityCommand extends CommandBase {

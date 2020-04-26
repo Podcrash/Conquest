@@ -1,9 +1,8 @@
 package me.raindance.champions.kits.skills.berserker;
 
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.events.DeathApplyEvent;
 import me.raindance.champions.events.skill.SkillUseEvent;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -11,8 +10,8 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.time.resources.TimeResource;
-import com.podcrash.api.mc.util.EntityUtil;
+import com.podcrash.api.time.resources.TimeResource;
+import com.podcrash.api.util.EntityUtil;
 import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -96,7 +95,6 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
                 double multiplier = (1 - diff/reach) + 0.33;
                 if(multiplier > 1) multiplier = 1;
                 vector.normalize().multiply(1.7d * multiplier).setY(0.9);
-                Pluginizer.getLogger().info(multiplier + ": SLAM");
                 DamageApplier.damage(possibleVictim, getPlayer(), this.damage, this, false);
                 possibleVictim.setVelocity(vector);
             }

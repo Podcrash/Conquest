@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.berserker;
 
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.sound.SoundPlayer;
 import me.raindance.champions.kits.EnergyBar;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;

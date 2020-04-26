@@ -1,9 +1,9 @@
 package me.raindance.champions.kits.skilltypes;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.enums.ItemType;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundPlayer;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;

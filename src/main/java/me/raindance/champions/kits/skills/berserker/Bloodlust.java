@@ -1,18 +1,18 @@
 package me.raindance.champions.kits.skills.berserker;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.DeathApplyEvent;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.events.DeathApplyEvent;
 import me.raindance.champions.Main;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.particle.ParticleGenerator;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.skilltypes.Passive;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.time.resources.EntityParticleResource;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.time.resources.EntityParticleResource;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

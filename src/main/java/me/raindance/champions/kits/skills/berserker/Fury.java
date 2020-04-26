@@ -1,8 +1,8 @@
 package me.raindance.champions.kits.skills.berserker;
 
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.events.DeathApplyEvent;
+import com.podcrash.api.time.resources.TimeResource;
 import me.raindance.champions.kits.EnergyBar;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -10,7 +10,6 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 105, skillType = SkillType.Berserker, invType = InvType.INNATE)

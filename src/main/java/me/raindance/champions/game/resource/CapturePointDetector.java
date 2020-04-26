@@ -1,15 +1,14 @@
 package me.raindance.champions.game.resource;
 
-import com.podcrash.api.mc.events.game.GameCaptureEvent;
-import com.podcrash.api.mc.game.TeamEnum;
-import com.podcrash.api.mc.game.objects.objectives.CapturePoint;
-import com.podcrash.api.mc.game.resources.GameResource;
+import com.podcrash.api.events.game.GameCaptureEvent;
+import com.podcrash.api.game.TeamEnum;
+import com.podcrash.api.game.objects.objectives.CapturePoint;
+import com.podcrash.api.game.resources.GameResource;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.game.DomGame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 

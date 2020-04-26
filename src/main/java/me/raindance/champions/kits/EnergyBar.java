@@ -1,7 +1,7 @@
 package me.raindance.champions.kits;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TimeResource;
-import com.podcrash.api.mc.util.ExpUtil;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
+import com.podcrash.api.util.ExpUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

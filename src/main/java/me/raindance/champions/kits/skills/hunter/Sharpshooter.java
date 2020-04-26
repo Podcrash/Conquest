@@ -1,8 +1,7 @@
 package me.raindance.champions.kits.skills.hunter;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -10,19 +9,16 @@ import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.skilltypes.Passive;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.time.TimeHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 @SkillMetadata(id = 405, skillType = SkillType.Hunter, invType = InvType.INNATE)

@@ -1,10 +1,9 @@
 package me.raindance.champions.kits;
 
-import com.podcrash.api.mc.damage.DamageSource;
-import com.podcrash.api.mc.game.TeamEnum;
+import com.podcrash.api.damage.DamageSource;
+import com.podcrash.api.game.TeamEnum;
 import me.raindance.champions.events.skill.SkillCooldownEvent;
-import com.podcrash.api.mc.game.Game;
-import me.raindance.champions.kits.annotation.SkillMetadata;
+import com.podcrash.api.game.Game;
 import me.raindance.champions.kits.iskilltypes.champion.ISkill;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -12,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
 

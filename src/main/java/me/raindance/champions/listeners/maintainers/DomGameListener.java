@@ -2,28 +2,26 @@ package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.db.pojos.map.ConquestMap;
 import com.podcrash.api.db.redis.Communicator;
-import com.podcrash.api.mc.economy.Currency;
-import com.podcrash.api.mc.economy.IEconomyHandler;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.events.ItemObjectiveSpawnEvent;
-import com.podcrash.api.mc.events.game.*;
-import com.podcrash.api.mc.game.*;
-import com.podcrash.api.mc.game.objects.IObjective;
-import com.podcrash.api.mc.game.objects.ItemObjective;
-import com.podcrash.api.mc.game.objects.WinObjective;
-import com.podcrash.api.mc.game.objects.objectives.*;
-import com.podcrash.api.mc.game.resources.HealthBarResource;
-import com.podcrash.api.mc.game.resources.ItemObjectiveSpawner;
-import com.podcrash.api.mc.game.resources.ScoreboardRepeater;
-import com.podcrash.api.mc.game.scoreboard.GameScoreboard;
-import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TipScheduler;
-import com.podcrash.api.mc.util.VectorUtil;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.economy.Currency;
+import com.podcrash.api.economy.EconomyHandler;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.events.DeathApplyEvent;
+import com.podcrash.api.events.ItemObjectiveSpawnEvent;
+import com.podcrash.api.events.game.*;
+import com.podcrash.api.game.*;
+import com.podcrash.api.game.objects.IObjective;
+import com.podcrash.api.game.objects.ItemObjective;
+import com.podcrash.api.game.objects.WinObjective;
+import com.podcrash.api.game.objects.objectives.*;
+import com.podcrash.api.game.resources.HealthBarResource;
+import com.podcrash.api.game.resources.ItemObjectiveSpawner;
+import com.podcrash.api.game.resources.ScoreboardRepeater;
+import com.podcrash.api.game.scoreboard.GameScoreboard;
+import com.podcrash.api.listeners.ListenerBase;
+import com.podcrash.api.time.resources.TipScheduler;
+import com.podcrash.api.util.VectorUtil;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import me.raindance.champions.Main;
 import me.raindance.champions.game.DomGame;
@@ -90,11 +88,9 @@ public class DomGameListener extends ListenerBase {
     @EventHandler
     public void stateListener(GameStateEvent e) {
         TipScheduler scheduler = Main.getInstance().getTips();
-        Pluginizer.getLogger().info("state change");
+        PodcrashSpigot.debugLog("state change");
         if(scheduler == null)
             return;
-
-        Pluginizer.getLogger().info("state change");
 
         switch (e.getState()) {
             case LOBBY:
@@ -184,7 +180,7 @@ public class DomGameListener extends ListenerBase {
     public void onEnd(GameEndEvent e) {
         Communicator.publishLobby(Communicator.getCode() + " close");
         DomGame game1 = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
-        IEconomyHandler handler = Pluginizer.getSpigotPlugin().getEconomyHandler();
+        EconomyHandler handler = PodcrashSpigot.getInstance().getEconomyHandler();
         if (!PodcrashSpigot.getInstance().hasPPLOwner()) {
             for(Player player : e.getGame().getBukkitPlayers()) {
                 if(GameManager.isSpectating(player)) break;

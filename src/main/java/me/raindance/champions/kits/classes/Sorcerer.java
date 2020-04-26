@@ -1,15 +1,11 @@
 package me.raindance.champions.kits.classes;
 
-import com.podcrash.api.mc.sound.SoundWrapper;
+import com.podcrash.api.sound.SoundWrapper;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.List;
 

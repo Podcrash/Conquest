@@ -1,16 +1,15 @@
 package me.raindance.champions.kits.skills.rogue;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.PacketUtil;
-import com.podcrash.api.mc.util.VectorUtil;
-import com.podcrash.api.mc.world.BlockUtil;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.PacketUtil;
+import com.podcrash.api.util.VectorUtil;
+import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
@@ -19,7 +18,6 @@ import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Instant;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -28,12 +26,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 /**
  * Phantom Dash
@@ -93,18 +88,15 @@ public class PhantomDash extends Instant implements ICooldown {
         //checks
         Entity damager = event.getDamager();
 
-        Pluginizer.getLogger().info("t1");
         //if the damager is not a pearl or the pearl we need, return.
         //if(!(damager instanceof EnderPearl) || damager != this.pearl) return;
         //actually, just do this: check if the pearl is not the damager
         if(damager != this.pearl) return;
         Entity victim = event.getEntity();// victim
 
-        Pluginizer.getLogger().info("t2");
         //we want to check if the damager hit is an actual living damager and not something random (like item frames)
         if(!(victim instanceof LivingEntity)) return;
 
-        Pluginizer.getLogger().info("t3");
         //at this point, the pearl has hit some living damager,
         //so we need to do 5 damage and have the user teleport.
         doEffect((LivingEntity) victim);
@@ -116,12 +108,10 @@ public class PhantomDash extends Instant implements ICooldown {
         lock = true;
         //damage
         if(!isAlly(victim)) {
-            Pluginizer.getLogger().info("t3.5");
             DamageApplier.damage(victim, getPlayer(), 6, this, false);
         }
 
 
-        Pluginizer.getLogger().info("t4");
         WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.SMOKE_LARGE, 10);
         particles.setLocation(victim.getLocation());
         PacketUtil.asyncSend(particles, getPlayers());

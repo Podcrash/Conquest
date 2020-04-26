@@ -1,14 +1,14 @@
 package me.raindance.champions.kits.skills.warden;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.VectorUtil;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.util.VectorUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.util.Vector;

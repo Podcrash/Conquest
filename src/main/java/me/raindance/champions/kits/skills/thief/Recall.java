@@ -1,16 +1,16 @@
 package me.raindance.champions.kits.skills.thief;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.location.Coordinate;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.location.Coordinate;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.ItemType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.*;
 import me.raindance.champions.kits.skilltypes.Drop;
-import com.podcrash.api.mc.time.TimeHandler;
+import com.podcrash.api.time.TimeHandler;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.event.player.PlayerDropItemEvent;

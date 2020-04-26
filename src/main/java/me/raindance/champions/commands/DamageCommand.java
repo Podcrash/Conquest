@@ -1,7 +1,7 @@
 package me.raindance.champions.commands;
 
-import com.podcrash.api.mc.commands.CommandBase;
-import com.podcrash.api.mc.damage.DamageApplier;
+import com.podcrash.api.commands.CommandBase;
+import com.podcrash.api.damage.DamageApplier;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

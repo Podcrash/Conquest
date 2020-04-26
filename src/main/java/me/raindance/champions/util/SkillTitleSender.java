@@ -1,6 +1,6 @@
 package me.raindance.champions.util;
 
-import com.podcrash.api.mc.util.TitleSender;
+import com.podcrash.api.util.TitleSender;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;

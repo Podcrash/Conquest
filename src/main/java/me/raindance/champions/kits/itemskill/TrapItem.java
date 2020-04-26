@@ -1,15 +1,15 @@
 package me.raindance.champions.kits.itemskill;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.callback.helpers.TrapSetter;
-import com.podcrash.api.mc.callback.sources.AwaitTime;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.events.TrapPrimeEvent;
-import com.podcrash.api.mc.events.TrapSnareEvent;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.callback.helpers.TrapSetter;
+import com.podcrash.api.callback.sources.AwaitTime;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.events.DeathApplyEvent;
+import com.podcrash.api.events.TrapPrimeEvent;
+import com.podcrash.api.events.TrapSnareEvent;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.util.PacketUtil;
 import me.raindance.champions.events.ApplyKitEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

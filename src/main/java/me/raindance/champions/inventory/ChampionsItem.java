@@ -1,19 +1,13 @@
 package me.raindance.champions.inventory;
 
-import com.podcrash.api.mc.util.ChatUtil;
-import com.podcrash.api.mc.util.Utility;
-import net.md_5.bungee.protocol.packet.Chat;
+import com.podcrash.api.util.ChatUtil;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 import java.util.ArrayList;

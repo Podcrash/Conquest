@@ -1,30 +1,21 @@
 package me.raindance.champions.kits.itemskill.item;
 
-import com.abstractpackets.packetwrapper.AbstractPacket;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.item.ItemManipulationManager;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.time.TimeHandler;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.packetwrapper.abstractpackets.AbstractPacket;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.item.ItemManipulationManager;
+import com.podcrash.api.sound.SoundPlayer;
 import me.raindance.champions.kits.annotation.ItemMetaData;
-import me.raindance.champions.kits.itemskill.IItem;
 import me.raindance.champions.kits.itemskill.TrapItem;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.util.Vector;
 
-import java.awt.event.ItemListener;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 //when there's a better item system, change this
 @ItemMetaData(mat = Material.REDSTONE_LAMP_OFF, actions = {Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK})

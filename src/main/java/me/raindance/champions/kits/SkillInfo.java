@@ -4,8 +4,8 @@ import com.google.common.reflect.ClassPath;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.EconomyTable;
-import com.podcrash.api.mc.util.ChatUtil;
-import com.podcrash.api.plugin.Pluginizer;
+import com.podcrash.api.plugin.PodcrashSpigot;
+import com.podcrash.api.util.ChatUtil;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -57,7 +57,7 @@ public final class SkillInfo {
             Class<?> skillClass = Class.forName(info.getName());
 
             if(!skillClass.isAnnotationPresent(SkillMetadata.class)) {
-                Pluginizer.getLogger().info("Skipping " + info.getName());
+                PodcrashSpigot.debugLog("Skipping " + info.getName());
                 continue;
             }
             Skill skill = (Skill) emptyConstructor(skillClass);

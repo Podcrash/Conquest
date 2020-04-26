@@ -1,20 +1,17 @@
 package me.raindance.champions.kits.skills.duelist;
 
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.time.resources.TimeResource;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.time.resources.TimeResource;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Passive;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SkillMetadata(id = 309, skillType = SkillType.Duelist, invType = InvType.INNATE)
 public class Challenger extends Passive implements IPassiveTimer, TimeResource {

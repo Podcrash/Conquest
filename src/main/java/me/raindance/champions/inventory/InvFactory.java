@@ -7,19 +7,18 @@ import com.google.gson.JsonParser;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.TableOrganizer;
-import com.podcrash.api.mc.Configurator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.game.GameManager;
-import com.podcrash.api.mc.game.GameState;
-import com.podcrash.api.mc.util.ItemStackUtil;
-import com.podcrash.api.plugin.Pluginizer;
-import javafx.util.Pair;
+import com.podcrash.api.plugin.Configurator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.game.GameManager;
+import com.podcrash.api.game.GameState;
+import com.podcrash.api.plugin.PodcrashSpigot;
+import com.podcrash.api.util.ItemStackUtil;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.Skill;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -39,7 +38,7 @@ public final class InvFactory {
     private static Map<String, Integer> buildMap = new HashMap<>();
     private static Map<String, Integer> buildIDHistory = new HashMap<>();
     private static Map<String, SkillType> skillTypeHistory = new HashMap<>();
-    private static final Configurator kitConfigurator = Pluginizer.getSpigotPlugin().getConfigurator("kits");
+    private static final Configurator kitConfigurator = PodcrashSpigot.getInstance().getConfigurator("kits");
     private InvFactory() {
 
     }
@@ -265,8 +264,8 @@ public final class InvFactory {
         int id = buildMap.get(player.getName());
         String data = championsPlayer.serialize().toString();
         String current = getKitTable().getJSONData(uuid, clasz, id);
-        Pluginizer.getLogger().info("save1: " + data);
-        Pluginizer.getLogger().info("current: " + current);
+        PodcrashSpigot.debugLog("save1: " + data);
+        PodcrashSpigot.debugLog("current: " + current);
         if(current == null) getKitTable().set(uuid, clasz, id, data);
         else getKitTable().alter(uuid, clasz, id, data);
 

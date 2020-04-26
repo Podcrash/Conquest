@@ -4,28 +4,28 @@ import com.podcrash.api.db.DBUtils;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.ChampionsKitTable;
 import com.podcrash.api.db.tables.DataTableType;
-import com.podcrash.api.mc.damage.DamageApplier;
-import com.podcrash.api.mc.economy.EconomyHandler;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.game.GameState;
-import com.podcrash.api.mc.game.TeamEnum;
-import com.podcrash.api.mc.listeners.ListenerBase;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TimeResource;
-import com.podcrash.api.mc.util.ChatUtil;
-import com.podcrash.api.mc.util.InventoryUtil;
-import com.podcrash.api.mc.util.MathUtil;
-import com.podcrash.api.mc.world.BlockUtil;
-import com.podcrash.api.plugin.Pluginizer;
-import com.podcrash.api.mc.game.Game;
-import com.podcrash.api.mc.game.GameManager;
+import com.podcrash.api.damage.DamageApplier;
+import com.podcrash.api.economy.EconomyHandler;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.game.GameState;
+import com.podcrash.api.game.TeamEnum;
+import com.podcrash.api.listeners.ListenerBase;
+import com.podcrash.api.plugin.PodcrashSpigot;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
+import com.podcrash.api.util.ChatUtil;
+import com.podcrash.api.util.InventoryUtil;
+import com.podcrash.api.util.MathUtil;
+import com.podcrash.api.world.BlockUtil;
+import com.podcrash.api.game.Game;
+import com.podcrash.api.game.GameManager;
 import me.raindance.champions.Main;
 import me.raindance.champions.inventory.*;
 import me.raindance.champions.kits.ChampionsPlayer;
 import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.enums.SkillType;
-import com.podcrash.api.mc.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -35,14 +35,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -279,7 +277,7 @@ public class InventoryListener extends ListenerBase {
     }
 
     private void attemptBuy(Player clicker, Inventory inventory, int slot, ItemStack selected, ClickType clickType) {
-        EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
+        EconomyHandler handler = PodcrashSpigot.getInstance().getEconomyHandler();
 
         handler.buy(clicker, selected.getItemMeta().getDisplayName()).exceptionally(t -> {
             DBUtils.handleThrowables(t);
@@ -294,7 +292,7 @@ public class InventoryListener extends ListenerBase {
      * @param slot - The slot (11 = confirm) (15 = cancel)
      */
     private void confirm(Player clicker, Inventory inventory, int slot) {
-        EconomyHandler handler = (EconomyHandler) Pluginizer.getSpigotPlugin().getEconomyHandler();
+        EconomyHandler handler = PodcrashSpigot.getInstance().getEconomyHandler();
         if (slot == 11) {
             handler.confirm(clicker, ChatUtil.strip(inventory.getItem(13).getItemMeta().getDisplayName()));
         } else if (slot == 15) {
@@ -361,7 +359,7 @@ public class InventoryListener extends ListenerBase {
         ChampionsKitTable table = TableOrganizer.getTable(DataTableType.KITS);
         CompletableFuture<Set<String>> future = table.getAllowedSkillsFuture(e.getPlayer().getUniqueId());
         Set<String> defaultAllowed = Main.getDefaultAllowedSkills();
-        Pluginizer.getLogger().info(defaultAllowed.toString());
+        PodcrashSpigot.debugLog(defaultAllowed.toString());
         future.thenAccept(skillSet -> {
             for(ItemStack item : e.getInventory()) {
                 if(item == null || item.getType() != Material.BOOK) continue;

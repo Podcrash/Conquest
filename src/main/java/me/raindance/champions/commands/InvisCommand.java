@@ -1,19 +1,15 @@
 package me.raindance.champions.commands;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.mc.commands.CommandBase;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.commands.CommandBase;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.util.PacketUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.awt.*;
 
 public class InvisCommand extends CommandBase {
     @Override

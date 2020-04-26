@@ -1,25 +1,19 @@
 package me.raindance.champions.kits.skills.thief;
 
-import com.abstractpackets.packetwrapper.WrapperPlayServerWorldParticles;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.podcrash.api.db.pojos.Rank;
-import com.podcrash.api.mc.disguise.Disguiser;
-import com.podcrash.api.mc.effect.particle.ParticleGenerator;
-import com.podcrash.api.mc.effect.status.Status;
-import com.podcrash.api.mc.effect.status.StatusApplier;
-import com.podcrash.api.mc.events.DamageApplyEvent;
-import com.podcrash.api.mc.events.DeathApplyEvent;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.util.PrefixUtil;
+import com.podcrash.api.disguise.Disguiser;
+import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
 import me.raindance.champions.Main;
-import me.raindance.champions.kits.ChampionsPlayerManager;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICooldown;
 import me.raindance.champions.kits.skilltypes.Continuous;
-import com.podcrash.api.mc.mob.CustomSkeleton;
-import com.podcrash.api.mc.util.PacketUtil;
+import com.podcrash.api.mob.CustomSkeleton;
+import com.podcrash.api.util.PacketUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,9 +22,7 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
-import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 

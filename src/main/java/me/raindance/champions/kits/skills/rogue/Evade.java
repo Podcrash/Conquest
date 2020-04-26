@@ -1,7 +1,7 @@
 package me.raindance.champions.kits.skills.rogue;
 
-import com.podcrash.api.mc.damage.Cause;
-import com.podcrash.api.mc.events.DamageApplyEvent;
+import com.podcrash.api.damage.Cause;
+import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import me.raindance.champions.kits.annotation.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -10,13 +10,12 @@ import me.raindance.champions.kits.enums.SkillType;
 import me.raindance.champions.kits.iskilltypes.action.ICharge;
 import me.raindance.champions.kits.iskilltypes.action.IPassiveTimer;
 import me.raindance.champions.kits.skilltypes.Instant;
-import com.podcrash.api.mc.sound.SoundPlayer;
-import com.podcrash.api.mc.time.TimeHandler;
-import com.podcrash.api.mc.time.resources.TimeResource;
-import com.podcrash.api.mc.util.MathUtil;
-import com.podcrash.api.mc.util.TitleSender;
+import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
+import com.podcrash.api.util.MathUtil;
+import com.podcrash.api.util.TitleSender;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.protocol.packet.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -27,8 +26,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 @SkillMetadata(id = 604, skillType = SkillType.Rogue, invType = InvType.SWORD)
 public class Evade extends Instant implements TimeResource, ICharge, IPassiveTimer {
