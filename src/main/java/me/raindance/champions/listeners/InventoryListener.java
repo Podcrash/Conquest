@@ -10,6 +10,7 @@ import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.game.GameState;
 import com.podcrash.api.game.TeamEnum;
+import com.podcrash.api.kits.KitPlayer;
 import com.podcrash.api.listeners.ListenerBase;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.time.TimeHandler;
@@ -22,9 +23,9 @@ import com.podcrash.api.game.Game;
 import com.podcrash.api.game.GameManager;
 import me.raindance.champions.Main;
 import me.raindance.champions.inventory.*;
+import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -394,8 +395,8 @@ public class InventoryListener extends ListenerBase {
         String name = inventory.getName().toLowerCase();
         ChampionsPlayer newPlayer = InvFactory.inventoryToChampion((Player) e.getPlayer(), e.getInventory(), SkillType.getByName(name));
 
-        ChampionsInventory.clearHotbarSelection(newPlayer.getPlayer());
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(newPlayer);
+        InventoryUtil.clearHotbarSelection(newPlayer.getPlayer());
+        KitPlayerManager.getInstance().addKitPlayer(newPlayer);
         InvFactory.editClose(newPlayer.getPlayer(), newPlayer);
         if(GameManager.getGame().getGameState() == GameState.LOBBY) {
             GameManager.getGame().updateLobbyInventory(newPlayer.getPlayer());

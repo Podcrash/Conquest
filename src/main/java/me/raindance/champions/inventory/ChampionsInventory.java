@@ -2,7 +2,7 @@ package me.raindance.champions.inventory;
 
 import com.podcrash.api.util.ItemStackUtil;
 import me.raindance.champions.Main;
-import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.SkillType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -104,18 +104,6 @@ public class ChampionsInventory {
         ItemStack item = ItemStackUtil.createItem(material, String.format("%s%s%s%s", ChatColor.RESET, ChatColor.AQUA, ChatColor.BOLD, skillType.getName()), desc);
         classItemList[cursor] = item;
         cursor++;
-    }
-
-    /**
-     * Clear the player's inventory
-     * @param player
-     */
-    public static void clearHotbarSelection(Player player) {
-        Inventory inv = player.getInventory();
-        for(int i = 9; i < 36; i++) {
-            inv.setItem(i, new ItemStack(Material.AIR, 1));
-        }
-        Bukkit.getScheduler().runTaskLater(Main.instance, player::updateInventory, 1L);
     }
 
     public static ItemStack[] getClassItemList() {

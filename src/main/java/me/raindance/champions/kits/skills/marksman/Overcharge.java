@@ -3,10 +3,10 @@ package me.raindance.champions.kits.skills.marksman;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.events.DamageApplyEvent;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.skilltypes.BowChargeUp;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.SkillType;
+import com.podcrash.api.kits.skilltypes.BowChargeUp;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 

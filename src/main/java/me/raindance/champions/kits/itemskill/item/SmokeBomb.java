@@ -4,7 +4,7 @@ import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.events.ItemCollideEvent;
 import com.podcrash.api.item.ItemManipulationManager;
-import me.raindance.champions.kits.annotation.ItemMetaData;
+import com.podcrash.api.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.*;
 import org.bukkit.entity.Item;

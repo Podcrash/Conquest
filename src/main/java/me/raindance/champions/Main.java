@@ -17,7 +17,7 @@ import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
@@ -199,7 +199,7 @@ public class Main extends JavaPlugin {
         tickTask.cancel();
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();
-        ChampionsPlayerManager.getInstance().clear();
+        KitPlayerManager.getInstance().clear();
         //CustomEntityType.unregisterEntities();
         GameManager.destroyCurrentGame();
 

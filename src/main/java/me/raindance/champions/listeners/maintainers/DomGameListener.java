@@ -29,11 +29,11 @@ import me.raindance.champions.game.StarBuff;
 import me.raindance.champions.game.resource.CapturePointDetector;
 import me.raindance.champions.game.resource.CapturePointScorer;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.iskilltypes.action.ICharge;
-import me.raindance.champions.kits.skilltypes.TogglePassive;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
+import com.podcrash.api.kits.Skill;
+import com.podcrash.api.kits.iskilltypes.action.ICharge;
+import com.podcrash.api.kits.skilltypes.TogglePassive;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemFrame;
@@ -50,6 +50,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Set;
 
 public class DomGameListener extends ListenerBase {
     private static final Material[] nonInteractables = new Material[]{
@@ -78,8 +79,8 @@ public class DomGameListener extends ListenerBase {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void regDamage(DamageApplyEvent event) {
         if(!(event.getAttacker() instanceof Player) && !(event.getVictim() instanceof Player)) return;
-        ChampionsPlayer championsVictim = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
-        ChampionsPlayer championsAttacker = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
+        KitPlayer championsVictim = KitPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
+        KitPlayer championsAttacker = KitPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
 
         event.setArmorValue(championsVictim.getArmorValue());
     }
@@ -168,7 +169,7 @@ public class DomGameListener extends ListenerBase {
         );
 
         for(Player p: game.getBukkitPlayers()) {
-            ChampionsPlayer player = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+            KitPlayer player = KitPlayerManager.getInstance().getChampionsPlayer(p);
             player.restockInventory();
             player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
@@ -211,7 +212,7 @@ public class DomGameListener extends ListenerBase {
             if (e.getWho() != e.getKiller())
                 e.getGame().increment(enemyTeam, 50);
         }
-        List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
+        Set<Skill> skills = KitPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
@@ -228,7 +229,7 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
-        ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho()).respawn();
+        KitPlayerManager.getInstance().getChampionsPlayer(e.getWho()).respawn();
     }
 
     @EventHandler
@@ -279,7 +280,7 @@ public class DomGameListener extends ListenerBase {
             builder.append(" has collected 200 points!");
             game.broadcast(builder.toString());
         }else if(itemObjective instanceof Restock) {
-            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
+            KitPlayer cPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
             cPlayer.restockInventory();
             player.sendMessage(ChatColor.YELLOW + ChatColor.BOLD.toString() + "You recieved supplies!");
         }else if(itemObjective instanceof Landmine) {
@@ -303,8 +304,8 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void resurrect(GameResurrectEvent e) {
-        ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(e.getWho());
-        championsPlayer.getSkills().forEach(skill -> {
+        KitPlayer kitPlayer = KitPlayerManager.getInstance().getChampionsPlayer(e.getWho());
+        kitPlayer.getSkills().forEach(skill -> {
             if(skill instanceof ICharge) {
                 if(!((ICharge) skill).isMaxAtStart()) return;
                 for(int i = 0; i < ((ICharge) skill).getMaxCharges(); i++) {

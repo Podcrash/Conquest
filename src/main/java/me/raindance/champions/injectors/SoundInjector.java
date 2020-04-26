@@ -5,8 +5,8 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketEvent;
 import me.raindance.champions.Main;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
 import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.entity.Player;
 
@@ -22,9 +22,9 @@ public class SoundInjector extends InjectorBase {
             WrapperPlayServerEntityStatus status = new WrapperPlayServerEntityStatus(event.getPacket());
             if (!(status.getEntity(event) instanceof Player)) return;
             Player player = (Player) status.getEntity(event);
-            ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
-            if (championsPlayer == null) return;
-            SoundPlayer.sendSound(player.getLocation(), championsPlayer.getSound());
+            KitPlayer kitPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
+            if (kitPlayer == null) return;
+            SoundPlayer.sendSound(player.getLocation(), kitPlayer.getSound());
         }else {
             if(event.getPacket().getStrings().getValues().get(0).equals("game.player.hurt")) event.setCancelled(true);
         }

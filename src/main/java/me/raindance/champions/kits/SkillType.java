@@ -1,7 +1,6 @@
-package me.raindance.champions.kits.enums;
+package me.raindance.champions.kits;
 
 import me.raindance.champions.inventory.ChampionsInventory;
-import me.raindance.champions.kits.Skill;
 
 import java.util.Arrays;
 
@@ -40,21 +39,6 @@ public enum SkillType {
         return defaultSkills;
     }
 
-    public static String getDefaultSerialized(SkillType skillType) {
-        StringBuilder data = new StringBuilder();
-        data.append("{\"skilltype\":\"")
-                .append(skillType.getName())
-                .append("\",\"skills\":")
-                .append(Arrays.toString(skillType.getDefaultSkills()))
-                .append(",\"items\":{");
-        int[] hotbarIDs = ChampionsInventory.getDefaultHotbarIDs(skillType);
-        for (int i = 0; i < hotbarIDs.length; i++) {
-            data.append("\"").append(i).append("\"").append(":").append(hotbarIDs[i]).append(",");
-        }
-        data.deleteCharAt(data.length()-1);
-        data.append("}}");
-        return data.toString();
-    }
 
     public static SkillType getByName(String name){
         name = name.toLowerCase();

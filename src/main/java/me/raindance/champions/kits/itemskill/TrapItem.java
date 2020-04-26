@@ -10,7 +10,7 @@ import com.podcrash.api.events.TrapPrimeEvent;
 import com.podcrash.api.events.TrapSnareEvent;
 import com.podcrash.api.game.GameManager;
 import com.podcrash.api.util.PacketUtil;
-import me.raindance.champions.events.ApplyKitEvent;
+import com.podcrash.api.events.skill.ApplyKitEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -85,7 +85,7 @@ public abstract class TrapItem implements IItem, Listener {
 
     @EventHandler
     public void apply(ApplyKitEvent e) {
-        Player player = e.getChampionsPlayer().getPlayer();
+        Player player = e.getKitPlayer().getPlayer();
         consumeAllTrapItems(player, TrapSetter::destroyTrap);
     }
 

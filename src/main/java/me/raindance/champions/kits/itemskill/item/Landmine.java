@@ -8,7 +8,7 @@ import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.item.ItemManipulationManager;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.VectorUtil;
-import me.raindance.champions.kits.annotation.ItemMetaData;
+import com.podcrash.api.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.TrapItem;
 import org.bukkit.Location;
 import org.bukkit.Material;

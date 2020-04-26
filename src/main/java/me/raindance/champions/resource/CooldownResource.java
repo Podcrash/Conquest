@@ -2,16 +2,16 @@ package me.raindance.champions.resource;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.podcrash.api.time.resources.TimeResource;
-import me.raindance.champions.events.skill.SkillCooldownEvent;
-import me.raindance.champions.events.skill.SkillRechargeEvent;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
+import com.podcrash.api.events.skill.SkillCooldownEvent;
+import com.podcrash.api.events.skill.SkillRechargeEvent;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
+import com.podcrash.api.kits.Skill;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.TitleSender;
-import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.skilltypes.Passive;
-import me.raindance.champions.util.SkillTitleSender;
+import com.podcrash.api.kits.iskilltypes.action.ICooldown;
+import com.podcrash.api.kits.skilltypes.Passive;
+import com.podcrash.api.util.SkillTitleSender;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -38,7 +38,7 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public void task() {
-        ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
+        KitPlayer cPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
         if(cPlayer == null) return;
         Skill skill = cPlayer.getCurrentSkillInHand();
         if(skill != null && skill == this.skill && !(skill instanceof Passive)) {

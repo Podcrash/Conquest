@@ -4,12 +4,12 @@ import com.google.common.reflect.ClassPath;
 import com.podcrash.api.db.TableOrganizer;
 import com.podcrash.api.db.tables.DataTableType;
 import com.podcrash.api.db.tables.EconomyTable;
+import com.podcrash.api.kits.Skill;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.ChatUtil;
 import me.raindance.champions.inventory.SkillData;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
 import me.raindance.champions.kits.skills.warden.Adrenaline;
 
 import java.io.IOException;
