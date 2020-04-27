@@ -1,9 +1,10 @@
 package me.raindance.champions.kits.classes;
 
 import com.podcrash.api.sound.SoundWrapper;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.Skill;
+import me.raindance.champions.kits.SkillType;
 import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.enums.SkillType;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,12 +12,13 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class Rogue extends ChampionsPlayer {
     public Rogue(Player player, List<Skill> skills) {
-        super(player);
-        this.skills = skills;
+        super(player, 35);
+        this.skills = new HashSet<>(skills);
         setSound(new SoundWrapper("random.bow", 0.95F, 126));
         this.armor = new Material[]{Material.LEATHER_BOOTS, Material.LEATHER_LEGGINGS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET};
     }
@@ -24,11 +26,6 @@ public class Rogue extends ChampionsPlayer {
     @Override
     public SkillType getType() {
         return SkillType.Rogue;
-    }
-
-    @Override
-    public int getHP() {
-        return 35;
     }
 
     @Override

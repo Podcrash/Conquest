@@ -2,7 +2,7 @@ package me.raindance.champions.kits.skills.duelist;
 
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.events.StatusApplyEvent;
-import me.raindance.champions.kits.skilltypes.Passive;
+import com.podcrash.api.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
 //@SkillMetadata(id = 310, skillType = SkillType.Duelist, invType = InvType.PRIMARY_PASSIVE)

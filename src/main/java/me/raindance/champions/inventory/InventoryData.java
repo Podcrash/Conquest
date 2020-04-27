@@ -3,7 +3,7 @@ package me.raindance.champions.inventory;
 import com.podcrash.api.util.ChatUtil;
 import com.podcrash.api.util.ItemStackUtil;
 import me.raindance.champions.kits.SkillInfo;
-import me.raindance.champions.kits.enums.InvType;
+import com.podcrash.api.kits.enums.InvType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -31,11 +31,5 @@ public class InventoryData {
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
         return item;
-    }
-
-    public static void setItemName(ItemStack item, String name) {
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        item.setItemMeta(meta);
     }
 }

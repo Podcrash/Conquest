@@ -7,11 +7,11 @@ import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.events.DamageApplyEvent;
 import com.podcrash.api.sound.SoundPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.skilltypes.Continuous;
+import com.podcrash.api.kits.KitPlayerManager;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.SkillType;
+import com.podcrash.api.kits.skilltypes.Continuous;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -85,7 +85,7 @@ public class Rest extends Continuous {
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wolf.hurt", 1, 63);
         String cancelMsg = String.format("%s%s> %s%s%s cancelled %sRest%s.",
                 ChatColor.BLUE,
-                ChampionsPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(),
+                KitPlayerManager.getInstance().getKitPlayer(getPlayer()).getName(),
                 ChatColor.YELLOW, event.getAttacker().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY);
         getPlayer().sendMessage(cancelMsg);
     }

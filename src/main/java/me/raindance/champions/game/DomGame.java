@@ -22,8 +22,6 @@ public class DomGame extends Game {
     private List<Landmine> mines;
 
 
-    private DomScoreboard scoreboard;
-
     private StarBuff starBuff;
     public DomGame(int id, String name) {
         super(id, name, GameType.DOM);
@@ -34,6 +32,7 @@ public class DomGame extends Game {
         this.mines = new ArrayList<>();
 
         this.starBuff = new StarBuff(this);
+        this.board = new DomScoreboard(id);
     }
 
     @Override
@@ -50,12 +49,6 @@ public class DomGame extends Game {
         });
         builder.append("\n ");
         return builder.toString();
-    }
-
-    @Override
-    public GameScoreboard getGameScoreboard() {
-        if(scoreboard == null) scoreboard = new DomScoreboard(this.getId());
-        return scoreboard;
     }
 
     @Override
@@ -100,10 +93,6 @@ public class DomGame extends Game {
         return 1;
     }
 
-    @Override
-    public Location spectatorSpawn() {
-        return getGameWorld().getSpawnLocation();
-    }
 
     @Override
     public void leaveCheck() {

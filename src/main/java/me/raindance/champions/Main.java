@@ -17,7 +17,7 @@ import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
@@ -54,48 +54,32 @@ public class Main extends JavaPlugin {
     //Mapping configuration files
     private File mapConfig;
     private FileConfiguration mapConfiguration;
-    // permissions HashMap
-    private Map<UUID, PermissionAttachment> playerPermissions = new HashMap<>();
-    //configurators
-    private ExecutorService executor = Executors.newFixedThreadPool(8);
 
-    private CompletableFuture<Void> registerListeners() {
-        return CompletableFuture.runAsync(() -> {
-            new DomRewardsListener(this);
-            new DomGameListener(this);
-            new SoundDamage(this);
-            new InventoryListener(this);
-            new MapListener(this);
-            new ObjectiveListener(this);
-            new PlayerJoinEventTest(this);
-            new SkillMaintainListener(this);
-            new ItemHelper(this);
-            new TickEventListener(this);
-            new Disguiser().disguiserIntercepter();
-            new ApplyKitListener(this);
-            new EconomyListener(this);
-            new LobbyListener(this);
-        }, executor);
+    private void registerListeners() {
+        new DomRewardsListener(this);
+        new DomGameListener(this);
+        new SoundDamage(this);
+        new InventoryListener(this);
+        new MapListener(this);
+        new ObjectiveListener(this);
+        new PlayerJoinEventTest(this);
+        new SkillMaintainListener(this);
+        new ItemHelper(this);
+        new TickEventListener(this);
+        new Disguiser().disguiserIntercepter();
+        new ApplyKitListener(this);
+        new EconomyListener(this);
+        new LobbyListener(this);
     }
-    private CompletableFuture<Void> setUpClasses() {
-        return CompletableFuture.runAsync(SkillInfo::setUp, executor);
-    }
-    private CompletableFuture<Void> registerInjectors() {
-        return CompletableFuture.runAsync(() -> {
-            //new SoundInjector();
-        }, executor);
-    }
-    private CompletableFuture<Void> setUp() {
-        return CompletableFuture.runAsync(() -> {
-            final PluginManager pman = Bukkit.getPluginManager();
-            tickTask = Bukkit.getScheduler().runTaskTimer(instance, () -> pman.callEvent(new TickEvent()), 1L, 1L);
+    private void setUpClasses() {
+        SkillInfo.setUp();
 
-        }, executor);
     }
-    private CompletableFuture<Void> registerCustomEnchant(){
-        return CompletableFuture.runAsync(() -> {
-            // lol
-        }, executor);
+    private void registerInjectors() {
+
+    }
+    private void setUp() {
+
     }
 
     public static Set<String> getDefaultAllowedSkills() {
@@ -135,13 +119,11 @@ public class Main extends JavaPlugin {
 
         spigot.registerConfigurator("kits");
 
-        CompletableFuture kb = setKnockback();
-        CompletableFuture customEnchantment = registerCustomEnchant();
-        CompletableFuture listeners = registerListeners();
-        CompletableFuture commands = registerCommands();
-        CompletableFuture injectors = registerInjectors();
-        CompletableFuture setups = setUp();
-        CompletableFuture setupClasses = setUpClasses();
+        registerListeners();
+        registerCommands();
+        registerInjectors();
+        setUp();
+        setUpClasses();
         CompletableFuture tips = registerTips();
 
         spigot.getWorldSetter().loadFromEnvVariable("conquest_spawn");
@@ -153,22 +135,9 @@ public class Main extends JavaPlugin {
 
         this.log.info(Bukkit.getWorlds().toString());
 
-        CompletableFuture allFutures = CompletableFuture.allOf(
-            kb,
-            customEnchantment,
-            listeners,
-            commands,
-            injectors,
-            setups,
-            setupClasses,
-            tips
-        );
-
-        ParticleRunnable.start();
-        PlayerCache.packetUpdater();
 
         try {
-            allFutures.get();
+            tips.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -188,18 +157,14 @@ public class Main extends JavaPlugin {
             }
         }
         Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
-        executor.shutdown();
 
 
     }
 
     @Override
     public void onDisable() {
-        DamageQueue.active = false;
-        tickTask.cancel();
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();
-        ChampionsPlayerManager.getInstance().clear();
         //CustomEntityType.unregisterEntities();
         GameManager.destroyCurrentGame();
 
@@ -213,37 +178,7 @@ public class Main extends JavaPlugin {
             }catch (IOException e) {
                 e.printStackTrace();
             }
-        }, executor);
-    }
-    private CompletableFuture<Void> setKnockback() {
-        return CompletableFuture.runAsync(() -> {
-            log.info("Kb Numbers: ");
-        /*
-
-        getDouble("settings.knockback.friction", knockbackFriction);
-        getDouble("settings.knockback.horizontal", knockbackHorizontal);
-        getDouble("settings.knockback.vertical", knockbackVertical);
-        getDouble("settings.knockback.verticallimit", knockbackVerticalLimit);
-        getDouble("settings.knockback.extrahorizontal", knockbackExtraHorizontal);
-        getDouble("settings.knockback.extravertical", knockbackExtraVertical);
-         */
-
-            SpigotConfig.knockbackFriction = SpigotConfig.config.getDouble("settings.knockback.friction");
-            SpigotConfig.knockbackHorizontal = SpigotConfig.config.getDouble("settings.knockback.horizontal");
-            SpigotConfig.knockbackVertical = SpigotConfig.config.getDouble("settings.knockback.vertical");
-            SpigotConfig.knockbackVerticalLimit = SpigotConfig.config.getDouble("settings.knockback.verticallimit");
-            SpigotConfig.knockbackExtraHorizontal = SpigotConfig.config.getDouble("settings.knockback.extrahorizontal");
-            SpigotConfig.knockbackExtraVertical = SpigotConfig.config.getDouble("settings.knockback.extravertical");
-
-
-            log.info("Friction: " + SpigotConfig.knockbackFriction);
-            log.info("Horizontal: " + SpigotConfig.knockbackHorizontal);
-            log.info("Veritcal: " + SpigotConfig.knockbackVertical);
-            log.info("Vertical Limit: " + SpigotConfig.knockbackVerticalLimit);
-            log.info("Extra Horizontal: " + SpigotConfig.knockbackExtraHorizontal);
-            log.info("Extra Vertical: " + SpigotConfig.knockbackExtraVertical);
-
-        }, executor);
+        });
     }
 
     public FileConfiguration getMapConfiguration() {
@@ -257,20 +192,18 @@ public class Main extends JavaPlugin {
         }
     }
 
-    private CompletableFuture<Void> registerCommands() {
-        return CompletableFuture.runAsync(() -> {
-            getCommand("wteleport").setExecutor(new WorldTeleportCommand());
-            getCommand("invis").setExecutor(new InvisCommand());
-            getCommand("damage").setExecutor(new DamageCommand());
-            getCommand("velo").setExecutor(new VelocityCommand());
-            getCommand("disguise").setExecutor(new DisguiseCommand());
-            getCommand("currentlocation").setExecutor(new CurrentLocationCommand());
-            getCommand("copyworld").setExecutor(new CopyWorldCommand());
-            getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
-            getCommand("rc").setExecutor(new ReloadChampionsCommand());
-            getCommand("skill").setExecutor(new SkillCommand());
-            getCommand("lock").setExecutor(new LockCommand());
-        }, executor);
+    private void registerCommands() {
+        getCommand("wteleport").setExecutor(new WorldTeleportCommand());
+        getCommand("invis").setExecutor(new InvisCommand());
+        getCommand("damage").setExecutor(new DamageCommand());
+        getCommand("velo").setExecutor(new VelocityCommand());
+        getCommand("disguise").setExecutor(new DisguiseCommand());
+        getCommand("currentlocation").setExecutor(new CurrentLocationCommand());
+        getCommand("copyworld").setExecutor(new CopyWorldCommand());
+        getCommand("deleteworld").setExecutor(new DeleteWorldCommand());
+        getCommand("rc").setExecutor(new ReloadChampionsCommand());
+        getCommand("skill").setExecutor(new SkillCommand());
+        getCommand("lock").setExecutor(new LockCommand());
     }
 
     public static Main getInstance() {

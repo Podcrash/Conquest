@@ -2,8 +2,8 @@ package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.events.SoundApplyEvent;
 import com.podcrash.api.listeners.ListenerBase;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +17,7 @@ public class SoundDamage extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void sound(SoundApplyEvent event) {
         if(!(event.getVictim() instanceof Player)) return;
-        ChampionsPlayer championsPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
-        event.setSound(championsPlayer.getSound());
+        KitPlayer kitPlayer = KitPlayerManager.getInstance().getKitPlayer((Player) event.getVictim());
+        event.setSound(kitPlayer.getSound());
     }
 }

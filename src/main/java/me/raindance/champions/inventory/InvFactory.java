@@ -14,11 +14,13 @@ import com.podcrash.api.game.GameManager;
 import com.podcrash.api.game.GameState;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.ItemStackUtil;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
+import com.podcrash.api.kits.Skill;
 import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.enums.SkillType;
+import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.sound.SoundPlayer;
+import me.raindance.champions.util.ConquestUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -77,7 +79,7 @@ public final class InvFactory {
      * @return
      */
     private static ChampionsPlayer findViaSkillType(SkillType skillType, Player player, List<Skill> skills) {
-        return ChampionsPlayerManager.getInstance().newObj(player, skills, skillType);
+        return ConquestUtil.newObj(player, skills, skillType);
     }
 
     /**
@@ -158,7 +160,7 @@ public final class InvFactory {
     /**
      * Read the build id of specific skilltype of a specific player UUID and return the
      * serialized string for skills.
-     * @see {@link ChampionsPlayer#serialize()}
+     * @see {@link KitPlayer#serialize()}
      *
      * @param player
      * @param skillType
@@ -175,8 +177,8 @@ public final class InvFactory {
             player.getInventory().clear();
             player.closeInventory();
 
-            ChampionsPlayer cPlayer = ChampionsPlayerManager.getInstance().deserialize(player, serializedInfo);
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(cPlayer);
+            ChampionsPlayer cPlayer = ChampionsPlayer.deserialize(player, serializedInfo);
+            KitPlayerManager.getInstance().addKitPlayer(cPlayer);
             cPlayer.restockInventory();
             if(GameManager.getGame().getGameState() == GameState.LOBBY) {
                 GameManager.getGame().updateLobbyInventory(player);
@@ -256,20 +258,20 @@ public final class InvFactory {
      * When a player closes the inventory,
      * have it be applied as well as save it as the current build.
      * @param player
-     * @param championsPlayer
+     * @param kitPlayer
      */
-    public static void editClose(Player player, ChampionsPlayer championsPlayer) {
+    public static void editClose(Player player, ChampionsPlayer kitPlayer) {
         UUID uuid = player.getUniqueId();
-        String clasz = championsPlayer.getType().getName();
+        String clasz = kitPlayer.getType().getName();
         int id = buildMap.get(player.getName());
-        String data = championsPlayer.serialize().toString();
+        String data = kitPlayer.serialize().toString();
         String current = getKitTable().getJSONData(uuid, clasz, id);
         PodcrashSpigot.debugLog("save1: " + data);
         PodcrashSpigot.debugLog("current: " + current);
         if(current == null) getKitTable().set(uuid, clasz, id, data);
         else getKitTable().alter(uuid, clasz, id, data);
 
-        setCurrent(player, championsPlayer.getType(), buildMap.get(player.getName()));
+        setCurrent(player, kitPlayer.getType(), buildMap.get(player.getName()));
         buildMap.remove(player.getName());
     }
 

@@ -4,7 +4,7 @@ import com.podcrash.api.events.ItemCollideEvent;
 import com.podcrash.api.item.ItemManipulationManager;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.world.BlockUtil;
-import me.raindance.champions.kits.annotation.ItemMetaData;
+import com.podcrash.api.kits.annotation.ItemMetaData;
 import me.raindance.champions.kits.itemskill.IItem;
 import org.bukkit.Location;
 import org.bukkit.Material;

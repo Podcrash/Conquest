@@ -6,17 +6,17 @@ import com.podcrash.api.game.Game;
 import com.podcrash.api.game.GameManager;
 import com.podcrash.api.game.GameState;
 import com.podcrash.api.listeners.ListenerBase;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
-import me.raindance.champions.kits.Skill;
-import me.raindance.champions.kits.skilltypes.TogglePassive;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
+import com.podcrash.api.kits.Skill;
+import com.podcrash.api.kits.skilltypes.TogglePassive;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
+import java.util.Set;
 
 public class LobbyListener extends ListenerBase {
 
@@ -32,9 +32,9 @@ public class LobbyListener extends ListenerBase {
 
         if (game.getGameState() != GameState.LOBBY) return;
 
-        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(p);
+        KitPlayer champion = KitPlayerManager.getInstance().getKitPlayer(p);
         champion.resetCooldowns();
-        List<Skill> skills = ChampionsPlayerManager.getInstance().getChampionsPlayer(p).getSkills();
+        Set<Skill> skills = KitPlayerManager.getInstance().getKitPlayer(p).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
@@ -61,9 +61,9 @@ public class LobbyListener extends ListenerBase {
 
         game.addPlayerLobbyPVPing(player);
 
-        ChampionsPlayer champion = ChampionsPlayerManager.getInstance().getChampionsPlayer(player);
-        ChampionsPlayerManager.getInstance().removeChampionsPlayer(champion);
-        ChampionsPlayerManager.getInstance().addChampionsPlayer(champion);
+        KitPlayer champion = KitPlayerManager.getInstance().getKitPlayer(player);
+        KitPlayerManager.getInstance().removeKitPlayer(champion);
+        KitPlayerManager.getInstance().addKitPlayer(champion);
 
         game.updateLobbyInventory(player);
     }

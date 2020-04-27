@@ -4,11 +4,11 @@ import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.sound.SoundPlayer;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
-import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.skilltypes.Interaction;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
+import com.podcrash.api.kits.enums.ItemType;
+import me.raindance.champions.kits.SkillType;
+import com.podcrash.api.kits.skilltypes.Interaction;
 import org.bukkit.entity.LivingEntity;
 
 /**

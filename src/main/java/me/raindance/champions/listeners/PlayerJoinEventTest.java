@@ -8,12 +8,12 @@ import com.podcrash.api.listeners.ListenerBase;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.game.GameManager;
 import me.raindance.champions.inventory.InvFactory;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.KitPlayerManager;
 import com.podcrash.api.mob.CustomEntityFirework;
-import net.minecraft.server.v1_8_R3.GenericAttributes;
+import me.raindance.champions.kits.ChampionsPlayer;
+import me.raindance.champions.util.ConquestUtil;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -42,9 +42,6 @@ public class PlayerJoinEventTest extends ListenerBase {
     public void join(PlayerJoinEvent e) {
         Player player = e.getPlayer();
 
-
-        ((CraftLivingEntity) player).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
-        player.getInventory().setItem(35, beacon);
         //adds the PermissionAttachment so permissions work on the players
 
         //Spawn the Firework, get the FireworkMeta.
@@ -77,8 +74,9 @@ public class PlayerJoinEventTest extends ListenerBase {
             }
         }
         InvFactory.applyLastBuild(player);
-        if(ChampionsPlayerManager.getInstance().getChampionsPlayer(player) == null) {
-            ChampionsPlayerManager.getInstance().addChampionsPlayer(ChampionsPlayerManager.getInstance().defaultBuild(player));
+        if(KitPlayerManager.getInstance().getKitPlayer(player) == null) {
+            ChampionsPlayer cp = ConquestUtil.defaultBuild(player);
+            KitPlayerManager.getInstance().addKitPlayer(cp);
             if(!GameManager.getGame().getGameState().equals(GameState.STARTED)) GameManager.getGame().updateLobbyInventory(player);
         }
     }
@@ -87,14 +85,14 @@ public class PlayerJoinEventTest extends ListenerBase {
     public void leave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         Game game = GameManager.getGame();
-        ChampionsPlayerManager cm = ChampionsPlayerManager.getInstance();
-        ChampionsPlayer cplayer = cm.getChampionsPlayer(player);
+        KitPlayerManager cm = KitPlayerManager.getInstance();
+        KitPlayer cplayer = cm.getKitPlayer(player);
         //HitDetectionInjector.getHitDetection(e.getPlayer()).deinject();
         StatusApplier.getOrNew(player).removeStatus(Status.values());
         StatusApplier.remove(player);
 
         if (cplayer != null)
-            cm.removeChampionsPlayer(cplayer);
+            cm.removeKitPlayer(cplayer);
     }
 
     //TODO: isnt this method pointless now? (since we aren't depending on the hub world being "world"
@@ -103,8 +101,8 @@ public class PlayerJoinEventTest extends ListenerBase {
         if (event.getPlayer().getWorld().getName().equals("world")) {
             event.getPlayer().getWorld().getPlayers().forEach(p -> p.sendMessage(event.getDeathMessage()));
             event.getPlayer().setHealth(20.0D);
-            ChampionsPlayer cPlayer;
-            if ((cPlayer = ChampionsPlayerManager.getInstance().getChampionsPlayer(event.getPlayer())) != null) {
+            KitPlayer cPlayer;
+            if ((cPlayer = KitPlayerManager.getInstance().getKitPlayer(event.getPlayer())) != null) {
                 cPlayer.restockInventory();
                 cPlayer.equip();
             }

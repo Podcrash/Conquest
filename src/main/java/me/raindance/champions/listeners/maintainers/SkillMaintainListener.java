@@ -2,11 +2,11 @@ package me.raindance.champions.listeners.maintainers;
 
 import com.podcrash.api.game.Game;
 import com.podcrash.api.game.GameManager;
-import me.raindance.champions.events.skill.SkillCooldownEvent;
-import me.raindance.champions.events.skill.SkillInteractEvent;
-import me.raindance.champions.events.skill.SkillUseEvent;
-import me.raindance.champions.kits.ChampionsPlayer;
-import me.raindance.champions.kits.iskilltypes.action.ICooldown;
+import com.podcrash.api.events.skill.SkillCooldownEvent;
+import com.podcrash.api.events.skill.SkillInteractEvent;
+import com.podcrash.api.events.skill.SkillUseEvent;
+import com.podcrash.api.kits.KitPlayer;
+import com.podcrash.api.kits.iskilltypes.action.ICooldown;
 import com.podcrash.api.listeners.ListenerBase;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
@@ -37,8 +37,8 @@ public class SkillMaintainListener extends ListenerBase {
             e.setCancelled(true);
             return;
         }
-        ChampionsPlayer championsPlayer = e.getSkill().getChampionsPlayer();
-        if(championsPlayer.isSilenced()){
+        KitPlayer kitPlayer = e.getSkill().getChampionsPlayer();
+        if(kitPlayer.isSilenced()){
             e.setCancelled(true);
             e.getPlayer().sendMessage(String.format("%sCondition> %sYou are silenced for %s%.2f %sseconds",
                     ChatColor.BLUE,

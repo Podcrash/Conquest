@@ -2,11 +2,11 @@ package me.raindance.champions.kits.skills.druid;
 
 import com.podcrash.api.damage.Cause;
 import com.podcrash.api.events.DamageApplyEvent;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.iskilltypes.action.IEnergy;
-import me.raindance.champions.kits.skilltypes.Passive;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.SkillType;
+import com.podcrash.api.kits.iskilltypes.action.IEnergy;
+import com.podcrash.api.kits.skilltypes.Passive;
 import org.bukkit.event.EventHandler;
 
 @SkillMetadata(id = 202, skillType = SkillType.Druid, invType = InvType.INNATE)

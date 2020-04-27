@@ -7,12 +7,12 @@ import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.PacketUtil;
-import me.raindance.champions.kits.annotation.SkillMetadata;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.ItemType;
-import me.raindance.champions.kits.enums.SkillType;
-import me.raindance.champions.kits.iskilltypes.action.ICooldown;
-import me.raindance.champions.kits.skilltypes.Instant;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import com.podcrash.api.kits.enums.InvType;
+import com.podcrash.api.kits.enums.ItemType;
+import me.raindance.champions.kits.SkillType;
+import com.podcrash.api.kits.iskilltypes.action.ICooldown;
+import com.podcrash.api.kits.skilltypes.Instant;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
 

@@ -9,10 +9,11 @@ import com.podcrash.api.economy.Currency;
 import com.podcrash.api.util.ItemStackUtil;
 import com.podcrash.api.util.MathUtil;
 import me.raindance.champions.Main;
-import me.raindance.champions.kits.ChampionsPlayerManager;
+import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
-import me.raindance.champions.kits.enums.InvType;
-import me.raindance.champions.kits.enums.SkillType;
+import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.SkillType;
+import me.raindance.champions.util.ConquestUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -190,7 +191,8 @@ public class MenuCreator {
                     table.getJSONDataAsync(uuid, clasz, i).thenAccept(dataJSON -> {
                         ItemStack duplicate =  new ItemStack(Material.INK_SACK, 1, color.getData());
                         ItemMeta futureMeta = item.getItemMeta();
-                        futureMeta.setLore(ChampionsPlayerManager.getInstance().readSkills(dataJSON));
+
+                        futureMeta.setLore(ConquestUtil.readSkills(dataJSON));
                         duplicate.setItemMeta(futureMeta);
                         inventory.setItem(slot, duplicate);
                     });
@@ -207,11 +209,11 @@ public class MenuCreator {
 
         String data = table.getJSONData(uuid, clasz, 0);
         if(data == null) {
-            data = SkillType.getDefaultSerialized(skillType);
+            data = ConquestUtil.getDefaultSerialized(skillType);
             table.set(uuid, clasz, 0, data);
         }
         //System.out.println(data);
-        defMeta.setLore(ChampionsPlayerManager.getInstance().readSkills(data));
+        defMeta.setLore(ConquestUtil.readSkills(data));
         defItemStack.setItemMeta(defMeta);
         inventory.setItem(18,defItemStack);
 
