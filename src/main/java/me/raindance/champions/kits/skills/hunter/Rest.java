@@ -85,7 +85,7 @@ public class Rest extends Continuous {
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.wolf.hurt", 1, 63);
         String cancelMsg = String.format("%s%s> %s%s%s cancelled %sRest%s.",
                 ChatColor.BLUE,
-                KitPlayerManager.getInstance().getChampionsPlayer(getPlayer()).getName(),
+                KitPlayerManager.getInstance().getKitPlayer(getPlayer()).getName(),
                 ChatColor.YELLOW, event.getAttacker().getName(), ChatColor.GRAY, ChatColor.GREEN, ChatColor.GRAY);
         getPlayer().sendMessage(cancelMsg);
     }

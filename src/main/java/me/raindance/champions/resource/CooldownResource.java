@@ -38,7 +38,7 @@ public class CooldownResource implements TimeResource {
 
     @Override
     public void task() {
-        KitPlayer cPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
+        KitPlayer cPlayer = KitPlayerManager.getInstance().getKitPlayer(player);
         if(cPlayer == null) return;
         Skill skill = cPlayer.getCurrentSkillInHand();
         if(skill != null && skill == this.skill && !(skill instanceof Passive)) {

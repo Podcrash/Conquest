@@ -17,7 +17,7 @@ public class SoundDamage extends ListenerBase {
     @EventHandler(priority = EventPriority.LOWEST)
     public void sound(SoundApplyEvent event) {
         if(!(event.getVictim() instanceof Player)) return;
-        KitPlayer kitPlayer = KitPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
+        KitPlayer kitPlayer = KitPlayerManager.getInstance().getKitPlayer((Player) event.getVictim());
         event.setSound(kitPlayer.getSound());
     }
 }

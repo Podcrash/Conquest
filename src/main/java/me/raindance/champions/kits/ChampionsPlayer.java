@@ -90,29 +90,29 @@ public abstract class ChampionsPlayer extends KitPlayer {
 
     @Override
     public JsonObject serialize() {
-            if(jsonObject != null) return jsonObject;
-            JsonObject championsObject = new JsonObject();
+        if(jsonObject != null) return jsonObject;
+        JsonObject championsObject = new JsonObject();
 
-            championsObject.addProperty("skilltype", this.getType().getName().toLowerCase());
+        championsObject.addProperty("skilltype", this.getType().getName().toLowerCase());
 
-            JsonArray skillArray = new JsonArray();
+        JsonArray skillArray = new JsonArray();
 
-            for(Skill skill : skills)
-                skillArray.add(SkillInfo.getSkillID(skill));
+        for (Skill skill : skills)
+            skillArray.add(SkillInfo.getSkillID(skill));
 
-            JsonObject itemsSerial = new JsonObject();
-            for(int i = 0; i < defaultHotbar.length; i++) {
-                ItemStack item = defaultHotbar[i];
-                if(item == null || item.getType() == Material.AIR) continue;
-                ChampionsItem championsItem = ChampionsItem.getByName(item.getItemMeta().getDisplayName());
-                int slotID = (championsItem == null) ? -1 : championsItem.getSlotID();
-                itemsSerial.addProperty(Integer.toString(i), slotID);
-            }
+        JsonObject itemsSerial = new JsonObject();
+        for (int i = 0; i < defaultHotbar.length; i++) {
+            ItemStack item = defaultHotbar[i];
+            if(item == null || item.getType() == Material.AIR) continue;
+            ChampionsItem championsItem = ChampionsItem.getByName(item.getItemMeta().getDisplayName());
+            int slotID = (championsItem == null) ? -1 : championsItem.getSlotID();
+            itemsSerial.addProperty(Integer.toString(i), slotID);
+        }
 
-            championsObject.add("skills", skillArray);
-            championsObject.add("items", itemsSerial);
-            this.jsonObject = championsObject;
-            return championsObject;
+        championsObject.add("skills", skillArray);
+        championsObject.add("items", itemsSerial);
+        this.jsonObject = championsObject;
+        return championsObject;
     }
 
     public static ChampionsPlayer deserialize(Player owner, String jsonStr) {
@@ -121,7 +121,7 @@ public abstract class ChampionsPlayer extends KitPlayer {
 
         JsonObject itemsJson = json.getAsJsonObject("items");
         ItemStack[] items = new ItemStack[9];
-        for(Map.Entry<String, JsonElement> entry : itemsJson.entrySet()) {
+        for (Map.Entry<String, JsonElement> entry : itemsJson.entrySet()) {
             String slotKey = entry.getKey();
             int itemID = entry.getValue().getAsInt();
             if(itemID == -1) continue;

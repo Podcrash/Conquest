@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
 import java.util.Set;
 
 public class LobbyListener extends ListenerBase {
@@ -33,9 +32,9 @@ public class LobbyListener extends ListenerBase {
 
         if (game.getGameState() != GameState.LOBBY) return;
 
-        KitPlayer champion = KitPlayerManager.getInstance().getChampionsPlayer(p);
+        KitPlayer champion = KitPlayerManager.getInstance().getKitPlayer(p);
         champion.resetCooldowns();
-        Set<Skill> skills = KitPlayerManager.getInstance().getChampionsPlayer(p).getSkills();
+        Set<Skill> skills = KitPlayerManager.getInstance().getKitPlayer(p).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
@@ -62,7 +61,7 @@ public class LobbyListener extends ListenerBase {
 
         game.addPlayerLobbyPVPing(player);
 
-        KitPlayer champion = KitPlayerManager.getInstance().getChampionsPlayer(player);
+        KitPlayer champion = KitPlayerManager.getInstance().getKitPlayer(player);
         KitPlayerManager.getInstance().removeKitPlayer(champion);
         KitPlayerManager.getInstance().addKitPlayer(champion);
 

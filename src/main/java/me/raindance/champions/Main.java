@@ -135,8 +135,6 @@ public class Main extends JavaPlugin {
 
         this.log.info(Bukkit.getWorlds().toString());
 
-        ParticleRunnable.start();
-        PlayerCache.packetUpdater();
 
         try {
             tips.get();
@@ -165,10 +163,8 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        DamageQueue.active = false;
         ProtocolLibrary.getProtocolManager().removePacketListeners(this);
         Bukkit.getScheduler().cancelAllTasks();
-        KitPlayerManager.getInstance().clear();
         //CustomEntityType.unregisterEntities();
         GameManager.destroyCurrentGame();
 

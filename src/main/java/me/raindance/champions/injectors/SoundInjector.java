@@ -22,7 +22,7 @@ public class SoundInjector extends InjectorBase {
             WrapperPlayServerEntityStatus status = new WrapperPlayServerEntityStatus(event.getPacket());
             if (!(status.getEntity(event) instanceof Player)) return;
             Player player = (Player) status.getEntity(event);
-            KitPlayer kitPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
+            KitPlayer kitPlayer = KitPlayerManager.getInstance().getKitPlayer(player);
             if (kitPlayer == null) return;
             SoundPlayer.sendSound(player.getLocation(), kitPlayer.getSound());
         }else {

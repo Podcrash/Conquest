@@ -80,8 +80,8 @@ public class DomGameListener extends ListenerBase {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void regDamage(DamageApplyEvent event) {
         if(!(event.getAttacker() instanceof Player) && !(event.getVictim() instanceof Player)) return;
-        KitPlayer championsVictim = KitPlayerManager.getInstance().getChampionsPlayer((Player) event.getVictim());
-        KitPlayer championsAttacker = KitPlayerManager.getInstance().getChampionsPlayer((Player) event.getAttacker());
+        KitPlayer championsVictim = KitPlayerManager.getInstance().getKitPlayer((Player) event.getVictim());
+        KitPlayer championsAttacker = KitPlayerManager.getInstance().getKitPlayer((Player) event.getAttacker());
 
         event.setArmorValue(championsVictim.getArmorValue());
     }
@@ -170,7 +170,7 @@ public class DomGameListener extends ListenerBase {
         );
 
         for(Player p: game.getBukkitPlayers()) {
-            KitPlayer player = KitPlayerManager.getInstance().getChampionsPlayer(p);
+            KitPlayer player = KitPlayerManager.getInstance().getKitPlayer(p);
             player.restockInventory();
             player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
@@ -223,7 +223,7 @@ public class DomGameListener extends ListenerBase {
             if (e.getWho() != e.getKiller())
                 e.getGame().increment(enemyTeam, 50);
         }
-        Set<Skill> skills = KitPlayerManager.getInstance().getChampionsPlayer(victim).getSkills();
+        Set<Skill> skills = KitPlayerManager.getInstance().getKitPlayer(victim).getSkills();
         for(Skill skill : skills) {
             if(!(skill instanceof TogglePassive)) continue;
             if (((TogglePassive) skill).isToggled())
@@ -240,7 +240,7 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void ressurect(GameResurrectEvent e) {
-        KitPlayerManager.getInstance().getChampionsPlayer(e.getWho()).respawn();
+        KitPlayerManager.getInstance().getKitPlayer(e.getWho()).respawn();
     }
 
     @EventHandler
@@ -291,7 +291,7 @@ public class DomGameListener extends ListenerBase {
             builder.append(" has collected 200 points!");
             game.broadcast(builder.toString());
         }else if(itemObjective instanceof Restock) {
-            KitPlayer cPlayer = KitPlayerManager.getInstance().getChampionsPlayer(player);
+            KitPlayer cPlayer = KitPlayerManager.getInstance().getKitPlayer(player);
             cPlayer.restockInventory();
             player.sendMessage(ChatColor.YELLOW + ChatColor.BOLD.toString() + "You recieved supplies!");
         }else if(itemObjective instanceof Landmine) {
@@ -315,7 +315,7 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler
     public void resurrect(GameResurrectEvent e) {
-        KitPlayer kitPlayer = KitPlayerManager.getInstance().getChampionsPlayer(e.getWho());
+        KitPlayer kitPlayer = KitPlayerManager.getInstance().getKitPlayer(e.getWho());
         kitPlayer.getSkills().forEach(skill -> {
             if(skill instanceof ICharge) {
                 if(!((ICharge) skill).isMaxAtStart()) return;
