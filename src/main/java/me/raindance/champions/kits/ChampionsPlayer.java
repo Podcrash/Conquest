@@ -13,6 +13,10 @@ import me.raindance.champions.inventory.ChampionsItem;
 import me.raindance.champions.kits.classes.Druid;
 import me.raindance.champions.kits.classes.Sorcerer;
 import me.raindance.champions.util.ConquestUtil;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.ChatColor;
@@ -77,15 +81,18 @@ public abstract class ChampionsPlayer extends KitPlayer {
     }
 
     public void skillsRead() {
-        player.sendMessage(ChatColor.YELLOW + this.getName());
-        for(Skill skill : skills) {
-            IChatBaseComponent message = IChatBaseComponent.ChatSerializer.a(
-                    "{\"text\":\"" + String.format("%s%s: ", ChatColor.GREEN, SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName() ) + "\"," +
-                            "\"extra\":[{\"text\":\"" + String.format("%s%s", ChatColor.WHITE, skill.getName()) + "\"," +
-                            "\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"" + niceLookingDescription(skill) + "\"}}]}");
-            PacketPlayOutChat packet = new PacketPlayOutChat(message, (byte) 1);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+
+        ComponentBuilder builder = new ComponentBuilder(this.getName()).color(net.md_5.bungee.api.ChatColor.YELLOW);
+        for (Skill skill : skills) {
+            String invTypeName = SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName();
+            String skillDesc =  niceLookingDescription(skill);
+
+            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(skillDesc).create());
+            builder.append("\n")
+                .append(invTypeName + " ").color(net.md_5.bungee.api.ChatColor.GREEN)
+                .append(skill.getName()).color(net.md_5.bungee.api.ChatColor.WHITE).event(hover);
         }
+        player.sendMessage(builder.create());
     }
 
     @Override
