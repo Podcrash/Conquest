@@ -148,7 +148,7 @@ public class DomGameListener extends ListenerBase {
     public void itemObjectiveSpawn(ItemObjectiveSpawnEvent e) {
         if(e.getObjective() instanceof Star) {
             DomGame game = (DomGame) GameManager.getGame();
-            game.getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + " Active");
+            game.getStarBuff().replaceLine(StarBuff.PREFIX, ChatColor.YELLOW + "Active");
         }
     }
     @EventHandler(priority = EventPriority.LOW)
