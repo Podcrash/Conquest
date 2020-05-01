@@ -28,7 +28,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 1011, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+//@SkillMetadata(id = 1011, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class Frostbolt extends Instant implements IEnergy, ICooldown, IConstruct, Listener {
     private int currentItemID;
 

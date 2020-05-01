@@ -6,24 +6,28 @@ import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.kits.enums.InvType;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.PacketUtil;
 import com.podcrash.api.util.VectorUtil;
 import com.podcrash.api.world.BlockUtil;
 import com.podcrash.api.kits.iskilltypes.action.IEnergy;
 import com.podcrash.api.kits.skilltypes.ChargeUp;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import me.raindance.champions.kits.SkillType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-//@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
-public class Gust extends ChargeUp implements IEnergy {
-    private final float duration = 4;           //  duration of slow
+@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+public class ColdWave extends ChargeUp implements IEnergy {
+    private final float duration = 2;           //  duration of slow
+    private final double maxDamage = 6;
 
     private final int freq = 5;                 // Frequency of particles
-    private final float rate = 0.05f;          // Rate of charge
+    private final float chargeTime = 1.5f;
 
-    private final float cooldown = 10;
+    private final float cooldown = 6;
     private final int energy = 40;
 
     private final double userPushMult = 0.75;
@@ -34,7 +38,7 @@ public class Gust extends ChargeUp implements IEnergy {
 
     @Override
     public float getRate() {
-        return rate;
+        return chargeTime / 20f;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class Gust extends ChargeUp implements IEnergy {
         Vector enemyPush = getPlayer().getEyeLocation().getDirection().normalize().multiply(enemyPushMult * getCharge());
         enemyPush.setY(getPlayer().getEyeLocation().getDirection().normalize().getY() + enemyVertBoost);
 
-        if(!getPlayer().isSneaking()) {
+        if(getPlayer().isSneaking()) {
             Vector userPush = getPlayer().getEyeLocation().getDirection().normalize().multiply(-(userPushMult * getCharge()));
             userPush.setY(userPush.getY() + userVertBoost);
             getPlayer().setVelocity(userPush);
@@ -56,13 +60,14 @@ public class Gust extends ChargeUp implements IEnergy {
         WrapperPlayServerWorldParticles particlePlayer = ParticleGenerator.createParticle(getPlayer().getLocation().toVector(), EnumWrappers.Particle.EXPLOSION_LARGE, 1, 0,0,0);
         PacketUtil.asyncSend(particlePlayer, getPlayers());
 
-        Location effectLocation = getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().normalize().multiply(2));
+        Location effectLocation = getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().normalize().multiply(1.5));
 
-        for (Player p : BlockUtil.getPlayersInArea(effectLocation, 3, getPlayers())) {
+        for (Player p : BlockUtil.getPlayersInArea(effectLocation, 2, getPlayers())) {
             if (p == getPlayer()) continue;
             if(!isAlly(p)) {
                 StatusApplier applier = StatusApplier.getOrNew(p);
-                applier.applyStatus(Status.SLOW, duration, 0, true, true);
+                applier.applyStatus(Status.SLOW, duration, 1, true, true);
+                DamageApplier.damage(p, getPlayer(), maxDamage * getCharge(), this, false);
             }
             p.setVelocity(enemyPush);
             createEffect(getPlayer().getEyeLocation(), p.getEyeLocation());
@@ -82,7 +87,7 @@ public class Gust extends ChargeUp implements IEnergy {
 
     @Override
     public String getName() {
-        return "Gust";
+        return "Cold Wave";
     }
 
     @Override
