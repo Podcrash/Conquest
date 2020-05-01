@@ -41,10 +41,13 @@ public class StarBuff implements TimeResource {
         List<String> lines = scoreboard.getLines();
         for(int i = 0; i < lines.size(); i++) {
             String curr = lines.get(i);
-            if(!curr.toLowerCase().contains("star")) continue;
+            if(!curr.toLowerCase().contains("star:")) continue;
             int thing = i + 1;
             scoreboard.setPrefix(thing, prefix);
-            scoreboard.setLine(thing, line);
+            scoreboard.setDisplay(thing, "");
+            scoreboard.setSuffix(thing, line);
+            Bukkit.broadcastMessage("Line: " + prefix + line);
+            Bukkit.broadcastMessage("Actual: " + scoreboard.getLine(thing));
             break;
         }
     }
@@ -52,7 +55,7 @@ public class StarBuff implements TimeResource {
     public void setCollector(Player collector) {
         this.holder = collector.getName();
         this.endTime = System.currentTimeMillis() + 1000L * 30;
-        replaceLine(PREFIX, ChatColor.YELLOW.toString() + ChatColor.BOLD + holder);
+        replaceLine(PREFIX + ChatColor.YELLOW + "" + ChatColor.BOLD, holder);
         runAsync(1, 0);
     }
 
@@ -112,7 +115,7 @@ public class StarBuff implements TimeResource {
             game.broadcast(String.format("%s%s%s lost the star peacefully.", ChatColor.WHITE, ChatColor.BOLD, holder));
             //alert the players that the collector lost the buff peacefully
         }
-        replaceLine(PREFIX, ChatColor.GRAY + "Inactive");
+        replaceLine(PREFIX + ChatColor.GRAY + "" + ChatColor.BOLD, "Inactive");
 
         this.holder = null;
     }

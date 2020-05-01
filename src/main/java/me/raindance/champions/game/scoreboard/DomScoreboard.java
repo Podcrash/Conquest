@@ -43,7 +43,7 @@ public class DomScoreboard extends GameScoreboard {
 
         points.add("");
         // The line below doesn't really appear to do anything
-        points.add(StarBuff.PREFIX + " ACTIVE");
+        points.add(StarBuff.PREFIX);
         createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
     }
 

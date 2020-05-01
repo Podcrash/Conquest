@@ -31,8 +31,8 @@ public class DomGame extends Game {
         this.stars = new ArrayList<>();
         this.mines = new ArrayList<>();
 
-        this.starBuff = new StarBuff(this);
         this.board = new DomScoreboard(id);
+        this.starBuff = new StarBuff(this);
     }
 
     @Override
