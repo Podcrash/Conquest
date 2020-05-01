@@ -31,7 +31,7 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct
 
     @Override
     public float getCooldown() {
-        return 18;
+        return 13;
     }
 
     @Override
@@ -66,14 +66,14 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct
     private void explode(Arrow arrow, Location location) {
         explosion.setLocation(location);
         PacketUtil.syncSend(explosion, getPlayers());
-        for(final Player player : getPlayers()) {
+        for (final Player player : getPlayers()) {
             double deltaDistance = this.range - location.distanceSquared(player.getLocation());
-            if(deltaDistance > 0) {
+            if (deltaDistance > 0) {
                 double divide = deltaDistance/range;
                 Vector vector = player.getLocation().add(0, 1, 0).subtract(location).toVector().normalize().multiply(0.45D + 0.6D * divide);
                 vector.setY(vector.getY() + 0.3D + 0.3D * divide);
-                if(vector.getY() > 0.8D) vector.setY(0.8D);
-                if(EntityUtil.onGround(player)) {
+                if (vector.getY() > 0.8D) vector.setY(0.8D);
+                if (EntityUtil.onGround(player)) {
                     vector.setY(vector.getY() + 0.1);
                 }
                 player.setVelocity(vector);
