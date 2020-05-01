@@ -56,7 +56,7 @@ public class PhantomDash extends Instant implements ICooldown {
         if(!rightClickCheck(action) || onCooldown()) return;
 
         if(StatusApplier.getOrNew(event.getPlayer()).has(Status.SLOW)) {
-            getPlayer().sendMessage(String.format("%sPhantom Dash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
+            getPlayer().sendMessage(getCannotUseWhileMessage("Slowed"));
             return;
         }
 
