@@ -25,7 +25,7 @@ public class Adrenaline extends Passive {
     @EventHandler
     public void damage(DamageApplyEvent e) {
         if(e.getAttacker() != getPlayer()) return;
-        if(EntityUtil.isBelow(getPlayer(), 0.4) && e.getCause().equals(Cause.MELEE)) {
+        if(EntityUtil.isBelow(getPlayer(), 0.5) && e.getCause().equals(Cause.MELEE)) {
             e.setVelocityModifierX(e.getVelocityModifierX() * 1.33);
             e.setVelocityModifierZ(e.getVelocityModifierZ() * 1.33);
             e.addSource(this);

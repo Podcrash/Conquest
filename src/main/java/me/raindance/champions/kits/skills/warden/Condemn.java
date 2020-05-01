@@ -35,15 +35,15 @@ public class Condemn extends Passive implements ICooldown {
 
     @EventHandler
     public void damage(DamageApplyEvent e) {
-        if(onCooldown() || e.getAttacker() != getPlayer()) return;
-        if(e.getCause() != Cause.MELEE && e.getCause() != Cause.MELEESKILL) return;
-        if(isAlly(e.getVictim())) return;
+        if (onCooldown() || e.getAttacker() != getPlayer()) return;
+        if (e.getCause() != Cause.MELEE && e.getCause() != Cause.MELEESKILL) return;
+        if (isAlly(e.getVictim())) return;
+
         setLastUsed(System.currentTimeMillis());
         getPlayer().sendMessage(getUsedMessage(e.getVictim()).replace("used", "unleashed"));
-        StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.GROUND, 1.5F, 1);
-        e.setDamage(e.getDamage() - 2);
-        e.setModified(true);
+        StatusApplier.getOrNew((Player) e.getVictim()).applyStatus(Status.GROUND, 2F, 1);
         e.addSource(this);
+
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.hit", 0.7F, 77);
         ParticleGenerator.createBlockEffect(getPlayer().getLocation(), Material.WOODEN_DOOR.getId());
     }

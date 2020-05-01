@@ -50,7 +50,7 @@ public class Vigilance extends Instant implements TimeResource, ICooldown {
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
         applier.applyStatus(Status.WEAKNESS, duration, 1);
         applier.applyStatus(Status.RESISTANCE, duration, 2);
-        applier.applyStatus(Status.SLOW, duration, 2);
+        applier.applyStatus(Status.SLOW, duration, 1);
         applier.applyStatus(Status.GROUND, duration, 1);
         TimeHandler.repeatedTime(1, 0, this);
         setLastUsed(System.currentTimeMillis());
