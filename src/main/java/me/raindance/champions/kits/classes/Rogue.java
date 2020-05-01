@@ -33,8 +33,6 @@ public class Rogue extends ChampionsPlayer {
         if(!super.equip()) return false;
         EntityEquipment equipment = getPlayer().getEquipment();
         for(ItemStack armor : equipment.getArmorContents()) {
-            if(armor.getType() == Material.LEATHER_BOOTS ||
-                    armor.getType() == Material.LEATHER_LEGGINGS) continue;
             colorWhite(armor);
         }
         return true;

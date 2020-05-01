@@ -13,7 +13,7 @@ import org.bukkit.event.EventPriority;
 
 @SkillMetadata(id = 602, skillType = SkillType.Rogue, invType = InvType.PRIMARY_PASSIVE)
 public class ChainAttack extends Passive {
-    private int bonus = 0;
+    private double bonus = 0;
     private long lastHit = 0;
     private String affectedPlayer;
 
@@ -31,10 +31,10 @@ public class ChainAttack extends Passive {
         event.setDamage(event.getDamage() + bonus);
         event.setModified(true);
         SoundPlayer.sendSound(victim.getLocation(), "note.hat", 0.9F, 110);
-        if (bonus < 3) {
+        if (bonus < 2) {
             if (bonus == 0 || affectedPlayer == null || affectedPlayer.equals(victim.getName())) {
                 affectedPlayer = victim.getName();
-                bonus++;
+                bonus += 0.5;
             } else reset();
         }
     }

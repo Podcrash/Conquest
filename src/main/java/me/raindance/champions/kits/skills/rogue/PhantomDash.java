@@ -108,7 +108,7 @@ public class PhantomDash extends Instant implements ICooldown {
         lock = true;
         //damage
         if(!isAlly(victim)) {
-            DamageApplier.damage(victim, getPlayer(), 6, this, false);
+            DamageApplier.damage(victim, getPlayer(), 5, this, false);
         }
 
 

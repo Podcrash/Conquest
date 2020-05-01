@@ -29,7 +29,7 @@ public class VitalStab extends Interaction {
         if(isAlly(clickedEntity)) {return;}
         setLastUsed(System.currentTimeMillis());
         DamageApplier.damage(clickedEntity, getPlayer(), 6, this, false);
-        StatusApplier.getOrNew(clickedEntity).applyStatus(Status.BLEED, 5, 1);
+        StatusApplier.getOrNew(clickedEntity).applyStatus(Status.BLEED, 3, 1);
         //TODO:
         SoundPlayer.sendSound(clickedEntity.getLocation(), "random.anvil_land", 0.9F, 110);
 
@@ -38,7 +38,7 @@ public class VitalStab extends Interaction {
 
     @Override
     public float getCooldown() {
-        return 9;
+        return 5;
     }
 
     @Override
