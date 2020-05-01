@@ -1,5 +1,7 @@
 package me.raindance.champions.kits.skills.duelist;
 
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.EntityUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
@@ -31,7 +33,11 @@ public class Lunge extends Drop implements ICooldown {
 
     @Override
     public boolean drop(PlayerDropItemEvent e) {
-        if(onCooldown()) return false;
+        if (onCooldown()) return false;
+        if (StatusApplier.getOrNew(getPlayer()).has(Status.SLOW)) {
+            getPlayer().sendMessage(getCannotUseWhileMessage("Slowed"));
+            return false;
+        }
         setLastUsed(System.currentTimeMillis());
         SoundPlayer.sendSound(getPlayer().getLocation(), "item.fireCharge.use", 0.8F, 90);
         setVector();

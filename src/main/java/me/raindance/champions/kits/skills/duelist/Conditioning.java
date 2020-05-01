@@ -29,7 +29,7 @@ public class Conditioning extends Passive {
         if(event.getAttacker() != getPlayer()) return;
         if(event.getCause() != Cause.MELEE && event.getCause() != Cause.MELEESKILL) return;
         System.out.println("Do conditioning: " + (event.getAttacker() != getPlayer()));
-        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.ABSORPTION, 40, 1, false, true);
+        StatusApplier.getOrNew(getPlayer()).applyStatus(Status.ABSORPTION, 45, 0, false, true);
         getPlayer().sendMessage(getUsedMessage());
     }
 }

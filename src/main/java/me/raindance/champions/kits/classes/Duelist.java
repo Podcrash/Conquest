@@ -14,7 +14,7 @@ import java.util.List;
 public class Duelist extends ChampionsPlayer {
 
     public Duelist(Player player, List<Skill> skills) {
-        super(player, 50);
+        super(player, 45);
         this.skills = new HashSet<>(skills);
         setSound(new SoundWrapper("mob.blaze.hit", 0.95F, 57));
         this.armor = new Material[]{Material.IRON_BOOTS, Material.IRON_LEGGINGS, Material.IRON_CHESTPLATE, Material.IRON_HELMET};

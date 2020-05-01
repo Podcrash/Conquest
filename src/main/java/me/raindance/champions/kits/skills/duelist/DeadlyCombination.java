@@ -25,8 +25,8 @@ public class DeadlyCombination extends Interaction implements ICooldown {
     private int i;
     @Override
     public void doSkill(LivingEntity clickedEntity) {
-        if(onCooldown()) return;
-        if(isAlly(clickedEntity)) return;
+        if (onCooldown()) return;
+        if (isAlly(clickedEntity)) return;
         this.attacked = clickedEntity;
         this.i = 0;
         setLastUsed(System.currentTimeMillis());
@@ -35,7 +35,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
         packet.setEntityStatus(WrapperPlayServerEntityStatus.Status.ENTITY_HURT);
 
         AbstractPacket packet2 = ParticleGenerator.createBlockEffect(attacked.getLocation().toVector(), Material.OBSIDIAN.getId());
-        for(Player player : getPlayers()) {
+        for (Player player : getPlayers()) {
             packet.sendPacket(player);
             packet2.sendPacket(player);
         }
@@ -45,11 +45,11 @@ public class DeadlyCombination extends Interaction implements ICooldown {
 
     @EventHandler
     public void hit(DamageApplyEvent event) {
-        if(attacked == null || event.getVictim() != attacked || event.getAttacker() != getPlayer()) return;
+        if (attacked == null || event.getVictim() != attacked || event.getAttacker() != getPlayer()) return;
         i++;
 
-        if(i < 2 || System.currentTimeMillis() - getLastUsed() > 3000L) return;
-        StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 2, 2);
+        if (i < 2 || System.currentTimeMillis() - getLastUsed() > 3000L) return;
+        StatusApplier.getOrNew(attacked).applyStatus(Status.SLOW, 3, 2);
         event.setDamage(event.getDamage() + 2);
         event.setModified(true);
         event.addSource(this);
@@ -69,7 +69,7 @@ public class DeadlyCombination extends Interaction implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 10;
     }
 
     @Override
