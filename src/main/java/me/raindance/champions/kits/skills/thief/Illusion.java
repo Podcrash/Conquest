@@ -35,7 +35,7 @@ public class Illusion extends Continuous implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 16;
+        return 12;
     }
 
     @Override

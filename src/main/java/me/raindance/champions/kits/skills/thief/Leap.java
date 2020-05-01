@@ -48,7 +48,7 @@ public class Leap extends Instant implements ICooldown {
     protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
         if(StatusApplier.getOrNew(getPlayer()).has(Status.SLOW)) {
-            getPlayer().sendMessage(String.format("%s%s> %sYou cannot use %s%s%s due to %s", org.bukkit.ChatColor.BLUE, getChampionsPlayer().getName(), org.bukkit.ChatColor.GRAY, org.bukkit.ChatColor.YELLOW, getName(), org.bukkit.ChatColor.GRAY, Status.SLOW));
+            getPlayer().sendMessage(getCannotUseWhileMessage("Slowed"));
             return;
         }
         //idk the proper value

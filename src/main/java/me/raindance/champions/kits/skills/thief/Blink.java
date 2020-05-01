@@ -52,7 +52,7 @@ public class Blink extends Instant implements ICooldown {
         Player player = getPlayer();
         if (!this.onCooldown()) {
             if(StatusApplier.getOrNew(getPlayer()).has(Status.SLOW)) {
-                getPlayer().sendMessage(String.format("%sFlash> %sYou cannot use %s%s%s due to %s", ChatColor.BLUE, ChatColor.GRAY, ChatColor.YELLOW, getName(), ChatColor.GRAY, Status.SLOW));
+                getPlayer().sendMessage(getCannotUseWhileMessage("Slowed"));
                 return;
             }
             player.setFallDistance(0);
