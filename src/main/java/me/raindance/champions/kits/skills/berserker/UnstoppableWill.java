@@ -21,7 +21,7 @@ public class UnstoppableWill extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 12;
+        return 10;
     }
 
     @Override
@@ -36,11 +36,11 @@ public class UnstoppableWill extends Instant implements ICooldown {
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
-        if(!rightClickCheck(action) || onCooldown()) return;
+        if (!rightClickCheck(action) || onCooldown()) return;
         setLastUsed(System.currentTimeMillis());
         StatusApplier applier = StatusApplier.getOrNew(getPlayer());
         applier.getEffects().forEach(status -> {
-            if(status.isNegative())
+            if (status.isNegative())
                 applier.removeStatus(status);
         });
         applier.applyStatus(Status.RESISTANCE, 7, 0);

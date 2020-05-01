@@ -27,11 +27,11 @@ import java.util.List;
 public class SeismicShockwave extends Instant implements TimeResource, ICooldown {
     private boolean usage = false;
     private final double reach = Math.pow((5.5d), 2d);
-    private final int damage = 4;
+    private final int damage = 6;
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 10;
     }
 
     @Override
@@ -65,8 +65,10 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
 
     @EventHandler
     public void die(DeathApplyEvent event) {
-        if(event.getPlayer() == getPlayer()) usage = false;
+        if (event.getPlayer() == getPlayer())
+            usage = false;
     }
+
     @Override
     public void task() {
 
@@ -83,7 +85,7 @@ public class SeismicShockwave extends Instant implements TimeResource, ICooldown
         usage = false;
         SkillUseEvent event = new SkillUseEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
         ParticleGenerator.generateRangeParticles(getPlayer().getLocation(), FastMath.sqrt(this.reach), true, (int) FastMath.sqrt(this.reach));
         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ZOMBIE_WOOD, 2f, 0.2f);
         List<Player> players = getPlayer().getWorld().getPlayers();

@@ -26,7 +26,7 @@ public class Perseverance extends Passive implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 9;
+        return 6;
     }
 
     @EventHandler

@@ -23,7 +23,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 11;
+        return 10;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BattleRage extends Drop implements ICooldown, IEnergy {
 
     @Override
     public boolean drop(PlayerDropItemEvent e) {
-        if(e.getPlayer() != getPlayer() || onCooldown()) return false;
+        if (e.getPlayer() != getPlayer() || onCooldown()) return false;
         setLastUsed(System.currentTimeMillis());
         EnergyBar energyBar = getChampionsPlayer().getEnergyBar();
         getChampionsPlayer().heal(2 * energyBar.getEnergy());
