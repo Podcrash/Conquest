@@ -1,7 +1,10 @@
 package me.raindance.champions.kits.skills.warden;
 
+import com.podcrash.api.callback.sources.CollideBeforeHitGround;
 import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.kits.iskilltypes.action.IConstruct;
+import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.EntityUtil;
 import com.podcrash.api.util.VectorUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
@@ -19,41 +22,68 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 @SkillMetadata(id = 905, skillType = SkillType.Warden, invType = InvType.SWORD)
-public class EarthSmash extends Instant implements ICooldown {
-    private double radiusSquared = 4.5 * 4.5;
+public class EarthSmash extends Instant implements ICooldown, IConstruct {
+    private double normalRadius = 4;
+    private double slamRadius = 5;
+    private double boost = -1;
+
+    private CollideBeforeHitGround hitGround;
     @Override
     public float getCooldown() {
         return 10;
     }
 
     @Override
-    public void doSkill(PlayerEvent event, Action action) {
-        if(!rightClickCheck(action) || onCooldown()) return;
-        if(!EntityUtil.onGround(getPlayer())) {
-            getPlayer().sendMessage(getMustAirborneMessage());
-            return;
-        }
-        setLastUsed(System.currentTimeMillis());
-        Location location = getPlayer().getLocation();
-        List<LivingEntity> players = location.getWorld().getLivingEntities();
-        for(LivingEntity enemy : players) {
-            if(getPlayer() == enemy) continue;
-            double dist = location.distanceSquared(enemy.getLocation());
-            if(dist > radiusSquared) continue;
-            pound(location, enemy, 1.33333D - ((16D - dist)/16D));
-        }
-        ParticleGenerator.generateRangeParticles(location, 8, true, 4);
-
-        getPlayer().sendMessage(getUsedMessage());
+    public void afterConstruction() {
+        hitGround = new CollideBeforeHitGround(getPlayer(), 1L,  0D, 0D, 0D).then(() -> {
+            Location location = getPlayer().getLocation();
+            List<LivingEntity> players = location.getWorld().getLivingEntities();
+            for(LivingEntity enemy : players) {
+                if(getPlayer() == enemy) continue;
+                double dist = location.distanceSquared(enemy.getLocation());
+                if(dist > Math.pow(slamRadius, 2)) continue;
+                pound(location, enemy, 1.33333D - ((16D - dist)/16D), 8);
+            }
+            ParticleGenerator.generateRangeParticles(location, slamRadius, true, (int) slamRadius);
+            getPlayer().sendMessage(getUsedMessage());
+        });
     }
 
-    private void pound(Location currentLoc, LivingEntity entity, double multiplier) {
+    @Override
+    public void doSkill(PlayerEvent event, Action action) {
+        if(!rightClickCheck(action) || onCooldown()) return;
+        setLastUsed(System.currentTimeMillis());
+
+        if(!EntityUtil.onGround(getPlayer())) {
+            slamDown();
+        } else {
+            Location location = getPlayer().getLocation();
+            List<LivingEntity> players = location.getWorld().getLivingEntities();
+            for(LivingEntity enemy : players) {
+                if(getPlayer() == enemy) continue;
+                double dist = location.distanceSquared(enemy.getLocation());
+                if(dist > Math.pow(normalRadius, 2)) continue;
+                pound(location, enemy, 1.33333D - ((16D - dist)/16D), 5);
+            }
+            ParticleGenerator.generateRangeParticles(location, normalRadius, true, (int) normalRadius);
+            setLastUsed(System.currentTimeMillis());
+            getPlayer().sendMessage(getUsedMessage());
+        }
+    }
+
+    private void pound(Location currentLoc, LivingEntity entity, double multiplier, double maxDamage) {
         if(multiplier > 1) multiplier = 1;
-        if(!isAlly(entity)) DamageApplier.damage(entity, getPlayer(), multiplier * 5D, this, false);
+        if(!isAlly(entity)) DamageApplier.damage(entity, getPlayer(), multiplier * maxDamage, this, false);
         Vector vector = VectorUtil.fromAtoB(currentLoc, entity.getLocation()).normalize();
         vector.multiply(multiplier * 1.25D).setY(vector.getY() + 1);
         if(vector.getY() > 1D) vector.setY(1D);
         entity.setVelocity(vector);
+    }
+
+    private void slamDown() {
+        SoundPlayer.sendSound(getPlayer().getLocation(), "random.fizz", 1f, 126, getPlayers());
+        getPlayer().setVelocity(getPlayer().getVelocity().setY(-2));
+        hitGround.run();
     }
 
     @Override
