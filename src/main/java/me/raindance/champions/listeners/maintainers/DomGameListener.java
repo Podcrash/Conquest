@@ -175,6 +175,8 @@ public class DomGameListener extends ListenerBase {
             player.resetCooldowns();
             StatusApplier.getOrNew(p).removeStatus(Status.values());
         }
+
+        ((DomGame) e.getGame()).getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + "" + ChatColor.BOLD, "Active");
     }
 
 
