@@ -6,17 +6,20 @@ import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
+import com.podcrash.api.kits.enums.InvType;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.PacketUtil;
 import com.podcrash.api.util.VectorUtil;
 import com.podcrash.api.world.BlockUtil;
 import com.podcrash.api.kits.iskilltypes.action.IEnergy;
 import com.podcrash.api.kits.skilltypes.ChargeUp;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import me.raindance.champions.kits.SkillType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-//@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class Gust extends ChargeUp implements IEnergy {
     private final float duration = 4;           //  duration of slow
 
@@ -82,7 +85,7 @@ public class Gust extends ChargeUp implements IEnergy {
 
     @Override
     public String getName() {
-        return "Gust";
+        return "Cold Wave";
     }
 
     @Override
