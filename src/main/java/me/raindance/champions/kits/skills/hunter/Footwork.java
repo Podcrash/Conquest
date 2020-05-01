@@ -4,6 +4,7 @@ import com.podcrash.api.damage.Cause;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.events.StatusApplyEvent;
 import me.raindance.champions.annotation.kits.SkillMetadata;
 import com.podcrash.api.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
@@ -27,5 +28,13 @@ public class Footwork extends Passive {
     public void bowHit(DamageApplyEvent event) {
         if(event.getAttacker() != getPlayer() || event.getCause() != Cause.PROJECTILE || isAlly(event.getVictim())) return;
         StatusApplier.getOrNew(getPlayer()).applyStatus(Status.SPEED, 3, 1, true);
+    }
+
+    @EventHandler
+    public void onSlow(StatusApplyEvent e) {
+        if (e.getStatus().equals(Status.SLOW)) {
+            // TODO add a sound effect for this maybe ...
+            e.setCancelled(true);
+        }
     }
 }

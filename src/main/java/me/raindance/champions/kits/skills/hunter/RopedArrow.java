@@ -24,7 +24,7 @@ public class RopedArrow extends BowShotSkill {
 
     @Override
     public float getCooldown() {
-        return 8;
+        return 6;
     }
 
     @Override

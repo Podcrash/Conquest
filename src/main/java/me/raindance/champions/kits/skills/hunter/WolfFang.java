@@ -29,7 +29,7 @@ public class WolfFang extends BowShotSkill {
 
     @Override
     public float getCooldown() {
-        return 8;
+        return 7;
     }
 
     @Override

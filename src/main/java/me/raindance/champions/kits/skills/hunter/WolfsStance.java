@@ -79,7 +79,7 @@ public class WolfsStance extends ChargeUp implements IConstruct {
 
     @Override
     public float getCooldown() {
-        return 8F;
+        return 4F;
     }
 
     @Override
