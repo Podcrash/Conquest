@@ -29,7 +29,7 @@ public class ParalyzingPollen extends Instant implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 10;
+        return 8;
     }
 
     @Override

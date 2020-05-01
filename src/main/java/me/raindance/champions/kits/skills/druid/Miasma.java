@@ -114,7 +114,7 @@ public class Miasma extends Instant implements IEnergy, ICooldown, IConstruct {
 
     @Override
     public float getCooldown() {
-        return 10;
+        return 8;
     }
 
     @Override

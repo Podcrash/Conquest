@@ -26,7 +26,7 @@ import java.util.Random;
 public class NaturesGift extends Instant implements ICooldown, IEnergy {
     @Override
     public float getCooldown() {
-        return 15;
+        return 12;
     }
 
     @Override

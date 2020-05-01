@@ -24,8 +24,10 @@ import java.util.Random;
 
 @SkillMetadata(id = 205, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Nurture extends TogglePassive implements IEnergy, TimeResource {
-    private int energyUsage = 30;
+    private int energyUsage = 20;
     private int counter = 0;
+    private double radius = 7;
+
     @Override
     public void toggle() {
         run(1, 0);
@@ -62,7 +64,7 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
 
     private void buff(Player victim) {
         if(victim != getPlayer() && !isAlly(victim)) return;
-        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > 25) return;
+        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > Math.pow(radius, 2)) return;
 
         StatusApplier.getOrNew(victim).applyStatus(Status.REGENERATION, 1.25f, 1, false, true);
     }

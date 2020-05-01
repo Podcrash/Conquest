@@ -38,7 +38,7 @@ public class EarthWall extends Instant implements IEnergy, TimeResource, ICooldo
 
     @Override
     public float getCooldown() {
-        return 11;
+        return 8;
     }
 
     @Override

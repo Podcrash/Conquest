@@ -26,7 +26,7 @@ import java.util.List;
 
 @SkillMetadata(id = 206, skillType = SkillType.Druid, invType = InvType.SWORD)
 public class Overgrowth extends Instant implements ICooldown, IEnergy {
-    private int energyUsage = 70;
+    private int energyUsage = 90;
     private int radius = 5;
     private float duration = 5;
 
@@ -66,7 +66,7 @@ public class Overgrowth extends Instant implements ICooldown, IEnergy {
 
     @Override
     public float getCooldown() {
-        return 8;
+        return 10;
     }
 
     @Override
