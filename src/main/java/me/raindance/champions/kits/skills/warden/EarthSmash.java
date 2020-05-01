@@ -1,10 +1,14 @@
 package me.raindance.champions.kits.skills.warden;
 
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.podcrash.api.callback.sources.CollideBeforeHitGround;
 import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.kits.iskilltypes.action.IConstruct;
 import com.podcrash.api.sound.SoundPlayer;
+import com.podcrash.api.sound.SoundWrapper;
+import com.podcrash.api.time.resources.EntityParticleResource;
 import com.podcrash.api.util.EntityUtil;
 import com.podcrash.api.util.VectorUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
@@ -14,6 +18,7 @@ import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.ICooldown;
 import com.podcrash.api.kits.skilltypes.Instant;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEvent;
@@ -26,8 +31,9 @@ public class EarthSmash extends Instant implements ICooldown, IConstruct {
     private double normalRadius = 4;
     private double slamRadius = 5;
     private double boost = -1;
-
+    private boolean isFalling = false;
     private CollideBeforeHitGround hitGround;
+
     @Override
     public float getCooldown() {
         return 10;
@@ -45,6 +51,7 @@ public class EarthSmash extends Instant implements ICooldown, IConstruct {
                 pound(location, enemy, 1.33333D - ((16D - dist)/16D), 8);
             }
             ParticleGenerator.generateRangeParticles(location, slamRadius, true, (int) slamRadius);
+            isFalling = false;
             getPlayer().sendMessage(getUsedMessage());
         });
     }
@@ -55,6 +62,7 @@ public class EarthSmash extends Instant implements ICooldown, IConstruct {
         setLastUsed(System.currentTimeMillis());
 
         if(!EntityUtil.onGround(getPlayer())) {
+            isFalling = true;
             slamDown();
         } else {
             Location location = getPlayer().getLocation();
@@ -81,8 +89,12 @@ public class EarthSmash extends Instant implements ICooldown, IConstruct {
     }
 
     private void slamDown() {
+        WrapperPlayServerWorldParticles particles = ParticleGenerator.createParticle(EnumWrappers.Particle.EXPLOSION_NORMAL, 1);
+        AftershockParticleResource resource = new AftershockParticleResource(getPlayer(), particles, null);
+        resource.run(1);
+
         SoundPlayer.sendSound(getPlayer().getLocation(), "random.fizz", 1f, 126, getPlayers());
-        getPlayer().setVelocity(getPlayer().getVelocity().setY(-2));
+        getPlayer().setVelocity(getPlayer().getVelocity().setY(boost));
         hitGround.run();
     }
 
@@ -94,5 +106,16 @@ public class EarthSmash extends Instant implements ICooldown, IConstruct {
     @Override
     public ItemType getItemType() {
         return ItemType.SWORD;
+    }
+
+    private class AftershockParticleResource extends EntityParticleResource {
+        private AftershockParticleResource(Entity entity, WrapperPlayServerWorldParticles packet, SoundWrapper sound) {
+            super(entity, packet, sound);
+        }
+
+        @Override
+        public boolean cancel() {
+            return !isFalling || getGame().isRespawning(getPlayer());
+        }
     }
 }
