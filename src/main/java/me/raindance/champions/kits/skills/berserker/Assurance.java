@@ -1,11 +1,13 @@
 package me.raindance.champions.kits.skills.berserker;
 
 import com.podcrash.api.events.DamageApplyEvent;
+import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.annotation.kits.SkillMetadata;
 import com.podcrash.api.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.skilltypes.Passive;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 
@@ -24,11 +26,13 @@ public class Assurance extends Passive {
     @EventHandler
     public void damage(DamageApplyEvent e) {
         if(getPlayer() != e.getAttacker()) return;
-        LivingEntity victim = e.getVictim();
-        if(victim.getMaxHealth() * 0.5D < victim.getHealth()) return;
 
-        e.setDamage(e.getDamage() + 1);
-        e.addSource(this);
+        // Find the current percentage of health remaining, then multiply it by our real max HP value (e.g. 40 for zerk right now)
+        double trueCurrentHP = (e.getVictim().getHealth() / e.getVictim().getMaxHealth()) * getChampionsPlayer().getHP();
+        double trueMissingHP = getChampionsPlayer().getHP() - trueCurrentHP;
+        double bonus = trueMissingHP * 0.1;
+
+        e.setDamage(e.getDamage() + bonus);
         e.setModified(true);
     }
 }
