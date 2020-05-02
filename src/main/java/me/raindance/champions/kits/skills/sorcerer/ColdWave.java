@@ -38,7 +38,7 @@ public class ColdWave extends ChargeUp implements IEnergy {
 
     @Override
     public float getRate() {
-        return chargeTime / 20f;
+        return chargeTime / 40f;
     }
 
     @Override
