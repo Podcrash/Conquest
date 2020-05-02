@@ -95,6 +95,21 @@ public abstract class ChampionsPlayer extends KitPlayer {
         player.sendMessage(builder.create());
     }
 
+    public void skillsRead(Player target) {
+
+        ComponentBuilder builder = new ComponentBuilder(this.getName()).color(net.md_5.bungee.api.ChatColor.YELLOW);
+        for (Skill skill : skills) {
+            String invTypeName = SkillInfo.getSkill(SkillInfo.getSkillID(skill)).getInvType().getName();
+            String skillDesc =  niceLookingDescription(skill);
+
+            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(skillDesc).create());
+            builder.append("\n")
+                    .append(invTypeName + " ").color(net.md_5.bungee.api.ChatColor.GREEN)
+                    .append(skill.getName()).color(net.md_5.bungee.api.ChatColor.WHITE).event(hover);
+        }
+        target.sendMessage(builder.create());
+    }
+
     @Override
     public JsonObject serialize() {
         if(jsonObject != null) return jsonObject;
