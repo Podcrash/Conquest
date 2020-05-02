@@ -4,16 +4,16 @@ import com.packetwrapper.abstractpackets.AbstractPacket;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
-import com.podcrash.api.util.PacketUtil;
-import com.podcrash.api.world.BlockUtil;
-import me.raindance.champions.annotation.kits.SkillMetadata;
 import com.podcrash.api.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
-import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.ICooldown;
 import com.podcrash.api.kits.skilltypes.Instant;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.EntityUtil;
+import com.podcrash.api.util.PacketUtil;
+import com.podcrash.api.world.BlockUtil;
+import me.raindance.champions.annotation.kits.SkillMetadata;
+import me.raindance.champions.kits.SkillType;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,12 +53,22 @@ public class Leap extends Instant implements ICooldown {
         }
         //idk the proper value
         //double velocity = 1.3D + 0.2D * getLevel();
-        Vector behind = getPlayer().getLocation().getDirection().normalize().multiply(-1);
-        Location loc = getPlayer().getLocation().add(behind.setY(0));
-        Location headLoc = getPlayer().getEyeLocation().add(behind.setY(0));
-        if (!BlockUtil.isPassable(loc.getBlock()) || !BlockUtil.isPassable(headLoc.getBlock()))
+        Vector facing = getPlayer().getLocation().getDirection().setY(0).normalize();
+
+        Location headLoc = getPlayer().getEyeLocation().subtract(facing);
+        Location footLoc = headLoc.clone().subtract(0, 1, 0);
+
+        Location standingLocOne = footLoc.clone().subtract(0, 1, 0);
+        Location standingLocTwo = standingLocOne.clone().add(facing);
+
+        if (!BlockUtil.isPassable(standingLocOne.getBlock()) && standingLocTwo.getBlock().getType().equals(Material.AIR)) {
             wallKick();
-        else leap();
+            return;
+        }
+
+        if (!BlockUtil.isPassable(headLoc.getBlock()) || !BlockUtil.isPassable(footLoc.getBlock())) {
+            wallKick();
+        } else leap();
     }
 
     private void wallKick() {
