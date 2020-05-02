@@ -72,7 +72,7 @@ public class Vigilance extends Instant implements TimeResource, ICooldown {
 
     @Override
     public boolean cancel() {
-        return (System.currentTimeMillis() - getLastUsed() >= 4000L);
+        return (System.currentTimeMillis() - getLastUsed() >= 4000L) || getGame().isRespawning(getPlayer());
     }
 
     @Override
