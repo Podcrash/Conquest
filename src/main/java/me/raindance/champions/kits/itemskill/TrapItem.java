@@ -9,6 +9,8 @@ import com.podcrash.api.events.DeathApplyEvent;
 import com.podcrash.api.events.TrapPrimeEvent;
 import com.podcrash.api.events.TrapSnareEvent;
 import com.podcrash.api.game.GameManager;
+import com.podcrash.api.time.TimeHandler;
+import com.podcrash.api.time.resources.TimeResource;
 import com.podcrash.api.util.PacketUtil;
 import com.podcrash.api.events.skill.ApplyKitEvent;
 import org.bukkit.Bukkit;
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -49,8 +52,27 @@ public abstract class TrapItem implements IItem, Listener {
     @EventHandler
     public void trapPrime(TrapPrimeEvent e) {
         Item item = e.getItem();
+        String ownerName = itemOwners.get(item.getEntityId());
         if(!itemOwners.containsKey(item.getEntityId())) return;
         primeTrap(item);
+
+        TimeHandler.repeatedTime(10, 0, new TimeResource() {
+            @Override
+            public void task() {
+                WrapperPlayServerWorldParticles safeParticles =
+                        ParticleGenerator.createParticle(item.getLocation().toVector().add(new Vector(0, 1, 0)), EnumWrappers.Particle.VILLAGER_HAPPY, 2, 0, 0, 0);
+                PacketUtil.syncSend(safeParticles, GameManager.getGame().getTeam(ownerName).getBukkitPlayers());
+            }
+
+            @Override
+            public boolean cancel() {
+                return item.isDead();
+            }
+
+            @Override
+            public void cleanup() { }
+        });
+
         AwaitTime time = new AwaitTime(despawnDelay);
         time.then(() -> {
             if(TrapSetter.destroyTrap(item)) {
@@ -69,7 +91,8 @@ public abstract class TrapItem implements IItem, Listener {
         Player owner = Bukkit.getPlayer(ownerName);
         Item item = e.getItem();
         Player snared = e.getPlayer();
-        if(GameManager.getGame() != null && GameManager.getGame().isRespawning(snared)) {
+
+        if(GameManager.getGame() != null && GameManager.getGame().isRespawning(snared) || GameManager.getGame().getTeam(ownerName).getBukkitPlayers().contains(snared)) {
             e.setCancelled(true);
         }else {
             snareTrap(owner, snared, item);
