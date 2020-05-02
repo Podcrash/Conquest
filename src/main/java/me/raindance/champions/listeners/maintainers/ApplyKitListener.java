@@ -18,6 +18,6 @@ public class ApplyKitListener extends ListenerBase {
         if(e.getKitPlayer().getPlayer().getWorld().getName().equals("world")) {
             e.setKeepInventory(true);
         }
-        ((ChampionsPlayer) e.getKitPlayer()).skillsRead();
+        e.getKitPlayer().getPlayer().sendMessage(((ChampionsPlayer) e.getKitPlayer()).skillsRead());
     }
 }

@@ -19,7 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-@SkillMetadata(id = 1012, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
+@SkillMetadata(id = 1011, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class ColdWave extends ChargeUp implements IEnergy {
     private final float duration = 2;           //  duration of slow
     private final double maxDamage = 6;

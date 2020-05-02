@@ -21,13 +21,13 @@ public class SkillCommand extends CommandBase {
                 if(targetChampionsPlayer == null) {
                     player.sendMessage(ChatColor.BOLD + args[0] + "doesn't have any skills!");
                 } else {
-                    targetChampionsPlayer.skillsRead(player);
+                    player.sendMessage(targetChampionsPlayer.skillsRead());
                 }
             } else {
                 ChampionsPlayer championsPlayer = (ChampionsPlayer) KitPlayerManager.getInstance().getKitPlayer((Player) sender);
                 if(championsPlayer == null)
                     player.sendMessage(ChatColor.BOLD + "You currently don't have any skills!");
-                else championsPlayer.skillsRead();
+                else player.sendMessage(championsPlayer.skillsRead());
             }
         }
         return true;
