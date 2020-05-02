@@ -10,6 +10,7 @@ import com.podcrash.api.game.Game;
 import com.podcrash.api.game.GameState;
 import com.podcrash.api.game.TeamEnum;
 import com.podcrash.api.game.scoreboard.GameScoreboard;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.time.resources.TimeResource;
 import com.podcrash.api.util.PacketUtil;
 import org.bukkit.Bukkit;
@@ -44,10 +45,7 @@ public class StarBuff implements TimeResource {
             if(!curr.toLowerCase().contains("star:")) continue;
             int thing = i + 1;
             scoreboard.setPrefix(thing, prefix);
-            scoreboard.setDisplay(thing, "");
             scoreboard.setSuffix(thing, line);
-            Bukkit.broadcastMessage("Line: " + prefix + line);
-            Bukkit.broadcastMessage("Actual: " + scoreboard.getLine(thing));
             break;
         }
     }
