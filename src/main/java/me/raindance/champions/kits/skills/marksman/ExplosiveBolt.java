@@ -19,6 +19,7 @@ import net.jafama.FastMath;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -53,7 +54,7 @@ public class ExplosiveBolt extends BowShotSkill implements ICooldown, IConstruct
     }
 
     @Override
-    protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+    protected void shotEntity(DamageApplyEvent event, Player shooter, LivingEntity victim, Arrow arrow, float force) {
         event.setCancelled(true);
         Bukkit.getScheduler().runTask(Main.instance, () -> explode(arrow, arrow.getLocation().getBlock().getLocation()));
 
