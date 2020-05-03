@@ -25,6 +25,7 @@ import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
 import me.raindance.champions.kits.SkillType;
 import net.jafama.FastMath;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -53,11 +54,12 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
     private float rootDuration = 2.5F;
 
     private int updateCounter = 0;
+    private boolean forceStop = false;
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if(usage || !rightClickCheck(action) || onCooldown()) return;
-        if(!EntityUtil.onGround(getPlayer())) {
+        if(!EntityUtil.onGround(getPlayer()) || !getPlayer().getLocation().subtract(new Vector(0, 0.1, 0)).getBlock().getType().isSolid()) {
             getPlayer().sendMessage(getMustAirborneMessage());
             return;
         }
@@ -98,16 +100,18 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
                     break;
                 case NO_PATH :
                     //No path found, throw error.
-                    System.out.println("No path found!");
+                    getPlayer().sendMessage(String.format("%s%s> %sNo path found!",
+                            ChatColor.BLUE, getChampionsPlayer().getName(), ChatColor.GRAY));
+                    usage = false;
                     break;
             }
         } catch (AStar.InvalidPathException e) {
             //InvalidPathException will be thrown if start or end block is air
             if(e.isEndNotSolid()){
-                System.out.println("End block is not walkable ");
+                //System.out.println("End block is not walkable ");
             }
             if(e.isStartNotSolid()){
-                System.out.println("Start block is not walkable");
+                //System.out.println("Start block is not walkable");
             }
         }
     }
@@ -122,7 +126,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         //BlockUtil.setBlock(crosshairView, Material.REDSTONE_BLOCK);
 
         if (updateCounter >= 2) {
-            runPathing(currentPointer, crosshairView, 50);
+            runPathing(currentPointer, crosshairView, 35);
             updateCounter = 0;
         }
 
@@ -192,7 +196,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     @Override
     public boolean cancel() {
-        return !hasEnergy(getEnergyUsageTicks()) || !getPlayer().isBlocking();
+        return !hasEnergy(getEnergyUsageTicks()) || !getPlayer().isBlocking() || !usage;
     }
 
     @Override
@@ -200,14 +204,14 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         if(!hasEnergy(getEnergyUsageTicks()))
             getPlayer().sendMessage(getNoEnergyMessage());
 
-        explode();
-        //clear the variables to save some space
+        if (usage) {
+            setLastUsed(System.currentTimeMillis());
+            explode();
+        }
+
         players = null;
         currentPointer = null;
         updateCounter = 0;
-
-        //cooldown
-        setLastUsed(System.currentTimeMillis());
         usage = false;
     }
 
