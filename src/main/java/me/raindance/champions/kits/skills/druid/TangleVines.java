@@ -1,30 +1,34 @@
 package me.raindance.champions.kits.skills.druid;
 
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.packetwrapper.abstractpackets.AbstractPacket;
 import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.item.ItemManipulationManager;
+import com.podcrash.api.kits.enums.InvType;
+import com.podcrash.api.kits.enums.ItemType;
+import com.podcrash.api.kits.iskilltypes.action.ICooldown;
+import com.podcrash.api.kits.iskilltypes.action.IEnergy;
+import com.podcrash.api.kits.skilltypes.Instant;
+import com.podcrash.api.pathing.AStar;
+import com.podcrash.api.pathing.PathingResult;
+import com.podcrash.api.pathing.Tile;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.time.TimeHandler;
 import com.podcrash.api.time.resources.TimeResource;
 import com.podcrash.api.util.EntityUtil;
 import com.podcrash.api.util.PacketUtil;
-import com.podcrash.api.util.VectorUtil;
 import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
-import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
-import com.podcrash.api.kits.iskilltypes.action.ICooldown;
-import com.podcrash.api.kits.iskilltypes.action.IEnergy;
-import com.podcrash.api.kits.skilltypes.Instant;
 import net.jafama.FastMath;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -33,10 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 //TODO: path finding algorithm (bruh)
 @SkillMetadata(id = 208, skillType = SkillType.Druid, invType = InvType.SWORD)
@@ -49,9 +50,9 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
 
     private int radius = 4;
     private double damage = 10;
-    private double speedFactor = 0.35;
     private float rootDuration = 2.5F;
 
+    private int updateCounter = 0;
 
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
@@ -74,6 +75,43 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         getPlayer().getWorld().playSound(currentLocation, Sound.STEP_STONE, 0.9f, 1f);
     }
 
+    public void runPathing(final Location start, final Location end, final int range){
+        try {
+            //create our pathfinder
+            AStar path = new AStar(start, end, range);
+            //get the list of nodes to walk to as a Tile object
+            ArrayList<Tile> route = path.iterate();
+            //get the result of the path trace
+            PathingResult result = path.getPathingResult();
+
+            switch(result){
+                case SUCCESS :
+                    //Path was successful
+                    Location next;
+                    if (route.size() > 1) {
+                         next = route.get(1).getLocation(start);
+                    } else {
+                        return;
+                    }
+                    currentPointer = next;
+
+                    break;
+                case NO_PATH :
+                    //No path found, throw error.
+                    System.out.println("No path found!");
+                    break;
+            }
+        } catch (AStar.InvalidPathException e) {
+            //InvalidPathException will be thrown if start or end block is air
+            if(e.isEndNotSolid()){
+                System.out.println("End block is not walkable ");
+            }
+            if(e.isStartNotSolid()){
+                System.out.println("Start block is not walkable");
+            }
+        }
+    }
+
     private void movePointer(Location currentPointer) {
         Location crosshairView = getPlayer().getTargetBlock((HashSet<Byte>) null, 25).getLocation();
         //pseudo correction, just in case the pointer tries to go in air.
@@ -81,31 +119,14 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
             BlockUtil.getHighestUnderneath(crosshairView);
         }
 
-        //find initial direction to go to.
-        Vector direction = VectorUtil.fromAtoB(currentPointer, crosshairView).normalize();
-        //SLOOOOOWWWW DOWN
-        direction.multiply(speedFactor);
+        //BlockUtil.setBlock(crosshairView, Material.REDSTONE_BLOCK);
 
-        currentPointer.add(direction);
-        Block eval = currentPointer.getBlock();
-        Material evalType = eval.getType();
-        if(!locationIsValidForRupture(eval, evalType))
-            currentPointer.subtract(direction);
-
-    }
-
-    private boolean locationIsValidForRupture(Block eval, Material evalType) {
-        //if the suspected direction goes some form of water or air, cancel
-        switch (evalType) {
-            case STATIONARY_WATER:
-            case WATER:
-            case AIR:
-                return false;
-            default:
-                break;
+        if (updateCounter >= 2) {
+            runPathing(currentPointer, crosshairView, 50);
+            updateCounter = 0;
         }
-        //if the something can't pass through the block, then cancel
-        return !BlockUtil.isPassable(eval);
+
+        //BlockUtil.setBlock(currentPointer, Material.DIAMOND_BLOCK);
     }
 
     private void spawnVines(Location location) {
@@ -166,6 +187,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         useEnergy(getEnergyUsageTicks());
         produceParticles(currentPointer);
         movePointer(currentPointer);
+        updateCounter++;
     }
 
     @Override
@@ -182,6 +204,7 @@ public class TangleVines extends Instant implements TimeResource, IEnergy, ICool
         //clear the variables to save some space
         players = null;
         currentPointer = null;
+        updateCounter = 0;
 
         //cooldown
         setLastUsed(System.currentTimeMillis());
