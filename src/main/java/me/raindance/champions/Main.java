@@ -2,22 +2,17 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.podcrash.api.damage.DamageQueue;
 import com.podcrash.api.damage.HitDetectionInjector;
 import com.podcrash.api.disguise.Disguiser;
-import com.podcrash.api.effect.particle.ParticleRunnable;
-import com.podcrash.api.events.TickEvent;
 import com.podcrash.api.game.GameManager;
 import com.podcrash.api.time.resources.TipScheduler;
 import com.podcrash.api.util.ChatUtil;
 import com.podcrash.api.util.ConfigUtil;
-import com.podcrash.api.util.PlayerCache;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.db.redis.Communicator;
 import me.raindance.champions.commands.*;
 import me.raindance.champions.game.DomGame;
 import me.raindance.champions.inventory.InvFactory;
-import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.kits.SkillInfo;
 import me.raindance.champions.kits.itemskill.ItemHelper;
 import me.raindance.champions.listeners.*;
@@ -26,19 +21,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.spigotmc.SpigotConfig;
 
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -67,7 +57,6 @@ public class Main extends JavaPlugin {
         new TickEventListener(this);
         new Disguiser().disguiserIntercepter();
         new EconomyListener(this);
-        new LobbyListener(this);
         new DomKitApplyListener(this);
     }
     private void setUpClasses() {
