@@ -1,6 +1,7 @@
 package me.raindance.champions.game.resource;
 
 import com.podcrash.api.events.game.GameCaptureEvent;
+import com.podcrash.api.game.Game;
 import com.podcrash.api.game.TeamEnum;
 import com.podcrash.api.game.objects.objectives.CapturePoint;
 import com.podcrash.api.game.resources.GameResource;
@@ -31,7 +32,6 @@ public final class CapturePointDetector extends GameResource {
      * [capturePoint index][x,y,z coordinate][first or second bound]
      */
     private final double[][][] bounds;
-    private final String[] players;
 
     public CapturePointDetector(int gameID) {
         super(gameID, 8, 100);
@@ -52,7 +52,6 @@ public final class CapturePointDetector extends GameResource {
         List<String> names = new ArrayList<>();
         for(Player player : getGame().getBukkitPlayers()) names.add(player.getName());
         names.removeIf((name) -> getGame().isSpectating(name));
-        this.players = names.toArray(new String[names.size()]);
         this.scoreboard = ((DomScoreboard) getGame().getGameScoreboard());
         red = getGame().getTeam(0).getTeamEnum();
         blue = getGame().getTeam(1).getTeamEnum();
@@ -96,13 +95,14 @@ public final class CapturePointDetector extends GameResource {
      * @param i the capture point index
      */
     private void findPlayerInCap(int i) {
+        List<Player> players = getGame().getBukkitPlayers();
         boolean foundPlayer = false;
-        for(int p = 0; p < players.length; p++){
-            boolean a = isInBound(i, Bukkit.getPlayer(players[p]));
+        for(Player player : players){
+            boolean a = isInBound(i, player);
             if(a) {
-                TeamEnum team = getGame().getTeamEnum(Bukkit.getPlayer(players[p]));
+                TeamEnum team = getGame().getTeamEnum(player);
                 teamToColor.put(i, teamToColor.get(i) + team.getIntData());
-                firstPlayerToCapture.set(i, Bukkit.getPlayer(players[p]));
+                firstPlayerToCapture.set(i, player);
                 foundPlayer = true;
             }
         }
