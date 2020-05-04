@@ -14,6 +14,7 @@ import com.podcrash.api.kits.skilltypes.BowShotSkill;
 import com.podcrash.api.sound.SoundPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 @SkillMetadata(id = 505, skillType = SkillType.Marksman, invType = InvType.BOW)
@@ -44,7 +45,7 @@ public class InfernoShot extends BowShotSkill implements IConstruct {
     }
 
     @Override
-    protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+    protected void shotEntity(DamageApplyEvent event, Player shooter, LivingEntity victim, Arrow arrow, float force) {
         if(isAlly(victim)) return;
         victim.setFireTicks(0);
         //float duration = 1.5F + (float) victim.getLocation().distance(shooter.getLocation())/scaling;

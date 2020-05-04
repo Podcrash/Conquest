@@ -79,7 +79,7 @@ public class DomGameListener extends ListenerBase {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void regDamage(DamageApplyEvent event) {
-        if(!(event.getAttacker() instanceof Player) && !(event.getVictim() instanceof Player)) return;
+        if(!(event.getAttacker() instanceof Player) || !(event.getVictim() instanceof Player)) return;
         KitPlayer championsVictim = KitPlayerManager.getInstance().getKitPlayer((Player) event.getVictim());
         KitPlayer championsAttacker = KitPlayerManager.getInstance().getKitPlayer((Player) event.getAttacker());
 

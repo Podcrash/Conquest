@@ -51,7 +51,7 @@ public class MarkedForDeath extends BowShotSkill {
     }
 
     @Override
-    protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+    protected void shotEntity(DamageApplyEvent event, Player shooter, LivingEntity victim, Arrow arrow, float force) {
         if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.MARKED, 3, 1);
         victim.getWorld().playSound(victim.getLocation(), Sound.BLAZE_BREATH, 1.0f, 1.5f);

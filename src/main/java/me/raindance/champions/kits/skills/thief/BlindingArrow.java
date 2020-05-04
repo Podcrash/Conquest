@@ -14,6 +14,7 @@ import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.PacketUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 @SkillMetadata(id = 702, skillType = SkillType.Thief, invType = InvType.BOW)
@@ -40,7 +41,7 @@ public class BlindingArrow extends BowShotSkill {
     }
 
     @Override
-    protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+    protected void shotEntity(DamageApplyEvent event, Player shooter, LivingEntity victim, Arrow arrow, float force) {
         if(event.isCancelled()) return;
         StatusApplier.getOrNew(victim).applyStatus(Status.BLIND, duration, 1);
         StatusApplier.getOrNew(victim).applyStatus(Status.SLOW, duration, 1);

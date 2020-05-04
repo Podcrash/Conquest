@@ -13,6 +13,7 @@ import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.skilltypes.BowShotSkill;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 @SkillMetadata(id = 407, skillType = SkillType.Hunter, invType = InvType.BOW)
@@ -41,7 +42,7 @@ public class WolfFang extends BowShotSkill {
     }
 
     @Override
-    protected void shotPlayer(DamageApplyEvent event, Player shooter, Player victim, Arrow arrow, float force) {
+    protected void shotEntity(DamageApplyEvent event, Player shooter, LivingEntity victim, Arrow arrow, float force) {
         //getPlayer().sendMessage(String.format("You shot %s", victim.getName()));
         event.addSource(this);
         event.setModified(true);
