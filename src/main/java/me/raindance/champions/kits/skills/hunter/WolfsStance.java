@@ -9,7 +9,7 @@ import com.podcrash.api.location.BoundingBox;
 import com.podcrash.api.location.Coordinate;
 import me.raindance.champions.Main;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.IConstruct;
 import com.podcrash.api.kits.skilltypes.ChargeUp;

@@ -9,7 +9,7 @@ import com.podcrash.api.events.DamageApplyEvent;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.skilltypes.Continuous;
 import net.md_5.bungee.api.ChatColor;

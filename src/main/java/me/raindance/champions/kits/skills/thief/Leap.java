@@ -4,7 +4,7 @@ import com.packetwrapper.abstractpackets.AbstractPacket;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import com.podcrash.api.kits.iskilltypes.action.ICooldown;
 import com.podcrash.api.kits.skilltypes.Instant;

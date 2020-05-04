@@ -3,7 +3,7 @@ package me.raindance.champions.kits.skills.rogue;
 import com.podcrash.api.damage.Cause;
 import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.skilltypes.Passive;
 import com.podcrash.api.sound.SoundPlayer;

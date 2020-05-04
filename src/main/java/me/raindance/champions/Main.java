@@ -63,13 +63,12 @@ public class Main extends JavaPlugin {
         new MapListener(this);
         new ObjectiveListener(this);
         new PlayerJoinEventTest(this);
-        new SkillMaintainListener(this);
         new ItemHelper(this);
         new TickEventListener(this);
         new Disguiser().disguiserIntercepter();
-        new ApplyKitListener(this);
         new EconomyListener(this);
         new LobbyListener(this);
+        new DomKitApplyListener(this);
     }
     private void setUpClasses() {
         SkillInfo.setUp();

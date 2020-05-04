@@ -6,7 +6,7 @@ import com.podcrash.api.damage.DamageApplier;
 import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.util.PacketUtil;
 import com.podcrash.api.util.VectorUtil;

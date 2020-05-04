@@ -4,7 +4,7 @@ import com.podcrash.api.plugin.Configurator;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.ChatUtil;
 import com.podcrash.api.kits.Skill;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 import org.bukkit.ChatColor;
 

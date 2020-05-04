@@ -5,7 +5,7 @@ import com.podcrash.api.effect.status.Status;
 import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.item.ItemManipulationManager;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.IConstruct;
 import com.podcrash.api.kits.iskilltypes.action.IEnergy;

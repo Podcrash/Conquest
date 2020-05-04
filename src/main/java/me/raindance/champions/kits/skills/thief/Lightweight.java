@@ -8,7 +8,7 @@ import com.podcrash.api.events.DamageApplyEvent;
 import com.podcrash.api.events.game.GameStartEvent;
 import com.podcrash.api.time.TimeHandler;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.IConstruct;

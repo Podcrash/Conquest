@@ -4,12 +4,10 @@ import com.podcrash.api.events.DamageApplyEvent;
 import com.podcrash.api.kits.KitPlayer;
 import com.podcrash.api.kits.KitPlayerManager;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.skilltypes.Passive;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 

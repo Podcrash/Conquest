@@ -16,7 +16,7 @@ import com.podcrash.api.util.PacketUtil;
 import com.podcrash.api.util.VectorUtil;
 import com.podcrash.api.world.BlockUtil;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.ICooldown;

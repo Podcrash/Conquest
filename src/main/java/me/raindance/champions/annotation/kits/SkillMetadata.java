@@ -1,6 +1,6 @@
 package me.raindance.champions.annotation.kits;
 
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.SkillType;
 
 import java.lang.annotation.*;

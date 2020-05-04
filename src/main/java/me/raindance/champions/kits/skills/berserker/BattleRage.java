@@ -4,7 +4,7 @@ import com.podcrash.api.effect.particle.ParticleGenerator;
 import com.podcrash.api.sound.SoundPlayer;
 import com.podcrash.api.kits.EnergyBar;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.ICooldown;

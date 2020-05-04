@@ -9,7 +9,7 @@ import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.ChatUtil;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import me.raindance.champions.kits.skills.warden.Adrenaline;
 
 import java.io.IOException;

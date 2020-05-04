@@ -4,7 +4,7 @@ import com.podcrash.api.damage.Cause;
 import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import me.raindance.champions.annotation.kits.SkillMetadata;
-import com.podcrash.api.kits.enums.InvType;
+import me.raindance.champions.kits.enums.InvType;
 import com.podcrash.api.kits.enums.ItemType;
 import me.raindance.champions.kits.SkillType;
 import com.podcrash.api.kits.iskilltypes.action.ICharge;
