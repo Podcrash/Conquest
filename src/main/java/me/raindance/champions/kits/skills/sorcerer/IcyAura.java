@@ -31,10 +31,12 @@ import java.util.Set;
 
 @SkillMetadata(id = 1006, skillType = SkillType.Sorcerer, invType = InvType.DROP)
 public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
-    private int energeUsage = 15;
-    private int radius = 5;
-    private double radiusSquared = FastMath.pow(radius, 2);
+    private final int energeUsage = 15;
+    private final int radius = 5;
+    private final double radiusSquared = FastMath.pow(radius, 2);
     private final Random random = new Random();
+
+    private int i = 0;
     public IcyAura() {}
 
     @Override
@@ -77,6 +79,19 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
             }
 
         }
+
+        for(Player player : getPlayers()) {
+            StatusApplier applier = StatusApplier.getOrNew(player);
+            if(player == getPlayer()) applier.applyStatus(Status.RESISTANCE, 0.5F, 0, true, true);
+            else if(isAlly(player) && player.getLocation().distanceSquared(getPlayer().getLocation()) <= this.radiusSquared) {
+                applier.applyStatus(Status.RESISTANCE, 0.5F, 1, true);
+            }
+        }
+
+        if (i == 2) {
+            i = 0;
+            return;
+        }
         Set<Vector> vectors = BlockUtil.getOuterBlocksWithinRange(location, radius, false);
         double currentY = location.getY();
         double minus = currentY - 1;
@@ -91,14 +106,7 @@ public class IcyAura extends TogglePassive implements IEnergy, TimeResource {
                 }
             }
         }
-
-        for(Player player : getPlayers()) {
-            StatusApplier applier = StatusApplier.getOrNew(player);
-            if(player == getPlayer()) applier.applyStatus(Status.RESISTANCE, 0.5F, 0, true, true);
-            else if(isAlly(player) && player.getLocation().distanceSquared(getPlayer().getLocation()) <= this.radiusSquared) {
-                applier.applyStatus(Status.RESISTANCE, 0.5F, 1, true);
-            }
-        }
+        i++;
     }
 
     @Override
