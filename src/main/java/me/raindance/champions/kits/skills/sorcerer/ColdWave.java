@@ -21,8 +21,8 @@ import org.bukkit.util.Vector;
 
 @SkillMetadata(id = 1011, skillType = SkillType.Sorcerer, invType = InvType.SWORD)
 public class ColdWave extends ChargeUp implements IEnergy {
-    private final float duration = 2;           //  duration of slow
-    private final double maxDamage = 6;
+    private final float duration = 3;           //  duration of slow
+    private final double maxDamage = 7;
 
     private final int freq = 5;                 // Frequency of particles
     private final float chargeTime = 1.5f;
@@ -30,7 +30,7 @@ public class ColdWave extends ChargeUp implements IEnergy {
     private final float cooldown = 6;
     private final int energy = 40;
 
-    private final double userPushMult = 0.75;
+    private final double userPushMult = 1.25;
     private final double userVertBoost = 0.25;
 
     private final double enemyPushMult = 1.5;
@@ -62,7 +62,7 @@ public class ColdWave extends ChargeUp implements IEnergy {
 
         Location effectLocation = getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().normalize().multiply(1.5));
 
-        for (Player p : BlockUtil.getPlayersInArea(effectLocation, 2, getPlayers())) {
+        for (Player p : BlockUtil.getPlayersInArea(effectLocation, 3, getPlayers())) {
             if (p == getPlayer()) continue;
             if(!isAlly(p)) {
                 StatusApplier applier = StatusApplier.getOrNew(p);
