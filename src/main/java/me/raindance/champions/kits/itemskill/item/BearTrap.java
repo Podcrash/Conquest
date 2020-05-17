@@ -26,6 +26,7 @@ import java.util.List;
 public class BearTrap extends TrapItem implements DamageSource {
     public BearTrap() {
         super(2500);
+        despawnDelay = 40 * 1000;
     }
     @Override
     protected Item throwItem(Player player, Action action) {
