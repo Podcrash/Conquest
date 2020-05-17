@@ -88,7 +88,7 @@ public class StarBuff implements TimeResource {
         }
 
 
-        Location location = owner.getLocation().add(0, 1.25, 0);
+        Location location = owner.getLocation().add(0, 1.10, 0);
         packet.setLocation(location);
         PacketUtil.asyncSend(packet, location.getWorld().getPlayers());
     }
