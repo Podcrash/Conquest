@@ -17,7 +17,7 @@ public class PreemptiveStrike extends Passive implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 10;
+        return 5;
     }
 
     @Override

@@ -107,7 +107,9 @@ public class Stampede extends Passive implements IPassiveTimer, ICharge {
     }
 
     private void resetSpeed(){
-        StatusApplier.getOrNew(getPlayer()).removeStatus(Status.SPEED);
+        if (currentSpeed >= 1) {
+            StatusApplier.getOrNew(getPlayer()).removeStatus(Status.SPEED);
+        }
         currentSpeed = -1;
     }
 

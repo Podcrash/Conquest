@@ -23,7 +23,7 @@ public class ConcussiveBlow extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 12;
+        return 10;
     }
 
     @Override
