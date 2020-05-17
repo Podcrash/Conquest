@@ -51,7 +51,7 @@ public class GlacialTomb extends Instant implements IEnergy, ICooldown, IConstru
 
     @Override
     public float getCooldown() {
-        return 20;
+        return 15;
     }
 
     @Override

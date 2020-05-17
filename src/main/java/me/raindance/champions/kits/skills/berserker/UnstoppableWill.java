@@ -44,6 +44,7 @@ public class UnstoppableWill extends Instant implements ICooldown {
                 applier.removeStatus(status);
         });
         applier.applyStatus(Status.RESISTANCE, 7, 0);
+        applier.applyStatus(Status.SPEED, 7, 0);
         SoundPlayer.sendSound(getPlayer().getLocation(), "mob.irongolem.hit", 0.8F, 70);
         WrapperPlayServerWorldParticles packet = ParticleGenerator.createParticle(EnumWrappers.Particle.VILLAGER_ANGRY, 4);
         getPlayer().sendMessage(getUsedMessage());

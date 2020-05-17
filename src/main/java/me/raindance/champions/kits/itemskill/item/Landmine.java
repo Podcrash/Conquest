@@ -24,6 +24,7 @@ import java.util.List;
 public class Landmine extends TrapItem {
     public Landmine() {
         super(5000);
+        despawnDelay = 90 * 1000;
     }
 
     @Override

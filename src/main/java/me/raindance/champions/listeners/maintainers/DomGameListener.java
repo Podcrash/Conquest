@@ -298,7 +298,9 @@ public class DomGameListener extends ListenerBase {
             player.sendMessage(ChatColor.YELLOW + ChatColor.BOLD.toString() + "You recieved supplies!");
         }else if(itemObjective instanceof Landmine) {
             player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "You collected a landmine!");
-            player.getInventory().addItem(new ItemStack(Material.TNT));
+            ItemStack TNTStack = new ItemStack(Material.TNT);
+            TNTStack.setAmount(2);
+            player.getInventory().addItem(TNTStack);
             game.increment(team, 50);
         }else if(itemObjective instanceof Star) {
             //player.sendMessage(ChatColor.WHITE + ChatColor.BOLD.toString() + "You collected a star!");

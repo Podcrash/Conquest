@@ -22,6 +22,7 @@ import java.util.List;
 public class StunCharge extends TrapItem {
     public StunCharge() {
         super(2500);
+        despawnDelay = 40 * 1000;
     }
     @Override
     public Item throwItem(Player player, Action action) {

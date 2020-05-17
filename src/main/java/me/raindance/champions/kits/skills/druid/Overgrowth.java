@@ -28,7 +28,7 @@ import java.util.List;
 public class Overgrowth extends Instant implements ICooldown, IEnergy {
     private int energyUsage = 90;
     private int radius = 5;
-    private float duration = 5;
+    private float duration = 3;
 
     public Overgrowth() { }
 

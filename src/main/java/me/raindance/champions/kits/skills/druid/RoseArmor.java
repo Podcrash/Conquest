@@ -40,7 +40,7 @@ public class RoseArmor extends TogglePassive implements TimeResource, IEnergy {
     @Override
     public void toggle() {
         if(isToggled()) {
-            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.RESISTANCE, Integer.MAX_VALUE, 2);
+            StatusApplier.getOrNew(getPlayer()).applyStatus(Status.RESISTANCE, Integer.MAX_VALUE, 1);
             run(1, 0);
         }else {
             unregister();
@@ -75,7 +75,7 @@ public class RoseArmor extends TogglePassive implements TimeResource, IEnergy {
         if(!isToggled() || event.getVictim() != getPlayer()) return;
         if(event.getCause() != Cause.MELEE && event.getCause() != Cause.PROJECTILE) return;
         event.setDoKnockback(false);
-        if(event.getCause() == Cause.MELEE) DamageApplier.damage(event.getAttacker(), getPlayer(), 2, this, false);
+        if(event.getCause() == Cause.MELEE) DamageApplier.damage(event.getAttacker(), getPlayer(), damage, this, false);
 
     }
     private void spawnRose(Location location) {

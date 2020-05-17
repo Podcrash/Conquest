@@ -20,13 +20,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.LongGrass;
 import org.bukkit.util.Vector;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @SkillMetadata(id = 205, skillType = SkillType.Druid, invType = InvType.DROP)
 public class Nurture extends TogglePassive implements IEnergy, TimeResource {
     private int energyUsage = 20;
     private int counter = 0;
     private double radius = 7;
+    private Set<Player> currentlyBuffed = new HashSet<>();
 
     @Override
     public void toggle() {
@@ -64,9 +68,17 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
 
     private void buff(Player victim) {
         if(victim != getPlayer() && !isAlly(victim)) return;
-        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > Math.pow(radius, 2)) return;
+        if(victim.getLocation().distanceSquared(getPlayer().getLocation()) > Math.pow(radius, 2)) {
+            if (currentlyBuffed.contains(victim)) {
+                currentlyBuffed.remove(victim);
+                StatusApplier.getOrNew(victim).removeStatus(Status.HEALTH_BOOST);
+            }
+            return;
+        }
 
         StatusApplier.getOrNew(victim).applyStatus(Status.REGENERATION, 1.25f, 1, false, true);
+        StatusApplier.getOrNew(victim).applyStatus(Status.HEALTH_BOOST, Integer.MAX_VALUE, 0, false, false);
+        currentlyBuffed.add(victim);
     }
 
     @Override
@@ -79,6 +91,11 @@ public class Nurture extends TogglePassive implements IEnergy, TimeResource {
         if(!hasEnergy(getEnergyUsageTicks())) {
             forceToggle();
         }
+
+        for (Player buffed : currentlyBuffed) {
+            StatusApplier.getOrNew(buffed).removeStatus(Status.HEALTH_BOOST);
+        }
+        currentlyBuffed.clear();
     }
 
     private void spawnGrass(Location location) {

@@ -38,7 +38,7 @@ public class Guardian extends Drop implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 17;
+        return 14;
     }
 
     @Override

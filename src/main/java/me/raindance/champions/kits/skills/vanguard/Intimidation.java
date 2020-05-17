@@ -59,6 +59,6 @@ public class Intimidation extends Instant implements ICooldown {
 
     @Override
     public float getCooldown() {
-        return 14;
+        return 12;
     }
 }

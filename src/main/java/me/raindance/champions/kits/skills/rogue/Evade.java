@@ -1,6 +1,8 @@
 package me.raindance.champions.kits.skills.rogue;
 
 import com.podcrash.api.damage.Cause;
+import com.podcrash.api.effect.status.Status;
+import com.podcrash.api.effect.status.StatusApplier;
 import com.podcrash.api.events.DamageApplyEvent;
 import me.raindance.champions.Main;
 import me.raindance.champions.annotation.kits.SkillMetadata;
@@ -83,6 +85,10 @@ public class Evade extends Instant implements TimeResource, ICharge, IPassiveTim
     @Override
     protected void doSkill(PlayerEvent event, Action action) {
         if (!rightClickCheck(action)) return;
+        if (StatusApplier.getOrNew(event.getPlayer()).has(Status.SLOW)) {
+            event.getPlayer().sendMessage(getCannotUseWhileMessage("Slowed"));
+            return;
+        }
         //if in roughly quarter of a second you right click again, then don't start it (which shouldn't be humanly possible)
         if(System.currentTimeMillis() - time <= 225) return;
         if (hasCharges()) {
