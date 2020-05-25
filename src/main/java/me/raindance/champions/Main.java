@@ -58,6 +58,7 @@ public class Main extends JavaPlugin {
         new Disguiser().disguiserIntercepter();
         new EconomyListener(this);
         new DomKitApplyListener(this);
+        new RestrictPickup(this);
     }
     private void setUpClasses() {
         SkillInfo.setUp();
