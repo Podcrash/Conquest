@@ -5,6 +5,7 @@ import com.podcrash.api.game.*;
 import com.podcrash.api.game.objects.ItemObjective;
 import com.podcrash.api.game.objects.WinObjective;
 import com.podcrash.api.game.objects.objectives.*;
+import com.podcrash.api.listeners.DeathHandler;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import com.podcrash.api.game.scoreboard.GameScoreboard;
 import org.bukkit.ChatColor;
@@ -33,6 +34,7 @@ public class DomGame extends Game {
 
         this.board = new DomScoreboard(id);
         this.starBuff = new StarBuff(this);
+        DeathHandler.setAllowPlayerDrops(false);
     }
 
     @Override

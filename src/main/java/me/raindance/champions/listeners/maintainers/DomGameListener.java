@@ -165,7 +165,7 @@ public class DomGameListener extends ListenerBase {
                 new ScoreboardRepeater(game.getId()),
                 new ItemObjectiveSpawner(game.getId()),
                 capture,
-                new CapturePointScorer(capture),
+                new CapturePointScorer(game.getId()),
                 new HealthBarResource(game.getId())
         );
 

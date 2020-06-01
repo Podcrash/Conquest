@@ -1,10 +1,9 @@
 package me.raindance.champions.game.resource;
 
 import com.podcrash.api.events.game.GameCaptureEvent;
-import com.podcrash.api.game.Game;
 import com.podcrash.api.game.TeamEnum;
 import com.podcrash.api.game.objects.objectives.CapturePoint;
-import com.podcrash.api.game.resources.GameResource;
+import com.podcrash.api.game.resources.TimeGameResource;
 import me.raindance.champions.game.scoreboard.DomScoreboard;
 import me.raindance.champions.game.DomGame;
 import org.bukkit.Bukkit;
@@ -13,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public final class CapturePointDetector extends GameResource {
+public final class CapturePointDetector extends TimeGameResource {
     private final CapturePoint[] capturePoints;
     private final boolean[] playersCurrentlyIn;
     private boolean bold;
@@ -36,7 +35,7 @@ public final class CapturePointDetector extends GameResource {
     public CapturePointDetector(int gameID) {
         super(gameID, 8, 100);
         this.firstPlayerToCapture = new ArrayList<>(Arrays.asList(null, null, null, null, null));
-        this.capturePoints = ((DomGame) getGame()).getCapturePoints().toArray(new CapturePoint[((DomGame) getGame()).getCapturePoints().size()]);
+        this.capturePoints = ((DomGame) game).getCapturePoints().toArray(new CapturePoint[((DomGame) game).getCapturePoints().size()]);
         this.bounds = new double[5][3][2];
         this.playersCurrentlyIn = new boolean[5];
         for (int i = 0; i < this.capturePoints.length; i++) {
@@ -50,11 +49,11 @@ public final class CapturePointDetector extends GameResource {
             }
         }
         List<String> names = new ArrayList<>();
-        for(Player player : getGame().getBukkitPlayers()) names.add(player.getName());
-        names.removeIf((name) -> getGame().isSpectating(name));
-        this.scoreboard = ((DomScoreboard) getGame().getGameScoreboard());
-        red = getGame().getTeam(0).getTeamEnum();
-        blue = getGame().getTeam(1).getTeamEnum();
+        for(Player player : game.getBukkitPlayers()) names.add(player.getName());
+        names.removeIf(game::isSpectating);
+        this.scoreboard = ((DomScoreboard) game.getGameScoreboard());
+        red = game.getTeam(0).getTeamEnum();
+        blue = game.getTeam(1).getTeamEnum();
 
         this.bold = false;
     }
@@ -95,12 +94,12 @@ public final class CapturePointDetector extends GameResource {
      * @param i the capture point index
      */
     private void findPlayerInCap(int i) {
-        List<Player> players = getGame().getBukkitPlayers();
+        List<Player> players = game.getBukkitPlayers();
         boolean foundPlayer = false;
         for(Player player : players){
             boolean a = isInBound(i, player);
             if(a) {
-                TeamEnum team = getGame().getTeamEnum(player);
+                TeamEnum team = game.getTeamEnum(player);
                 teamToColor.put(i, teamToColor.get(i) + team.getIntData());
                 firstPlayerToCapture.set(i, player);
                 foundPlayer = true;
@@ -137,7 +136,7 @@ public final class CapturePointDetector extends GameResource {
             }
         }
         teamToColor.put(i, 0);
-        if(team != null) Bukkit.getPluginManager().callEvent(new GameCaptureEvent(getGame(), firstPlayerToCapture.get(i), capturePoint));
+        if(team != null) Bukkit.getPluginManager().callEvent(new GameCaptureEvent(game, firstPlayerToCapture.get(i), capturePoint));
     }
     @Override
     public void task() {
