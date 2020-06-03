@@ -56,27 +56,6 @@ public class InventoryListener extends ListenerBase {
     private boolean invincible = false;
 
     /**
-     * Right clicking a beacon in your hand
-     */
-    @EventHandler
-    public void clickBeacon(PlayerInteractEvent event) {
-        ItemStack itemStack = event.getPlayer().getItemInHand();
-        if(itemStack.getType() == Material.WOOL && GameManager.hasPlayer(event.getPlayer())) {
-            if(itemStack.getData() instanceof Wool) {
-                event.setCancelled(true);
-                Wool woolData = (Wool) itemStack.getData();
-                Game game = GameManager.getGame();
-                int id = game.getId();
-                if(woolData.getColor() == DyeColor.BLUE) {
-                    GameManager.joinTeam(event.getPlayer(), TeamEnum.BLUE);
-                }else if(woolData.getColor() == DyeColor.RED) {
-                    GameManager.joinTeam(event.getPlayer(), TeamEnum.RED);
-                }
-            }
-
-        }
-    }
-    /**
      * Right clicking an enchanting table and opening the kit menu
      */
     @EventHandler(priority = EventPriority.LOWEST)

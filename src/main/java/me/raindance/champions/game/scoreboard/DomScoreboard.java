@@ -3,6 +3,8 @@ package me.raindance.champions.game.scoreboard;
 import com.podcrash.api.game.*;
 import com.podcrash.api.game.objects.objectives.CapturePoint;
 import com.podcrash.api.game.scoreboard.GameScoreboard;
+import com.podcrash.api.scoreboard.CustomScoreboard;
+import com.podcrash.api.scoreboard.ScoreboardInput;
 import me.raindance.champions.game.StarBuff;
 import org.bukkit.ChatColor;
 
@@ -12,14 +14,13 @@ import java.util.List;
 /**
  * This scoreboard is backed by an array to constantly show a dynamic changing scoreboard
  */
-public class DomScoreboard extends GameScoreboard {
+public class DomScoreboard extends ScoreboardInput {
     private List<CapturePoint> capturePoints;
+    private final Game game;
 
-    public DomScoreboard(int gameId) {
-        super(17, gameId, GameType.DOM);
-
-
-
+    public DomScoreboard(CustomScoreboard scoreboard, Game game) {
+        super(scoreboard);
+        this.game = game;
     }
 
     /**
@@ -29,7 +30,10 @@ public class DomScoreboard extends GameScoreboard {
      */
     public void setup(List<CapturePoint> capturePoints) {
         List<String> points = new ArrayList<>();
-        for(GTeam team : getGame().getTeams()) {
+        points.add(ChatColor.LIGHT_PURPLE + "Conquest");
+        points.add("Control");
+        points.add("");
+        for(GTeam team : game.getTeams()) {
             TeamEnum teamE = team.getTeamEnum();
             points.add(teamE.getScoreboardColor() + "" + ChatColor.BOLD + teamE.getName());
             points.add("");
@@ -44,7 +48,8 @@ public class DomScoreboard extends GameScoreboard {
         points.add("");
         // The line below doesn't really appear to do anything
         points.add(StarBuff.PREFIX);
-        createGameScoreboard(ChatColor.LIGHT_PURPLE + "Conquest", "Control", points);
+
+        setLines(points);
     }
 
     public void createScoreboard() {
@@ -54,12 +59,7 @@ public class DomScoreboard extends GameScoreboard {
      * Update the dom scoreboard values.
      */
     public void update(){
-        for(GTeam team : getGame().getTeams()) updateScore(team.getTeamEnum());
-    }
-
-    @Override
-    public void startScoreboardTimer() {
-
+        for(GTeam team : game.getTeams()) updateScore(team.getTeamEnum());
     }
 
     public void updateScore(TeamEnum team) {
@@ -71,7 +71,7 @@ public class DomScoreboard extends GameScoreboard {
             //Pluginizer.getLogger().info(line.toLowerCase()+ " vs " + lowerTeam);
             if(!line.toLowerCase().contains(lowerTeam)) continue;
             //prev is the exact same integer.
-            setLine(i, String.valueOf(getGame().getTeam(team).getScore()));
+            setLine(i, String.valueOf(game.getTeam(team).getScore()));
             break;
         }
     }
@@ -111,5 +111,10 @@ public class DomScoreboard extends GameScoreboard {
             setLine(i + 1, newLine);
             break;
         }
+    }
+
+    @Override
+    public boolean cancel() {
+        return game.getGameState() == GameState.LOBBY;
     }
 }

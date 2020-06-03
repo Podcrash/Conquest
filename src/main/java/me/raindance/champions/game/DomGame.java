@@ -32,7 +32,6 @@ public class DomGame extends Game {
         this.stars = new ArrayList<>();
         this.mines = new ArrayList<>();
 
-        this.board = new DomScoreboard(id);
         this.starBuff = new StarBuff(this);
         DeathHandler.setAllowPlayerDrops(false);
     }

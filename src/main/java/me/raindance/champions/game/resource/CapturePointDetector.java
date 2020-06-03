@@ -51,7 +51,7 @@ public final class CapturePointDetector extends TimeGameResource {
         List<String> names = new ArrayList<>();
         for(Player player : game.getBukkitPlayers()) names.add(player.getName());
         names.removeIf(game::isSpectating);
-        this.scoreboard = ((DomScoreboard) game.getGameScoreboard());
+        this.scoreboard = ((DomScoreboard) game.getInput());
         red = game.getTeam(0).getTeamEnum();
         blue = game.getTeam(1).getTeamEnum();
 

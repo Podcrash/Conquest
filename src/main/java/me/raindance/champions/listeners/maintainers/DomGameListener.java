@@ -138,10 +138,6 @@ public class DomGameListener extends ListenerBase {
                 spawn.setDirection(VectorUtil.fromAtoB(spawn, randomBuffLoc));
             }));
         }
-
-        GameScoreboard gameScoreboard;
-        if((gameScoreboard = game.getGameScoreboard()) instanceof DomScoreboard)
-            ((DomScoreboard) gameScoreboard).setup(game.getCapturePoints());
     }
 
     @EventHandler
@@ -154,7 +150,10 @@ public class DomGameListener extends ListenerBase {
     @EventHandler(priority = EventPriority.LOW)
     public void onStart(GameStartEvent e) {
         Game game = e.getGame();
-        Main.getInstance().getLogger().info("game is " + game);
+        DomScoreboard scoreboard = new DomScoreboard(game.getGameScoreboard(), game);
+        game.setScoreboardInput(scoreboard);
+        scoreboard.setup(((DomGame) game).getCapturePoints());
+                Main.getInstance().getLogger().info("game is " + game);
         if (e.getGame().size() < 1) {
             Main.instance.getLogger().info(String.format("Can't start game %d, not enough players!", game.getId()));
         }
@@ -168,14 +167,6 @@ public class DomGameListener extends ListenerBase {
                 new CapturePointScorer(game.getId()),
                 new HealthBarResource(game.getId())
         );
-
-        for(Player p: game.getBukkitPlayers()) {
-            KitPlayer player = KitPlayerManager.getInstance().getKitPlayer(p);
-            player.restockInventory();
-            player.resetCooldowns();
-            StatusApplier.getOrNew(p).removeStatus(Status.values());
-        }
-
         ((DomGame) e.getGame()).getStarBuff().replaceLine(StarBuff.PREFIX + ChatColor.YELLOW + "" + ChatColor.BOLD, "Active");
     }
 
@@ -269,7 +260,7 @@ public class DomGameListener extends ListenerBase {
                  */
             }
             //game.broadcast(builder.toString());
-            DomScoreboard scoreboard = (DomScoreboard) game.getGameScoreboard();
+            DomScoreboard scoreboard = (DomScoreboard) game.getInput();
             scoreboard.updateCapturePoint(team, objective.getName());
             objective.spawnFirework();
         }else if(objective instanceof Diamond) {
