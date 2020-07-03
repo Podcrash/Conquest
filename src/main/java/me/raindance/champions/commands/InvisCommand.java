@@ -4,6 +4,7 @@ import com.packetwrapper.abstractpackets.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.podcrash.api.commands.CommandBase;
 import com.podcrash.api.effect.particle.ParticleGenerator;
+import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.PacketUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,6 +33,7 @@ public class InvisCommand extends CommandBase {
             particle.setParticleData(particleData);
 
             PacketUtil.asyncSend(particle, playerLocation.getWorld().getPlayers());
+            PodcrashSpigot.debugLog(particle.toString());
         } else {
             sender.sendMessage(String.format("%sConquest> %sYou have insufficient permissions to use that command.", ChatColor.BLUE, ChatColor.GRAY));
         }

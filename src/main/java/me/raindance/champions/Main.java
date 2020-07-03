@@ -2,9 +2,11 @@ package me.raindance.champions;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.podcrash.api.annotations.GamePlugin;
 import com.podcrash.api.damage.HitDetectionInjector;
 import com.podcrash.api.disguise.Disguiser;
 import com.podcrash.api.game.GameManager;
+import com.podcrash.api.plugin.IGamePlugin;
 import com.podcrash.api.time.resources.TipScheduler;
 import com.podcrash.api.util.ChatUtil;
 import com.podcrash.api.util.ConfigUtil;
@@ -31,7 +33,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin {
+@GamePlugin
+public class Main extends JavaPlugin implements IGamePlugin {
     public static volatile Main instance;
     private static Set<String> defaultAllowedSkills;
     private Properties properties;
@@ -45,7 +48,7 @@ public class Main extends JavaPlugin {
     private File mapConfig;
     private FileConfiguration mapConfiguration;
 
-    private void registerListeners() {
+    public void registerListeners() {
         new DomRewardsListener(this);
         new DomGameListener(this);
         new SoundDamage(this);
@@ -77,6 +80,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        long startTime = System.currentTimeMillis();
         /*
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -108,7 +112,6 @@ public class Main extends JavaPlugin {
 
         spigot.registerConfigurator("kits");
 
-        registerListeners();
         registerCommands();
         registerInjectors();
         setUp();
@@ -131,10 +134,6 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        DomGame game = new DomGame(GameManager.getCurrentID(), Long.toString(System.currentTimeMillis()));
-        GameManager.createGame(game);
-        log.info("Created game " + game.getName());
-
 
         //This part is really only used for reloading
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
@@ -145,9 +144,8 @@ public class Main extends JavaPlugin {
                 InvFactory.applyLastBuild(p);
             }
         }
-        Communicator.putLobbyMap("maxsize", GameManager.getGame().getMaxPlayers());
 
-
+        PodcrashSpigot.debugLog("ENDTIME: " + (System.currentTimeMillis() - startTime));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.raindance.champions.game;
 
+import com.podcrash.api.annotations.GameData;
 import com.podcrash.api.db.pojos.map.*;
 import com.podcrash.api.game.*;
 import com.podcrash.api.game.objects.ItemObjective;
@@ -14,6 +15,7 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.List;
 
+@GameData(name = "Conquest")
 public class DomGame extends Game {
 
     private List<CapturePoint> capturePoints;

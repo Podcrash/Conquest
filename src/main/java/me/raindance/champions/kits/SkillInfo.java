@@ -7,6 +7,7 @@ import com.podcrash.api.db.tables.EconomyTable;
 import com.podcrash.api.kits.Skill;
 import com.podcrash.api.plugin.PodcrashSpigot;
 import com.podcrash.api.util.ChatUtil;
+import com.podcrash.api.util.ReflectionUtil;
 import me.raindance.champions.inventory.SkillData;
 import me.raindance.champions.annotation.kits.SkillMetadata;
 import me.raindance.champions.kits.enums.InvType;
@@ -60,7 +61,7 @@ public final class SkillInfo {
                 PodcrashSpigot.debugLog("Skipping " + info.getName());
                 continue;
             }
-            Skill skill = (Skill) emptyConstructor(skillClass);
+            Skill skill = (Skill) ReflectionUtil.constructor(skillClass);
             if(skill == null) throw new RuntimeException("skill cannot be null! current at: " + info.getName());
             SkillMetadata annot = skillClass.getAnnotation(SkillMetadata.class);
             SkillType skillType = annot.skillType();
@@ -83,7 +84,7 @@ public final class SkillInfo {
         EconomyTable eco = TableOrganizer.getTable(DataTableType.ECONOMY);
         eco.putItem(costs);
         try {
-            CompletableFuture.allOf(voids.toArray(new CompletableFuture[voids.size()]))
+            CompletableFuture.allOf(voids.toArray(new CompletableFuture[0]))
                 .get(5000, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
@@ -105,16 +106,6 @@ public final class SkillInfo {
         idDataMap.put(skillID, data);
 
         return data;
-    }
-
-    private static <T> T emptyConstructor(Class<T> clazz) {
-        try {
-            Constructor<T> constructor = clazz.getConstructor();
-            return constructor.newInstance();
-        }catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public static int getSkillID(Skill skill) {

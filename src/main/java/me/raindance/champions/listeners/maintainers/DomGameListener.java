@@ -183,26 +183,6 @@ public class DomGameListener extends ListenerBase {
                         Currency.GOLD.getFormatting(), ChatColor.BOLD, e.getGame().getReward(player), Currency.GOLD.getName()));
             }
         }
-
-        //move this logic to the Engine
-        GameSettings oldSettings = e.getGame().getGameSettings();
-        Game game = e.getGame();
-        Set<UUID> specUUIDs = game.getSpectators();
-        GameManager.destroyCurrentGame();
-        GameManager.createGame(game1);
-        game1.setGameSettings(oldSettings);
-
-        PodcrashSpigot spigot = PodcrashSpigot.getInstance();
-        System.out.println(specUUIDs.toString());
-        boolean hasPPLOwner = spigot.hasPPLOwner();
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            boolean contains = specUUIDs.contains(player.getUniqueId());
-            if(hasPPLOwner && contains) {
-                game1.addSpectator(player);
-            } else GameManager.addPlayer(player);
-            player.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
-            StatusApplier.getOrNew(player).removeStatus(Status.values());
-        }
     }
 
 
